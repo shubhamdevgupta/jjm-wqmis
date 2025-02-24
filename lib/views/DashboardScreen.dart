@@ -38,26 +38,13 @@ class DashboardScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            ExpansionTile(
-              leading: const Icon(Icons.assignment),
+
+            ListTile(
+              leading: const Icon(Icons.list),
               title: const Text('Submit Sample Info'),
-              children: [
-                ListTile(
-                  title: const Text('As per Laboratories'),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: const Text('As per Parameters'),
-                  onTap: () {
-                    print('hey i am clicked');
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Sampleinformationscreen()));
-                  },
-                ),
-                ListTile(
-                  title: const Text('Retesting Sample'),
-                  onTap: () {},
-                ),
-              ],
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Sampleinformationscreen()));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.list),

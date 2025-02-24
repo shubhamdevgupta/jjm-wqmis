@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../models/LoginResponse.dart';
-import '../repository/UserRepository.dart';
+import '../repository/MasterRepository.dart';
 import '../utils/CustomException.dart';
 import '../utils/Loader.dart';
 import '../views/ExceptionScreen.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
-  final UserRepository _userRepository = UserRepository();
+  final MasterRepository _userRepository = MasterRepository();
   String? _loginStatus;
   String? _accessToken;
   User? _loggedInUser;

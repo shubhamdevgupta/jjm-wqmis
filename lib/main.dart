@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/WaterTestingScreen.dart';
+import 'package:jjm_wqmis/views/LoginScreen.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -11,6 +12,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (_) => Masterprovider()),
       ],
       child: MyApp(),
     ),

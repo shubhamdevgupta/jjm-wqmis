@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String? value;
-  final List<String> items;
-  final String title; // Added title parameter
+  final List<DropdownMenuItem<String>> items;
+  final String title;
   final ValueChanged<String?>? onChanged;
 
   const CustomDropdown({
     Key? key,
     required this.value,
     required this.items,
-    required this.title, // Initialize title
+    required this.title,
     required this.onChanged,
   }) : super(key: key);
 
@@ -42,8 +42,7 @@ class CustomDropdown extends StatelessWidget {
             ]
                 : [], // If no asterisk, don't add any children
           ),
-        )
-        ,
+        ),
         SizedBox(height: 5), // Space between title and dropdown
         DropdownButtonFormField<String>(
           value: value,
@@ -51,27 +50,24 @@ class CustomDropdown extends StatelessWidget {
             labelStyle: TextStyle(color: Colors.blueAccent),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+              borderSide: BorderSide(color: Colors.grey, width: 2),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+              borderSide: BorderSide(color: Colors.blueGrey, width: 2),
+            ),
+            errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.redAccent,width: 2)
             ),
             contentPadding:
             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           ),
-          items: items
-              .map((item) => DropdownMenuItem<String>(
-            value: item,
-            child: Text(item),
-          ))
-              .toList(),
+          items: items,
           onChanged: onChanged,
           dropdownColor: Colors.white,
           isExpanded: true,
           style: TextStyle(color: Colors.black, fontSize: 16),
           icon: Icon(Icons.arrow_drop_down),
-          iconEnabledColor: Colors.blueAccent,
           borderRadius: BorderRadius.circular(8),
         ),
       ],

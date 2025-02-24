@@ -9,7 +9,7 @@ import '../utils/CustomException.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
 class BaseApiService {
-  final String _baseUrl = 'https://ejalshakti.gov.in/krcpwa/api/';
+  final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/apimaster';
 
   Future<dynamic> post(
     String endpoint, {
@@ -57,14 +57,18 @@ class BaseApiService {
   }
 
   Future<dynamic> get(
-    String endpoint, {
-    Map<String, String>? headers,
-  }) async {
+      String endpoint, {
+        Map<String, String>? headers,
+      }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
+
+    // Ensure headers are not null and set default Content-Type
+    headers ??= {};
+    headers.putIfAbsent('Content-Type', () => 'application/json');
 
     // Log the request
     log('GET Request: URL: $url');
-    log('Headers: ${headers?.toString() ?? "No Headers"}');
+    log('Headers: ${headers.toString()}');
 
     try {
       final response = await http.get(
@@ -72,6 +76,9 @@ class BaseApiService {
         headers: headers,
       );
 
+      if (response.headers['content-type']?.contains(',') ?? false) {
+        response.headers['content-type'] = 'application/json; charset=utf-8';
+      }
       // Log the response
       log('Response: ${response.statusCode}');
       log('Response Body: ${response.body}');
@@ -83,6 +90,7 @@ class BaseApiService {
       rethrow;
     }
   }
+
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
