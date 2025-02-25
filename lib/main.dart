@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/LoginScreen.dart';
+import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: DashboardScreen(),
+      home: Sampleinformationscreen(),
     );
   }
 }

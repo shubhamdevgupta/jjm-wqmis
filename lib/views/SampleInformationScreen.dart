@@ -232,8 +232,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                     children: [
                                       CustomDropdown(
                                         title: "GP *",
-                                        value: masterProvider
-                                            .selectedGramPanchayat,
+                                        value: masterProvider.selectedGramPanchayat,
                                         items: masterProvider.gramPanchayat
                                             .map((gramPanchayat) {
                                           return DropdownMenuItem<String>(
@@ -246,8 +245,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                               ));
                                         }).toList(),
                                         onChanged: (value) {
-                                          masterProvider
-                                              .setSelectedGrampanchayat(value);
+                                          masterProvider.setSelectedGrampanchayat(value);
                                           if(value!=null){
                                             masterProvider.fetchVillage(masterProvider.selectedStateId!, masterProvider.selectedDistrictId!, masterProvider.selectedBlockId!, value);
                                           }
@@ -265,25 +263,24 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               value: masterProvider.selectedVillage,
                               items: masterProvider.village.map((village) {
                                 return DropdownMenuItem<String>(
-                                  value: village.villageName,
-                                  child: Text(
-                                    village.villageName,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                );
+                                    value: village.jjmVillageId.toString(),
+                                    child: Text(
+                                      village.villageName,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ));
                               }).toList(),
                               onChanged: (value) {
                                 masterProvider.setSelectedVillage(value);
                                 if(value!=null){
-                                  masterProvider.fetchHabitations(masterProvider.selectedStateId!, masterProvider.selectedDistrictId!, masterProvider.selectedBlockId!, masterProvider.selectedGramPanchayat!, value);
+                                  masterProvider.fetchHabitations(masterProvider.selectedStateId!, masterProvider.selectedDistrictId!, masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!, value);
                                 }
                               },
                             ),
                             SizedBox(height: 12),
 
                             CustomDropdown(
-                              title: "Habitation *",
+                              title: "Habitation",
                               value: masterProvider.selectedHabitation,
                               items: masterProvider.habitationId.map((habitation) {
                                 return DropdownMenuItem<String>(

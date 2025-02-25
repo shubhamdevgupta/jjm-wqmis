@@ -92,31 +92,32 @@ class MasterRepository {
         throw Exception('Unexpected response format');
       }
     } catch (e) {
-      log('Error in fetchBlocks: $e');
+      log('Error in fetchGramPanchayats: $e');
       rethrow;
     }
   }
 
 
-  Future<List<VillageResponse>> fetchVillages(String stateId, String districtId, String blockId, String gpId) async {
+  Future<List<Villageresponse>> fetchVillages(String stateId, String districtId, String blockId, String gpId) async {
     try {
       final response = await _apiService.get('/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
 
       log('Village API Response: $response');
 
       if (response is List) {
-        return response.map((item) => VillageResponse.fromJson(item)).toList();
+        return response.map((item) => Villageresponse.fromJson(item)).toList();
       } else {
         throw Exception('Unexpected response format');
       }
     } catch (e) {
-      log('Error in fetchBlocks: $e');
+      log('Error in fetchVillages: $e');
       rethrow;
     }
   }
 
   Future<List<HabitationResponse>> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
     try {
+
       final response = await _apiService.get('/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
 
       log('Habitation API Response: $response');
@@ -127,7 +128,7 @@ class MasterRepository {
         throw Exception('Unexpected response format');
       }
     } catch (e) {
-      log('Error in fetchBlocks: $e');
+      log('Error in fetchHabitations: $e');
       rethrow;
     }
   }

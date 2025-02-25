@@ -25,7 +25,7 @@ class Masterprovider extends ChangeNotifier {
   List<GramPanchayatresponse> gramPanchayat = [];
   String? selectedGramPanchayat;
 
-  List<VillageResponse> village = [];
+  List<Villageresponse> village = [];
   String? selectedVillage;
 
   List<HabitationResponse> habitationId = [];
@@ -97,7 +97,7 @@ class Masterprovider extends ChangeNotifier {
         selectedGramPanchayat = gramPanchayat.first.jjmPanchayatId;
       }
     } catch (e) {
-      debugPrint('Error in fetching blocks: $e');
+      debugPrint('Error in fetching grampanchayat: $e');
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
@@ -112,10 +112,10 @@ class Masterprovider extends ChangeNotifier {
       village = await _masterRepository.fetchVillages(
           stateId, districtId, blockId, gpID);
       if (village.isNotEmpty) {
-        selectedVillage = village.first.villageName;
+        selectedVillage = village.first.jjmVillageId.toString();
       }
     } catch (e) {
-      debugPrint('Error in fetching blocks: $e');
+      debugPrint('Error in fetching village: $e');
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
@@ -133,7 +133,7 @@ class Masterprovider extends ChangeNotifier {
         selectedHabitation = habitationId.first.habitationName;
       }
     } catch (e) {
-      debugPrint('Error in fetching blocks: $e');
+      debugPrint('Error in fetching habitation: $e');
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading

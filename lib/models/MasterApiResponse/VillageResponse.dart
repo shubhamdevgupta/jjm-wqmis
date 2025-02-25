@@ -1,16 +1,23 @@
-class VillageResponse {
+class Villageresponse {
   final int jjmVillageId;
   final String villageName;
 
-  VillageResponse({
+  Villageresponse({
     required this.jjmVillageId,
     required this.villageName,
   });
 
-  factory VillageResponse.fromJson(Map<String, dynamic> json) {
-    return VillageResponse(
-      jjmVillageId: json['JJM_VillageId'] ?? 0,
-      villageName: json['VillageName'] ?? '--Select--',
+  factory Villageresponse.fromJson(Map<String, dynamic> json) {
+    return Villageresponse(
+      jjmVillageId: json['JJM_VillageId'],
+      villageName: json['VillageName'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'JJM_VillageId': jjmVillageId,
+      'VillageName': villageName,
+    };
   }
 }
