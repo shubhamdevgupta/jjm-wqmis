@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/MasterApiResponse/BlockResponse.dart';
@@ -30,6 +32,22 @@ class Masterprovider extends ChangeNotifier {
 
   List<HabitationResponse> habitationId = [];
   String? selectedHabitation;
+
+  List<SchemeResponse> schemes = [];
+  String? selectedScheme;
+
+  List<WaterSourceResponse> waterSource = [];
+  String? selectedWaterSource;
+
+  int? _selectedSource;
+
+  int? get selectedSource => _selectedSource;
+  int? _selectedSubSource;
+
+  int? get selectedSubSource => _selectedSubSource;
+  int? _selectedPwsType;
+
+  int? get selectedPwsType => _selectedPwsType;
 
   Masterprovider() {
     fetchStates();
@@ -130,7 +148,7 @@ class Masterprovider extends ChangeNotifier {
       habitationId = await _masterRepository.fetchHabitations(
           stateId, districtId, blockId, gpId, villageId);
       if (habitationId.isNotEmpty) {
-        selectedHabitation = habitationId.first.habitationName;
+        selectedHabitation = habitationId.first.habitationId.toString();
       }
     } catch (e) {
       debugPrint('Error in fetching habitation: $e');
@@ -138,6 +156,71 @@ class Masterprovider extends ChangeNotifier {
       isLoading = false;
       notifyListeners(); // Finish loading
     }
+  }
+
+  Future<void> fetchSchemes(String villageId, String habitationId) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      schemes = await _masterRepository.fetchSchemes(villageId, habitationId);
+      if (schemes.isNotEmpty) {
+        selectedScheme = schemes.first.schemeId.toString();
+      }
+    } catch (e) {
+      debugPrint('Error in fetching scheme: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners(); // Finish loading
+    }
+  }
+
+  Future<void> fetchSourceInformation(
+      String villageId,
+      String habitationId,
+      String filter,
+      String cat,
+      String subcat,
+      String wtpId,
+      String stateId,
+      String schemeId) async {
+    isLoading = true;
+    try {
+      waterSource = await _masterRepository.fetchSourceInformation(villageId,
+          habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
+      if (waterSource.isNotEmpty) {
+        selectedWaterSource = waterSource.first.locationName;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching source information: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setSelectedWaterSourceInformation(String? waterSource){
+    selectedWaterSource=waterSource;
+    notifyListeners();
+  }
+
+  void setSelectedSource(int? value) {
+    _selectedSource = value;
+    notifyListeners();
+  }
+
+  void setSelectedSubSource(int? value) {
+    _selectedSubSource = value;
+    notifyListeners();
+  }
+
+  void setSelectedPwsSource(int? value) {
+    _selectedPwsType = value;
+    notifyListeners();
+  }
+
+  void setSelectedScheme(String? schemeId) {
+    selectedScheme = schemeId;
+    notifyListeners();
   }
 
   void setSelectedHabitation(String? habitationId) {
@@ -148,6 +231,8 @@ class Masterprovider extends ChangeNotifier {
   void setSelectedVillage(String? village) {
     selectedVillage = village;
     selectedHabitation = null;
+    selectedScheme = null;
+    schemes.clear();
     habitationId.clear();
     notifyListeners();
   }
@@ -155,7 +240,9 @@ class Masterprovider extends ChangeNotifier {
   void setSelectedGrampanchayat(String? grampanchayat) {
     selectedGramPanchayat = grampanchayat;
     selectedVillage = null;
-    selectedHabitation=null;
+    selectedHabitation = null;
+    selectedScheme = null;
+    schemes.clear();
     habitationId.clear();
     notifyListeners();
   }
@@ -165,6 +252,8 @@ class Masterprovider extends ChangeNotifier {
     selectedGramPanchayat = null;
     selectedVillage = null;
     selectedHabitation = null;
+    selectedScheme = null;
+    schemes.clear();
     gramPanchayat.clear();
     village.clear();
     habitationId.clear();
@@ -177,6 +266,8 @@ class Masterprovider extends ChangeNotifier {
     selectedGramPanchayat = null;
     selectedVillage = null;
     selectedHabitation = null;
+    selectedScheme = null;
+    schemes.clear();
     blocks.clear(); // Clear blocks when district changes
     gramPanchayat.clear();
     habitationId.clear();
@@ -191,6 +282,8 @@ class Masterprovider extends ChangeNotifier {
     selectedGramPanchayat = null;
     selectedVillage = null;
     selectedHabitation = null;
+    selectedScheme = null;
+    schemes.clear();
     districts.clear(); // Clear districts when state changes
     blocks.clear(); // Clear blocks when state changes
     gramPanchayat.clear();

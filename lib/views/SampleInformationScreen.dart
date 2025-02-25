@@ -55,7 +55,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             backgroundColor: Colors.blue[700],
           ),
-
           body: Consumer<Masterprovider>(
               builder: (context, masterProvider, child) {
             return Padding(
@@ -72,7 +71,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       margin: EdgeInsets.all(0),
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(4.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -95,24 +94,34 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(top: 4.0),
-
                                         child: DropdownButtonFormField<String>(
                                           value: masterProvider.selectedStateId,
                                           decoration: InputDecoration(
-                                            labelStyle: TextStyle(color: Colors.blueAccent),
+                                            labelStyle: TextStyle(
+                                                color: Colors.blueAccent),
                                             enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                              borderSide: BorderSide(color: Colors.grey, width: 2),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey, width: 2),
                                             ),
                                             focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                              borderSide: BorderSide(color: Colors.blueGrey, width: 2),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              borderSide: BorderSide(
+                                                  color: Colors.blueGrey,
+                                                  width: 2),
                                             ),
-                                            errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                                                borderSide: BorderSide(color: Colors.redAccent,width: 2)
-                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                    color: Colors.redAccent,
+                                                    width: 2)),
                                             contentPadding:
-                                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                                EdgeInsets.symmetric(
+                                                    horizontal: 15,
+                                                    vertical: 10),
                                           ),
                                           items: masterProvider.states
                                               .map((state) {
@@ -232,7 +241,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                     children: [
                                       CustomDropdown(
                                         title: "GP *",
-                                        value: masterProvider.selectedGramPanchayat,
+                                        value: masterProvider
+                                            .selectedGramPanchayat,
                                         items: masterProvider.gramPanchayat
                                             .map((gramPanchayat) {
                                           return DropdownMenuItem<String>(
@@ -245,9 +255,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                               ));
                                         }).toList(),
                                         onChanged: (value) {
-                                          masterProvider.setSelectedGrampanchayat(value);
-                                          if(value!=null){
-                                            masterProvider.fetchVillage(masterProvider.selectedStateId!, masterProvider.selectedDistrictId!, masterProvider.selectedBlockId!, value);
+                                          masterProvider
+                                              .setSelectedGrampanchayat(value);
+                                          if (value != null) {
+                                            masterProvider.fetchVillage(
+                                                masterProvider.selectedStateId!,
+                                                masterProvider
+                                                    .selectedDistrictId!,
+                                                masterProvider.selectedBlockId!,
+                                                value);
                                           }
                                         },
                                       ),
@@ -272,19 +288,26 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               }).toList(),
                               onChanged: (value) {
                                 masterProvider.setSelectedVillage(value);
-                                if(value!=null){
-                                  masterProvider.fetchHabitations(masterProvider.selectedStateId!, masterProvider.selectedDistrictId!, masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!, value);
+                                if (value != null) {
+                                  masterProvider.fetchHabitations(
+                                      masterProvider.selectedStateId!,
+                                      masterProvider.selectedDistrictId!,
+                                      masterProvider.selectedBlockId!,
+                                      masterProvider.selectedGramPanchayat!,
+                                      value);
+                                  masterProvider.fetchSchemes(
+                                      masterProvider.selectedVillage!, "0");
                                 }
                               },
                             ),
                             SizedBox(height: 12),
-
+                            ///// habitation  data heree ----------
                             CustomDropdown(
                               title: "Habitation",
                               value: masterProvider.selectedHabitation,
                               items: masterProvider.habitationId.map((habitation) {
                                 return DropdownMenuItem<String>(
-                                  value: habitation.habitationName,
+                                  value: habitation.habitationId.toString(),
                                   child: Text(
                                     habitation.habitationName,
                                     overflow: TextOverflow.ellipsis,
@@ -298,18 +321,23 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             ),
                             SizedBox(height: 12),
 
-/*
-                          CustomDropdown(
-                            title: "Select Scheme",
-                            value: selectedDistrict,
-                            items: districtList,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedDistrict = value;
-                              });
-                            },
-                          ),
-*/
+                            CustomDropdown(
+                              title: "Scheme Name",
+                              value: masterProvider.selectedScheme,
+                              items: masterProvider.schemes.map((scheme) {
+                                return DropdownMenuItem<String>(
+                                  value: scheme.schemeId.toString(),
+                                  child: Text(
+                                    scheme.schemeName,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                masterProvider.setSelectedScheme(value);
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -324,7 +352,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(4.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +365,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             SizedBox(height: 12),
                             Flexible(
                               child: DropdownButtonFormField<int>(
-                                value: _selectedSource,
+                                value: masterProvider.selectedSource,
                                 isExpanded: true,
                                 // Ensures the dropdown takes full width inside Flexible
                                 decoration: InputDecoration(
@@ -359,7 +387,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 ),
                                 items: [
                                   DropdownMenuItem(
-                                    value: 1,
+                                    value: 2,
                                     child: Text(
                                       'Sources of Schemes (Raw water)',
                                       overflow: TextOverflow
@@ -367,7 +395,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                     ),
                                   ),
                                   DropdownMenuItem(
-                                    value: 2,
+                                    value: 6,
                                     child:
                                         Text('WTP of PWS schemes (Treatment)'),
                                   ),
@@ -389,10 +417,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                   ),
                                 ],
                                 onChanged: (value) {
+                                  masterProvider.setSelectedSource(value);
+                                  masterProvider.setSelectedSubSource(null);
+                                  masterProvider.setSelectedPwsSource(null);
                                   setState(() {
-                                    _selectedSource = value;
-                                    _selectedSubSource = null;
-                                    _selectedPwsType = null;
                                     _selectedHandPumpType = null;
                                   });
                                 },
@@ -402,7 +430,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             SizedBox(height: 16),
                             // First Visibility Widget with Border
                             Visibility(
-                              visible: _selectedSource == 1,
+                              visible: masterProvider.selectedSource == 2,
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -428,12 +456,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                       children: [
                                         Radio(
                                           value: 1,
-                                          groupValue: _selectedSubSource,
+                                          groupValue:
+                                              masterProvider.selectedSubSource,
                                           onChanged: (value) {
-                                            setState(() {
-                                              _selectedSubSource =
-                                                  value as int?;
-                                            });
+                                            masterProvider
+                                                .setSelectedSubSource(value);
                                           },
                                         ),
                                         Text('Ground water sources (GW)')
@@ -443,12 +470,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                       children: [
                                         Radio(
                                           value: 2,
-                                          groupValue: _selectedSubSource,
+                                          groupValue:
+                                              masterProvider.selectedSubSource,
                                           onChanged: (value) {
-                                            setState(() {
-                                              _selectedSubSource =
-                                                  value as int?;
-                                            });
+                                            masterProvider
+                                                .setSelectedSubSource(value);
                                           },
                                         ),
                                         Text('Surface water sources (SW)')
@@ -459,7 +485,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               ),
                             ),
                             Visibility(
-                              visible: _selectedSubSource != null,
+                              visible: masterProvider.selectedSubSource != null,
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -484,11 +510,32 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                       children: [
                                         Radio(
                                           value: 1,
-                                          groupValue: _selectedPwsType,
+                                          groupValue:
+                                              masterProvider.selectedPwsType,
                                           onChanged: (value) {
-                                            setState(() {
-                                              _selectedPwsType = value as int?;
-                                            });
+                                            masterProvider
+                                                .setSelectedPwsSource(value);
+                                            if (value != null) {
+                                              masterProvider
+                                                  .fetchSourceInformation(
+                                                      masterProvider
+                                                          .selectedVillage!,
+                                                     "0",
+                                                      masterProvider
+                                                          .selectedSource
+                                                          .toString(),
+                                                      masterProvider
+                                                          .selectedSubSource
+                                                          .toString(),
+                                                      masterProvider
+                                                          .selectedPwsType
+                                                          .toString(),
+                                                      "0",
+                                                      masterProvider
+                                                          .selectedStateId!,
+                                                      masterProvider
+                                                          .selectedScheme!);
+                                            }
                                           },
                                         ),
                                         Text('PWS with FHTC'),
@@ -498,11 +545,32 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                       children: [
                                         Radio(
                                           value: 2,
-                                          groupValue: _selectedPwsType,
+                                          groupValue:
+                                              masterProvider.selectedPwsType,
                                           onChanged: (value) {
-                                            setState(() {
-                                              _selectedPwsType = value as int?;
-                                            });
+                                            masterProvider
+                                                .setSelectedPwsSource(value);
+                                            if (value != null) {
+                                              masterProvider
+                                                  .fetchSourceInformation(
+                                                  masterProvider
+                                                      .selectedVillage!,
+                                                  "0",
+                                                  masterProvider
+                                                      .selectedSource
+                                                      .toString(),
+                                                  masterProvider
+                                                      .selectedSubSource
+                                                      .toString(),
+                                                  masterProvider
+                                                      .selectedPwsType
+                                                      .toString(),
+                                                  "0",
+                                                  masterProvider
+                                                      .selectedStateId!,
+                                                  masterProvider
+                                                      .selectedScheme!);
+                                            }
                                           },
                                         ),
                                         Text('PWS without FHTC'),
@@ -513,23 +581,29 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               ),
                             ),
                             Visibility(
-                              visible: _selectedPwsType != null,
+                              visible: masterProvider.selectedPwsType != null,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 // Align text to the left
                                 children: [
-/*
-                                CustomDropdown(
-                                  title: "Select Water Source *",
-                                  value: selectedDistrict,
-                                  items: districtList,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedDistrict = value;
-                                    });
-                                  },
-                                ),
-*/
+                                  CustomDropdown(
+                                    title: "Select Water Source *",
+                                    value: masterProvider.selectedWaterSource ?? '',
+                                    items: masterProvider.waterSource
+                                        .map((waterSource) {
+                                      return DropdownMenuItem<String>(
+                                        value: waterSource.locationId,
+                                        child: Text(
+                                          waterSource.locationName,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      masterProvider.setSelectedWaterSourceInformation(value);
+                                    },
+                                  ),
                                   Text(
                                     'Date & Time of Sample Collection *',
                                     style:

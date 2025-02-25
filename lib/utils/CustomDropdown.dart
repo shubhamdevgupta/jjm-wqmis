@@ -66,9 +66,11 @@ class CustomDropdown extends StatelessWidget {
           onChanged: onChanged,
           dropdownColor: Colors.white,
           isExpanded: true,
+          
           style: TextStyle(color: Colors.black, fontSize: 16),
           icon: Icon(Icons.arrow_drop_down),
           borderRadius: BorderRadius.circular(8),
+          hint: Text('-select-'),
         ),
       ],
     );

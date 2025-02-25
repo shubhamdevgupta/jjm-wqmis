@@ -2,14 +2,15 @@ import 'dart:developer';
 
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 
 import '../models/LoginResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/MasterApiResponse/HabitationResponse.dart';
 import '../services/BaseApiService.dart';
-import '../utils/CustomException.dart';
 
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
@@ -17,7 +18,8 @@ class MasterRepository {
   Future<LoginResponse> loginUser(String phoneNumber, String password) async {
     final response = await _apiService.post(
       'JJM_Mobile/Login',
-      headers: {'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
       body: {
@@ -65,9 +67,11 @@ class MasterRepository {
     }
   }
 
-  Future<List<BlockResponse>> fetchBlocks(String stateId, String districtId) async {
+  Future<List<BlockResponse>> fetchBlocks(
+      String stateId, String districtId) async {
     try {
-      final response = await _apiService.get('/getblock?stateid=$stateId&districtid=$districtId');
+      final response = await _apiService
+          .get('/getblock?stateid=$stateId&districtid=$districtId');
       log('Block API Response: $response');
 
       if (response is List) {
@@ -81,13 +85,17 @@ class MasterRepository {
     }
   }
 
-  Future<List<GramPanchayatresponse>> fetchGramPanchayats(String stateId, String districtId, String blockId) async {
-    try{
-      final response = await _apiService.get('/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
+  Future<List<GramPanchayatresponse>> fetchGramPanchayats(
+      String stateId, String districtId, String blockId) async {
+    try {
+      final response = await _apiService.get(
+          '/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
       log('Grampanchayat API Response: $response');
 
       if (response is List) {
-        return response.map((item) => GramPanchayatresponse.fromJson(item)).toList();
+        return response
+            .map((item) => GramPanchayatresponse.fromJson(item))
+            .toList();
       } else {
         throw Exception('Unexpected response format');
       }
@@ -97,10 +105,11 @@ class MasterRepository {
     }
   }
 
-
-  Future<List<Villageresponse>> fetchVillages(String stateId, String districtId, String blockId, String gpId) async {
+  Future<List<Villageresponse>> fetchVillages(
+      String stateId, String districtId, String blockId, String gpId) async {
     try {
-      final response = await _apiService.get('/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
+      final response = await _apiService.get(
+          '/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
 
       log('Village API Response: $response');
 
@@ -115,15 +124,18 @@ class MasterRepository {
     }
   }
 
-  Future<List<HabitationResponse>> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
+  Future<List<HabitationResponse>> fetchHabitations(String stateId,
+      String districtId, String blockId, String gpId, String villageId) async {
     try {
-
-      final response = await _apiService.get('/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
+      final response = await _apiService.get(
+          '/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
 
       log('Habitation API Response: $response');
 
       if (response is List) {
-        return response.map((item) => HabitationResponse.fromJson(item)).toList();
+        return response
+            .map((item) => HabitationResponse.fromJson(item))
+            .toList();
       } else {
         throw Exception('Unexpected response format');
       }
@@ -133,14 +145,50 @@ class MasterRepository {
     }
   }
 
+  Future<List<SchemeResponse>> fetchSchemes(
+      String villageId, String habitationId) async {
+    try {
+      final response = await _apiService
+          .get('/getScheme?villageid=$villageId&habitationid=$habitationId');
 
+      log('Scheme API Response: $response');
 
+      if (response is List) {
+        return response.map((item) => SchemeResponse.fromJson(item)).toList();
+      } else {
+        throw Exception('Unexpected response format');
+      }
+    } catch (e) {
+      log('Error in fetchSchemes: $e');
+      rethrow;
+    }
+  }
 
+  Future<List<WaterSourceResponse>> fetchSourceInformation(
+      String villageId,
+      String habitationId,
+      String filter,
+      String cat,
+      String subcat,
+      String wtpId,
+      String stateId,
+      String schemeId) async {
+    try {
+      final response = await _apiService.get(
+          '/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
 
+      log('Water Source API Response: $response');
 
-
-
-
-
-
+      if (response is List) {
+        return response
+            .map((item) => WaterSourceResponse.fromJson(item))
+            .toList();
+      } else {
+        throw Exception('Unexpected response format');
+      }
+    } catch (e) {
+      log('Error in fetchSchemes: $e');
+      rethrow;
+    }
+  }
 }
