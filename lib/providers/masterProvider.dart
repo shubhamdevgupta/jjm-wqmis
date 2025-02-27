@@ -104,8 +104,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchGramPanchayat(
-      String stateId, String districtId, String blockId) async {
+  Future<void> fetchGramPanchayat(String stateId, String districtId, String blockId) async {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
@@ -122,8 +121,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchVillage(
-      String stateId, String districtId, String blockId, String gpID) async {
+  Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
@@ -140,8 +138,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHabitations(String stateId, String districtId,
-      String blockId, String gpId, String villageId) async {
+  Future<void> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -188,7 +185,7 @@ class Masterprovider extends ChangeNotifier {
       waterSource = await _masterRepository.fetchSourceInformation(villageId,
           habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
       if (waterSource.isNotEmpty) {
-        selectedWaterSource = waterSource.first.locationName;
+        selectedWaterSource = waterSource.first.locationId;
       }
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
@@ -198,9 +195,10 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  void setSelectedWaterSourceInformation(String? waterSource){
-    selectedWaterSource=waterSource;
-    notifyListeners();
+
+  void setSelectedWaterSourceInformation(String? value) {
+    selectedWaterSource = value;
+    notifyListeners();  // Notify listeners to rebuild the widget
   }
 
   void setSelectedSource(int? value) {
