@@ -1,7 +1,7 @@
 // Flutter layout for the 'Sample Information' form
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +20,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   int? _selectedPwsType;
 
   int? _selectedHandPumpType;
-  String _selectedWaterSource =
-      'Location : TUBEWELL [ Source type : Deep Tubewell ]';
-  String _currentDateTime =
-      DateFormat('yyyy/MM/dd HH:mm').format(DateTime.now());
 
   List<String> districtList = [
     'Agra',
@@ -568,82 +564,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   masterProvider.setSelectedWaterSourceInformation(value);
                 },
               ),
-              Text(
-                'Date & Time of Sample Collection *',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8), // Add some spacing
-              InkWell(
-                onTap: () async {
-                  // Open Date Picker for Present and Past Dates Only
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    // Start from today
-                    firstDate: DateTime(2000),
-                    // Set the earliest selectable date
-                    lastDate: DateTime.now(), // Disallow future dates
-                  );
-
-                  if (pickedDate != null) {
-                    // Check if the selected date is today
-                    bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day,
-                    ));
-
-                    // Open Time Picker
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-
-                    if (pickedTime != null) {
-                      // Combine Date and Time
-                      DateTime combinedDateTime = DateTime(
-                        pickedDate.year,
-                        pickedDate.month,
-                        pickedDate.day,
-                        pickedTime.hour,
-                        pickedTime.minute,
-                      );
-
-                      // Check if the selected date and time is valid
-                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
-                        // Show error if time is in the future for today
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Future time is not allowed for today.'),
-                          backgroundColor: Colors.red,
-                        ));
-                      } else {
-                        // Format Date and Time with AM/PM
-                        String formattedDateTime =
-                            DateFormat('yyyy/MM/dd hh:mm a')
-                                .format(combinedDateTime);
-
-                        // Save to State and Update UI
-                        setState(() {
-                          _currentDateTime = formattedDateTime;
-                        });
-                      }
-                    }
-                  }
-                },
-                child: IgnorePointer(
-                  // Makes the field non-editable but tappable
-                  child: TextFormField(
-                    controller: TextEditingController(text: _currentDateTime),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      hintText: 'Select Date & Time',
-                      prefixIcon: Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
+              CustomDateTimePicker(onDateTimeSelected: (value) {})
             ],
           ),
         ),
@@ -752,80 +673,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               masterProvider.setSelectedWaterSourceInformation(value);
             },
           ),
-          Text(
-            'Date & Time of Sample Collection *',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8), // Add some spacing
-          InkWell(
-            onTap: () async {
-              // Open Date Picker for Present and Past Dates Only
-              DateTime? pickedDate = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                // Start from today
-                firstDate: DateTime(2000),
-                // Set the earliest selectable date
-                lastDate: DateTime.now(), // Disallow future dates
-              );
-
-              if (pickedDate != null) {
-                // Check if the selected date is today
-                bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ));
-
-                // Open Time Picker
-                TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-
-                if (pickedTime != null) {
-                  // Combine Date and Time
-                  DateTime combinedDateTime = DateTime(
-                    pickedDate.year,
-                    pickedDate.month,
-                    pickedDate.day,
-                    pickedTime.hour,
-                    pickedTime.minute,
-                  );
-
-                  // Check if the selected date and time is valid
-                  if (isToday && combinedDateTime.isAfter(DateTime.now())) {
-                    // Show error if time is in the future for today
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Future time is not allowed for today.'),
-                      backgroundColor: Colors.red,
-                    ));
-                  } else {
-                    // Format Date and Time with AM/PM
-                    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a')
-                        .format(combinedDateTime);
-
-                    // Save to State and Update UI
-                    setState(() {
-                      _currentDateTime = formattedDateTime;
-                    });
-                  }
-                }
-              }
-            },
-            child: IgnorePointer(
-              // Makes the field non-editable but tappable
-              child: TextFormField(
-                controller: TextEditingController(text: _currentDateTime),
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: 'Select Date & Time',
-                  prefixIcon: Icon(Icons.calendar_today),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-          ),
+          CustomDateTimePicker(onDateTimeSelected: (value) {})
         ],
       ),
     );
@@ -894,83 +742,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   hintText: 'Enter Location',
                   prefixIcon: Icons.cabin_rounded,
                 ),
-                Text(
-                  'Date & Time of Sample Collection *',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8), // Add some spacing
-                InkWell(
-                  onTap: () async {
-                    // Open Date Picker for Present and Past Dates Only
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      // Start from today
-                      firstDate: DateTime(2000),
-                      // Set the earliest selectable date
-                      lastDate: DateTime.now(), // Disallow future dates
-                    );
-
-                    if (pickedDate != null) {
-                      // Check if the selected date is today
-                      bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day,
-                      ));
-
-                      // Open Time Picker
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-
-                      if (pickedTime != null) {
-                        // Combine Date and Time
-                        DateTime combinedDateTime = DateTime(
-                          pickedDate.year,
-                          pickedDate.month,
-                          pickedDate.day,
-                          pickedTime.hour,
-                          pickedTime.minute,
-                        );
-
-                        // Check if the selected date and time is valid
-                        if (isToday &&
-                            combinedDateTime.isAfter(DateTime.now())) {
-                          // Show error if time is in the future for today
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('Future time is not allowed for today.'),
-                            backgroundColor: Colors.red,
-                          ));
-                        } else {
-                          // Format Date and Time with AM/PM
-                          String formattedDateTime =
-                              DateFormat('yyyy/MM/dd hh:mm a')
-                                  .format(combinedDateTime);
-
-                          // Save to State and Update UI
-                          setState(() {
-                            _currentDateTime = formattedDateTime;
-                          });
-                        }
-                      }
-                    }
-                  },
-                  child: IgnorePointer(
-                    // Makes the field non-editable but tappable
-                    child: TextFormField(
-                      controller: TextEditingController(text: _currentDateTime),
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: 'Select Date & Time',
-                        prefixIcon: Icon(Icons.calendar_today),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
+                CustomDateTimePicker(onDateTimeSelected: (value) {})
               ],
             ),
           ),
@@ -996,83 +768,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.setSelectedWaterSourceInformation(value);
                   },
                 ),
-                Text(
-                  'Date & Time of Sample Collection *',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8), // Add some spacing
-                InkWell(
-                  onTap: () async {
-                    // Open Date Picker for Present and Past Dates Only
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      // Start from today
-                      firstDate: DateTime(2000),
-                      // Set the earliest selectable date
-                      lastDate: DateTime.now(), // Disallow future dates
-                    );
-
-                    if (pickedDate != null) {
-                      // Check if the selected date is today
-                      bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day,
-                      ));
-
-                      // Open Time Picker
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-
-                      if (pickedTime != null) {
-                        // Combine Date and Time
-                        DateTime combinedDateTime = DateTime(
-                          pickedDate.year,
-                          pickedDate.month,
-                          pickedDate.day,
-                          pickedTime.hour,
-                          pickedTime.minute,
-                        );
-
-                        // Check if the selected date and time is valid
-                        if (isToday &&
-                            combinedDateTime.isAfter(DateTime.now())) {
-                          // Show error if time is in the future for today
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('Future time is not allowed for today.'),
-                            backgroundColor: Colors.red,
-                          ));
-                        } else {
-                          // Format Date and Time with AM/PM
-                          String formattedDateTime =
-                              DateFormat('yyyy/MM/dd hh:mm a')
-                                  .format(combinedDateTime);
-
-                          // Save to State and Update UI
-                          setState(() {
-                            _currentDateTime = formattedDateTime;
-                          });
-                        }
-                      }
-                    }
-                  },
-                  child: IgnorePointer(
-                    // Makes the field non-editable but tappable
-                    child: TextFormField(
-                      controller: TextEditingController(text: _currentDateTime),
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: 'Select Date & Time',
-                        prefixIcon: Icon(Icons.calendar_today),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
+                CustomDateTimePicker(onDateTimeSelected: (value) {})
               ],
             ),
           )
@@ -1130,7 +826,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Visibility(
           visible: _selectedHandPumpType == 1,
           child: Column(
@@ -1154,82 +852,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   masterProvider.setSelectedWaterSourceInformation(value);
                 },
               ),
-              Text(
-                'Date & Time of Sample Collection *',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8), // Add some spacing
-              InkWell(
-                onTap: () async {
-                  // Open Date Picker for Present and Past Dates Only
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    // Start from today
-                    firstDate: DateTime(2000),
-                    // Set the earliest selectable date
-                    lastDate: DateTime.now(), // Disallow future dates
-                  );
-
-                  if (pickedDate != null) {
-                    // Check if the selected date is today
-                    bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day,
-                    ));
-
-                    // Open Time Picker
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-
-                    if (pickedTime != null) {
-                      // Combine Date and Time
-                      DateTime combinedDateTime = DateTime(
-                        pickedDate.year,
-                        pickedDate.month,
-                        pickedDate.day,
-                        pickedTime.hour,
-                        pickedTime.minute,
-                      );
-
-                      // Check if the selected date and time is valid
-                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
-                        // Show error if time is in the future for today
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Future time is not allowed for today.'),
-                          backgroundColor: Colors.red,
-                        ));
-                      } else {
-                        // Format Date and Time with AM/PM
-                        String formattedDateTime =
-                            DateFormat('yyyy/MM/dd hh:mm a')
-                                .format(combinedDateTime);
-
-                        // Save to State and Update UI
-                        setState(() {
-                          _currentDateTime = formattedDateTime;
-                        });
-                      }
-                    }
-                  }
-                },
-                child: IgnorePointer(
-                  // Makes the field non-editable but tappable
-                  child: TextFormField(
-                    controller: TextEditingController(text: _currentDateTime),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      hintText: 'Select Date & Time',
-                      prefixIcon: Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
+              CustomDateTimePicker(onDateTimeSelected: (value) {})
             ],
           ),
         ),
@@ -1248,82 +871,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 hintText: 'Enter Location',
                 prefixIcon: Icons.dehaze,
               ),
-              Text(
-                'Date & Time of Sample Collection *',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8), // Add some spacing
-              InkWell(
-                onTap: () async {
-                  // Open Date Picker for Present and Past Dates Only
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    // Start from today
-                    firstDate: DateTime(2000),
-                    // Set the earliest selectable date
-                    lastDate: DateTime.now(), // Disallow future dates
-                  );
-
-                  if (pickedDate != null) {
-                    // Check if the selected date is today
-                    bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                      DateTime.now().year,
-                      DateTime.now().month,
-                      DateTime.now().day,
-                    ));
-
-                    // Open Time Picker
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-
-                    if (pickedTime != null) {
-                      // Combine Date and Time
-                      DateTime combinedDateTime = DateTime(
-                        pickedDate.year,
-                        pickedDate.month,
-                        pickedDate.day,
-                        pickedTime.hour,
-                        pickedTime.minute,
-                      );
-
-                      // Check if the selected date and time is valid
-                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
-                        // Show error if time is in the future for today
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Future time is not allowed for today.'),
-                          backgroundColor: Colors.red,
-                        ));
-                      } else {
-                        // Format Date and Time with AM/PM
-                        String formattedDateTime =
-                            DateFormat('yyyy/MM/dd hh:mm a')
-                                .format(combinedDateTime);
-
-                        // Save to State and Update UI
-                        setState(() {
-                          _currentDateTime = formattedDateTime;
-                        });
-                      }
-                    }
-                  }
-                },
-                child: IgnorePointer(
-                  // Makes the field non-editable but tappable
-                  child: TextFormField(
-                    controller: TextEditingController(text: _currentDateTime),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      hintText: 'Select Date & Time',
-                      prefixIcon: Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
+              CustomDateTimePicker(onDateTimeSelected: (value) {})
             ],
           ),
         )
