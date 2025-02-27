@@ -12,33 +12,36 @@ class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/apimaster';
 
   Future<dynamic> post(
-    String endpoint, {
-    Map<String, String>? headers,
-    Map<String, dynamic>? body,
-  }) async {
+      String endpoint, {
+        Map<String, String>? headers,
+        Map<String, dynamic>? body,
+      }) async {
     await _checkConnectivity();
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
-    // Log the request
+    // Ensure headers are initialized and correctly formatted
+    headers ??= {};
+    headers['Content-Type'] = 'application/json'; // Correct Content-Type
+
+    // Log the request details
     log('POST Request: URL: $url');
-    log('Headers: ${headers?.toString() ?? "No Headers"}');
-    log('Body: ${body?.toString() ?? "No Body"}');
+    log('Headers: ${headers.toString()}');
+    log('Body: ${jsonEncode(body)}');
 
     try {
-      final bool isJson =
-          headers != null && headers['Content-Type'] == 'application/json';
       final response = await http.post(
         url,
         headers: headers,
-        body: isJson ? jsonEncode(body) : body, // Encode only if JSON
+        body: jsonEncode(body), // Always encode to JSON
       );
+
+      // Check the status code and log response
       if (response.statusCode == 200) {
         log('Request Successful');
       } else {
         log('Request Failed with Status Code: ${response.statusCode}');
       }
 
-      // Log the response
       log('Response: ${response.statusCode}');
       log('Response Body: ${response.body}');
 
@@ -46,15 +49,17 @@ class BaseApiService {
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
       throw NetworkException(
-          'Unable to connect to server. Please check your internet connection.');
+        'Unable to connect to server. Please check your internet connection.',
+      );
     } on NetworkException catch (e) {
       log('Error during network exception: $e');
-      NetworkException(e.message);
+      throw NetworkException(e.message);
     } on Exception catch (e) {
       log('Error during POST request: $e');
       GlobalExceptionHandler.handleException(e); // No context needed
     }
   }
+
 
   Future<dynamic> get(
       String endpoint, {

@@ -15,16 +15,18 @@ import '../services/BaseApiService.dart';
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<LoginResponse> loginUser(String phoneNumber, String password) async {
+  Future<LoginResponse> loginUser(String phoneNumber, String password,String roldId,String txtSalt) async {
     final response = await _apiService.post(
-      'JJM_Mobile/Login',
+      '/JJM_Mobile/Login',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
       body: {
-        'phone': phoneNumber,
+        'loginid': phoneNumber,
         'password': password,
+        'role_id':roldId,
+        'txtSaltedHash': txtSalt
       },
     );
     return LoginResponse.fromJson(response);
