@@ -43,7 +43,7 @@ class CustomDropdown extends StatelessWidget {
                 : [], // If no asterisk, don't add any children
           ),
         ),
-        SizedBox(height: 5), // Space between title and dropdown
+        SizedBox(height: 8), // Space between title and dropdown
         DropdownButtonFormField<String>(
           value: value,
           decoration: InputDecoration(

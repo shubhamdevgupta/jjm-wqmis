@@ -73,68 +73,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     SizedBox(
                       height: 12,
                     ),
-                    // card for location of source from where sample taken
-/*
-                Card(
-                  elevation: 1,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    // Align text to the left
-                    children: [
-                      Text(
-                        'Select lab where sample has being submitted *',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: 1,
-                            groupValue: _selectedSubSource,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedSubSource = value as int?;
-                              });
-                            },
-                          ),
-                          Text('As per laboratories')
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: 2,
-                            groupValue: _selectedSubSource,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedSubSource = value as int?;
-                              });
-                            },
-                          ),
-                          Text('As per parameters')
-                        ],
-                      ),
-                      CustomDropdown(
-                        title: "Select Laboratory *",
-                        value: selectedDistrict,
-                        items: districtList,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedDistrict = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                )
-*/
                   ],
                 ),
               ),
@@ -471,249 +409,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
             SizedBox(height: 16),
             // First Visibility Widget with Border
-           buildRawWater(masterProvider),
-            //sub handpumps and other private sources selected value 5
-            Visibility(
-              visible: _selectedSource == 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent, width: 1.5),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: EdgeInsets.all(10),
-                // Inner padding
-                margin: EdgeInsets.only(top: 12),
-                // Spacing from the first container
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _selectedHandPumpType,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedHandPumpType = value as int?;
-                            });
-                          },
-                        ),
-                        Text('Govt. Handpump'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _selectedHandPumpType,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedHandPumpType = value as int?;
-                            });
-                          },
-                        ),
-                        Text('Private source location'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: _selectedHandPumpType == 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // Align text to the left
-                children: [
-/*
-                                CustomDropdown(
-                                  title: "Select Govt. Handpump *",
-                                  value: selectedDistrict,
-                                  items: districtList,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedDistrict = value;
-                                    });
-                                  },
-                                ),
-*/
-                  Text(
-                    'Date & Time of Sample Collection *',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8), // Add some spacing
-                  InkWell(
-                    onTap: () async {
-                      // Open Date Picker for Present and Past Dates Only
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        // Start from today
-                        firstDate: DateTime(2000),
-                        // Set the earliest selectable date
-                        lastDate: DateTime.now(), // Disallow future dates
-                      );
-
-                      if (pickedDate != null) {
-                        // Check if the selected date is today
-                        bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                        ));
-
-                        // Open Time Picker
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-
-                        if (pickedTime != null) {
-                          // Combine Date and Time
-                          DateTime combinedDateTime = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            pickedTime.hour,
-                            pickedTime.minute,
-                          );
-
-                          // Check if the selected date and time is valid
-                          if (isToday &&
-                              combinedDateTime.isAfter(DateTime.now())) {
-                            // Show error if time is in the future for today
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text('Future time is not allowed for today.'),
-                              backgroundColor: Colors.red,
-                            ));
-                          } else {
-                            // Format Date and Time with AM/PM
-                            String formattedDateTime =
-                                DateFormat('yyyy/MM/dd hh:mm a')
-                                    .format(combinedDateTime);
-
-                            // Save to State and Update UI
-                            setState(() {
-                              _currentDateTime = formattedDateTime;
-                            });
-                          }
-                        }
-                      }
-                    },
-                    child: IgnorePointer(
-                      // Makes the field non-editable but tappable
-                      child: TextFormField(
-                        controller:
-                            TextEditingController(text: _currentDateTime),
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: 'Select Date & Time',
-                          prefixIcon: Icon(Icons.calendar_today),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: _selectedHandPumpType == 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomTextField(
-                    labelText: 'Type of source *',
-                    hintText: 'Enter Source type',
-                    prefixIcon: Icons.edit_calendar_sharp,
-                  ),
-                  CustomTextField(
-                    labelText: 'Enter Location *',
-                    hintText: 'Enter Location',
-                    prefixIcon: Icons.dehaze,
-                  ),
-                  Text(
-                    'Date & Time of Sample Collection *',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8), // Add some spacing
-                  InkWell(
-                    onTap: () async {
-                      // Open Date Picker for Present and Past Dates Only
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        // Start from today
-                        firstDate: DateTime(2000),
-                        // Set the earliest selectable date
-                        lastDate: DateTime.now(), // Disallow future dates
-                      );
-
-                      if (pickedDate != null) {
-                        // Check if the selected date is today
-                        bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                        ));
-
-                        // Open Time Picker
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-
-                        if (pickedTime != null) {
-                          // Combine Date and Time
-                          DateTime combinedDateTime = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            pickedTime.hour,
-                            pickedTime.minute,
-                          );
-
-                          // Check if the selected date and time is valid
-                          if (isToday &&
-                              combinedDateTime.isAfter(DateTime.now())) {
-                            // Show error if time is in the future for today
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text('Future time is not allowed for today.'),
-                              backgroundColor: Colors.red,
-                            ));
-                          } else {
-                            // Format Date and Time with AM/PM
-                            String formattedDateTime =
-                                DateFormat('yyyy/MM/dd hh:mm a')
-                                    .format(combinedDateTime);
-
-                            // Save to State and Update UI
-                            setState(() {
-                              _currentDateTime = formattedDateTime;
-                            });
-                          }
-                        }
-                      }
-                    },
-                    child: IgnorePointer(
-                      // Makes the field non-editable but tappable
-                      child: TextFormField(
-                        controller:
-                            TextEditingController(text: _currentDateTime),
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          hintText: 'Select Date & Time',
-                          prefixIcon: Icon(Icons.calendar_today),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
+            buildRawWater(masterProvider),
+            buildTreatmentWater(masterProvider),
+            buildEsrWater(masterProvider),
+            buildHouseholdWater(masterProvider),
+            buildHandpumpWater(masterProvider),
           ],
         ),
       ),
@@ -774,7 +474,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
         Visibility(
-          visible: masterProvider.selectedSubSource != null,
+          visible: masterProvider.selectedSubSource == 1 ||
+              masterProvider.selectedSource == 2,
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueAccent, width: 1.5),
@@ -909,19 +610,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       );
 
                       // Check if the selected date and time is valid
-                      if (isToday &&
-                          combinedDateTime.isAfter(DateTime.now())) {
+                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
                         // Show error if time is in the future for today
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content:
-                          Text('Future time is not allowed for today.'),
+                              Text('Future time is not allowed for today.'),
                           backgroundColor: Colors.red,
                         ));
                       } else {
                         // Format Date and Time with AM/PM
                         String formattedDateTime =
-                        DateFormat('yyyy/MM/dd hh:mm a')
-                            .format(combinedDateTime);
+                            DateFormat('yyyy/MM/dd hh:mm a')
+                                .format(combinedDateTime);
 
                         // Save to State and Update UI
                         setState(() {
@@ -934,8 +634,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 child: IgnorePointer(
                   // Makes the field non-editable but tappable
                   child: TextFormField(
-                    controller:
-                    TextEditingController(text: _currentDateTime),
+                    controller: TextEditingController(text: _currentDateTime),
                     readOnly: true,
                     decoration: InputDecoration(
                       hintText: 'Select Date & Time',
@@ -948,6 +647,686 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget buildTreatmentWater(Masterprovider masterProvider) {
+    return Visibility(
+      visible: masterProvider.selectedSource == 3,
+      child: Column(
+        children: [
+          CustomDropdown(
+            value: masterProvider.selectedBlockId,
+            items: masterProvider.blocks.map((block) {
+              return DropdownMenuItem<String>(
+                value: block.jjmBlockId,
+                child: Text(
+                  block.blockName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList(),
+            title: "Select water treatment plant (WTP)",
+            onChanged: (value) {
+              masterProvider.setSelectedBlock(value);
+              if (value != null) {
+                masterProvider.fetchGramPanchayat(
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedDistrictId!,
+                    value);
+              }
+            },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Radio(
+                    value: 5,
+                    groupValue: masterProvider.selectedSubSource,
+                    onChanged: (value) {
+                      masterProvider.setSelectedSubSource(value);
+                    },
+                  ),
+                  Text('Inlet of WTP')
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                    value: 6,
+                    groupValue: masterProvider.selectedSubSource,
+                    onChanged: (value) {
+                      masterProvider.setSelectedSubSource(value);
+                    },
+                  ),
+                  Text('Outlet of WTP')
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                    value: 7,
+                    groupValue: masterProvider.selectedSubSource,
+                    onChanged: (value) {
+                      masterProvider.setSelectedSubSource(value);
+                    },
+                  ),
+                  Text('Disinfection')
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildEsrWater(Masterprovider masterProvider) {
+    return Visibility(
+      visible: masterProvider.selectedSource == 4,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // Align text to the left
+        children: [
+          CustomDropdown(
+            title: "Select ESR/GSR *",
+            value: masterProvider.selectedWaterSource,
+            items: masterProvider.waterSource.map((waterSource) {
+              return DropdownMenuItem<String>(
+                value: waterSource.locationId,
+                child: Text(
+                  waterSource.locationName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              masterProvider.setSelectedWaterSourceInformation(value);
+            },
+          ),
+          Text(
+            'Date & Time of Sample Collection *',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 8), // Add some spacing
+          InkWell(
+            onTap: () async {
+              // Open Date Picker for Present and Past Dates Only
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                // Start from today
+                firstDate: DateTime(2000),
+                // Set the earliest selectable date
+                lastDate: DateTime.now(), // Disallow future dates
+              );
+
+              if (pickedDate != null) {
+                // Check if the selected date is today
+                bool isToday = pickedDate.isAtSameMomentAs(DateTime(
+                  DateTime.now().year,
+                  DateTime.now().month,
+                  DateTime.now().day,
+                ));
+
+                // Open Time Picker
+                TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+
+                if (pickedTime != null) {
+                  // Combine Date and Time
+                  DateTime combinedDateTime = DateTime(
+                    pickedDate.year,
+                    pickedDate.month,
+                    pickedDate.day,
+                    pickedTime.hour,
+                    pickedTime.minute,
+                  );
+
+                  // Check if the selected date and time is valid
+                  if (isToday && combinedDateTime.isAfter(DateTime.now())) {
+                    // Show error if time is in the future for today
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Future time is not allowed for today.'),
+                      backgroundColor: Colors.red,
+                    ));
+                  } else {
+                    // Format Date and Time with AM/PM
+                    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a')
+                        .format(combinedDateTime);
+
+                    // Save to State and Update UI
+                    setState(() {
+                      _currentDateTime = formattedDateTime;
+                    });
+                  }
+                }
+              }
+            },
+            child: IgnorePointer(
+              // Makes the field non-editable but tappable
+              child: TextFormField(
+                controller: TextEditingController(text: _currentDateTime),
+                readOnly: true,
+                decoration: InputDecoration(
+                  hintText: 'Select Date & Time',
+                  prefixIcon: Icon(Icons.calendar_today),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    ;
+  }
+
+  Widget buildHouseholdWater(Masterprovider masterProvider) {
+    return Visibility(
+      visible: masterProvider.selectedSource == 5,
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blueAccent, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: EdgeInsets.all(10),
+            // Inner padding
+            margin: EdgeInsets.only(top: 12),
+            // Spacing from the first container
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Radio(
+                      value: 3,
+                      groupValue: _selectedHandPumpType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedHandPumpType = value as int?;
+                        });
+                      },
+                    ),
+                    Text('At household'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      value: 4,
+                      groupValue: _selectedHandPumpType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedHandPumpType = value as int?;
+                        });
+                      },
+                    ),
+                    Text('At school/AWCs'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Visibility(
+            visible: _selectedHandPumpType == 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // Align text to the left
+              children: [
+                CustomTextField(
+                  labelText: 'Name of household *',
+                  hintText: 'Enter Location',
+                  prefixIcon: Icons.cabin_rounded,
+                ),
+                Text(
+                  'Date & Time of Sample Collection *',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8), // Add some spacing
+                InkWell(
+                  onTap: () async {
+                    // Open Date Picker for Present and Past Dates Only
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      // Start from today
+                      firstDate: DateTime(2000),
+                      // Set the earliest selectable date
+                      lastDate: DateTime.now(), // Disallow future dates
+                    );
+
+                    if (pickedDate != null) {
+                      // Check if the selected date is today
+                      bool isToday = pickedDate.isAtSameMomentAs(DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                      ));
+
+                      // Open Time Picker
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (pickedTime != null) {
+                        // Combine Date and Time
+                        DateTime combinedDateTime = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+
+                        // Check if the selected date and time is valid
+                        if (isToday &&
+                            combinedDateTime.isAfter(DateTime.now())) {
+                          // Show error if time is in the future for today
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Future time is not allowed for today.'),
+                            backgroundColor: Colors.red,
+                          ));
+                        } else {
+                          // Format Date and Time with AM/PM
+                          String formattedDateTime =
+                              DateFormat('yyyy/MM/dd hh:mm a')
+                                  .format(combinedDateTime);
+
+                          // Save to State and Update UI
+                          setState(() {
+                            _currentDateTime = formattedDateTime;
+                          });
+                        }
+                      }
+                    }
+                  },
+                  child: IgnorePointer(
+                    // Makes the field non-editable but tappable
+                    child: TextFormField(
+                      controller: TextEditingController(text: _currentDateTime),
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: 'Select Date & Time',
+                        prefixIcon: Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: _selectedHandPumpType == 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomDropdown(
+                  title: "Select school / AWCs *",
+                  value: masterProvider.selectedWaterSource,
+                  items: masterProvider.waterSource.map((waterSource) {
+                    return DropdownMenuItem<String>(
+                      value: waterSource.locationId,
+                      child: Text(
+                        waterSource.locationName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    masterProvider.setSelectedWaterSourceInformation(value);
+                  },
+                ),
+                Text(
+                  'Date & Time of Sample Collection *',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8), // Add some spacing
+                InkWell(
+                  onTap: () async {
+                    // Open Date Picker for Present and Past Dates Only
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      // Start from today
+                      firstDate: DateTime(2000),
+                      // Set the earliest selectable date
+                      lastDate: DateTime.now(), // Disallow future dates
+                    );
+
+                    if (pickedDate != null) {
+                      // Check if the selected date is today
+                      bool isToday = pickedDate.isAtSameMomentAs(DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                      ));
+
+                      // Open Time Picker
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (pickedTime != null) {
+                        // Combine Date and Time
+                        DateTime combinedDateTime = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+
+                        // Check if the selected date and time is valid
+                        if (isToday &&
+                            combinedDateTime.isAfter(DateTime.now())) {
+                          // Show error if time is in the future for today
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Future time is not allowed for today.'),
+                            backgroundColor: Colors.red,
+                          ));
+                        } else {
+                          // Format Date and Time with AM/PM
+                          String formattedDateTime =
+                              DateFormat('yyyy/MM/dd hh:mm a')
+                                  .format(combinedDateTime);
+
+                          // Save to State and Update UI
+                          setState(() {
+                            _currentDateTime = formattedDateTime;
+                          });
+                        }
+                      }
+                    }
+                  },
+                  child: IgnorePointer(
+                    // Makes the field non-editable but tappable
+                    child: TextFormField(
+                      controller: TextEditingController(text: _currentDateTime),
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: 'Select Date & Time',
+                        prefixIcon: Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildHandpumpWater(Masterprovider masterProvider) {
+    return Column(
+      children: [
+        Visibility(
+          visible: masterProvider.selectedSource == 6,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blueAccent, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: EdgeInsets.all(10),
+            // Inner padding
+            margin: EdgeInsets.only(top: 12),
+            // Spacing from the first container
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Radio(
+                      value: 1,
+                      groupValue: _selectedHandPumpType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedHandPumpType = value as int?;
+                        });
+                      },
+                    ),
+                    Text('Govt. Handpump'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      value: 2,
+                      groupValue: _selectedHandPumpType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedHandPumpType = value as int?;
+                        });
+                      },
+                    ),
+                    Text('Private source location'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(height: 10,),
+        Visibility(
+          visible: _selectedHandPumpType == 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // Align text to the left
+            children: [
+              CustomDropdown(
+                title: "Select Govt. Handpump *",
+                value: masterProvider.selectedWaterSource,
+                items: masterProvider.waterSource.map((waterSource) {
+                  return DropdownMenuItem<String>(
+                    value: waterSource.locationId,
+                    child: Text(
+                      waterSource.locationName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedWaterSourceInformation(value);
+                },
+              ),
+              Text(
+                'Date & Time of Sample Collection *',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8), // Add some spacing
+              InkWell(
+                onTap: () async {
+                  // Open Date Picker for Present and Past Dates Only
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    // Start from today
+                    firstDate: DateTime(2000),
+                    // Set the earliest selectable date
+                    lastDate: DateTime.now(), // Disallow future dates
+                  );
+
+                  if (pickedDate != null) {
+                    // Check if the selected date is today
+                    bool isToday = pickedDate.isAtSameMomentAs(DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                    ));
+
+                    // Open Time Picker
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+
+                    if (pickedTime != null) {
+                      // Combine Date and Time
+                      DateTime combinedDateTime = DateTime(
+                        pickedDate.year,
+                        pickedDate.month,
+                        pickedDate.day,
+                        pickedTime.hour,
+                        pickedTime.minute,
+                      );
+
+                      // Check if the selected date and time is valid
+                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
+                        // Show error if time is in the future for today
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text('Future time is not allowed for today.'),
+                          backgroundColor: Colors.red,
+                        ));
+                      } else {
+                        // Format Date and Time with AM/PM
+                        String formattedDateTime =
+                            DateFormat('yyyy/MM/dd hh:mm a')
+                                .format(combinedDateTime);
+
+                        // Save to State and Update UI
+                        setState(() {
+                          _currentDateTime = formattedDateTime;
+                        });
+                      }
+                    }
+                  }
+                },
+                child: IgnorePointer(
+                  // Makes the field non-editable but tappable
+                  child: TextFormField(
+                    controller: TextEditingController(text: _currentDateTime),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: 'Select Date & Time',
+                      prefixIcon: Icon(Icons.calendar_today),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: _selectedHandPumpType == 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomTextField(
+                labelText: 'Type of source *',
+                hintText: 'Enter Source type',
+                prefixIcon: Icons.edit_calendar_sharp,
+              ),
+              CustomTextField(
+                labelText: 'Enter Location *',
+                hintText: 'Enter Location',
+                prefixIcon: Icons.dehaze,
+              ),
+              Text(
+                'Date & Time of Sample Collection *',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8), // Add some spacing
+              InkWell(
+                onTap: () async {
+                  // Open Date Picker for Present and Past Dates Only
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    // Start from today
+                    firstDate: DateTime(2000),
+                    // Set the earliest selectable date
+                    lastDate: DateTime.now(), // Disallow future dates
+                  );
+
+                  if (pickedDate != null) {
+                    // Check if the selected date is today
+                    bool isToday = pickedDate.isAtSameMomentAs(DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                    ));
+
+                    // Open Time Picker
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+
+                    if (pickedTime != null) {
+                      // Combine Date and Time
+                      DateTime combinedDateTime = DateTime(
+                        pickedDate.year,
+                        pickedDate.month,
+                        pickedDate.day,
+                        pickedTime.hour,
+                        pickedTime.minute,
+                      );
+
+                      // Check if the selected date and time is valid
+                      if (isToday && combinedDateTime.isAfter(DateTime.now())) {
+                        // Show error if time is in the future for today
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text('Future time is not allowed for today.'),
+                          backgroundColor: Colors.red,
+                        ));
+                      } else {
+                        // Format Date and Time with AM/PM
+                        String formattedDateTime =
+                            DateFormat('yyyy/MM/dd hh:mm a')
+                                .format(combinedDateTime);
+
+                        // Save to State and Update UI
+                        setState(() {
+                          _currentDateTime = formattedDateTime;
+                        });
+                      }
+                    }
+                  }
+                },
+                child: IgnorePointer(
+                  // Makes the field non-editable but tappable
+                  child: TextFormField(
+                    controller: TextEditingController(text: _currentDateTime),
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: 'Select Date & Time',
+                      prefixIcon: Icon(Icons.calendar_today),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
