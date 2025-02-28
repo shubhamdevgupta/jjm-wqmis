@@ -65,7 +65,8 @@ class AuthenticationProvider extends ChangeNotifier {
       );
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
-        await _localStorage.saveBool('isLoggedIn', true);
+        _localStorage.saveBool('isLoggedIn', true);
+        _localStorage.saveString('token', _loginResponse!.token.toString());
         notifyListeners();
         onSuccess();
       } else {

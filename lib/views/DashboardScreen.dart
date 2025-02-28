@@ -4,9 +4,13 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../services/LocalStorageService.dart';
+
 class DashboardScreen extends StatelessWidget {
+  final LocalStorageService _localStorage = LocalStorageService();
   @override
   Widget build(BuildContext context) {
+    getToken();
     return Scaffold(
       appBar: AppBar(
         title: const Text('JJM-WQMIS'),
@@ -42,8 +46,9 @@ class DashboardScreen extends StatelessWidget {
             ),
 
             ListTile(
+
               leading: const Icon(Icons.list),
-              title: const Text('Submit Sample Info'),
+              title: const Text('Submit Sample Info '),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Sampleinformationscreen()));
               },
@@ -121,12 +126,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDashboardCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color,
-  }) {
+  Widget _buildDashboardCard({required String title, required String value, required IconData icon, required Color color,}) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -161,4 +161,10 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+  String getToken(){
+    String? token = _localStorage.getString('token') ?? '';
+    print("token-------------- $token");
+    return token;
+  }
 }
+

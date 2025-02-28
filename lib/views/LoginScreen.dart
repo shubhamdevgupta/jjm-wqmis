@@ -236,8 +236,7 @@ class _LoginpageState extends State<Loginscreen> {
                                                 // Success: Navigate to Dashboard or Home Screen
                                                 print('sucess login');
                                                 Navigator.pushReplacementNamed(context, '/dashboard');
-                                              },
-                                                  (errorMessage) {
+                                              }, (errorMessage) {
                                                 // Failure: Show Snackbar with error message
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
