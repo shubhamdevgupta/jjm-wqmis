@@ -13,26 +13,8 @@ class Sampleinformationscreen extends StatefulWidget {
 }
 
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
-  String? selectedDistrict;
-
-  int? _selectedSource;
-  int? _selectedSubSource;
-  int? _selectedPwsType;
 
   int? _selectedHandPumpType;
-
-  List<String> districtList = [
-    'Agra',
-    'Aligarh',
-    'Amethi',
-    'Ayodhya',
-    'Bareilly',
-    'Gorakhpur',
-    'Lucknow',
-    'Varanasi',
-    'Kanpur',
-    'Meerut'
-  ];
 
   @override
   Widget build(BuildContext context) {

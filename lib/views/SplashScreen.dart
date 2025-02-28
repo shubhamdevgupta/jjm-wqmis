@@ -1,8 +1,10 @@
 // Import necessary packages
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'dart:async';
 
 import 'package:jjm_wqmis/views/LoginScreen.dart';
+import 'package:provider/provider.dart';
 
 // Splash Screen
 class SplashScreen extends StatefulWidget {
@@ -14,12 +16,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Loginpage()),
-      );
-    });
+    _navigateToNextScreen();
+  }
+
+  void _navigateToNextScreen() async {
+    await Future.delayed(Duration(seconds: 2)); // SplashScreen Duration
+
+    // Check Login Status using ViewModel
+    var authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    await authProvider.checkLoginStatus();
+
+    if (authProvider.isLoggedIn) {
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override

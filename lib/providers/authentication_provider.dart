@@ -6,26 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 
 import '../models/LoginResponse.dart';
+import '../services/LocalStorageService.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
+  final LocalStorageService _localStorage = LocalStorageService();
 
-/*  Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
-    isLoading = true;
-    notifyListeners(); // Start loading
-    try {
-      village = await _masterRepository.fetchVillages(
-          stateId, districtId, blockId, gpID);
-      if (village.isNotEmpty) {
-        selectedVillage = village.first.jjmVillageId.toString();
-      }
-    } catch (e) {
-      debugPrint('Error in fetching village: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners(); // Finish loading
-    }
-  }*/
+  AuthenticationProvider() {
+    generateCaptcha();
+  }
+
+  bool _isLoggedIn = false;
+
+  bool get isLoggedIn => _isLoggedIn;
+
+  var randomOne, randomTwo, captchResult;
 
   LoginResponse? _loginResponse;
   bool _isLoading = false;
@@ -35,20 +30,48 @@ class AuthenticationProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  bool _isShownPassword = false;
+
+  bool get isShownPassword => _isShownPassword;
+
+  String errorMsg = '';
+
+  Future<void> checkLoginStatus() async {
+    _isLoggedIn = _localStorage.getBool('isLoggedIn') ?? false;
+    notifyListeners();
+  }
+
+  Future<void> logoutUser() async {
+    _isLoggedIn = false;
+    await _localStorage.remove('isLoggedIn');
+    notifyListeners();
+  }
+
   // Method to login user
-  Future<void> loginUser(phoneNumber, password) async {
+  Future<void> loginUser(phoneNumber, password, roldId, Function onSuccess,
+      Function onFailure) async {
+    generateCaptcha();
     _isLoading = true;
     notifyListeners();
-    String txtSalt =generateSalt();
-    String encryPass= encryptPassword(password, txtSalt);
+    String txtSalt = generateSalt();
+    String encryPass = encryptPassword(password, txtSalt);
 
     try {
       _loginResponse = await _authRepository.loginUser(
         phoneNumber,
         encryPass,
-        "4",
+        roldId,
         txtSalt,
       );
+      if (_loginResponse?.status == 1) {
+        _isLoggedIn = true;
+        await _localStorage.saveBool('isLoggedIn', true);
+        notifyListeners();
+        onSuccess();
+      } else {
+        errorMsg = _loginResponse!.msg!;
+        onFailure(errorMsg);
+      }
     } catch (e) {
       print('Error during login: $e');
       _loginResponse = null;
@@ -79,5 +102,21 @@ class AuthenticationProvider extends ChangeNotifier {
     final List<int> saltBytes =
         List<int>.generate(length, (_) => random.nextInt(256));
     return base64Encode(saltBytes);
+  }
+
+  int generateCaptcha() {
+    int max = 15;
+    randomOne = Random().nextInt(max);
+    randomTwo = Random().nextInt(max);
+    print("calling the captch $randomOne  $randomTwo");
+    captchResult = randomOne + randomTwo;
+    notifyListeners();
+    return captchResult;
+  }
+
+  // Toggle Password Visibility
+  void togglePasswordVisibility() {
+    _isShownPassword = !_isShownPassword;
+    notifyListeners();
   }
 }

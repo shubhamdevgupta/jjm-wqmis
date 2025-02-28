@@ -71,7 +71,7 @@ class BaseApiService {
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
     // Log the request
-    log('GET Request: URL: $url');
+    log('POST Request: URL: $url');
     log('Headers: ${headers.toString()}');
     try {
       final response = await http.post(

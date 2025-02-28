@@ -1,6 +1,8 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
@@ -55,6 +57,17 @@ class DashboardScreen extends StatelessWidget {
               leading: const Icon(Icons.settings),
               title: const Text('Maintenance'),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () async{
+                final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+
+                await authProvider.logoutUser();
+
+                Navigator.pushReplacementNamed(context, '/login');
+              },
             ),
           ],
         ),
