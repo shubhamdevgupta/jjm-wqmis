@@ -9,13 +9,10 @@ import '../utils/CustomException.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
 class BaseApiService {
-  final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/apimaster';
+  final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
 
-  Future<dynamic> post(
-      String endpoint, {
-        Map<String, String>? headers,
-        Map<String, dynamic>? body,
-      }) async {
+/*
+  Future<dynamic> post(String endpoint, {Map<String, String>? headers, Map<String, dynamic>? body,}) async {
     await _checkConnectivity();
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
@@ -57,6 +54,52 @@ class BaseApiService {
     } on Exception catch (e) {
       log('Error during POST request: $e');
       GlobalExceptionHandler.handleException(e); // No context needed
+    }
+  }
+*/
+
+  // POST Request Function
+  Future<dynamic> post(
+      String endpoint, {
+        Map<String, String>? headers,
+        dynamic body, // Accepts raw JSON as string
+      }) async {
+    final Uri url = Uri.parse('$_baseUrl$endpoint');
+
+    // Ensure headers are not null and set default Content-Type
+    headers ??= {};
+    headers.putIfAbsent('Content-Type', () => 'application/json');
+
+    // Log the request
+    log('GET Request: URL: $url');
+    log('Headers: ${headers.toString()}');
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body, // Sending raw JSON body
+      );
+
+      if (response.headers['content-type']?.contains(',') ?? false) {
+        response.headers['content-type'] = 'application/json; charset=utf-8';
+      }
+
+      // Logging the full response for better debugging
+      log('Response Status Code: ${response.statusCode}');
+      log('Response Headers: ${response.headers}');
+      log('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed with Status Code: ${response.statusCode}');
+      }
+    } on SocketException catch (e) {
+      log('SocketException: ${e.message}');
+      throw Exception('No internet connection');
+    } catch (e) {
+      log('Exception during POST request: $e');
+      throw Exception('Error during POST request');
     }
   }
 
@@ -112,6 +155,8 @@ class BaseApiService {
         return jsonDecode(response.body);
       case 400:
         throw ApiException('Bad Request: ${response.body}');
+      case 404:
+        throw ApiException('Page not found: ${response.body}');
       case 401:
         throw ApiException('Unauthorized: ${response.body}');
       case 500:

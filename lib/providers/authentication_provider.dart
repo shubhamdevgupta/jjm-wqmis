@@ -3,74 +3,61 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 
-import '../main.dart';
 import '../models/LoginResponse.dart';
-import '../repository/MasterRepository.dart';
-import '../utils/CustomException.dart';
-import '../utils/Loader.dart';
-import '../views/ExceptionScreen.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
-  final MasterRepository _userRepository = MasterRepository();
-  String? _loginStatus;
-  String? _accessToken;
-  User? _loggedInUser;
-  bool? _isLoading;
-  String? _errorMessage; // Store error message
+  final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
 
-  String? get loginStatus => _loginStatus;
-
-  String? get accessToken => _accessToken;
-
-  User? get loggedInUser => _loggedInUser;
-
-  bool? get isLoading => _isLoading;
-
-  String? get errorMessage => _errorMessage;
-
-  Future<void> loginUser(String phoneNumber, String password) async {
-
-    String salt=generateSalt();
-    String encPass=encryptPassword(password, salt);
-
-    Loader.circularLoader();
+/*  Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
+    isLoading = true;
+    notifyListeners(); // Start loading
     try {
-      _isLoading = true;
-      _errorMessage = null; // Clear previous errors
-      notifyListeners();
-      final loginResponse = await _userRepository.loginUser(
-          phoneNumber, encPass, "4", salt);
-
-      if (loginResponse.statusCode == 200) {
-        print('login success ${loginResponse.statusCode}');
-        _accessToken = loginResponse.accessToken;
-        _loggedInUser = loginResponse.user;
-        _loginStatus = 'Login Successful';
-      } else {
-        _loginStatus = 'Login Failed';
+      village = await _masterRepository.fetchVillages(
+          stateId, districtId, blockId, gpID);
+      if (village.isNotEmpty) {
+        selectedVillage = village.first.jjmVillageId.toString();
       }
-    } on NetworkException catch (e) {
-      _loginStatus = e.message;
-      // Show a SnackBar or dialog for no internet connection
-      print('No internet connection: ${e.message}');
     } catch (e) {
-      _errorMessage = e.toString();
-      _loginStatus = 'Error occurred';
-      notifyListeners();
+      debugPrint('Error in fetching village: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners(); // Finish loading
+    }
+  }*/
 
-      // Navigate to Exception Screen
-      navigatorKey.currentState?.push(
-        MaterialPageRoute(
-          builder: (context) =>
-              ExceptionScreen(errorMessage: _errorMessage ?? "Unknown Error"),
-        ),
+  LoginResponse? _loginResponse;
+  bool _isLoading = false;
+
+  // Getters
+  LoginResponse? get loginResponse => _loginResponse;
+
+  bool get isLoading => _isLoading;
+
+  // Method to login user
+  Future<void> loginUser(phoneNumber, password) async {
+    _isLoading = true;
+    notifyListeners();
+    String txtSalt =generateSalt();
+    String encryPass= encryptPassword(password, txtSalt);
+
+    try {
+      _loginResponse = await _authRepository.loginUser(
+        phoneNumber,
+        encryPass,
+        "4",
+        txtSalt,
       );
+    } catch (e) {
+      print('Error during login: $e');
+      _loginResponse = null;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
   String trim(String value) => value.trim();
 
   String sha512Base64(String input) {
@@ -85,10 +72,12 @@ class AuthenticationProvider extends ChangeNotifier {
     String hash2 = sha512Base64(salt + hash1);
     return hash2;
   }
+
   /// Generates a random salt of the given length
   String generateSalt({int length = 16}) {
     final Random random = Random.secure();
-    final List<int> saltBytes = List<int>.generate(length, (_) => random.nextInt(256));
+    final List<int> saltBytes =
+        List<int>.generate(length, (_) => random.nextInt(256));
     return base64Encode(saltBytes);
   }
 }

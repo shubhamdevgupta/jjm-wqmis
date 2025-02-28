@@ -15,27 +15,11 @@ import '../services/BaseApiService.dart';
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<LoginResponse> loginUser(String phoneNumber, String password,String roldId,String txtSalt) async {
-    final response = await _apiService.post(
-      '/JJM_Mobile/Login',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: {
-        'loginid': phoneNumber,
-        'password': password,
-        'role_id':roldId,
-        'txtSaltedHash': txtSalt
-      },
-    );
-    return LoginResponse.fromJson(response);
-  }
 
   Future<List<Stateresponse>> fetchStates() async {
     try {
       // Call the GET method from BaseApiService
-      final response = await _apiService.get('/GetState');
+      final response = await _apiService.get('/apimaster/GetState');
       log('API Response: $response');
 
       // Parse response and convert to List<StateModel>
@@ -54,7 +38,7 @@ class MasterRepository {
   Future<List<Districtresponse>> fetchDistricts(String stateId) async {
     try {
       // Call the GET method from BaseApiService
-      final response = await _apiService.get('/getdistrict?stateid=$stateId');
+      final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
       log('API Response for Districts: $response');
 
       // Parse response and convert to List<DistrictResponse>
@@ -73,7 +57,7 @@ class MasterRepository {
       String stateId, String districtId) async {
     try {
       final response = await _apiService
-          .get('/getblock?stateid=$stateId&districtid=$districtId');
+          .get('/apimaster/getblock?stateid=$stateId&districtid=$districtId');
       log('Block API Response: $response');
 
       if (response is List) {
@@ -91,7 +75,7 @@ class MasterRepository {
       String stateId, String districtId, String blockId) async {
     try {
       final response = await _apiService.get(
-          '/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
+          '/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
       log('Grampanchayat API Response: $response');
 
       if (response is List) {
@@ -111,7 +95,7 @@ class MasterRepository {
       String stateId, String districtId, String blockId, String gpId) async {
     try {
       final response = await _apiService.get(
-          '/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
+          '/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
 
       log('Village API Response: $response');
 
@@ -130,7 +114,7 @@ class MasterRepository {
       String districtId, String blockId, String gpId, String villageId) async {
     try {
       final response = await _apiService.get(
-          '/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
+          '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
 
       log('Habitation API Response: $response');
 
@@ -151,7 +135,7 @@ class MasterRepository {
       String villageId, String habitationId) async {
     try {
       final response = await _apiService
-          .get('/getScheme?villageid=$villageId&habitationid=$habitationId');
+          .get('/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId');
 
       log('Scheme API Response: $response');
 
@@ -177,7 +161,7 @@ class MasterRepository {
       String schemeId) async {
     try {
       final response = await _apiService.get(
-          '/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
+          '/apimaster/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
 
       log('Water Source API Response: $response');
 

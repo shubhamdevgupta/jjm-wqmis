@@ -203,15 +203,6 @@ class _LoginpageState extends State<Loginpage> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !RegExp(r'^[a-zA-Z0-9_]+$')
-                                            .hasMatch(value)) {
-                                      return "Enter correct phone number";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
                                 ),
                               ),
                               const SizedBox(
