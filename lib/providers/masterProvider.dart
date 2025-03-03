@@ -1,12 +1,16 @@
 // lib/providers/state_provider.dart
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/ParameterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
@@ -38,6 +42,19 @@ class Masterprovider extends ChangeNotifier {
 
   List<WaterSourceResponse> waterSource = [];
   String? selectedWaterSource;
+
+
+  List<Wtplistresponse> wtpList= [];
+  String? selectedWtp;
+
+  List<Alllabresponse> labList=[];
+  String? selectedLab;
+
+  List<Parameterresponse> parameterList =[];
+  int? selectedParameter;
+
+  List<Watersourcefilterresponse> wtsFilterList =[];
+  String? selectedWtsfilter;
 
   int? _selectedSource;
 
@@ -171,15 +188,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSourceInformation(
-      String villageId,
-      String habitationId,
-      String filter,
-      String cat,
-      String subcat,
-      String wtpId,
-      String stateId,
-      String schemeId) async {
+  Future<void> fetchSourceInformation(String villageId, String habitationId, String filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
     isLoading = true;
     try {
       waterSource = await _masterRepository.fetchSourceInformation(villageId,
@@ -195,7 +204,85 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchWTPList(String villageId, String habitationId, String stateId, String schemeId) async {
+    isLoading = true;
+    try {
+      wtpList = await _masterRepository.fetchWTPlist(villageId,
+          habitationId,stateId, schemeId);
+      if (wtpList.isNotEmpty) {
+        selectedWtp = wtpList.first.wtpId;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching wtp list: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
+  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+    isLoading = true;
+    try {
+      labList = await _masterRepository.fetchAllLab(StateId,districtId,blockid,gpid,villageid,isall);
+      if (labList.isNotEmpty) {
+        selectedLab = labList.first.value;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching lab list: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
+    isLoading = true;
+    try {
+      parameterList = await _masterRepository.fetchAllParameter(labid,stateid,sid,reg_id,parameteetype);
+      if (parameterList.isNotEmpty) {
+        selectedParameter = parameterList.first.parameterId;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching lab list: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchWatersourcefilterList() async {
+    isLoading = true;
+    notifyListeners(); // Start loading
+    try {
+      wtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
+      if (wtsFilterList.isNotEmpty) {
+        selectedWtsfilter = wtsFilterList.first.id.toString(); // Default to the first state
+      }
+    } catch (e) {
+      debugPrint('Error in StateProvider: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners(); // Finish loading
+    }
+  }
+  void setSelectedWaterSourcefilter(String? value) {
+    selectedWtsfilter = value;
+    notifyListeners();  // Notify listeners to rebuild the widget
+  }
+
+
+  void setSelectedParameter(int? value) {
+    selectedParameter = value;
+    notifyListeners();  // Notify listeners to rebuild the widget
+  }
+  void setSelectedLab(String? value) {
+    selectedLab = value;
+    notifyListeners();  // Notify listeners to rebuild the widget
+  }
+  void setSelectedWTP(String? value) {
+    selectedWtp = value;
+    notifyListeners();  // Notify listeners to rebuild the widget
+  }
   void setSelectedWaterSourceInformation(String? value) {
     selectedWaterSource = value;
     notifyListeners();  // Notify listeners to rebuild the widget

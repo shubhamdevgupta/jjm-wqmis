@@ -300,6 +300,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               }).toList(),
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
+                masterProvider.fetchWatersourcefilterList();
               },
             ),
           ],
@@ -309,18 +310,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+    return Visibility(
+      visible: masterProvider.selectedScheme!=null,
       child: Padding(
         padding: EdgeInsets.all(4.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+         /*   Text(
               'Please select the location of source from where sample is taken:',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
@@ -384,6 +382,27 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 },
               ),
             ),
+      */
+
+            CustomDropdown(
+              title: "Please select the location of source from where sample is taken:",
+              value: masterProvider.selectedWtsfilter,
+              items: masterProvider.wtsFilterList.map((wtsFilter) {
+                return DropdownMenuItem<String>(
+                  value: wtsFilter.id.toString(),
+                  child: Text(
+                    wtsFilter.sourceType,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                masterProvider.setSelectedWaterSourcefilter(value);
+                //  masterProvider.setSelectedScheme(value);
+               /// masterProvider.fetchWatersourcefilterList();
+              },
+            ),
 
             SizedBox(height: 16),
             // First Visibility Widget with Border
@@ -402,10 +421,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedSource == 2,
+          visible: masterProvider.selectedWtsfilter=="2",
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.blueAccent, width: 1.5),
+              border: Border.all(color: Colors.grey, width: 1.5),
               borderRadius: BorderRadius.circular(8),
             ),
             padding: EdgeInsets.all(10),
@@ -417,12 +436,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               // Align text to the left
               children: [
                 Text(
-                  'Select Sub-Source:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
-                  ),
-                ),
+                  'Select Sub-Source:',),
                 Row(
                   children: [
                     Radio(
@@ -556,84 +570,93 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildTreatmentWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedSource == 3,
-      child: Column(
-        children: [
-          CustomDropdown(
-            value: masterProvider.selectedBlockId,
-            items: masterProvider.blocks.map((block) {
-              return DropdownMenuItem<String>(
-                value: block.jjmBlockId,
-                child: Text(
-                  block.blockName,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+      visible: masterProvider.selectedWtsfilter == "5",
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 1.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.all(10),
+        // Inner padding
+        margin: EdgeInsets.only(top: 12),
+        child: Column(
+          children: [
+            CustomDropdown(
+              value: masterProvider.selectedWtp,
+              items: masterProvider.wtpList.map((wtpData) {
+                return DropdownMenuItem<String>(
+                  value: wtpData.wtpId,
+                  child: Text(
+                    wtpData.wtpName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                );
+              }).toList(),
+              title: "Select water treatment plant (WTP)",
+              onChanged: (value) {
+                masterProvider.setSelectedWTP(value);
+               /* if (value != null) {
+                  masterProvider.fetchGramPanchayat(
+                      masterProvider.selectedStateId!,
+                      masterProvider.selectedDistrictId!,
+                      value);
+                }*/
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Radio(
+                      value: 5,
+                      groupValue: masterProvider.selectedSubSource,
+                      onChanged: (value) {
+                        masterProvider.setSelectedSubSource(value);
+                      },
+                    ),
+                    Text('Inlet of WTP')
+                  ],
                 ),
-              );
-            }).toList(),
-            title: "Select water treatment plant (WTP)",
-            onChanged: (value) {
-              masterProvider.setSelectedBlock(value);
-              if (value != null) {
-                masterProvider.fetchGramPanchayat(
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedDistrictId!,
-                    value);
-              }
-            },
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Radio(
-                    value: 5,
-                    groupValue: masterProvider.selectedSubSource,
-                    onChanged: (value) {
-                      masterProvider.setSelectedSubSource(value);
-                    },
-                  ),
-                  Text('Inlet of WTP')
-                ],
-              ),
-              Row(
-                children: [
-                  Radio(
-                    value: 6,
-                    groupValue: masterProvider.selectedSubSource,
-                    onChanged: (value) {
-                      masterProvider.setSelectedSubSource(value);
-                    },
-                  ),
-                  Text('Outlet of WTP')
-                ],
-              ),
-              Row(
-                children: [
-                  Radio(
-                    value: 7,
-                    groupValue: masterProvider.selectedSubSource,
-                    onChanged: (value) {
-                      masterProvider.setSelectedSubSource(value);
-                    },
-                  ),
-                  Text('Disinfection')
-                ],
-              ),
-            ],
-          )
-        ],
+                Row(
+                  children: [
+                    Radio(
+                      value: 6,
+                      groupValue: masterProvider.selectedSubSource,
+                      onChanged: (value) {
+                        masterProvider.setSelectedSubSource(value);
+                      },
+                    ),
+                    Text('Outlet of WTP')
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      value: 7,
+                      groupValue: masterProvider.selectedSubSource,
+                      onChanged: (value) {
+                        masterProvider.setSelectedSubSource(value);
+                      },
+                    ),
+                    Text('Disinfection')
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedSource == 4,
+      visible: masterProvider.selectedWtsfilter == "6",
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         // Align text to the left
@@ -664,7 +687,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedSource == 5,
+      visible: masterProvider.selectedWtsfilter == "3",
       child: Column(
         children: [
           Container(
@@ -763,7 +786,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedSource == 6,
+          visible: masterProvider.selectedWtsfilter == "4",
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.blueAccent, width: 1.5),
