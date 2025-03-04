@@ -1,4 +1,6 @@
 // Flutter layout for the 'Sample Information' form
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
@@ -24,8 +26,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.pop(context);
-              },
+                if (Navigator.of(context).canPop()) {
+                  Navigator.pop(context);
+                } else {
+                  Navigator.pushReplacementNamed(context, '/dashboard');
+                }              },
             ),
             title: Text(
               'Sample Collection Form',
@@ -250,7 +255,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       maxLines: 1,
                     ));
               }).toList(),
-              onChanged: (value) {
+              onChanged: (value)  {
                 masterProvider.setSelectedVillage(value);
                 if (value != null) {
                   masterProvider.fetchHabitations(
@@ -259,8 +264,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.selectedBlockId!,
                       masterProvider.selectedGramPanchayat!,
                       value);
-                  masterProvider.fetchSchemes(
-                      masterProvider.selectedVillage!, "0");
+                  masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0");
                 }
               },
             ),
@@ -280,6 +284,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 );
               }).toList(),
               onChanged: (value) {
+                masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0");
                 masterProvider.setSelectedHabitation(value);
               },
             ),
@@ -302,7 +307,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 masterProvider.setSelectedScheme(value);
                 masterProvider.fetchWatersourcefilterList();
               },
-            ),
+            )
           ],
         ),
       ),
@@ -352,19 +357,19 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     ),
                   ),
                   DropdownMenuItem(
-                    value: 3,
+                    value: 5,
                     child: Text('WTP of PWS schemes (Treatment)'),
                   ),
                   DropdownMenuItem(
-                    value: 4,
+                    value: 6,
                     child: Text('Storage Structure (ESR/GSR)'),
                   ),
                   DropdownMenuItem(
-                    value: 5,
+                    value: 3,
                     child: Text('Households /school /AWCs'),
                   ),
                   DropdownMenuItem(
-                    value: 6,
+                    value: 4,
                     child: Text(
                       'Handpumps and other private sources',
                       overflow: TextOverflow
@@ -381,9 +386,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   });
                 },
               ),
-            ),
-      */
-
+            ),*/
+            /// data from the apiss
             CustomDropdown(
               title: "Please select the location of source from where sample is taken:",
               value: masterProvider.selectedWtsfilter,
@@ -570,7 +574,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildTreatmentWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "5",
+      visible: masterProvider.selectedSource == 5,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 1.5),

@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
+import 'package:jjm_wqmis/utils/CustomException.dart';
 
 import '../models/LoginResponse.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/GlobalExceptionHandler.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
@@ -57,12 +59,7 @@ class AuthenticationProvider extends ChangeNotifier {
     String encryPass = encryptPassword(password, txtSalt);
 
     try {
-      _loginResponse = await _authRepository.loginUser(
-        phoneNumber,
-        encryPass,
-        roldId,
-        txtSalt,
-      );
+      _loginResponse = await _authRepository.loginUser(phoneNumber, encryPass, roldId, txtSalt);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
         _localStorage.saveBool('isLoggedIn', true);
@@ -74,7 +71,7 @@ class AuthenticationProvider extends ChangeNotifier {
         onFailure(errorMsg);
       }
     } catch (e) {
-      print('Error during login: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
       _loginResponse = null;
     } finally {
       _isLoading = false;

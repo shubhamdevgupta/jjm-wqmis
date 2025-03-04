@@ -15,6 +15,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/MasterApiResponse/BlockResponse.dart';
+import '../utils/GlobalExceptionHandler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -71,9 +72,10 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchStates() async {
-    print('callinng the state functionnnnn');
+    print('Calling the state function...');
     isLoading = true;
     notifyListeners(); // Start loading
+
     try {
       states = await _masterRepository.fetchStates();
       if (states.isNotEmpty) {
@@ -81,11 +83,13 @@ class Masterprovider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
     }
   }
+
 
   Future<void> fetchDistricts(String stateId) async {
     print('Fetching districts for state: $stateId');
