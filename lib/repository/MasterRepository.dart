@@ -75,8 +75,7 @@ class MasterRepository {
     }
   }
 
-  Future<List<GramPanchayatresponse>> fetchGramPanchayats(
-      String stateId, String districtId, String blockId) async {
+  Future<List<GramPanchayatresponse>> fetchGramPanchayats(String stateId, String districtId, String blockId) async {
     try {
       final response = await _apiService.get(
           '/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
@@ -94,8 +93,7 @@ class MasterRepository {
     }
   }
 
-  Future<List<Villageresponse>> fetchVillages(
-      String stateId, String districtId, String blockId, String gpId) async {
+  Future<List<Villageresponse>> fetchVillages(String stateId, String districtId, String blockId, String gpId) async {
     try {
       final response = await _apiService.get(
           '/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
@@ -112,8 +110,7 @@ class MasterRepository {
     }
   }
 
-  Future<List<HabitationResponse>> fetchHabitations(String stateId,
-      String districtId, String blockId, String gpId, String villageId) async {
+  Future<List<HabitationResponse>> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
     try {
       final response = await _apiService.get(
           '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
@@ -132,8 +129,7 @@ class MasterRepository {
     }
   }
 
-  Future<List<SchemeResponse>> fetchSchemes(
-      String villageId, String habitationId) async {
+  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId) async {
     try {
       final response = await _apiService.get(
           '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId');
@@ -215,41 +211,4 @@ class MasterRepository {
     }
   }
 
-  Future<List<Alllabresponse>> fetchAllLab(String StateId, String districtId,
-      String blockid, String gpid, String villageid, String isall) async {
-    try {
-      final response = await _apiService.get(
-          '/apimaster/Getalllab?villageid=$villageid&districtId=$districtId&blockid=$blockid&gpid=$gpid&villageid=$villageid&isall=$isall');
-
-      log('Fetch All Lab API Response: $response');
-
-      if (response is List) {
-        return response.map((item) => Alllabresponse.fromJson(item)).toList();
-      } else {
-        throw ApiException('Api Error :$response');
-      }
-    } catch (e) {
-      throw NetworkException();
-    }
-  }
-
-  Future<List<Parameterresponse>> fetchAllParameter(String labid,
-      String stateid, String sid, String reg_id, String parameteetype) async {
-    try {
-      final response = await _apiService.get(
-          '/apimaster/GetTestList?labid=$labid&stateid=$stateid&sid=$sid&reg_id=$reg_id&parameteetype=$parameteetype');
-
-      log('Water Source API Response: $response');
-
-      if (response is List) {
-        return response
-            .map((item) => Parameterresponse.fromJson(item))
-            .toList();
-      } else {
-        throw ApiException('Api Error :$response');
-      }
-    } catch (e) {
-      throw NetworkException();
-    }
-  }
 }
