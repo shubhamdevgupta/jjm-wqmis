@@ -11,59 +11,12 @@ import '../utils/GlobalExceptionHandler.dart';
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
 
-/*
-  Future<dynamic> post(String endpoint, {Map<String, String>? headers, Map<String, dynamic>? body,}) async {
-    await _checkConnectivity();
-    final Uri url = Uri.parse('$_baseUrl$endpoint');
-
-    // Ensure headers are initialized and correctly formatted
-    headers ??= {};
-    headers['Content-Type'] = 'application/json'; // Correct Content-Type
-
-    // Log the request details
-    log('POST Request: URL: $url');
-    log('Headers: ${headers.toString()}');
-    log('Body: ${jsonEncode(body)}');
-
-    try {
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: jsonEncode(body), // Always encode to JSON
-      );
-
-      // Check the status code and log response
-      if (response.statusCode == 200) {
-        log('Request Successful');
-      } else {
-        log('Request Failed with Status Code: ${response.statusCode}');
-      }
-
-      log('Response: ${response.statusCode}');
-      log('Response Body: ${response.body}');
-
-      return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException(
-        'Unable to connect to server. Please check your internet connection.',
-      );
-    } on NetworkException catch (e) {
-      log('Error during network exception: $e');
-      throw NetworkException(e.message);
-    } on Exception catch (e) {
-      log('Error during POST request: $e');
-      GlobalExceptionHandler.handleException(e); // No context needed
-    }
-  }
-*/
-
   // POST Request Function
   Future<dynamic> post(
-      String endpoint, {
-        Map<String, String>? headers,
-        dynamic body, // Accepts raw JSON as string
-      }) async {
+    String endpoint, {
+    Map<String, String>? headers,
+    dynamic body, // Accepts raw JSON as string
+  }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
     // Ensure headers are not null and set default Content-Type
@@ -74,6 +27,7 @@ class BaseApiService {
     log('POST Request: URL: $url');
     log('Headers: ${headers.toString()}');
     try {
+      await _checkConnectivity();
       final response = await http.post(
         url,
         headers: headers,
@@ -92,24 +46,22 @@ class BaseApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw Exception('Failed with Status Code: ${response.statusCode}');
+        throw ApiException("API Error: ${response.statusCode}");
       }
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
-      throw Exception('No internet connection');
+      throw NetworkException('No internet connection');
     } catch (e) {
       log('Exception during POST request: $e');
       throw Exception('Error during POST request');
     }
   }
 
-
   Future<dynamic> get(
-      String endpoint, {
-        Map<String, String>? headers,
-      }) async {
+    String endpoint, {
+    Map<String, String>? headers,
+  }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
-
     // Ensure headers are not null and set default Content-Type
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
@@ -119,6 +71,8 @@ class BaseApiService {
     log('Headers: ${headers.toString()}');
 
     try {
+      await _checkConnectivity();
+
       final response = await http.get(
         url,
         headers: headers,
@@ -138,7 +92,6 @@ class BaseApiService {
       rethrow;
     }
   }
-
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();

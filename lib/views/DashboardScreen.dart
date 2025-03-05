@@ -46,11 +46,10 @@ class DashboardScreen extends StatelessWidget {
             ),
 
             ListTile(
-
               leading: const Icon(Icons.list),
               title: const Text('Submit Sample Info '),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Sampleinformationscreen()));
+                Navigator.pushReplacementNamed(context, '/savesample');
               },
             ),
             ListTile(

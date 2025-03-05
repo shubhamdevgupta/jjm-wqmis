@@ -15,6 +15,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/MasterApiResponse/BlockResponse.dart';
+import '../utils/GlobalExceptionHandler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -47,11 +48,7 @@ class Masterprovider extends ChangeNotifier {
   List<Wtplistresponse> wtpList= [];
   String? selectedWtp;
 
-  List<Alllabresponse> labList=[];
-  String? selectedLab;
 
-  List<Parameterresponse> parameterList =[];
-  int? selectedParameter;
 
   List<Watersourcefilterresponse> wtsFilterList =[];
   String? selectedWtsfilter;
@@ -71,9 +68,10 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchStates() async {
-    print('callinng the state functionnnnn');
+    print('Calling the state function...');
     isLoading = true;
     notifyListeners(); // Start loading
+
     try {
       states = await _masterRepository.fetchStates();
       if (states.isNotEmpty) {
@@ -81,11 +79,13 @@ class Masterprovider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
     }
   }
+
 
   Future<void> fetchDistricts(String stateId) async {
     print('Fetching districts for state: $stateId');
@@ -220,35 +220,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
-    isLoading = true;
-    try {
-      labList = await _masterRepository.fetchAllLab(StateId,districtId,blockid,gpid,villageid,isall);
-      if (labList.isNotEmpty) {
-        selectedLab = labList.first.value;
-      }
-    } catch (e) {
-      debugPrint('Error in fetching lab list: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
-    isLoading = true;
-    try {
-      parameterList = await _masterRepository.fetchAllParameter(labid,stateid,sid,reg_id,parameteetype);
-      if (parameterList.isNotEmpty) {
-        selectedParameter = parameterList.first.parameterId;
-      }
-    } catch (e) {
-      debugPrint('Error in fetching lab list: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
 
   Future<void> fetchWatersourcefilterList() async {
     isLoading = true;
@@ -270,15 +241,6 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();  // Notify listeners to rebuild the widget
   }
 
-
-  void setSelectedParameter(int? value) {
-    selectedParameter = value;
-    notifyListeners();  // Notify listeners to rebuild the widget
-  }
-  void setSelectedLab(String? value) {
-    selectedLab = value;
-    notifyListeners();  // Notify listeners to rebuild the widget
-  }
   void setSelectedWTP(String? value) {
     selectedWtp = value;
     notifyListeners();  // Notify listeners to rebuild the widget

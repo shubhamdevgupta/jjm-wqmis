@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/ErrorProvider.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
+import 'package:jjm_wqmis/views/LabParameterScreen.dart';
 import 'package:jjm_wqmis/views/LoginScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SplashScreen.dart';
@@ -18,6 +21,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => Masterprovider()),
+        ChangeNotifierProvider(create: (context) => ErrorProvider()),
+        ChangeNotifierProvider(create: (context) => ParameterProvider()),
       ],
       child: MyApp(),
     ),
