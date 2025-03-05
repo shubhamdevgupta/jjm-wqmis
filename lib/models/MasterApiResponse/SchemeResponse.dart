@@ -1,5 +1,5 @@
 class SchemeResponse {
-  final int schemeId;
+  final String schemeId;
   final String schemeName;
 
   SchemeResponse({required this.schemeId, required this.schemeName});

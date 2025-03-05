@@ -65,6 +65,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                         }).toList(),
                         onChanged: (value)  {
                           provider.setSelectedLab(value);
+                          provider.fetchAllParameter("470", "31", "0", "1151455", "1");
                         },
                       )
                     ],
