@@ -129,9 +129,25 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     borderRadius: BorderRadius.circular(5),
                     borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when not focused
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when focused
+
+                );
+              }).toList(),
+              onChanged: (value) {
+                masterProvider.setSelectedHabitation(value);
+              },
+            ),
+            SizedBox(height: 12),
+
+            CustomDropdown(
+              title: "Scheme Name",
+              value: masterProvider.selectedScheme,
+              items: masterProvider.schemes.map((scheme) {
+                return DropdownMenuItem<String>(
+                  value: scheme.schemeId.toString(),
+                  child: Text(
+                    scheme.schemeName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
