@@ -10,11 +10,13 @@ class ParameterProvider with ChangeNotifier {
 
   bool isLoading = false;
 
+  List<Parameterresponse> parameterList =[];
+  int? selectedParameter;
+
   int selectionType = 0;
   int parameterType = 0;
 
-  List<String> labs = ['Lab 1', 'Lab 2', 'Lab 3'];
-  List<String> allParameters = ['Chloride', 'Color', 'E. coli', 'Fluoride'];
+  List<String> allParameters = [];
   List<String> chemicalParameters = ['Chloride', 'Fluoride'];
   List<String> bacteriologicalParameters = ['E. coli'];
   List<String> cart = [];
@@ -22,8 +24,7 @@ class ParameterProvider with ChangeNotifier {
   List<Alllabresponse> labList=[];
   String? selectedLab;
 
-  List<Parameterresponse> parameterList =[];
-  int? selectedParameter;
+
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     isLoading = true;
@@ -45,7 +46,8 @@ class ParameterProvider with ChangeNotifier {
     try {
       parameterList = await _lapparameterrepository.fetchAllParameter(labid,stateid,sid,reg_id,parameteetype);
       if (parameterList.isNotEmpty) {
-        selectedParameter = parameterList.first.parameterId;
+        selectedParameter = parameterList.first.parameterIdAlt;
+        allParameters = parameterList.map((param) => param.parameterName).toList();
       }
     } catch (e) {
       debugPrint('Error in fetching lab list: $e');

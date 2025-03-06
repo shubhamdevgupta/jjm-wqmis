@@ -33,20 +33,23 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                     Row(
                       children: [
                         Radio(
-                          value: 0,
-                          groupValue: provider.selectionType,
-                          onChanged: (value) =>{
-                            provider.setSelectionType(value!),
-                            provider.fetchAllLabs("31", "471", "4902", "167838", "397110", "1")
-                          }
-                        ),
+                            value: 0,
+                            groupValue: provider.selectionType,
+                            onChanged: (value) => {
+                                  provider.parameterList.clear(),
+                                  provider.setSelectionType(value!),
+                                  provider.fetchAllLabs("31", "471", "4902",
+                                      "167838", "397110", "1")
+                                }),
                         Text('As per laboratory'),
                         Radio(
-                          value: 1,
-                          groupValue: provider.selectionType,
-                          onChanged: (value) =>
-                              provider.setSelectionType(value!),
-                        ),
+                            value: 1,
+                            groupValue: provider.selectionType,
+                            onChanged: (value) => {
+                                  provider.setSelectionType(value!),
+                                  provider.fetchAllParameter(
+                                      "0", "31", "0", "1151455", "1")
+                                }),
                         Text('As per parameters'),
                       ],
                     ),
@@ -63,9 +66,8 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 maxLines: 1,
                               ));
                         }).toList(),
-                        onChanged: (value)  {
+                        onChanged: (value) {
                           provider.setSelectedLab(value);
-                          provider.fetchAllParameter("470", "31", "0", "1151455", "1");
                         },
                       )
                     ],
@@ -87,21 +89,28 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               DropdownButton<int>(
-                                isExpanded: true,
-                                value: provider.parameterType,
-                                items: [
-                                  DropdownMenuItem(
-                                      value: 0, child: Text('All Parameter')),
-                                  DropdownMenuItem(
-                                      value: 1,
-                                      child: Text('Chemical Parameter')),
-                                  DropdownMenuItem(
-                                      value: 2,
-                                      child: Text('Bacteriological Parameter')),
-                                ],
-                                onChanged: (value) =>
-                                    provider.setParameterType(value!),
-                              ),
+                                  isExpanded: true,
+                                  value: provider.parameterType,
+                                  items: [
+                                    DropdownMenuItem(
+                                        value: 0, child: Text('All Parameter')),
+                                    DropdownMenuItem(
+                                        value: 1,
+                                        child: Text('Chemical Parameter')),
+                                    DropdownMenuItem(
+                                        value: 2,
+                                        child:
+                                            Text('Bacteriological Parameter')),
+                                  ],
+                                  onChanged: (value) => {
+                                        provider.setParameterType(value!),
+                                        provider.fetchAllParameter(
+                                            provider.selectedLab!,
+                                            "31",
+                                            "0",
+                                            "1151455",
+                                            value.toString())
+                                      }),
                             ],
                           ),
                         ),
@@ -124,35 +133,60 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             SizedBox(height: 10),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
+                            SizedBox(
+                              width: double.infinity,
                               child: DataTable(
+                                columnSpacing: 10,
+                                headingRowHeight: 40,
+                                dataRowHeight: 45,
                                 columns: const <DataColumn>[
-                                  DataColumn(label: Text('Sr. No.')),
-                                  DataColumn(label: Text('Test Name')),
-                                  DataColumn(label: Text('Test Price')),
-                                  DataColumn(label: Text('Select Test')),
+                                  DataColumn(
+                                      label: Text('Sr. No.',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
+                                  DataColumn(
+                                      label: Text('Test Name',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
+                                  DataColumn(
+                                      label: Text('Test Price',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
+                                  DataColumn(
+                                      label: Text('Select Test',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
                                 ],
-                                rows: List<DataRow>.generate(
-                                  provider.getParameters().length,
-                                  (index) => DataRow(
+                                rows: provider.parameterList
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  int index = entry.key;
+                                  var param = entry.value;
+                                  return DataRow(
                                     cells: <DataCell>[
                                       DataCell(Text('${index + 1}')),
-                                      DataCell(Text(
-                                          provider.getParameters()[index])),
-                                      DataCell(Text('0')),
+                                      DataCell(SizedBox(
+                                        width: 80,
+                                        child: Text(
+                                          param.parameterName,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )),
+                                      DataCell(
+                                          Text(param.publicRate.toString())),
                                       DataCell(
                                         Checkbox(
-                                          value: provider.cart.contains(
-                                              provider.getParameters()[index]),
-                                          onChanged: (bool? value) =>
-                                              provider.toggleCart(provider
-                                                  .getParameters()[index]),
+                                          value: provider.cart
+                                              .contains(param.parameterIdAlt),
+                                          onChanged: (bool? value) => provider
+                                              .toggleCart(param.parameterIdAlt
+                                                  .toString()),
                                         ),
                                       ),
                                     ],
-                                  ),
-                                ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                             SizedBox(height: 20),
