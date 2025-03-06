@@ -33,7 +33,7 @@ class Lapparameterrepository{
       final response = await _apiService.get(
           '/apimaster/GetTestList?labid=$labid&stateid=$stateid&sid=$sid&reg_id=$reg_id&parameteetype=$parameteetype');
 
-      log('Water Source API Response: $response');
+      log('fetch all parameter Response: $response');
 
       if (response is List) {
         return response.map((item) => Parameterresponse.fromJson(item)).toList();

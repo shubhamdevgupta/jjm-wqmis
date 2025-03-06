@@ -54,7 +54,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -71,7 +72,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -89,7 +91,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -106,7 +109,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -125,7 +129,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -143,6 +148,7 @@ class MasterRepository {
       }
     } catch (e) {
       log('Error in fetchSchemes: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
@@ -162,7 +168,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -179,7 +186,7 @@ class MasterRepository {
       final response = await _apiService.get(
           '/apimaster/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
 
-      log('Water Source API Response: $response');
+      log('Source Information API Response: $response');
 
       if (response is List) {
         return response
@@ -189,7 +196,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 
@@ -207,7 +215,8 @@ class MasterRepository {
         throw ApiException('Api Error :$response');
       }
     } catch (e) {
-      throw NetworkException();
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
     }
   }
 

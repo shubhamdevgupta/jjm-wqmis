@@ -284,7 +284,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 );
               }).toList(),
               onChanged: (value) {
-                masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0");
                 masterProvider.setSelectedHabitation(value);
               },
             ),
