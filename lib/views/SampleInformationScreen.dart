@@ -61,67 +61,113 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-              return Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //card for state district selection
-                      buildStateVillage(masterProvider),
-                      SizedBox(
-                        height: 12,
+                  return Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          //card for state district selection
+                          buildStateVillage(masterProvider),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          // card for location of source from where sample taken
+                          buildSampleTaken(masterProvider),
+                          SizedBox(
+                            height: 12,
+                          ),
+                        ],
                       ),
-                      // card for location of source from where sample taken
-                      buildSampleTaken(masterProvider),
-                      SizedBox(
-                        height: 12,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            })),
+                    ),
+                  );
+                })),
       ),
     );
   }
 
   Widget buildStateVillage(Masterprovider masterProvider) {
     return Card(
-      elevation: 1,
+      elevation: 5, // Increased elevation for a more modern shadow effect
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
       ),
-      margin: EdgeInsets.all(0),
+      margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
+      color: Colors.white, // Set background color of the card to white
       child: Padding(
-        padding: EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(8.0), // Increased padding for more spacing inside the card
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title for the dropdown
+            Text(
+              "Select Scheme",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87, // Dark text for better readability
+              ),
+            ),
 
-
-            CustomDropdown(
-              title: "Scheme Name",
-              value: masterProvider.selectedScheme,
-              items: masterProvider.schemes.map((scheme) {
-                return DropdownMenuItem<String>(
-                  value: scheme.schemeId.toString(),
-                  child: Text(
-                    scheme.schemeName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+            const Divider(
+              height: 10,
+              color: Colors.grey,
+              thickness: 1,
+            ),
+            SizedBox(height: 4), // Space between title and dropdown
+            // Custom dropdown
+            Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButtonFormField<String>(
+                value: masterProvider.selectedScheme,
+                decoration: InputDecoration(
+                  labelStyle: TextStyle(color: Colors.black),  // Change label color to black
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when not focused
                   ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                masterProvider.setSelectedScheme(value);
-                masterProvider.fetchWatersourcefilterList();
-              },
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when focused
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: Colors.redAccent, width: 2),  // Red border for error state
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  fillColor: Colors.white,  // Set background color to white
+                  filled: true,  // Ensures background color is applied
+                ),
+                items: masterProvider.schemes.map((scheme) {
+                  return DropdownMenuItem<String>(
+                    value: scheme.schemeId.toString(),
+                    child: Text(
+                      scheme.schemeName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedScheme(value);
+                  masterProvider.fetchWatersourcefilterList();
+                },
+                dropdownColor: Colors.white,  // Set dropdown color to white
+                isExpanded: true,
+                style: TextStyle(color: Colors.black, fontSize: 16),  // Set text color to black
+                icon: Icon(Icons.arrow_drop_down, color: Colors.black),  // Set icon color to black
+                borderRadius: BorderRadius.circular(5),
+                hint: Text('-select-', style: TextStyle(color: Colors.black54)),  // Placeholder color to be more readable
+              ),
             )
           ],
         ),
       ),
     );
+
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
@@ -210,7 +256,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: CustomDropdown(
                   title:
-                      "Please select the location of source from where sample is taken:",
+                  "Please select the location of source from where sample is taken:",
                   value: masterProvider.selectedWtsfilter,
                   items: masterProvider.wtsFilterList.map((wtsFilter) {
                     return DropdownMenuItem<String>(
@@ -307,7 +353,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-
+        SizedBox(height: 10,),
         Visibility(
           visible: masterProvider.selectedSubSource == 1 || masterProvider.selectedSource == 2,
           child: Card(
@@ -329,8 +375,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Text(
                     'PWS Type:',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blueAccent,fontSize: 15
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueAccent,fontSize: 15
                     ),
                   ),
                   Row(
@@ -393,6 +439,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
 
+        SizedBox(height: 10,),
 
         Visibility(
           visible: masterProvider.selectedPwsType != null,
