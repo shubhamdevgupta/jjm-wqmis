@@ -169,7 +169,7 @@ class MasterRepository {
   Future<List<WaterSourceResponse>> fetchSourceInformation(
       String villageId,
       String habitationId,
-      String filter,
+      int filter,
       String cat,
       String subcat,
       String wtpId,

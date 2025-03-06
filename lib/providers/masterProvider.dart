@@ -178,7 +178,7 @@ class Masterprovider extends ChangeNotifier {
     try {
       schemes = await _masterRepository.fetchSchemes(villageId, habitationId);
       if (schemes.isNotEmpty) {
-        selectedScheme = schemes.first.schemeId.toString();
+        selectedScheme = schemes.first.schemeId;
       }
     } catch (e) {
       debugPrint('Error in fetching scheme: $e');
@@ -188,7 +188,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSourceInformation(String villageId, String habitationId, String filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
+  Future<void> fetchSourceInformation(String villageId, String habitationId, int filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
     isLoading = true;
     try {
       waterSource = await _masterRepository.fetchSourceInformation(villageId,
