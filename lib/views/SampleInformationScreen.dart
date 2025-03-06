@@ -88,55 +88,17 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildStateVillage(Masterprovider masterProvider) {
     return Card(
-      elevation: 5, // Increased elevation for a more modern shadow effect
+      elevation: 1,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+        borderRadius: BorderRadius.circular(8),
       ),
-      margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
-      color: Colors.white, // Set background color of the card to white
+      margin: EdgeInsets.all(0),
       child: Padding(
-        padding: EdgeInsets.all(8.0), // Increased padding for more spacing inside the card
+        padding: EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title for the dropdown
-            Text(
-              "Select Scheme",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87, // Dark text for better readability
-              ),
-            ),
 
-            const Divider(
-              height: 10,
-              color: Colors.grey,
-              thickness: 1,
-            ),
-            SizedBox(height: 4), // Space between title and dropdown
-            // Custom dropdown
-            Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DropdownButtonFormField<String>(
-                value: masterProvider.selectedScheme,
-                decoration: InputDecoration(
-                  labelStyle: TextStyle(color: Colors.black),  // Change label color to black
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when not focused
-                  ),
-
-                );
-              }).toList(),
-              onChanged: (value) {
-                masterProvider.setSelectedHabitation(value);
-              },
-            ),
-            SizedBox(height: 12),
 
             CustomDropdown(
               title: "Scheme Name",
@@ -149,41 +111,17 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.redAccent, width: 2),  // Red border for error state
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  fillColor: Colors.white,  // Set background color to white
-                  filled: true,  // Ensures background color is applied
-                ),
-                  items: masterProvider.schemes.map((scheme) {
-                    return DropdownMenuItem<String>(
-                      value: scheme.schemeId.toString(),
-                      child: Text(
-                        scheme.schemeName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    );
-                  }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedScheme(value);
-                  masterProvider.fetchWatersourcefilterList();
-                },
-                dropdownColor: Colors.white,  // Set dropdown color to white
-                isExpanded: true,
-                style: TextStyle(color: Colors.black, fontSize: 16),  // Set text color to black
-                icon: Icon(Icons.arrow_drop_down, color: Colors.black),  // Set icon color to black
-                borderRadius: BorderRadius.circular(5),
-                hint: Text('-select-', style: TextStyle(color: Colors.black54)),  // Placeholder color to be more readable
-              ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                masterProvider.setSelectedScheme(value);
+                masterProvider.fetchWatersourcefilterList();
+              },
             )
           ],
         ),
       ),
     );
-
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
