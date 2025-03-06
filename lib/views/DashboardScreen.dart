@@ -1,6 +1,7 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +14,79 @@ class DashboardScreen extends StatelessWidget {
     getToken();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('JJM-WQMIS'),
+      automaticallyImplyLeading: false,
+      // Removes the default back button
+      centerTitle: true,
+      title: const Text(
+        'JJM-WQMIS',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       ),
+
+      //Navigation Drawer Icon
+      leading: Builder(
+        // Add menu button to open the drawer
+        builder: (context) {
+          return IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            // Drawer icon
+            onPressed: () {
+              Scaffold.of(context)
+                  .openDrawer(); // Open the Navigation Drawer
+            },
+          );
+        },
+      ),
+
+      //Notification badge icon
+      actions: [
+        Stack(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.notifications_active,
+                  color: Colors.white),
+              onPressed: () {
+                // Handle notification button click
+                // if(unReadNotificationCount ==0){
+                //   CustomSnackBar.showError(context, 'There is no notifications found!');
+                // }else{
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => NotificationListScreenNew()),
+                //   );
+                // }
+
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => NotificationListScreen()),
+                // );
+              },
+            ),
+
+          ],
+        ),
+      ],
+
+      //elevation
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF096DA8), // Dark blue color
+              Color(0xFF3C8DBC), // Green color
+            ],
+            begin: Alignment.topCenter, // Start at the top center
+            end: Alignment.bottomCenter, // End at the bottom center
+          ),
+        ),
+      ),
+      elevation: 5,
+    ),
+
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -81,15 +153,95 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Dashboard Overview',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+
+            Center(
+              child: const Text(
+                'Dashboard Overview',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
             ),
-            const SizedBox(height: 16),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              margin: EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 6,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Circular user image
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundImage: AssetImage('assets/user_image.png'), // Replace with dynamic user profile image path
+                    backgroundColor: Colors.grey[200], // Fallback color
+                  ),
+                  SizedBox(width: 16), // Space between image and text
+
+                  // Text column
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Welcome message
+                        Text(
+                          'Welcome, Ajay', // Replace with dynamic username
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue[800], // Slightly dark blue color for warmth
+                            fontFamily: 'Poppins',
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+
+                        SizedBox(height: 8), // Space between lines
+
+                        // Phone Row
+                        Row(
+                          children: [
+                            Icon(Icons.phone_android, color: Colors.teal, size: 20), // Using an icon for consistency
+                            SizedBox(width: 6),
+                            Text(
+                              '9599460671', // Replace with dynamic phone number
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+
+
+
+
+
+            const SizedBox(height: 10),
+
+
+
+
             GridView.count(
               crossAxisCount: 2,
-              crossAxisSpacing: 16.0,
-              mainAxisSpacing: 16.0,
+              crossAxisSpacing: 20.0,
+              mainAxisSpacing: 20.0,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
@@ -97,66 +249,131 @@ class DashboardScreen extends StatelessWidget {
                   title: 'Total Samples',
                   value: '120',
                   icon: Icons.analytics,
-                  color: Colors.orange,
+                  gradientColors: [Colors.lightBlueAccent,Colors.blue],  // Example gradient colors
+
                 ),
                 _buildDashboardCard(
                   title: 'Pending Tests',
                   value: '15',
                   icon: Icons.hourglass_empty,
-                  color: Colors.red,
+                  gradientColors: [Color(0xFFFCE889), Color(0xFFFFAA00)],  // Example gradient colors
                 ),
                 _buildDashboardCard(
                   title: 'Completed Tests',
                   value: '105',
                   icon: Icons.check_circle,
-                  color: Colors.green,
+                  gradientColors: [ Colors.lightGreen,Colors.green],  // Example gradient colors
                 ),
                 _buildDashboardCard(
-                  title: 'Retesting ',
+                  title: 'Retesting',
                   value: '5',
                   icon: Icons.refresh,
-                  color: Colors.blue,
-                ),
+                  gradientColors: [Colors.redAccent,Colors.red],  // Example gradient colors
+                )
+
               ],
             ),
+            const SizedBox(height: 20),
+
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Show the LocationSelectionScreen as a dialog
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      double screenHeight = MediaQuery.of(context).size.height;
+                      return AlertDialog(
+                        contentPadding: EdgeInsets.all(10), // Adjust the padding to reduce space
+                        content: Container(
+                          color: Colors.white,
+                          height: screenHeight * 0.8,
+                          width: screenHeight * 0.4, // Set a fixed height for the content
+                          child: Locationscreen(), // Replace with your widget
+                        ),
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF0468B1),
+                  textStyle: TextStyle(fontSize: 16),
+                  minimumSize: Size(300, 50), // Set a minimum width (200) and height (50)
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min, // Ensures the button adjusts its size based on content
+                  children: [
+                    Icon(
+                      Icons.add, // Plus symbol icon
+                      color: Colors.white, // Match text color
+                      size: 18, // Adjust the size as needed
+                    ),
+                    SizedBox(width: 8), // Add spacing between icon and text
+                    Text(
+                      'Add Sample',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            )
+
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDashboardCard({required String title, required String value, required IconData icon, required Color color,}) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: color.withOpacity(0.2),
-              child: Icon(icon, color: color),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-          ],
+  Widget _buildDashboardCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required List<Color> gradientColors,  // Gradient colors as List
+  }) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradientColors,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 6,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.white.withOpacity(0.2),
+            child: Icon(icon, color: Colors.white, size: 30),
+          ),
+          SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -191,15 +191,8 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSourceInformation(
-      String villageId,
-      String habitationId,
-      String filter,
-      String cat,
-      String subcat,
-      String wtpId,
-      String stateId,
-      String schemeId) async {
+  Future<void> fetchSourceInformation(String villageId, String habitationId, int filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
+
     isLoading = true;
     try {
       waterSource = await _masterRepository.fetchSourceInformation(villageId,
