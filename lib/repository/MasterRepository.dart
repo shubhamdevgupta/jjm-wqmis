@@ -134,10 +134,10 @@ class MasterRepository {
     }
   }
 
-  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId) async {
+  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId,String districtId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId');
+          '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId');
 
       log('Scheme API Response: $response');
 
@@ -176,7 +176,7 @@ class MasterRepository {
   Future<List<WaterSourceResponse>> fetchSourceInformation(
       String villageId,
       String habitationId,
-      int filter,
+      String filter,
       String cat,
       String subcat,
       String wtpId,

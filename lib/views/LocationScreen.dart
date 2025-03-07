@@ -244,7 +244,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedGramPanchayat!,
                         value);
                     masterProvider.fetchSchemes(
-                        masterProvider.selectedVillage!, "0");
+                        masterProvider.selectedVillage!, "0","0");
                   }
                 },
               ),
@@ -264,8 +264,6 @@ class _LocationscreenState extends State<Locationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  masterProvider.fetchSchemes(
-                      masterProvider.selectedVillage!, "0");
                   masterProvider.setSelectedHabitation(value);
                 },
               ),

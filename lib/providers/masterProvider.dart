@@ -48,14 +48,17 @@ class Masterprovider extends ChangeNotifier {
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
-  int? _selectedSource;
 
-  int? get selectedSource => _selectedSource;
   int? _selectedSubSource;
-
   int? get selectedSubSource => _selectedSubSource;
-  int? _selectedPwsType;
 
+  int? _selectedHouseHoldType;
+  int? get selectedHousehold => _selectedHouseHoldType;
+
+  int? _selectedHandpumpPrivate;
+  int? get selectedHandpumpPrivate => _selectedHandpumpPrivate;
+
+  int? _selectedPwsType;
   int? get selectedPwsType => _selectedPwsType;
 
   Masterprovider() {
@@ -117,8 +120,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchGramPanchayat(
-      String stateId, String districtId, String blockId) async {
+  Future<void> fetchGramPanchayat(String stateId, String districtId, String blockId) async {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
@@ -136,8 +138,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchVillage(
-      String stateId, String districtId, String blockId, String gpID) async {
+  Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
@@ -155,8 +156,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHabitations(String stateId, String districtId,
-      String blockId, String gpId, String villageId) async {
+  Future<void> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -174,14 +174,30 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchemes(String villageId, String habitationId) async {
+  Future<void> fetchSchemes(String villageId, String habitationId,String districtid) async {
     isLoading = true;
     notifyListeners();
     try {
-      schemes = await _masterRepository.fetchSchemes(villageId, habitationId);
-      if (schemes.isNotEmpty) {
-        selectedScheme = schemes.first.schemeId;
+      schemes = await _masterRepository.fetchSchemes(villageId, habitationId, districtid);
+
+      List<SchemeResponse> filteredSchemes = [
+        SchemeResponse(schemeId: "", schemeName: "--Select--")
+      ];
+      filteredSchemes.addAll(
+          schemes.where((scheme) => scheme.schemeId.isNotEmpty).toList());
+      if (filteredSchemes.length > 1) {
+        print('Valid schemes found');
+        selectedScheme = filteredSchemes.first.schemeId; // Select "Select" by default
+      } else {
+        print('No valid scheme found, updating list to "Data Not Available"');
+        filteredSchemes = [
+          SchemeResponse(schemeId: "0", schemeName: "Data Not Available")
+        ];
+        selectedScheme = filteredSchemes.first.schemeId;
       }
+
+      schemes = filteredSchemes; // Update the provider list
+      notifyListeners();
     } catch (e) {
       debugPrint('Error in fetching scheme: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -191,7 +207,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSourceInformation(String villageId, String habitationId, int filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
+  Future<void> fetchSourceInformation(String villageId, String habitationId, String filter, String cat, String subcat, String wtpId, String stateId, String schemeId) async {
 
     isLoading = true;
     try {
@@ -233,8 +249,8 @@ class Masterprovider extends ChangeNotifier {
     try {
       wtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
       if (wtsFilterList.isNotEmpty) {
-        selectedWtsfilter =
-            wtsFilterList.first.id.toString(); // Default to the first state
+        wtsFilterList.insert(0, Watersourcefilterresponse(id: 0, sourceType: "-Select-"));
+        selectedWtsfilter = wtsFilterList.first.id.toString(); // Default to the first state
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
@@ -247,8 +263,22 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedWaterSourcefilter(String? value) {
     selectedWtsfilter = value;
+    _selectedPwsType=null;
+    _selectedSubSource=null;
+    _selectedHouseHoldType=null;
+    _selectedHandpumpPrivate=null;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
+  void setSelectedHouseHold(int? value){
+    _selectedHouseHoldType=value;
+    notifyListeners();
+  }
+
+  void setSelectedHandpump(int? value){
+    _selectedHandpumpPrivate=value;
+    notifyListeners();
+  }
+
 
   void setSelectedWTP(String? value) {
     selectedWtp = value;
@@ -260,13 +290,10 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
-  void setSelectedSource(int? value) {
-    _selectedSource = value;
-    notifyListeners();
-  }
 
   void setSelectedSubSource(int? value) {
     _selectedSubSource = value;
+    _selectedPwsType=null;
     notifyListeners();
   }
 
