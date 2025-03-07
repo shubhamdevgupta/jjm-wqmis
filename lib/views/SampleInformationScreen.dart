@@ -157,12 +157,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.fetchWatersourcefilterList();
                   }
                 },
-                dropdownColor: Colors.white,  // Set dropdown color to white
+                dropdownColor: Colors.white,
                 isExpanded: true,
-                style: TextStyle(color: Colors.black, fontSize: 16),  // Set text color to black
-                icon: Icon(Icons.arrow_drop_down, color: Colors.black),  // Set icon color to black
+                style: TextStyle(color: Colors.black, fontSize: 16),
+                icon: Icon(Icons.arrow_drop_down, color: Colors.black),
                 borderRadius: BorderRadius.circular(5),
-                hint: Text('-select-', style: TextStyle(color: Colors.black54)),  // Placeholder color to be more readable
+                hint: Text('-select-', style: TextStyle(color: Colors.black54)),
               ),
             )
           ],
@@ -181,72 +181,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /*   Text(
-              'Please select the location of source from where sample is taken:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            SizedBox(height: 12),
-            Flexible(
-              child: DropdownButtonFormField<int>(
-                value: masterProvider.selectedSource,
-                isExpanded: true,
-                // Ensures the dropdown takes full width inside Flexible
-                decoration: InputDecoration(
-                  labelText: 'Select Source',
-                  labelStyle: TextStyle(color: Colors.blueAccent),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value: 2,
-                    child: Text(
-                      'Sources of Schemes (Raw water)',
-                      overflow: TextOverflow
-                          .ellipsis, // Adds "..." if text is too long
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 5,
-                    child: Text('WTP of PWS schemes (Treatment)'),
-                  ),
-                  DropdownMenuItem(
-                    value: 6,
-                    child: Text('Storage Structure (ESR/GSR)'),
-                  ),
-                  DropdownMenuItem(
-                    value: 3,
-                    child: Text('Households /school /AWCs'),
-                  ),
-                  DropdownMenuItem(
-                    value: 4,
-                    child: Text(
-                      'Handpumps and other private sources',
-                      overflow: TextOverflow
-                          .ellipsis, // Adds "..." if text is too long
-                    ),
-                  ),
-                ],
-                onChanged: (value) {
-                  masterProvider.setSelectedSource(value);
-                  masterProvider.setSelectedSubSource(null);
-                  masterProvider.setSelectedPwsSource(null);
-                  setState(() {
-                    _selectedHandPumpType = null;
-                  });
-                },
-              ),
-            ),*/
 
-            /// data from the apiss
             Card(
               elevation: 5, // Increased elevation for a more modern shadow effect
               shape: RoundedRectangleBorder(
@@ -272,9 +207,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   onChanged: (value) {
                     masterProvider.setSelectedWaterSourcefilter(value);
                     if(masterProvider.selectedWtsfilter=="5"){
+                      print("----calling for WTP of PWS Scheme-----");
                       masterProvider.fetchWTPList(masterProvider.selectedVillage!, masterProvider.selectedHabitation!,
                           masterProvider.selectedStateId!, masterProvider.selectedScheme!);
                     }else if(masterProvider.selectedWtsfilter=="6"){
+                      print("----calling for Storage and strucute-----");
                     masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                         masterProvider.selectedHabitation!, value!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
                     }
@@ -383,10 +320,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 1,
                         groupValue: masterProvider.selectedPwsType,
                         onChanged: (value) {
-                          // If user selects PWS Type, store the value
                           masterProvider.setSelectedPwsSource(value);
-
-                          // Optionally, trigger actions like fetching new data
+                          print("----calling for Source of scheme raw water-----");
                           if (value != null) {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
@@ -410,10 +345,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 2,
                         groupValue: masterProvider.selectedPwsType,
                         onChanged: (value) {
-                          // If user selects PWS Type, store the value
                           masterProvider.setSelectedPwsSource(value);
-
-                          // Optionally, trigger actions like fetching new data
+                          print("----calling for Source of scheme raw water-----");
                           if (value != null) {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
@@ -510,12 +443,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               title: "Select water treatment plant (WTP)",
               onChanged: (value) {
                 masterProvider.setSelectedWTP(value);
-                /* if (value != null) {
-                  masterProvider.fetchGramPanchayat(
-                      masterProvider.selectedStateId!,
-                      masterProvider.selectedDistrictId!,
-                      value);
-                }*/
               },
             ),
             SizedBox(
@@ -530,11 +457,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       value: 5,
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
-                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                        print("----calling for wtp but now have to stop -----");
+               /*         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                             masterProvider.selectedHabitation!,
                             masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
                             masterProvider.selectedStateId!, masterProvider.selectedStateId!);
-                        masterProvider.setSelectedSubSource(value);
+                        masterProvider.setSelectedSubSource(value);*/
                       },
                     ),
                     Text('Inlet of WTP')
@@ -546,11 +474,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       value: 6,
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
+                        print("----calling for wtp but now have to stop -----");
+
                         masterProvider.setSelectedSubSource(value);
-                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+      /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                             masterProvider.selectedHabitation!,
                             masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
+                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
                       },
                     ),
                     Text('Outlet of WTP')
@@ -562,11 +492,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       value: 7,
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
+                        print("----calling for wtp but now have to stop -----");
+
                         masterProvider.setSelectedSubSource(value);
-                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                      /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                             masterProvider.selectedHabitation!,
                             masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
+                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
                       },
                     ),
                     Text('Disinfection')
@@ -646,6 +578,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       value: 4,
                       groupValue: masterProvider.selectedHousehold,
                       onChanged: (value) {
+                        print("----calling for house hold /school / aganwadi -----");
                        masterProvider.setSelectedHouseHold(value);
                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                            masterProvider.selectedHabitation!, masterProvider.selectedWtsfilter!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);

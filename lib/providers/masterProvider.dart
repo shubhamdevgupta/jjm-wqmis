@@ -61,6 +61,7 @@ class Masterprovider extends ChangeNotifier {
   int? _selectedPwsType;
   int? get selectedPwsType => _selectedPwsType;
 
+  String errorMsg='';
   Masterprovider() {
     fetchStates();
   }

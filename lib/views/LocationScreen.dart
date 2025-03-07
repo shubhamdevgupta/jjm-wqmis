@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
@@ -30,11 +31,6 @@ class _LocationscreenState extends State<Locationscreen> {
                   color: Colors.white,
                 ),
               ),
-
-              //Navigation Drawer Icon
-
-
-              //Notification badge icon
 
 
               //elevation
@@ -272,17 +268,14 @@ class _LocationscreenState extends State<Locationscreen> {
                 child: ElevatedButton(
                   onPressed: () {
 
-                    /*Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) =>  Sampleinformationscreen()
-                      ),
-                    );*/
-                    Navigator.pushReplacementNamed(context, '/savesample');
+                    if(validateStateVillate(masterProvider)){
+                      Navigator.pushReplacementNamed(context, '/savesample');
+                    }else{
+                      print("errrrrrrrrrrrrrrrrr ${masterProvider.errorMsg}");
+                      ToastHelper.showToastMessage(masterProvider.errorMsg,backgroundColor: Colors.red);
+                    }
 
-
-
-
-                    /*             if (_selectedState.stateName == "--Select State--") {
+                  /*  if (_selectedState.stateName == "--Select State--") {
                       ToastHelper.showToastMessage("Please select all dropdown options before proceeding.", backgroundColor: Colors.red,);
                     } else if (_selectedState == null || _selectedDistrict == null || _selectedBlock == null || _selectedGP == null || _selectedVillage == null) {
                       // Show a toast message if validation fails
@@ -329,29 +322,28 @@ class _LocationscreenState extends State<Locationscreen> {
                   child: const Text('Next', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
                 ),
               )
-
-            /*  CustomDropdown(
-                title: "Scheme Name",
-                value: masterProvider.selectedScheme,
-                items: masterProvider.schemes.map((scheme) {
-                  return DropdownMenuItem<String>(
-                    value: scheme.schemeId.toString(),
-                    child: Text(
-                      scheme.schemeName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedScheme(value);
-                  masterProvider.fetchWatersourcefilterList();
-                },
-              )*/
             ],
           ),
         ),
       ),
     );
+  }
+
+  bool validateStateVillate(Masterprovider provider) {
+      provider.errorMsg = (provider.selectedStateId!.isNotEmpty
+          ? (provider.selectedDistrictId!.isNotEmpty
+          ? (provider.selectedBlockId!.isNotEmpty
+          ? (provider.selectedGramPanchayat!.isNotEmpty
+          ? (provider.village.isNotEmpty
+          ? (provider.habitationId.isNotEmpty
+          ? ""
+          : "Please select habitation dropdown before proceeding.")
+          : "Please select village dropdown before proceeding.")
+          : "Please select GramPanchayat dropdown before proceeding.")
+          : "Please select Block dropdown before proceeding.")
+          : "Please select District dropdown before proceeding.")
+          : "Please select State dropdown before proceeding.");
+      return provider.errorMsg.isEmpty;
+
   }
 }
