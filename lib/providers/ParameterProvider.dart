@@ -5,12 +5,12 @@ import '../models/MasterApiResponse/AllLabResponse.dart';
 import '../models/MasterApiResponse/ParameterResponse.dart';
 
 class ParameterProvider with ChangeNotifier {
-
-  final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
+  final Lapparameterrepository _lapparameterrepository =
+      Lapparameterrepository();
 
   bool isLoading = false;
 
-  List<Parameterresponse> parameterList =[];
+  List<Parameterresponse> parameterList = [];
   int? selectedParameter;
 
   int selectionType = 0;
@@ -19,17 +19,17 @@ class ParameterProvider with ChangeNotifier {
   List<String> allParameters = [];
   List<String> chemicalParameters = ['Chloride', 'Fluoride'];
   List<String> bacteriologicalParameters = ['E. coli'];
-  List<String> cart = [];
+  List<Parameterresponse> cart = [];
 
-  List<Alllabresponse> labList=[];
+  List<Alllabresponse> labList = [];
   String? selectedLab;
 
-
-
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+  Future<void> fetchAllLabs(String StateId, String districtId, String blockid,
+      String gpid, String villageid, String isall) async {
     isLoading = true;
     try {
-      labList = await _lapparameterrepository.fetchAllLab(StateId,districtId,blockid,gpid,villageid,isall);
+      labList = await _lapparameterrepository.fetchAllLab(
+          StateId, districtId, blockid, gpid, villageid, isall);
       if (labList.isNotEmpty) {
         selectedLab = labList.first.value;
       }
@@ -41,13 +41,16 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
+  Future<void> fetchAllParameter(String labid, String stateid, String sid,
+      String reg_id, String parameteetype) async {
     isLoading = true;
     try {
-      parameterList = await _lapparameterrepository.fetchAllParameter(labid,stateid,sid,reg_id,parameteetype);
+      parameterList = await _lapparameterrepository.fetchAllParameter(
+          labid, stateid, sid, reg_id, parameteetype);
       if (parameterList.isNotEmpty) {
         selectedParameter = parameterList.first.parameterIdAlt;
-        allParameters = parameterList.map((param) => param.parameterName).toList();
+        allParameters =
+            parameterList.map((param) => param.parameterName).toList();
       }
     } catch (e) {
       debugPrint('Error in fetching lab list: $e');
@@ -61,6 +64,7 @@ class ParameterProvider with ChangeNotifier {
     selectedParameter = value;
     notifyListeners();
   }
+
   void setSelectedLab(String? value) {
     selectedLab = value;
     notifyListeners();
@@ -76,7 +80,6 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   List<String> getParameters() {
     switch (parameterType) {
       case 1:
@@ -88,12 +91,16 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  void toggleCart(String parameter) {
-    if (cart.contains(parameter)) {
-      cart.remove(parameter);
+  void toggleCart(Parameterresponse? parameter) {
+    if (parameter == null || parameter.parameterIdAlt == null)
+      return; // Null safety check
+
+    if (cart.any((item) => item.parameterIdAlt == parameter.parameterIdAlt)) {
+      cart.removeWhere(
+          (item) => item.parameterIdAlt == parameter.parameterIdAlt);
     } else {
       cart.add(parameter);
     }
-    notifyListeners();
+    notifyListeners(); // Notify UI of changes
   }
 }
