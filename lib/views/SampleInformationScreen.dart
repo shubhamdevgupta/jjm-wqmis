@@ -152,8 +152,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  masterProvider.setSelectedScheme(value);
-                  masterProvider.fetchWatersourcefilterList();
+                  if(value!="0"){
+                    masterProvider.setSelectedScheme(value);
+                    masterProvider.fetchWatersourcefilterList();
+                  }
                 },
                 dropdownColor: Colors.white,  // Set dropdown color to white
                 isExpanded: true,
@@ -250,7 +252,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
               ),
-              margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -270,8 +271,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   }).toList(),
                   onChanged: (value) {
                     masterProvider.setSelectedWaterSourcefilter(value);
-                    //  masterProvider.setSelectedScheme(value);
-                    /// masterProvider.fetchWatersourcefilterList();
+                    if(masterProvider.selectedWtsfilter=="5"){
+                      masterProvider.fetchWTPList(masterProvider.selectedVillage!, masterProvider.selectedHabitation!,
+                          masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                    }else if(masterProvider.selectedWtsfilter=="6"){
+                    masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                        masterProvider.selectedHabitation!, value!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                    }
+
                   },
                 ),
               ),
@@ -279,8 +286,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
             SizedBox(height: 10),
             // First Visibility Widget with Border
+
             buildRawWater(masterProvider),
-            buildTreatmentWater(masterProvider),
+            buildWtpWater(masterProvider),
             buildEsrWater(masterProvider),
             buildHouseholdWater(masterProvider),
             buildHandpumpWater(masterProvider),
@@ -320,13 +328,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 1,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          // Clear previous selection for PWS type when sub-source changes
                           masterProvider.setSelectedSubSource(value);
-
-                          // Reset PWS type selection to null or default value when changing sub-source
-                          masterProvider.setSelectedPwsSource(null); // This will clear the PWS type selection
-                          // Optionally, you can reset any other related values or trigger actions
-                        },
+                          },
                       ),
                       Text('Ground water sources (GW)'),
                     ],
@@ -337,12 +340,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 2,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          // Clear previous selection for PWS type when sub-source changes
                           masterProvider.setSelectedSubSource(value);
-
-                          // Reset PWS type selection to null or default value when changing sub-source
-                          masterProvider.setSelectedPwsSource(null); // This will clear the PWS type selection
-                          // Optionally, you can reset any other related values or trigger actions
                         },
                       ),
                       Text('Surface water sources (SW)'),
@@ -355,7 +353,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
         SizedBox(height: 10,),
         Visibility(
-          visible: masterProvider.selectedSubSource == 1 || masterProvider.selectedSource == 2,
+          visible: masterProvider.selectedSubSource == 1 || masterProvider.selectedWtsfilter == "2",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -376,7 +374,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     'PWS Type:',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,fontSize: 15
+                        color: Colors.black,fontSize: 15
                     ),
                   ),
                   Row(
@@ -393,7 +391,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
                                 "0",
-                                3,
+                                masterProvider.selectedWtsfilter!,
                                 masterProvider.selectedSubSource.toString(),
                                 masterProvider.selectedPwsType.toString(),
                                 "0",
@@ -420,7 +418,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
                                 "0",
-                                3,
+                                masterProvider.selectedWtsfilter!,
                                 masterProvider.selectedSubSource.toString(),
                                 masterProvider.selectedPwsType.toString(),
                                 "0",
@@ -483,9 +481,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
-  Widget buildTreatmentWater(Masterprovider masterProvider) {
+  Widget buildWtpWater(Masterprovider masterProvider) {
+
     return Visibility(
-      visible: masterProvider.selectedSource == 5,
+      visible: masterProvider.selectedWtsfilter == "5",
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 1.5),
@@ -531,6 +530,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       value: 5,
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
+                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                            masterProvider.selectedHabitation!,
+                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
                         masterProvider.setSelectedSubSource(value);
                       },
                     ),
@@ -544,6 +547,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
                         masterProvider.setSelectedSubSource(value);
+                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                            masterProvider.selectedHabitation!,
+                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
                       },
                     ),
                     Text('Outlet of WTP')
@@ -556,6 +563,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       groupValue: masterProvider.selectedSubSource,
                       onChanged: (value) {
                         masterProvider.setSelectedSubSource(value);
+                        masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                            masterProvider.selectedHabitation!,
+                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
                       },
                     ),
                     Text('Disinfection')
@@ -621,11 +632,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   children: [
                     Radio(
                       value: 3,
-                      groupValue: _selectedHandPumpType,
+                      groupValue: masterProvider.selectedHousehold,
                       onChanged: (value) {
-                        setState(() {
-                          _selectedHandPumpType = value as int?;
-                        });
+                        masterProvider.setSelectedHouseHold(value);
                       },
                     ),
                     Text('At household'),
@@ -635,11 +644,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   children: [
                     Radio(
                       value: 4,
-                      groupValue: _selectedHandPumpType,
+                      groupValue: masterProvider.selectedHousehold,
                       onChanged: (value) {
-                        setState(() {
-                          _selectedHandPumpType = value as int?;
-                        });
+                       masterProvider.setSelectedHouseHold(value);
+                       masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                           masterProvider.selectedHabitation!, masterProvider.selectedWtsfilter!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
                       },
                     ),
                     Text('At school/AWCs'),
@@ -652,7 +661,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             height: 10,
           ),
           Visibility(
-            visible: _selectedHandPumpType == 3,
+            visible: masterProvider.selectedHousehold == 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               // Align text to the left
@@ -667,7 +676,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
           Visibility(
-            visible: _selectedHandPumpType == 4,
+            visible: masterProvider.selectedHousehold == 4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -718,11 +727,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   children: [
                     Radio(
                       value: 1,
-                      groupValue: _selectedHandPumpType,
+                      groupValue: masterProvider.selectedHandpumpPrivate,
                       onChanged: (value) {
-                        setState(() {
-                          _selectedHandPumpType = value as int?;
-                        });
+                        masterProvider.setSelectedHandpump(value);
                       },
                     ),
                     Text('Govt. Handpump'),
@@ -732,11 +739,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   children: [
                     Radio(
                       value: 2,
-                      groupValue: _selectedHandPumpType,
+                      groupValue: masterProvider.selectedHandpumpPrivate,
                       onChanged: (value) {
-                        setState(() {
-                          _selectedHandPumpType = value as int?;
-                        });
+                        masterProvider.setSelectedHandpump(value);
                       },
                     ),
                     Text('Private source location'),
@@ -750,7 +755,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: _selectedHandPumpType == 1,
+          visible: masterProvider.selectedHandpumpPrivate == 1 && masterProvider.selectedWtsfilter=="4",
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             // Align text to the left
@@ -777,7 +782,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
         Visibility(
-          visible: _selectedHandPumpType == 2,
+          visible: masterProvider.selectedHandpumpPrivate == 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
