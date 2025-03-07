@@ -3,7 +3,7 @@ class Parameterresponse {
   final int userId;
   final int testSelectedCheck;
   final int parameterId;
-  final int parameterIdAlt;
+  final int? parameterIdAlt;
   final String parameterName;
   final double publicRate;
   final double deptRate;
@@ -32,7 +32,7 @@ class Parameterresponse {
     required this.userId,
     required this.testSelectedCheck,
     required this.parameterId,
-    required this.parameterIdAlt,
+     this.parameterIdAlt,
     required this.parameterName,
     required this.publicRate,
     required this.deptRate,

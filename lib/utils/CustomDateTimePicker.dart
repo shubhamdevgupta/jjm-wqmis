@@ -1,54 +1,53 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomDateTimePicker extends StatefulWidget {
   final Function(String) onDateTimeSelected;
-  final String initialValue;
 
-  const CustomDateTimePicker({
-    Key? key,
-    required this.onDateTimeSelected,
-    this.initialValue = '',
-  }) : super(key: key);
+  const CustomDateTimePicker({Key? key, required this.onDateTimeSelected})
+      : super(key: key);
 
   @override
   _CustomDateTimePickerState createState() => _CustomDateTimePickerState();
 }
 
 class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
-  String _selectedDateTime = '';
+  late String _selectedDateTime;
 
   @override
   void initState() {
     super.initState();
-    _selectedDateTime = widget.initialValue;
+    _setCurrentDateTime(); // Set the default value to the current date & time
+  }
+
+  void _setCurrentDateTime() {
+    DateTime now = DateTime.now();
+    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a').format(now);
+
+    setState(() {
+      _selectedDateTime = formattedDateTime;
+    });
+
+    widget.onDateTimeSelected(_selectedDateTime);
   }
 
   Future<void> _selectDateTime(BuildContext context) async {
-    // Open Date Picker for Present and Past Dates Only
+    DateTime now = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(), // Start from today
-      firstDate: DateTime(2000),   // Set the earliest selectable date
-      lastDate: DateTime.now(),    // Disallow future dates
+      initialDate: now,
+      firstDate: DateTime(2000),
+      lastDate: now, // Restrict future dates
     );
 
     if (pickedDate != null) {
-      // Check if the selected date is today
-      bool isToday = pickedDate.isAtSameMomentAs(DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-      ));
-
-      // Open Time Picker
       TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.now(),
+        initialTime: TimeOfDay.fromDateTime(now), // Default to current time
       );
 
       if (pickedTime != null) {
-        // Combine Date and Time
         DateTime combinedDateTime = DateTime(
           pickedDate.year,
           pickedDate.month,
@@ -57,26 +56,21 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
           pickedTime.minute,
         );
 
-        // Check if the selected date and time is valid
-        if (isToday && combinedDateTime.isAfter(DateTime.now())) {
-          // Show error if time is in the future for today
+        if (combinedDateTime.isAfter(now)) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Future time is not allowed for today.'),
+              content: Text('Future time is not allowed.'),
               backgroundColor: Colors.red,
             ),
           );
         } else {
-          // Format Date and Time with AM/PM
           String formattedDateTime =
           DateFormat('yyyy/MM/dd hh:mm a').format(combinedDateTime);
 
-          // Save to State and Update UI
           setState(() {
             _selectedDateTime = formattedDateTime;
           });
 
-          // Pass the selected date and time back to the parent widget
           widget.onDateTimeSelected(_selectedDateTime);
         }
       }
@@ -90,9 +84,9 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Date & Time of Sample Collection *',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           InkWell(
@@ -107,6 +101,83 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
                   border: OutlineInputBorder(),
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+*/
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class CustomDateTimePicker extends StatefulWidget {
+  final Function(String) onDateTimeSelected;
+
+  const CustomDateTimePicker({Key? key, required this.onDateTimeSelected})
+      : super(key: key);
+
+  @override
+  _CustomDateTimePickerState createState() => _CustomDateTimePickerState();
+}
+
+class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
+  late String _selectedDateTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _setCurrentDateTime();
+  }
+
+  void _setCurrentDateTime() {
+    DateTime now = DateTime.now();
+    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a').format(now);
+
+    setState(() {
+      _selectedDateTime = formattedDateTime;
+    });
+
+    widget.onDateTimeSelected(_selectedDateTime);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Date & Time of Sample Collection *',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey[200], // Light grey background
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade400), // Light border
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.access_time, color: Colors.blueGrey),
+                const SizedBox(width: 10),
+                Text(
+                  _selectedDateTime,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
