@@ -239,15 +239,14 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value);
-                    masterProvider.fetchSchemes(
-                        masterProvider.selectedVillage!, "0","0");
+                    masterProvider.fetchWatersourcefilterList();
                   }
                 },
               ),
               SizedBox(height: 12),
               ///// habitation  data heree ----------
               CustomDropdown(
-                title: "Habitation",
+                title: "Habitation *",
                 value: masterProvider.selectedHabitation,
                 items: masterProvider.habitationId.map((habitation) {
                   return DropdownMenuItem<String>(
@@ -271,7 +270,6 @@ class _LocationscreenState extends State<Locationscreen> {
                     if(validateStateVillate(masterProvider)){
                       Navigator.pushReplacementNamed(context, '/savesample');
                     }else{
-                      print("errrrrrrrrrrrrrrrrr ${masterProvider.errorMsg}");
                       ToastHelper.showToastMessage(masterProvider.errorMsg,backgroundColor: Colors.red);
                     }
 

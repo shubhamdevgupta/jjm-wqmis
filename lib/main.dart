@@ -3,7 +3,6 @@ import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
@@ -49,7 +48,10 @@ class MyApp extends StatelessWidget {
         '/savesample': (context) => Sampleinformationscreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/login': (context) => Loginscreen(),
-        'test':(context)=>SelectedTestScreen(cartList: [],)
+        '/labParam': (context) => Labparameterscreen(),
+        'test': (context) => SelectedTestScreen(
+              cartList: [],labinchargeresponse: null,
+            )
       },
     );
   }

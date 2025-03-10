@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
+import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/MasterApiResponse/AllLabResponse.dart';
-import '../models/MasterApiResponse/ParameterResponse.dart';
+import '../models/LabInchargeResponse/AllLabResponse.dart';
+import '../models/LabInchargeResponse/ParameterResponse.dart';
 
 class ParameterProvider with ChangeNotifier {
   final Lapparameterrepository _lapparameterrepository =
@@ -19,13 +21,14 @@ class ParameterProvider with ChangeNotifier {
   List<String> allParameters = [];
   List<String> chemicalParameters = ['Chloride', 'Fluoride'];
   List<String> bacteriologicalParameters = ['E. coli'];
-  List<Parameterresponse> cart = [];
+  List<Parameterresponse>? cart = [];
 
   List<Alllabresponse> labList = [];
   String? selectedLab;
+  Labinchargeresponse? labIncharge;
 
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid,
-      String gpid, String villageid, String isall) async {
+
+  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     isLoading = true;
     try {
       labList = await _lapparameterrepository.fetchAllLab(
@@ -41,8 +44,7 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllParameter(String labid, String stateid, String sid,
-      String reg_id, String parameteetype) async {
+  Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
     isLoading = true;
     try {
       parameterList = await _lapparameterrepository.fetchAllParameter(
@@ -59,6 +61,26 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+  Future<void> fetchLabIncharge(int labId) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      labIncharge = await _lapparameterrepository.fetchLabIncharge(labId);
+      if (labIncharge == null) {
+        throw ApiException("Lab Incharge data is null");
+      }
+
+    } catch (e) {
+      debugPrint(" Error fetching Lab Incharge: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
   void setSelectedParameter(int? value) {
     selectedParameter = value;
@@ -95,11 +117,12 @@ class ParameterProvider with ChangeNotifier {
     if (parameter == null || parameter.parameterIdAlt == null)
       return; // Null safety check
 
-    if (cart.any((item) => item.parameterIdAlt == parameter.parameterIdAlt)) {
-      cart.removeWhere(
+    if (cart!.any((item) => item.parameterIdAlt == parameter.parameterIdAlt)) {
+      cart!.removeWhere(
           (item) => item.parameterIdAlt == parameter.parameterIdAlt);
     } else {
-      cart.add(parameter);
+      cart!.add(parameter);
+      fetchLabIncharge(int.parse(selectedLab!));
     }
     notifyListeners(); // Notify UI of changes
   }

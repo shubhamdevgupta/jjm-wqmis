@@ -68,15 +68,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           //card for state district selection
-                          buildStateVillage(masterProvider),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          // card for location of source from where sample taken
                           buildSampleTaken(masterProvider),
                           SizedBox(
                             height: 12,
                           ),
+                          // card for location of source from where sample taken
                         ],
                       ),
                     ),
@@ -86,7 +82,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
-  Widget buildStateVillage(Masterprovider masterProvider) {
+  Widget buildSchemeDropDown(Masterprovider masterProvider) {
     return Card(
       elevation: 5, // Increased elevation for a more modern shadow effect
       shape: RoundedRectangleBorder(
@@ -154,7 +150,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 onChanged: (value) {
                   if(value!="0"){
                     masterProvider.setSelectedScheme(value);
-                    masterProvider.fetchWatersourcefilterList();
                   }
                 },
                 dropdownColor: Colors.white,
@@ -173,64 +168,64 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
-    return Visibility(
-      visible: masterProvider.selectedScheme != null,
-      child: Padding(
-        padding: EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Padding(
+      padding: EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
 
-            Card(
-              elevation: 5, // Increased elevation for a more modern shadow effect
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
-              ),
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomDropdown(
-                  title:
-                  "Please select the location of source from where sample is taken:",
-                  value: masterProvider.selectedWtsfilter,
-                  items: masterProvider.wtsFilterList.map((wtsFilter) {
-                    return DropdownMenuItem<String>(
-                      value: wtsFilter.id.toString(),
-                      child: Text(
-                        wtsFilter.sourceType,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    masterProvider.setSelectedWaterSourcefilter(value);
-                    if(masterProvider.selectedWtsfilter=="5"){
-                      print("----calling for WTP of PWS Scheme-----");
-                      masterProvider.fetchWTPList(masterProvider.selectedVillage!, masterProvider.selectedHabitation!,
-                          masterProvider.selectedStateId!, masterProvider.selectedScheme!);
-                    }else if(masterProvider.selectedWtsfilter=="6"){
-                      print("----calling for Storage and strucute-----");
-                    masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                        masterProvider.selectedHabitation!, value!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
-                    }
+          Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomDropdown(
+                title:
+                "Please select the location of source from where sample is taken:",
+                value: masterProvider.selectedWtsfilter,
+                items: masterProvider.wtsFilterList.map((wtsFilter) {
+                  return DropdownMenuItem<String>(
+                    value: wtsFilter.id.toString(),
+                    child: Text(
+                      wtsFilter.sourceType,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.fetchSchemes(
+                      masterProvider.selectedVillage!, "0","0");
+                  masterProvider.setSelectedWaterSourcefilter(value);
+                  if(masterProvider.selectedWtsfilter=="5"){
+                    print("----calling for WTP of PWS Scheme-----");
+                    masterProvider.fetchWTPList(masterProvider.selectedVillage!, masterProvider.selectedHabitation!,
+                        masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                  }else if(masterProvider.selectedWtsfilter=="6"){
+                    print("----calling for Storage and strucute-----");
+                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                      masterProvider.selectedHabitation!, value!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                  }
 
-                  },
-                ),
+                },
               ),
             ),
+          ),
+          buildSchemeDropDown(masterProvider),
 
-            SizedBox(height: 10),
-            // First Visibility Widget with Border
+          SizedBox(height: 10),
+          // First Visibility Widget with Border
 
-            buildRawWater(masterProvider),
-            buildWtpWater(masterProvider),
-            buildEsrWater(masterProvider),
-            buildHouseholdWater(masterProvider),
-            buildHandpumpWater(masterProvider),
-          ],
-        ),
+          buildRawWater(masterProvider),
+          buildWtpWater(masterProvider),
+          buildEsrWater(masterProvider),
+          buildHouseholdWater(masterProvider),
+          buildHandpumpWater(masterProvider),
+        ],
       ),
     );
   }
@@ -239,7 +234,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2",
+          visible: masterProvider.selectedWtsfilter == "2" && masterProvider.selectedScheme!.isNotEmpty,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -257,7 +252,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
                 children: [
                   Text(
-                    'Select Sub-Source:',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
+                    'Select Sub-Source Category:',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
                   ),
                   Row(
                     children: [
@@ -266,6 +261,16 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!,
+                              value.toString(),
+                              "0",//pws zero
+                              "0", // wtp zero
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!
+                          );
                           },
                       ),
                       Text('Ground water sources (GW)'),
@@ -278,6 +283,16 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!,
+                              value.toString(),
+                              "0",//pws zero
+                              "0",// wtp zero
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!
+                          );
                         },
                       ),
                       Text('Surface water sources (SW)'),
@@ -290,7 +305,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
         SizedBox(height: 10,),
         Visibility(
-          visible: masterProvider.selectedSubSource == 1 || masterProvider.selectedWtsfilter == "2",
+          visible: masterProvider.selectedSubSource == 6,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -323,16 +338,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           masterProvider.setSelectedPwsSource(value);
                           print("----calling for Source of scheme raw water-----");
                           if (value != null) {
-                            masterProvider.fetchSourceInformation(
-                                masterProvider.selectedVillage!,
-                                "0",
-                                masterProvider.selectedWtsfilter!,
-                                masterProvider.selectedSubSource.toString(),
-                                masterProvider.selectedPwsType.toString(),
-                                "0",
-                                masterProvider.selectedStateId!,
-                                masterProvider.selectedScheme!
-                            );
+
                           }
                         },
                       ),
@@ -373,7 +379,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         SizedBox(height: 10,),
 
         Visibility(
-          visible: masterProvider.selectedPwsType != null,
+          visible: masterProvider.selectedSubSource != null,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -404,7 +410,21 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {})
+                  CustomDateTimePicker(onDateTimeSelected: (value) {}),
+                  SizedBox(height: 20,),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/labParam');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF096DA8), // Button color
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                      ),
+                      child: const Text('Next', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    ),
+                  )
                 ],
               ),
             ),
