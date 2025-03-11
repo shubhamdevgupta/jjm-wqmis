@@ -438,95 +438,96 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5",
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 1.5),
-          borderRadius: BorderRadius.circular(8),
+      child: Card(
+        elevation: 5, // Increased elevation for a more modern shadow effect
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
         ),
-        padding: EdgeInsets.all(10),
-        // Inner padding
-        margin: EdgeInsets.only(top: 12),
-        child: Column(
-          children: [
-            CustomDropdown(
-              value: masterProvider.selectedWtp,
-              items: masterProvider.wtpList.map((wtpData) {
-                return DropdownMenuItem<String>(
-                  value: wtpData.wtpId,
-                  child: Text(
-                    wtpData.wtpName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              CustomDropdown(
+                value: masterProvider.selectedWtp,
+                items: masterProvider.wtpList.map((wtpData) {
+                  return DropdownMenuItem<String>(
+                    value: wtpData.wtpId,
+                    child: Text(
+                      wtpData.wtpName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                title: "Select water treatment plant (WTP)",
+                onChanged: (value) {
+                  masterProvider.setSelectedWTP(value);
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        value: 5,
+                        groupValue: masterProvider.selectedSubSource,
+                        onChanged: (value) {
+                          print("----calling for wtp but now have to stop -----");
+                 /*         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);
+                          masterProvider.setSelectedSubSource(value);*/
+                        },
+                      ),
+                      Text('Inlet of WTP')
+                    ],
                   ),
-                );
-              }).toList(),
-              title: "Select water treatment plant (WTP)",
-              onChanged: (value) {
-                masterProvider.setSelectedWTP(value);
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Radio(
-                      value: 5,
-                      groupValue: masterProvider.selectedSubSource,
-                      onChanged: (value) {
-                        print("----calling for wtp but now have to stop -----");
-               /*         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                            masterProvider.selectedHabitation!,
-                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);
-                        masterProvider.setSelectedSubSource(value);*/
-                      },
-                    ),
-                    Text('Inlet of WTP')
-                  ],
-                ),
-                Row(
-                  children: [
-                    Radio(
-                      value: 6,
-                      groupValue: masterProvider.selectedSubSource,
-                      onChanged: (value) {
-                        print("----calling for wtp but now have to stop -----");
+                  Row(
+                    children: [
+                      Radio(
+                        value: 6,
+                        groupValue: masterProvider.selectedSubSource,
+                        onChanged: (value) {
+                          print("----calling for wtp but now have to stop -----");
 
-                        masterProvider.setSelectedSubSource(value);
-      /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                            masterProvider.selectedHabitation!,
-                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
-                      },
-                    ),
-                    Text('Outlet of WTP')
-                  ],
-                ),
-                Row(
-                  children: [
-                    Radio(
-                      value: 7,
-                      groupValue: masterProvider.selectedSubSource,
-                      onChanged: (value) {
-                        print("----calling for wtp but now have to stop -----");
+                          masterProvider.setSelectedSubSource(value);
+                  /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
+                        },
+                      ),
+                      Text('Outlet of WTP')
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 7,
+                        groupValue: masterProvider.selectedSubSource,
+                        onChanged: (value) {
+                          print("----calling for wtp but now have to stop -----");
 
-                        masterProvider.setSelectedSubSource(value);
-                      /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                            masterProvider.selectedHabitation!,
-                            masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                            masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
-                      },
-                    ),
-                    Text('Disinfection')
-                  ],
-                ),
-              ],
-            )
-          ],
+                          masterProvider.setSelectedSubSource(value);
+                        /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
+                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
+                        },
+                      ),
+                      Text('Disinfection')
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -568,46 +569,49 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       visible: masterProvider.selectedWtsfilter == "3",
       child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blueAccent, width: 1.5),
-              borderRadius: BorderRadius.circular(8),
+          Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
             ),
-            padding: EdgeInsets.all(10),
-            // Inner padding
-            margin: EdgeInsets.only(top: 12),
-            // Spacing from the first container
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Radio(
-                      value: 3,
-                      groupValue: masterProvider.selectedHousehold,
-                      onChanged: (value) {
-                        masterProvider.setSelectedHouseHold(value);
-                      },
-                    ),
-                    Text('At household'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Radio(
-                      value: 4,
-                      groupValue: masterProvider.selectedHousehold,
-                      onChanged: (value) {
-                        print("----calling for house hold /school / aganwadi -----");
-                       masterProvider.setSelectedHouseHold(value);
-                       masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                           masterProvider.selectedHabitation!, masterProvider.selectedWtsfilter!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
-                      },
-                    ),
-                    Text('At school/AWCs'),
-                  ],
-                ),
-              ],
+            color: Colors.white,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              // Inner padding
+              margin: EdgeInsets.only(top: 12),
+              // Spacing from the first container
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        value: 3,
+                        groupValue: masterProvider.selectedHousehold,
+                        onChanged: (value) {
+                          masterProvider.setSelectedHouseHold(value);
+                        },
+                      ),
+                      Text('At household'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 4,
+                        groupValue: masterProvider.selectedHousehold,
+                        onChanged: (value) {
+                          print("----calling for house hold /school / aganwadi -----");
+                         masterProvider.setSelectedHouseHold(value);
+                         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                             masterProvider.selectedHabitation!, masterProvider.selectedWtsfilter!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                        },
+                      ),
+                      Text('At school/AWCs'),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
@@ -615,43 +619,63 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
           Visibility(
             visible: masterProvider.selectedHousehold == 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // Align text to the left
-              children: [
-                CustomTextField(
-                  labelText: 'Name of household *',
-                  hintText: 'Enter Location',
-                  prefixIcon: Icons.cabin_rounded,
+            child: Card(
+              elevation: 5, // Increased elevation for a more modern shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              ),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // Align text to the left
+                  children: [
+                    CustomTextField(
+                      labelText: 'Name of household *',
+                      hintText: 'Enter Location',
+                      prefixIcon: Icons.cabin_rounded,
+                    ),
+                    CustomDateTimePicker(onDateTimeSelected: (value) {})
+                  ],
                 ),
-                CustomDateTimePicker(onDateTimeSelected: (value) {})
-              ],
+              ),
             ),
           ),
           Visibility(
             visible: masterProvider.selectedHousehold == 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomDropdown(
-                  title: "Select school / AWCs *",
-                  value: masterProvider.selectedWaterSource,
-                  items: masterProvider.waterSource.map((waterSource) {
-                    return DropdownMenuItem<String>(
-                      value: waterSource.locationId,
-                      child: Text(
-                        waterSource.locationName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    masterProvider.setSelectedWaterSourceInformation(value);
-                  },
+            child: Card(
+              elevation: 5, // Increased elevation for a more modern shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              ),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomDropdown(
+                      title: "Select school / AWCs *",
+                      value: masterProvider.selectedWaterSource,
+                      items: masterProvider.waterSource.map((waterSource) {
+                        return DropdownMenuItem<String>(
+                          value: waterSource.locationId,
+                          child: Text(
+                            waterSource.locationName,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        masterProvider.setSelectedWaterSourceInformation(value);
+                      },
+                    ),
+                    CustomDateTimePicker(onDateTimeSelected: (value) {})
+                  ],
                 ),
-                CustomDateTimePicker(onDateTimeSelected: (value) {})
-              ],
+              ),
             ),
           )
         ],
@@ -664,43 +688,47 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       children: [
         Visibility(
           visible: masterProvider.selectedWtsfilter == "4",
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blueAccent, width: 1.5),
-              borderRadius: BorderRadius.circular(8),
+          child: Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
             ),
-            padding: EdgeInsets.all(10),
-            // Inner padding
-            margin: EdgeInsets.only(top: 12),
-            // Spacing from the first container
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Radio(
-                      value: 1,
-                      groupValue: masterProvider.selectedHandpumpPrivate,
-                      onChanged: (value) {
-                        masterProvider.setSelectedHandpump(value);
-                      },
-                    ),
-                    Text('Govt. Handpump'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Radio(
-                      value: 2,
-                      groupValue: masterProvider.selectedHandpumpPrivate,
-                      onChanged: (value) {
-                        masterProvider.setSelectedHandpump(value);
-                      },
-                    ),
-                    Text('Private source location'),
-                  ],
-                ),
-              ],
+            color: Colors.white,
+            child: Container(
+
+              padding: EdgeInsets.all(10),
+              // Inner padding
+              margin: EdgeInsets.only(top: 12),
+              // Spacing from the first container
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Radio(
+                        value: 1,
+                        groupValue: masterProvider.selectedHandpumpPrivate,
+                        onChanged: (value) {
+                          masterProvider.setSelectedHandpump(value);
+                        },
+                      ),
+                      Text('Govt. Handpump'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Radio(
+                        value: 2,
+                        groupValue: masterProvider.selectedHandpumpPrivate,
+                        onChanged: (value) {
+                          masterProvider.setSelectedHandpump(value);
+                        },
+                      ),
+                      Text('Private source location'),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -709,48 +737,68 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
         Visibility(
           visible: masterProvider.selectedHandpumpPrivate == 1 && masterProvider.selectedWtsfilter=="4",
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // Align text to the left
-            children: [
-              CustomDropdown(
-                title: "Select Govt. Handpump *",
-                value: masterProvider.selectedWaterSource,
-                items: masterProvider.waterSource.map((waterSource) {
-                  return DropdownMenuItem<String>(
-                    value: waterSource.locationId,
-                    child: Text(
-                      waterSource.locationName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedWaterSourceInformation(value);
-                },
+          child: Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // Align text to the left
+                children: [
+                  CustomDropdown(
+                    title: "Select Govt. Handpump *",
+                    value: masterProvider.selectedWaterSource,
+                    items: masterProvider.waterSource.map((waterSource) {
+                      return DropdownMenuItem<String>(
+                        value: waterSource.locationId,
+                        child: Text(
+                          waterSource.locationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      masterProvider.setSelectedWaterSourceInformation(value);
+                    },
+                  ),
+                  CustomDateTimePicker(onDateTimeSelected: (value) {})
+                ],
               ),
-              CustomDateTimePicker(onDateTimeSelected: (value) {})
-            ],
+            ),
           ),
         ),
         Visibility(
           visible: masterProvider.selectedHandpumpPrivate == 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextField(
-                labelText: 'Type of source *',
-                hintText: 'Enter Source type',
-                prefixIcon: Icons.edit_calendar_sharp,
+          child: Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextField(
+                    labelText: 'Type of source *',
+                    hintText: 'Enter Source type',
+                    prefixIcon: Icons.edit_calendar_sharp,
+                  ),
+                  CustomTextField(
+                    labelText: 'Enter Location *',
+                    hintText: 'Enter Location',
+                    prefixIcon: Icons.dehaze,
+                  ),
+                  CustomDateTimePicker(onDateTimeSelected: (value) {})
+                ],
               ),
-              CustomTextField(
-                labelText: 'Enter Location *',
-                hintText: 'Enter Location',
-                prefixIcon: Icons.dehaze,
-              ),
-              CustomDateTimePicker(onDateTimeSelected: (value) {})
-            ],
+            ),
           ),
         )
       ],
