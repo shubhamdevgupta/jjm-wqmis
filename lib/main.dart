@@ -49,9 +49,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => DashboardScreen(),
         '/login': (context) => Loginscreen(),
         '/labParam': (context) => Labparameterscreen(),
-        'test': (context) => SelectedTestScreen(
-              cartList: [],labinchargeresponse: null,
-            )
+        'test': (context) => SelectedTestScreen()
       },
     );
   }

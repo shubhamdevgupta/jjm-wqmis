@@ -57,12 +57,11 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             color: Colors.white),
                         // Cart icon
                         onPressed: () {
-                          Navigator.push(
-                            context,
+                          Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (context) => SelectedTestScreen(
-                                      cartList: provider.cart,labinchargeresponse: provider.labIncharge,)),
-                          );
+                              builder: (context) =>ChangeNotifierProvider.value(value: provider,
+                              child: SelectedTestScreen(),
+                              )),);
                         },
                       ),
                       if (provider.cart!
@@ -381,3 +380,4 @@ class _LabParameterScreen extends State<Labparameterscreen> {
     );
   }
 }
+

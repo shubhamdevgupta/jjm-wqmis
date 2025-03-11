@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/ErrorProvider.dart';
 
 class ExceptionScreen extends StatelessWidget {
-  final bool allowBackNavigation; // ✅ Pass this to control navigation behavior
+  final bool allowBackNavigation;
 
   const ExceptionScreen({Key? key, this.allowBackNavigation = true})
       : super(key: key);

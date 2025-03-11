@@ -17,7 +17,6 @@ class GlobalExceptionHandler {
     if (e is NetworkException) {
       errorMessage = 'No Internet Connection';
 
-      // ✅ Show Snackbar Instead of Navigating
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
@@ -26,7 +25,7 @@ class GlobalExceptionHandler {
         ),
       );
 
-      return; // ✅ Don't navigate for network errors
+      return;
     } else if (e is ApiException) {
       errorMessage = e.message;
     } else {

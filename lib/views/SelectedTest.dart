@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:provider/provider.dart';
 
 class SelectedTestScreen extends StatelessWidget {
-  final List<Parameterresponse>? cartList;
   final TextEditingController remarkController = TextEditingController();
-  final Labinchargeresponse? labinchargeresponse;
-
-  SelectedTestScreen(
-      {required this.cartList, required this.labinchargeresponse});
-
   @override
   Widget build(BuildContext context) {
-    print("------------>>>>>>>> $labinchargeresponse");
-    print("------------>>>>>>>> $cartList");
+
+    final provider = Provider.of<ParameterProvider>(context, listen: false);
+
+    print("------------>>>>>>>> ${provider.labIncharge}");
+    print("------------>>>>>>>> ${provider.cart}");
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -99,7 +98,7 @@ class SelectedTestScreen extends StatelessWidget {
                                             fontWeight: FontWeight.bold)),
                                   ),
                                 ],
-                                rows: cartList!.asMap().entries.map((entry) {
+                                rows: provider.cart!.asMap().entries.map((entry) {
                                   int index = entry.key;
                                   var param = entry.value;
                                   return DataRow(
@@ -174,9 +173,9 @@ class SelectedTestScreen extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text('Name: ${labinchargeresponse?.name ?? "N/A"}', style: const TextStyle(fontSize: 16),),
-                            Text('Lab Name: ${labinchargeresponse?.labName ?? "N/A"}', style: const TextStyle(fontSize: 16),),
-                            Text('Address: ${labinchargeresponse?.address ?? "N/A"}', style: const TextStyle(fontSize: 16),),
+                            Text('Name: ${provider.labIncharge?.name ?? "N/A"}', style: const TextStyle(fontSize: 16),),
+                            Text('Lab Name: ${provider.labIncharge?.labName ?? "N/A"}', style: const TextStyle(fontSize: 16),),
+                            Text('Address: ${provider.labIncharge?.address ?? "N/A"}', style: const TextStyle(fontSize: 16),),
                           ],
                         ),
                         SizedBox(height: 20,),
@@ -193,7 +192,7 @@ class SelectedTestScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "* Labs are not available with this combination (package)${cartList!.length}",
+                  "* Labs are not available with this combination (package)${provider.cart!.length}",
                   style: TextStyle(color: Colors.red, fontSize: 12),
                 ),
               ],
