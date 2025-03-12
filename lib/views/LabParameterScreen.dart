@@ -248,20 +248,19 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             height: 10,
                           ),
                           Visibility(
-                            visible: provider.parameterType==1|| provider.parameterType==2|| provider.parameterType==3||provider.selectionType==2,
+                            visible: provider.parameterType == 1 ||
+                                provider.parameterType == 2 ||
+                                provider.parameterType == 3 ||
+                                provider.selectionType == 2,
                             child: Card(
                               elevation: 5,
-                              // Increased elevation for a modern shadow effect
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    12), // Rounded corners for a smooth look
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               margin: EdgeInsets.all(5),
-                              // Margin around the card
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                // Adjusted padding for better spacing
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -270,34 +269,24 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        // Increased font size for better readability
-                                        color: Colors
-                                            .blueAccent, // Added color for better emphasis
+                                        color: Colors.blueAccent,
                                       ),
                                     ),
                                     const SizedBox(height: 15),
-                                    // Added more space between title and table
                                     SingleChildScrollView(
-                                      // Horizontal scrolling for "Test Name"
                                       scrollDirection: Axis.horizontal,
-                                      // Enable horizontal scroll
                                       child: DataTable(
                                         columnSpacing: 20,
-                                        // Increased column spacing for better clarity
                                         headingRowHeight: 50,
-                                        // Increased heading row height for a clean look
                                         dataRowHeight: 60,
-                                        // Increased data row height for better readability
                                         columns: const <DataColumn>[
                                           DataColumn(
                                             label: Text(
-                                              'Sr. No.',
+                                              'Select Test',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
-                                                // Font size adjustment for column headers
-                                                color: Colors
-                                                    .blueGrey, // Change the color for headers
+                                                color: Colors.blueGrey,
                                               ),
                                             ),
                                           ),
@@ -321,48 +310,14 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                               ),
                                             ),
                                           ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Select Test',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
-                                              ),
-                                            ),
-                                          ),
                                         ],
-                                        rows: provider.parameterList
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
-                                          int index = entry.key;
-                                          var param = entry.value;
+                                        rows: provider.parameterList.map((param) {
                                           return DataRow(
                                             cells: <DataCell>[
-                                              DataCell(Text('${index + 1}',
-                                                  style:
-                                                      TextStyle(fontSize: 14))),
-                                              DataCell(SizedBox(
-                                                width: 150,
-                                                // Giving more space for the test name to show
-                                                child: Text(
-                                                  param.parameterName,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  // To handle overflow
-                                                  style: TextStyle(fontSize: 14),
-                                                ),
-                                              )),
-                                              DataCell(Text(
-                                                  param.deptRate.toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 14))),
                                               DataCell(
                                                 Checkbox(
-                                                  value: provider.cart!.any(
-                                                      (item) =>
-                                                          item.parameterIdAlt ==
-                                                          param.parameterIdAlt),
+                                                  value: provider.cart!.any((item) =>
+                                                  item.parameterIdAlt == param.parameterIdAlt),
                                                   onChanged: (bool? value) {
                                                     if (value != null) {
                                                       provider.toggleCart(param);
@@ -370,6 +325,15 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                   },
                                                 ),
                                               ),
+                                              DataCell(SizedBox(
+                                                width: 150,
+                                                child: Text(
+                                                  param.parameterName,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: TextStyle(fontSize: 14),
+                                                ),
+                                              )),
+                                              DataCell(Text(param.deptRate.toString(), style: TextStyle(fontSize: 14))),
                                             ],
                                           );
                                         }).toList(),
@@ -378,15 +342,16 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                     const SizedBox(height: 20),
                                     Text(
                                       'Cart: ${provider.cart!.join(', ')}',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           )
+
+
+
                         ],
                       ),
                     ),
