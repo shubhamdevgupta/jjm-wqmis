@@ -208,30 +208,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 }
                               },
                             ),
-                            /*
-                            CustomDropdown(
-                              title: "Select Lab *",
-                              value: provider.selectedLab,
-                              items: provider.labList.map((labId) {
-                                return DropdownMenuItem<String>(
-                                    value: labId.value,
-                                    child: Text(
-                                      labId.text,
-                                    ));
-                              }).toList(),
-                              onChanged: (value) {
-                                provider.setSelectedLab(value);
-                                if(value!=null){
-                                  provider.fetchAllParameter(
-                                      provider.selectedLab!,
-                                      masterProvider.selectedStateId!,
-                                      "0",
-                                      "1151455",
-                                      "0");
-                                }
-                              },
-                            )
-*/
                           ],
                           SizedBox(
                             height: 10,
@@ -298,6 +274,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                           SizedBox(
                             height: 10,
                           ),
+/*
                           Visibility(
                             visible: provider.parameterType == 1 ||
                                 provider.parameterType == 2 ||
@@ -444,6 +421,121 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                               ),
                             ),
                           )
+*/
+                          Visibility(
+                            visible: provider.parameterType == 1 ||
+                                provider.parameterType == 2 ||
+                                provider.parameterType == 3 ||
+                                provider.selectionType == 2,
+                            child: Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              margin: EdgeInsets.all(5),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Tests Available:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: DataTable(
+                                        columnSpacing: 20,
+                                        headingRowHeight: 50,
+                                        dataRowHeight: 60,
+                                        columns: const <DataColumn>[
+                                          DataColumn(
+                                            label: Text(
+                                              'Select Test',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Test Name',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Test Price',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: provider.parameterList.map((param) {
+                                          return DataRow(
+                                            cells: <DataCell>[
+                                              DataCell(
+                                                Checkbox(
+                                                  value: provider.cart!.any(
+                                                        (item) => item.parameterIdAlt == param.parameterIdAlt,
+                                                  ),
+                                                  onChanged: (bool? value) {
+                                                    if (value != null) {
+                                                      provider.toggleCart(param);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                              DataCell(
+                                                SizedBox(
+                                                  width: 150,
+                                                  child: Text(
+                                                    param.parameterName,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(fontSize: 14),
+                                                  ),
+                                                ),
+                                              ),
+                                              DataCell(
+                                                Text(
+                                                  param.publicRate.toString(),
+                                                  style: TextStyle(fontSize: 14),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      'Cart: ${provider.cart!.join(', ')}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+
                         ],
                       ),
                     ),

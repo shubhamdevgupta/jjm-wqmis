@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/LoginScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SelectedTestScreen(),
+        '/': (context) => SplashScreen(),
         '/savesample': (context) => Sampleinformationscreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/login': (context) => Loginscreen(),
