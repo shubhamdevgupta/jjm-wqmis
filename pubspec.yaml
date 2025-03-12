@@ -42,6 +42,7 @@ dependencies:
   crypto: any
   intl: ^0.20.1
   shared_preferences: ^2.5.2
+  geolocator: ^13.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

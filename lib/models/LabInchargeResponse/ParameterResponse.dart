@@ -123,7 +123,7 @@ class Parameterresponse {
 
   @override
   String toString() {
-    return 'WaterTestParameter(parameterId: $parameterId, parameterName: "$parameterName", publicRate: $publicRate)';
+    return '$parameterIdAlt';
   }
 }
 
