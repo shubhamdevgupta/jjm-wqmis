@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LocationUtils.dart';
 
 class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
@@ -86,4 +88,16 @@ class Samplesubprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  void fetchLocation() async {
+    Position? position = await LocationService.getCurrentLocation();
+    if (position != null) {
+      longitude=position.longitude.toString();
+      latitude=position.latitude.toString();
+      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
+    } else {
+      print("Failed to get location.");
+    }
+  }
+
+
 }

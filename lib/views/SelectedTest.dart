@@ -366,14 +366,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 print('device id--->${provider.deviceId}');
-                                print('------->>>${int.tryParse(paramProvider.selectedLab?.toString() ?? '') ?? 0}');
-                                print(
-                                    '------->>>${paramProvider.selectedLab}');
-                                print(
-                                    '------->>>${masterProvider.selectedVillage}');
-                                print(
-                                    '------->>>${masterProvider.selectedGramPanchayat}');
-                                /*  provider.sampleSubmit(
+                                provider.fetchLocation();
+                               /*   provider.sampleSubmit(
                                         int.parse(paramProvider.selectedLab
                                             .toString()),
                                         0,
@@ -400,8 +394,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                         int.parse(masterProvider.selectedScheme.toString()),
                                         "",
                                         masterProvider.selectedWaterSource,
-                                        "24.5115",
-                                        "13.02445",
+                                        provider.latitude,
+                                        provider.longitude,
                                         remarkController.text,
                                         provider.deviceId,
                                         "",
