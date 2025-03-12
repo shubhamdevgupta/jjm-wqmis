@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ParameterProvider.dart';
-import '../utils/CustomDropdown.dart';
+import '../utils/CustomSearchableDropdown.dart';
 
 class Labparameterscreen extends StatefulWidget {
   @override
@@ -14,6 +13,7 @@ class Labparameterscreen extends StatefulWidget {
 
 class _LabParameterScreen extends State<Labparameterscreen> {
   late Masterprovider masterProvider;
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +45,8 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                       Navigator.pop(context);
                     } else {
                       Navigator.pushReplacementNamed(context, '/savesample');
-                    }                  },
+                    }
+                  },
                 ),
                 backgroundColor: Colors.blueAccent, // Consistent theme
                 actions: [
@@ -61,8 +62,11 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             MaterialPageRoute(
                               builder: (context) => MultiProvider(
                                 providers: [
-                                  ChangeNotifierProvider.value(value: masterProvider), // Pass masterProvider
-                                  ChangeNotifierProvider.value(value: provider), // Pass parameterProvider if needed
+                                  ChangeNotifierProvider.value(
+                                      value: masterProvider),
+                                  // Pass masterProvider
+                                  ChangeNotifierProvider.value(value: provider),
+                                  // Pass parameterProvider if needed
                                 ],
                                 child: SelectedTestScreen(),
                               ),
@@ -132,23 +136,43 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                           groupValue: provider.selectionType,
                                           onChanged: (value) => {
                                                 provider.parameterList.clear(),
-                                                provider.parameterType=0,
+                                                provider.parameterType = 0,
                                                 provider.cart!.clear(),
-                                                provider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1"),
-                                                provider.setSelectionType(value!),
+                                                provider.fetchAllLabs(
+                                                    masterProvider
+                                                        .selectedStateId!,
+                                                    masterProvider
+                                                        .selectedDistrictId!,
+                                                    masterProvider
+                                                        .selectedBlockId!,
+                                                    masterProvider
+                                                        .selectedGramPanchayat!,
+                                                    masterProvider
+                                                        .selectedVillage!,
+                                                    "1"),
+                                                provider
+                                                    .setSelectionType(value!),
                                               }),
                                       const Text('As per laboratory'),
                                       Radio(
                                           value: 2,
                                           groupValue: provider.selectionType,
                                           onChanged: (value) => {
-                                                provider.labIncharge=null,
-                                                provider.parameterType=0,
+                                                provider.labIncharge = null,
+                                                provider.parameterType = 0,
                                                 provider.cart!.clear(),
-                                            provider.setSelectionType(value!),
-                                            if(value==2){
-                                              provider.fetchAllParameter("0",masterProvider.selectedStateId!, "0", "1151455", "1"),
-                                            }
+                                                provider
+                                                    .setSelectionType(value!),
+                                                if (value == 2)
+                                                  {
+                                                    provider.fetchAllParameter(
+                                                        "0",
+                                                        masterProvider
+                                                            .selectedStateId!,
+                                                        "0",
+                                                        "1151455",
+                                                        "1"),
+                                                  }
                                               }),
                                       const Text('As per parameters'),
                                     ],
@@ -161,6 +185,30 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             height: 10,
                           ),
                           if (provider.selectionType == 1) ...[
+                            CustomSearchableDropdown(
+                              title: "Select Lab *",
+                              value: provider.selectedLab,
+                              items: provider.labList
+                                  .map((lab) => lab.text)
+                                  .toList(),
+                              onChanged: (selectedLabText) {
+                                final selectedLab = provider.labList.firstWhere(
+                                  (lab) => lab.text == selectedLabText,
+                                  orElse: () => provider.labList.first, // Default fallback (to avoid crashes)
+                                );
+                                provider.setSelectedLab(selectedLab.value);
+                                if (selectedLab.value != null) {
+                                  provider.fetchAllParameter(
+                                    selectedLab.value,
+                                    masterProvider.selectedStateId!,
+                                    "0",
+                                    "1151455",
+                                    "0",
+                                  );
+                                }
+                              },
+                            ),
+                            /*
                             CustomDropdown(
                               title: "Select Lab *",
                               value: provider.selectedLab,
@@ -169,8 +217,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                     value: labId.value,
                                     child: Text(
                                       labId.text,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
                                     ));
                               }).toList(),
                               onChanged: (value) {
@@ -185,6 +231,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 }
                               },
                             )
+*/
                           ],
                           SizedBox(
                             height: 10,
@@ -217,7 +264,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                         items: [
                                           const DropdownMenuItem(
                                               value: 0,
-                                              child: Text('Select Parameter'))  ,
+                                              child: Text('Select Parameter')),
                                           const DropdownMenuItem(
                                               value: 1,
                                               child: Text('All Parameter')),
@@ -231,14 +278,18 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                   'Bacteriological Parameter')),
                                         ],
                                         onChanged: (value) => {
-                                          provider.setParameterType(value!),
-                                          if(value!=0){
-                                            provider.fetchAllParameter(provider.selectedLab!, masterProvider.selectedStateId!, "0", "1151455", value.toString()),
-                                          }
-
-                                        }
-
-                                    ),
+                                              provider.setParameterType(value!),
+                                              if (value != 0)
+                                                {
+                                                  provider.fetchAllParameter(
+                                                      provider.selectedLab!,
+                                                      masterProvider
+                                                          .selectedStateId!,
+                                                      "0",
+                                                      "1151455",
+                                                      value.toString()),
+                                                }
+                                            }),
                                   ],
                                 ),
                               ),
@@ -254,13 +305,17 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 provider.selectionType == 2,
                             child: Card(
                               elevation: 5,
+                              // Increased elevation for a modern shadow effect
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(
+                                    12), // Rounded corners for a smooth look
                               ),
                               margin: EdgeInsets.all(5),
+                              // Margin around the card
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
+                                // Adjusted padding for better spacing
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -269,24 +324,34 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        color: Colors.blueAccent,
+                                        // Increased font size for better readability
+                                        color: Colors
+                                            .blueAccent, // Added color for better emphasis
                                       ),
                                     ),
                                     const SizedBox(height: 15),
+                                    // Added more space between title and table
                                     SingleChildScrollView(
+                                      // Horizontal scrolling for "Test Name"
                                       scrollDirection: Axis.horizontal,
+                                      // Enable horizontal scroll
                                       child: DataTable(
                                         columnSpacing: 20,
+                                        // Increased column spacing for better clarity
                                         headingRowHeight: 50,
+                                        // Increased heading row height for a clean look
                                         dataRowHeight: 60,
+                                        // Increased data row height for better readability
                                         columns: const <DataColumn>[
                                           DataColumn(
                                             label: Text(
-                                              'Select Test',
+                                              'Sr. No.',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
-                                                color: Colors.blueGrey,
+                                                // Font size adjustment for column headers
+                                                color: Colors
+                                                    .blueGrey, // Change the color for headers
                                               ),
                                             ),
                                           ),
@@ -310,30 +375,58 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                               ),
                                             ),
                                           ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Select Test',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
                                         ],
-                                        rows: provider.parameterList.map((param) {
+                                        rows: provider.parameterList
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          int index = entry.key;
+                                          var param = entry.value;
                                           return DataRow(
                                             cells: <DataCell>[
+                                              DataCell(Text('${index + 1}',
+                                                  style:
+                                                      TextStyle(fontSize: 14))),
+                                              DataCell(SizedBox(
+                                                width: 150,
+                                                // Giving more space for the test name to show
+                                                child: Text(
+                                                  param.parameterName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  // To handle overflow
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                              )),
+                                              DataCell(Text(
+                                                  param.deptRate.toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14))),
                                               DataCell(
                                                 Checkbox(
-                                                  value: provider.cart!.any((item) =>
-                                                  item.parameterIdAlt == param.parameterIdAlt),
+                                                  value: provider.cart!.any(
+                                                      (item) =>
+                                                          item.parameterIdAlt ==
+                                                          param.parameterIdAlt),
                                                   onChanged: (bool? value) {
                                                     if (value != null) {
-                                                      provider.toggleCart(param);
+                                                      provider
+                                                          .toggleCart(param);
                                                     }
                                                   },
                                                 ),
                                               ),
-                                              DataCell(SizedBox(
-                                                width: 150,
-                                                child: Text(
-                                                  param.parameterName,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: TextStyle(fontSize: 14),
-                                                ),
-                                              )),
-                                              DataCell(Text(param.deptRate.toString(), style: TextStyle(fontSize: 14))),
                                             ],
                                           );
                                         }).toList(),
@@ -342,16 +435,15 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                     const SizedBox(height: 20),
                                     Text(
                                       'Cart: ${provider.cart!.join(', ')}',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           )
-
-
-
                         ],
                       ),
                     ),
@@ -365,4 +457,3 @@ class _LabParameterScreen extends State<Labparameterscreen> {
     );
   }
 }
-
