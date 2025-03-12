@@ -1,6 +1,6 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:provider/provider.dart';
 
@@ -13,19 +13,19 @@ class Labparameterscreen extends StatefulWidget {
 }
 
 class _LabParameterScreen extends State<Labparameterscreen> {
+  late Masterprovider masterProvider;
+  @override
+  void initState() {
+    super.initState();
+    masterProvider = Provider.of<Masterprovider>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ParameterProvider(),
       child: Consumer<ParameterProvider>(
         builder: (context, provider, child) {
-          provider.fetchAllLabs(
-              "31",
-              "471",
-              "4902",
-              "167838",
-              "397110",
-              "1");
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -45,8 +45,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                       Navigator.pop(context);
                     } else {
                       Navigator.pushReplacementNamed(context, '/savesample');
-                    }
-                  },
+                    }                  },
                 ),
                 backgroundColor: Colors.blueAccent, // Consistent theme
                 actions: [
@@ -57,11 +56,18 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             color: Colors.white),
                         // Cart icon
                         onPressed: () {
-                          Navigator.push(context,
+                          Navigator.push(
+                            context,
                             MaterialPageRoute(
-                              builder: (context) =>ChangeNotifierProvider.value(value: provider,
-                              child: SelectedTestScreen(),
-                              )),);
+                              builder: (context) => MultiProvider(
+                                providers: [
+                                  ChangeNotifierProvider.value(value: masterProvider), // Pass masterProvider
+                                  ChangeNotifierProvider.value(value: provider), // Pass parameterProvider if needed
+                                ],
+                                child: SelectedTestScreen(),
+                              ),
+                            ),
+                          );
                         },
                       ),
                       if (provider.cart!
@@ -122,23 +128,27 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                   Row(
                                     children: [
                                       Radio(
-                                          value: 0,
+                                          value: 1,
                                           groupValue: provider.selectionType,
                                           onChanged: (value) => {
                                                 provider.parameterList.clear(),
+                                                provider.parameterType=0,
                                                 provider.cart!.clear(),
+                                                provider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1"),
                                                 provider.setSelectionType(value!),
                                               }),
                                       const Text('As per laboratory'),
                                       Radio(
-                                          value: 1,
+                                          value: 2,
                                           groupValue: provider.selectionType,
                                           onChanged: (value) => {
                                                 provider.labIncharge=null,
-                                                provider.setSelectionType(value!),
-                                                provider.fetchAllParameter("0",
-                                                    "31", "0", "1151455", "1"),
-                                                provider.cart!.clear()
+                                                provider.parameterType=0,
+                                                provider.cart!.clear(),
+                                            provider.setSelectionType(value!),
+                                            if(value==2){
+                                              provider.fetchAllParameter("0",masterProvider.selectedStateId!, "0", "1151455", "1"),
+                                            }
                                               }),
                                       const Text('As per parameters'),
                                     ],
@@ -150,7 +160,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          if (provider.selectionType == 0) ...[
+                          if (provider.selectionType == 1) ...[
                             CustomDropdown(
                               title: "Select Lab *",
                               value: provider.selectedLab,
@@ -165,12 +175,14 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                               }).toList(),
                               onChanged: (value) {
                                 provider.setSelectedLab(value);
-                                provider.fetchAllParameter(
-                                    provider.selectedLab!,
-                                    "31",
-                                    "0",
-                                    "1151455",
-                                    "0");
+                                if(value!=null){
+                                  provider.fetchAllParameter(
+                                      provider.selectedLab!,
+                                      masterProvider.selectedStateId!,
+                                      "0",
+                                      "1151455",
+                                      "0");
+                                }
                               },
                             )
                           ],
@@ -178,7 +190,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             height: 10,
                           ),
                           Visibility(
-                            visible: provider.selectionType == 0,
+                            visible: provider.selectionType == 1,
                             child: Card(
                               elevation: 5,
                               // Increased elevation for a more modern shadow effect
@@ -205,20 +217,25 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                         items: [
                                           const DropdownMenuItem(
                                               value: 0,
-                                              child: Text('All Parameter')),
+                                              child: Text('Select Parameter'))  ,
                                           const DropdownMenuItem(
                                               value: 1,
+                                              child: Text('All Parameter')),
+                                          const DropdownMenuItem(
+                                              value: 2,
                                               child:
                                                   Text('Chemical Parameter')),
                                           const DropdownMenuItem(
-                                              value: 2,
+                                              value: 3,
                                               child: Text(
                                                   'Bacteriological Parameter')),
                                         ],
                                         onChanged: (value) => {
-                                              provider.setParameterType(value!),
-                                              provider.fetchAllParameter(
-                                              provider.selectedLab!, "31", "0", "1151455", value.toString()),
+                                          provider.setParameterType(value!),
+                                          if(value!=0){
+                                            provider.fetchAllParameter(provider.selectedLab!, masterProvider.selectedStateId!, "0", "1151455", value.toString()),
+                                          }
+
                                         }
 
                                     ),
@@ -230,140 +247,143 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Card(
-                            elevation: 5,
-                            // Increased elevation for a modern shadow effect
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  12), // Rounded corners for a smooth look
-                            ),
-                            margin: EdgeInsets.all(5),
-                            // Margin around the card
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              // Adjusted padding for better spacing
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Tests Available:',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      // Increased font size for better readability
-                                      color: Colors
-                                          .blueAccent, // Added color for better emphasis
+                          Visibility(
+                            visible: provider.parameterType==1|| provider.parameterType==2|| provider.parameterType==3||provider.selectionType==2,
+                            child: Card(
+                              elevation: 5,
+                              // Increased elevation for a modern shadow effect
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    12), // Rounded corners for a smooth look
+                              ),
+                              margin: EdgeInsets.all(5),
+                              // Margin around the card
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                // Adjusted padding for better spacing
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Tests Available:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        // Increased font size for better readability
+                                        color: Colors
+                                            .blueAccent, // Added color for better emphasis
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  // Added more space between title and table
-                                  SingleChildScrollView(
-                                    // Horizontal scrolling for "Test Name"
-                                    scrollDirection: Axis.horizontal,
-                                    // Enable horizontal scroll
-                                    child: DataTable(
-                                      columnSpacing: 20,
-                                      // Increased column spacing for better clarity
-                                      headingRowHeight: 50,
-                                      // Increased heading row height for a clean look
-                                      dataRowHeight: 60,
-                                      // Increased data row height for better readability
-                                      columns: const <DataColumn>[
-                                        DataColumn(
-                                          label: Text(
-                                            'Sr. No.',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              // Font size adjustment for column headers
-                                              color: Colors
-                                                  .blueGrey, // Change the color for headers
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Test Name',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.blueGrey,
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Test Price',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.blueGrey,
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Select Test',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Colors.blueGrey,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                      rows: provider.parameterList
-                                          .asMap()
-                                          .entries
-                                          .map((entry) {
-                                        int index = entry.key;
-                                        var param = entry.value;
-                                        return DataRow(
-                                          cells: <DataCell>[
-                                            DataCell(Text('${index + 1}',
-                                                style:
-                                                    TextStyle(fontSize: 14))),
-                                            DataCell(SizedBox(
-                                              width: 150,
-                                              // Giving more space for the test name to show
-                                              child: Text(
-                                                param.parameterName,
-                                                overflow: TextOverflow.ellipsis,
-                                                // To handle overflow
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                            )),
-                                            DataCell(Text(
-                                                param.deptRate.toString(),
-                                                style:
-                                                    TextStyle(fontSize: 14))),
-                                            DataCell(
-                                              Checkbox(
-                                                value: provider.cart!.any(
-                                                    (item) =>
-                                                        item.parameterIdAlt ==
-                                                        param.parameterIdAlt),
-                                                onChanged: (bool? value) {
-                                                  if (value != null) {
-                                                    provider.toggleCart(param);
-                                                  }
-                                                },
+                                    const SizedBox(height: 15),
+                                    // Added more space between title and table
+                                    SingleChildScrollView(
+                                      // Horizontal scrolling for "Test Name"
+                                      scrollDirection: Axis.horizontal,
+                                      // Enable horizontal scroll
+                                      child: DataTable(
+                                        columnSpacing: 20,
+                                        // Increased column spacing for better clarity
+                                        headingRowHeight: 50,
+                                        // Increased heading row height for a clean look
+                                        dataRowHeight: 60,
+                                        // Increased data row height for better readability
+                                        columns: const <DataColumn>[
+                                          DataColumn(
+                                            label: Text(
+                                              'Sr. No.',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                // Font size adjustment for column headers
+                                                color: Colors
+                                                    .blueGrey, // Change the color for headers
                                               ),
                                             ),
-                                          ],
-                                        );
-                                      }).toList(),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Test Name',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Test Price',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: Text(
+                                              'Select Test',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.blueGrey,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        rows: provider.parameterList
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                          int index = entry.key;
+                                          var param = entry.value;
+                                          return DataRow(
+                                            cells: <DataCell>[
+                                              DataCell(Text('${index + 1}',
+                                                  style:
+                                                      TextStyle(fontSize: 14))),
+                                              DataCell(SizedBox(
+                                                width: 150,
+                                                // Giving more space for the test name to show
+                                                child: Text(
+                                                  param.parameterName,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  // To handle overflow
+                                                  style: TextStyle(fontSize: 14),
+                                                ),
+                                              )),
+                                              DataCell(Text(
+                                                  param.deptRate.toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14))),
+                                              DataCell(
+                                                Checkbox(
+                                                  value: provider.cart!.any(
+                                                      (item) =>
+                                                          item.parameterIdAlt ==
+                                                          param.parameterIdAlt),
+                                                  onChanged: (bool? value) {
+                                                    if (value != null) {
+                                                      provider.toggleCart(param);
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Text(
-                                    'Cart: ${provider.cart!.join(', ')}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      'Cart: ${provider.cart!.join(', ')}',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           )

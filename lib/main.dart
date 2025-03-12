@@ -44,10 +44,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => SelectedTestScreen(),
         '/savesample': (context) => Sampleinformationscreen(),
         '/dashboard': (context) => DashboardScreen(),
         '/login': (context) => Loginscreen(),
+        '/location': (context) => Locationscreen(),
         '/labParam': (context) => Labparameterscreen(),
         'test': (context) => SelectedTestScreen()
       },

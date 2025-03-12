@@ -19,8 +19,7 @@ class ParameterProvider with ChangeNotifier {
   int parameterType = 0;
 
   List<String> allParameters = [];
-  List<String> chemicalParameters = ['Chloride', 'Fluoride'];
-  List<String> bacteriologicalParameters = ['E. coli'];
+
   List<Parameterresponse>? cart = [];
 
   List<Alllabresponse> labList = [];
@@ -102,16 +101,6 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> getParameters() {
-    switch (parameterType) {
-      case 1:
-        return chemicalParameters;
-      case 2:
-        return bacteriologicalParameters;
-      default:
-        return allParameters;
-    }
-  }
 
   void toggleCart(Parameterresponse? parameter) {
     if (parameter == null || parameter.parameterIdAlt == null)
