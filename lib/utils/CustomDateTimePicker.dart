@@ -1,4 +1,3 @@
-/*
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -18,12 +17,12 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
   @override
   void initState() {
     super.initState();
-    _setCurrentDateTime(); // Set the default value to the current date & time
+    _setCurrentDateTime();
   }
 
   void _setCurrentDateTime() {
     DateTime now = DateTime.now();
-    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a').format(now);
+    String formattedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(now);
 
     setState(() {
       _selectedDateTime = formattedDateTime;
@@ -65,7 +64,7 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
           );
         } else {
           String formattedDateTime =
-          DateFormat('yyyy/MM/dd hh:mm a').format(combinedDateTime);
+          DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(combinedDateTime);
 
           setState(() {
             _selectedDateTime = formattedDateTime;
@@ -75,71 +74,6 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
         }
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Date & Time of Sample Collection *',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          InkWell(
-            onTap: () => _selectDateTime(context),
-            child: IgnorePointer(
-              child: TextFormField(
-                controller: TextEditingController(text: _selectedDateTime),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  hintText: 'Select Date & Time',
-                  prefixIcon: Icon(Icons.calendar_today),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-*/
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-class CustomDateTimePicker extends StatefulWidget {
-  final Function(String) onDateTimeSelected;
-
-  const CustomDateTimePicker({Key? key, required this.onDateTimeSelected})
-      : super(key: key);
-
-  @override
-  _CustomDateTimePickerState createState() => _CustomDateTimePickerState();
-}
-
-class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
-  late String _selectedDateTime;
-
-  @override
-  void initState() {
-    super.initState();
-    _setCurrentDateTime();
-  }
-
-  void _setCurrentDateTime() {
-    DateTime now = DateTime.now();
-    String formattedDateTime = DateFormat('yyyy/MM/dd hh:mm a').format(now);
-
-    setState(() {
-      _selectedDateTime = formattedDateTime;
-    });
-
-    widget.onDateTimeSelected(_selectedDateTime);
   }
 
   @override
@@ -158,26 +92,29 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
             ),
           ),
           const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey[200], // Light grey background
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.shade400), // Light border
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.access_time, color: Colors.blueGrey),
-                const SizedBox(width: 10),
-                Text(
-                  _selectedDateTime,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+          InkWell(
+            onTap: () => _selectDateTime(context),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200], // Light grey background
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade400), // Light border
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.access_time, color: Colors.blueGrey),
+                  const SizedBox(width: 10),
+                  Text(
+                    _selectedDateTime,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

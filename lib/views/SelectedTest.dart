@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
-import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:provider/provider.dart';
 

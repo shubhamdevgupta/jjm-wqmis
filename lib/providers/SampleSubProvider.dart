@@ -1,31 +1,30 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/LoginResponse.dart';
 import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
-import '../services/LocalStorageService.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
-class SubmitProvider extends ChangeNotifier {
+class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
   bool _isSubmitData = false;
   Sampleresponse? _sampleresponse;
   String errorMsg = '';
 
-  Future<void> SubmitData(
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  String latitude = '';
+  String longitude = '';
+  String? deviceId = '';
+
+  Future<void> sampleSubmit(
       Lab_id,
       Reg_Id,
       roldId,
       sample_collection_time,
       cat,
       sample_source_location,
-      Function onFailure,
       StateId,
       source_district,
       source_block,
@@ -44,6 +43,7 @@ class SubmitProvider extends ChangeNotifier {
       wtp_id,
       test_selected,
       sample_submit_type) async {
+    _isLoading = true;
     notifyListeners();
     try {
       _sampleresponse = await _samplesubrepo.sampleSubmit(
@@ -73,15 +73,12 @@ class SubmitProvider extends ChangeNotifier {
           sample_submit_type);
       if (_sampleresponse?.status == 1) {
         _isSubmitData = true;
-/*      _localStorage.saveBool('isLoggedIn', true);
-      _localStorage.saveString('token', _loginResponse!.token.toString());*/
         notifyListeners();
-        /*onSuccess();*/
       } else {
         errorMsg = _sampleresponse!.message;
-        onFailure(errorMsg);
       }
     } catch (e) {
+      print("unhandeled exception-----$e");
       GlobalExceptionHandler.handleException(e as Exception);
       _sampleresponse = null;
     } finally {
