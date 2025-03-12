@@ -59,136 +59,305 @@ class SelectedTestScreen extends StatelessWidget {
               children: [
                 Card(
                   elevation: 4,
+                  color: Colors.white, // White background
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity, // Ensures full width
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: MediaQuery.of(context).size.width),
-                              child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.all(Colors.blue),
-                                columnSpacing:
-                                    MediaQuery.of(context).size.width *
-                                        0.05, // Dynamic spacing
-                                columns: [
-                                  DataColumn(
-                                    label: Text('Sr. No.',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SizedBox(
+                    height: 250, // Fixed height
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical, // Enables vertical scrolling
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal, // Enables horizontal scrolling
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minWidth: MediaQuery.of(context).size.width,
                                   ),
-                                  DataColumn(
-                                    label: Text('Test Name',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  DataColumn(
-                                    label: Text('Price',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ],
-                                rows: provider.cart!.asMap().entries.map((entry) {
-                                  int index = entry.key;
-                                  var param = entry.value;
-                                  return DataRow(
-                                    cells: <DataCell>[
-                                      DataCell(Text('${index + 1}',
-                                          style: TextStyle(fontSize: 14))),
-                                      DataCell(SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4, // Dynamic width
-                                        child: Text(
-                                          param.parameterName,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      )),
-                                      DataCell(Text(param.deptRate.toString(),
-                                          style: TextStyle(fontSize: 14))),
+                                  child: DataTable(
+                                    headingRowColor: MaterialStateProperty.all(Colors.blue),
+                                    columnSpacing: MediaQuery.of(context).size.width * 0.05, // Dynamic spacing
+                                    columns: [
+                                      DataColumn(
+                                        label: Text('Sr. No.',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Test Name',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      DataColumn(
+                                        label: Text('Price',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
                                     ],
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Total Price",
-                                style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 20),
-                              Text(
-                                "₹ 0 /-",
-                                style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 45,
-                          child: TextFormField(
-                            controller: remarkController,
-                            decoration: InputDecoration(
-                              fillColor: Colors.grey.shade100,
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.white, width: 2),
-                                borderRadius: BorderRadius.circular(
-                                  10,
+                                    rows: provider.cart!.asMap().entries.map((entry) {
+                                      int index = entry.key;
+                                      var param = entry.value;
+                                      return DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(Text('${index + 1}', style: TextStyle(fontSize: 14))),
+                                          DataCell(SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.4, // Dynamic width
+                                            child: Text(
+                                              param.parameterName,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                          )),
+                                          DataCell(Text(param.deptRate.toString(), style: TextStyle(fontSize: 14))),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
                                 ),
                               ),
-                              hintText: "Enter your remarks",
-                              hintStyle: const TextStyle(fontSize: 16),
                             ),
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "Total Price",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Text(
+                                  "₹ 0 /-",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+
+
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: remarkController,
+                      maxLines: 2, // Allows multiline input
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16), // Better padding
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12), // Smoother rounded edges
+                          borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.blueAccent, width: 1.5), // Focus highlight
+                        ),
+                        hintText: "Enter your remarks",
+                        hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                        suffixIcon: remarkController.text.isNotEmpty
+                            ? IconButton(
+                          icon: Icon(Icons.clear, color: Colors.grey),
+                          onPressed: () {
+                            remarkController.clear(); // Clears text on click
+                          },
+                        )
+                            : null,
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.newline, // Allows new line input
+                    ),
+                  ),
+                ),
+
+
+                SizedBox(
+                  height: 10,
+                ),
+
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Section 1: Lab Incharge Details
+                        Text(
+                          "Lab Incharge Details",
+                          style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueGrey,
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Column(
+                        Divider(thickness: 1, color: Colors.grey.shade300), // Divider for separation
+                        SizedBox(height: 8),
+
+                        Row(
                           children: [
-                            Text('Name: ${provider.labIncharge?.name ?? "N/A"}', style: const TextStyle(fontSize: 16),),
-                            Text('Lab Name: ${provider.labIncharge?.labName ?? "N/A"}', style: const TextStyle(fontSize: 16),),
-                            Text('Address: ${provider.labIncharge?.address ?? "N/A"}', style: const TextStyle(fontSize: 16),),
+                            Icon(Icons.person, color: Colors.blueAccent),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Name: ${provider.labIncharge?.name ?? "N/A"}',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           ],
                         ),
-                        SizedBox(height: 20,),
-                        ElevatedButton(onPressed: (){}, child: Text('Submit Sample',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF096DA8), // Button color
-                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
-                            )
-                        )
+                        SizedBox(height: 10),
+
+                        Row(
+                          children: [
+                            Icon(Icons.business, color: Colors.green),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Lab Name: ${provider.labIncharge?.labName ?? "N/A"}',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: Colors.redAccent),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Address: ${provider.labIncharge?.address ?? "N/A"}',
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+
+
                       ],
                     ),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                       color: Colors.white,
+                        borderRadius: BorderRadius.circular(12), // Rounded corners
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3), // Shadow color
+                            blurRadius: 10, // Shadow blur
+                            offset: const Offset(0, 5), // Shadow position
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text(
+                                'Latitude:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                                ),
+                                child: Text(
+                                 "28.00000", // Display placeholder text if null
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black.withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                'Longitude:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                                ),
+                                child: Text(
+                                  "72.5200", // Display placeholder text if null
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black.withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20,),
+                ElevatedButton(onPressed: (){}, child: Text('Submit Sample',style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF096DA8), // Button color
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                    )
                 ),
                 SizedBox(height: 10),
                 Text(
