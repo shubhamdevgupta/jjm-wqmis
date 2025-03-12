@@ -274,9 +274,6 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                     ],
                                   ),
 
-
-
-
                                 ],
                               ),
                             ),
@@ -321,7 +318,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                             border: Border.all(color: Colors.grey.withOpacity(0.3)),
                                           ),
                                           child: Text(
-                                            "28.00000", // Display placeholder text if null
+                                            "${provider.latitude}", // Display placeholder text if null
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.black.withOpacity(0.7),
@@ -344,7 +341,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                             border: Border.all(color: Colors.grey.withOpacity(0.3)),
                                           ),
                                           child: Text(
-                                            "72.5200", // Display placeholder text if null
+                                            "${provider.longitude}", // Display placeholder text if null
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.black.withOpacity(0.7),
@@ -366,8 +363,9 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                           ElevatedButton(
                               onPressed: () {
                                 print('device id--->${provider.deviceId}');
+                                print('cartt id--->${paramProvider.cart}');
                                 provider.fetchLocation();
-                               /*   provider.sampleSubmit(
+                           /*       provider.sampleSubmit(
                                         int.parse(paramProvider.selectedLab
                                             .toString()),
                                         0,
@@ -397,7 +395,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                         provider.latitude,
                                         provider.longitude,
                                         remarkController.text,
-                                        provider.deviceId,
+                                        "mydeviceid",
                                         "",
                                         0,
                                         paramProvider.cart.toString(),
