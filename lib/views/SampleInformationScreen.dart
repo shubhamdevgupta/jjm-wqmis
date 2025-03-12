@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
+import 'package:jjm_wqmis/views/LabParameterScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/ParameterProvider.dart';
 import '../utils/CustomDropdown.dart';
 
 class Sampleinformationscreen extends StatefulWidget {
@@ -15,7 +17,6 @@ class Sampleinformationscreen extends StatefulWidget {
 }
 
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
-  int? _selectedHandPumpType;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   if (Navigator.of(context).canPop()) {
                     Navigator.pop(context);
                   } else {
-                    Navigator.pushReplacementNamed(context, '/dashboard');
+                    Navigator.pushReplacementNamed(context, '/location');
                   }
                 },
               ),
@@ -61,37 +62,42 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-                  return Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          //card for state district selection
-                          buildSampleTaken(masterProvider),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          // card for location of source from where sample taken
-                        ],
+              return Padding(
+                padding: EdgeInsets.all(5.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //card for state district selection
+                      buildSampleTaken(masterProvider),
+                      SizedBox(
+                        height: 12,
                       ),
-                    ),
-                  );
-                })),
+                      // card for location of source from where sample taken
+                    ],
+                  ),
+                ),
+              );
+            })),
       ),
     );
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
     return Card(
-      elevation: 5, // Increased elevation for a more modern shadow effect
+      elevation: 5,
+      // Increased elevation for a more modern shadow effect
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+        borderRadius: BorderRadius.circular(
+            12), // Slightly increased border radius for a smooth look
       ),
-      margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
-      color: Colors.white, // Set background color of the card to white
+      margin: EdgeInsets.all(5),
+      // Margin to ensure spacing around the card
+      color: Colors.white,
+      // Set background color of the card to white
       child: Padding(
-        padding: EdgeInsets.all(8.0), // Increased padding for more spacing inside the card
+        padding: EdgeInsets.all(8.0),
+        // Increased padding for more spacing inside the card
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -120,22 +126,31 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               child: DropdownButtonFormField<String>(
                 value: masterProvider.selectedScheme,
                 decoration: InputDecoration(
-                  labelStyle: TextStyle(color: Colors.black),  // Change label color to black
+                  labelStyle: TextStyle(color: Colors.black),
+                  // Change label color to black
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when not focused
+                    borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1), // Grey border when not focused
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when focused
+                    borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1), // Grey border when focused
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.redAccent, width: 2),  // Red border for error state
+                    borderSide: BorderSide(
+                        color: Colors.redAccent,
+                        width: 2), // Red border for error state
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  fillColor: Colors.white,  // Set background color to white
-                  filled: true,  // Ensures background color is applied
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  fillColor: Colors.white,
+                  // Set background color to white
+                  filled: true, // Ensures background color is applied
                 ),
                 items: masterProvider.schemes.map((scheme) {
                   return DropdownMenuItem<String>(
@@ -148,7 +163,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  if(value!="0"){
+                  if (value != "0") {
                     masterProvider.setSelectedScheme(value);
                   }
                 },
@@ -164,7 +179,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
       ),
     );
-
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
@@ -174,18 +188,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomDropdown(
                 title:
-                "Please select the location of source from where sample is taken:",
+                    "Please select the location of source from where sample is taken:",
                 value: masterProvider.selectedWtsfilter,
                 items: masterProvider.wtsFilterList.map((wtsFilter) {
                   return DropdownMenuItem<String>(
@@ -199,18 +213,27 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 }).toList(),
                 onChanged: (value) {
                   masterProvider.fetchSchemes(
-                      masterProvider.selectedVillage!, "0","0");
+                      masterProvider.selectedVillage!, "0", "0");
                   masterProvider.setSelectedWaterSourcefilter(value);
-                  if(masterProvider.selectedWtsfilter=="5"){
+                  if (masterProvider.selectedWtsfilter == "5") {
                     print("----calling for WTP of PWS Scheme-----");
-                    masterProvider.fetchWTPList(masterProvider.selectedVillage!, masterProvider.selectedHabitation!,
-                        masterProvider.selectedStateId!, masterProvider.selectedScheme!);
-                  }else if(masterProvider.selectedWtsfilter=="6"){
+                    masterProvider.fetchWTPList(
+                        masterProvider.selectedVillage!,
+                        masterProvider.selectedHabitation!,
+                        masterProvider.selectedStateId!,
+                        masterProvider.selectedScheme!);
+                  } else if (masterProvider.selectedWtsfilter == "6") {
                     print("----calling for Storage and strucute-----");
-                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                      masterProvider.selectedHabitation!, value!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                    masterProvider.fetchSourceInformation(
+                        masterProvider.selectedVillage!,
+                        masterProvider.selectedHabitation!,
+                        value!,
+                        "0",
+                        "0",
+                        "0",
+                        masterProvider.selectedStateId!,
+                        masterProvider.selectedScheme!);
                   }
-
                 },
               ),
             ),
@@ -234,25 +257,31 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" && masterProvider.selectedScheme!.isNotEmpty,
+          visible: masterProvider.selectedWtsfilter == "2" &&
+              masterProvider.selectedScheme!.isNotEmpty,
           child: Card(
-            elevation: 5, // Increased elevation for a more modern shadow effect
+            elevation: 5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12),
             ),
-            margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
+            margin: EdgeInsets.all(5),
             color: Colors.white,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
               ),
-              padding: EdgeInsets.all(10), // Inner padding
-              margin: EdgeInsets.only(top: 12), // Spacing from the previous widget
+              padding: EdgeInsets.all(10),
+              // Inner padding
+              margin: EdgeInsets.only(top: 12),
+              // Spacing from the previous widget
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // Align text to the left
                 children: [
                   Text(
-                    'Select Sub-Source Category:',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
+                    'Select Sub-Source Category:',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                   ),
                   Row(
                     children: [
@@ -263,15 +292,16 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           masterProvider.setSelectedSubSource(value);
                           masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
+                              "0",
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
-                              "0",//pws zero
-                              "0", // wtp zero
+                              "0",
+                              //pws zero
+                              "0",
+                              // wtp zero
                               masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!
-                          );
-                          },
+                              masterProvider.selectedScheme!);
+                        },
                       ),
                       Text('Ground water sources (GW)'),
                     ],
@@ -288,11 +318,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
-                              "0",//pws zero
-                              "0",// wtp zero
+                              "0",
+                              //pws zero
+                              "0",
+                              // wtp zero
                               masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!
-                          );
+                              masterProvider.selectedScheme!);
                         },
                       ),
                       Text('Surface water sources (SW)'),
@@ -303,22 +334,29 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Visibility(
           visible: masterProvider.selectedSubSource == 6,
           child: Card(
-            elevation: 5, // Increased elevation for a more modern shadow effect
+            elevation: 5,
+            // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
-            margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
+            margin: EdgeInsets.all(5),
+            // Margin to ensure spacing around the card
             color: Colors.white,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.all(8), // Inner padding
-              margin: EdgeInsets.only(top: 12), // Spacing from the first container
+              padding: EdgeInsets.all(8),
+              // Inner padding
+              margin: EdgeInsets.only(top: 12),
+              // Spacing from the first container
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -326,8 +364,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     'PWS Type:',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,fontSize: 15
-                    ),
+                        color: Colors.black,
+                        fontSize: 15),
                   ),
                   Row(
                     children: [
@@ -336,10 +374,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedPwsType,
                         onChanged: (value) {
                           masterProvider.setSelectedPwsSource(value);
-                          print("----calling for Source of scheme raw water-----");
-                          if (value != null) {
-
-                          }
+                          print(
+                              "----calling for Source of scheme raw water-----");
+                          if (value != null) {}
                         },
                       ),
                       Text('PWS with FHTC'),
@@ -352,7 +389,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedPwsType,
                         onChanged: (value) {
                           masterProvider.setSelectedPwsSource(value);
-                          print("----calling for Source of scheme raw water-----");
+                          print(
+                              "----calling for Source of scheme raw water-----");
                           if (value != null) {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
@@ -362,8 +400,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 masterProvider.selectedPwsType.toString(),
                                 "0",
                                 masterProvider.selectedStateId!,
-                                masterProvider.selectedScheme!
-                            );
+                                masterProvider.selectedScheme!);
                           }
                         },
                       ),
@@ -375,17 +412,20 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-
-        SizedBox(height: 10,),
-
+        SizedBox(
+          height: 10,
+        ),
         Visibility(
           visible: masterProvider.selectedSubSource != null,
           child: Card(
-            elevation: 5, // Increased elevation for a more modern shadow effect
+            elevation: 5,
+            // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
-            margin: EdgeInsets.all(5), // Margin to ensure spacing around the card
+            margin: EdgeInsets.all(5),
+            // Margin to ensure spacing around the card
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -410,19 +450,42 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {}),
-                  SizedBox(height: 20,),
+                  CustomDateTimePicker(onDateTimeSelected: (value) {
+                    masterProvider.setSelectedDateTime(value);
+                  }),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/labParam');
+                        masterProvider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeNotifierProvider.value(
+                                    value: masterProvider,
+                                    child: Labparameterscreen(),
+                                  )),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF096DA8), // Button color
-                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                        backgroundColor: const Color(0xFF096DA8),
+                        // Button color
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      child: const Text('Next', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
                   )
                 ],
@@ -435,13 +498,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildWtpWater(Masterprovider masterProvider) {
-
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5",
       child: Card(
         elevation: 5, // Increased elevation for a more modern shadow effect
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+          borderRadius: BorderRadius.circular(
+              12), // Slightly increased border radius for a smooth look
         ),
         color: Colors.white,
         child: Padding(
@@ -477,8 +540,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 5,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print("----calling for wtp but now have to stop -----");
-                 /*         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                          print(
+                              "----calling for wtp but now have to stop -----");
+                          /*         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
                               masterProvider.selectedStateId!, masterProvider.selectedStateId!);
@@ -494,10 +558,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 6,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print("----calling for wtp but now have to stop -----");
+                          print(
+                              "----calling for wtp but now have to stop -----");
 
                           masterProvider.setSelectedSubSource(value);
-                  /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                          /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
                               masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
@@ -512,10 +577,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 7,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print("----calling for wtp but now have to stop -----");
+                          print(
+                              "----calling for wtp but now have to stop -----");
 
                           masterProvider.setSelectedSubSource(value);
-                        /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
+                          /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
                               masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
@@ -557,7 +623,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               masterProvider.setSelectedWaterSourceInformation(value);
             },
           ),
-          CustomDateTimePicker(onDateTimeSelected: (value) {})
+          CustomDateTimePicker(onDateTimeSelected: (value) {
+            masterProvider.setSelectedDateTime(value);
+          })
         ],
       ),
     );
@@ -572,7 +640,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
             color: Colors.white,
             child: Container(
@@ -601,10 +670,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 4,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
-                          print("----calling for house hold /school / aganwadi -----");
-                         masterProvider.setSelectedHouseHold(value);
-                         masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                             masterProvider.selectedHabitation!, masterProvider.selectedWtsfilter!, "0", "0", "0", masterProvider.selectedStateId!, masterProvider.selectedScheme!);
+                          print(
+                              "----calling for house hold /school / aganwadi -----");
+                          masterProvider.setSelectedHouseHold(value);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!,
+                              "0",
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
                         },
                       ),
                       Text('At school/AWCs'),
@@ -620,9 +697,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Visibility(
             visible: masterProvider.selectedHousehold == 3,
             child: Card(
-              elevation: 5, // Increased elevation for a more modern shadow effect
+              elevation: 5,
+              // Increased elevation for a more modern shadow effect
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+                borderRadius: BorderRadius.circular(
+                    12), // Slightly increased border radius for a smooth look
               ),
               color: Colors.white,
               child: Padding(
@@ -636,7 +715,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       hintText: 'Enter Location',
                       prefixIcon: Icons.cabin_rounded,
                     ),
-                    CustomDateTimePicker(onDateTimeSelected: (value) {})
+                    CustomDateTimePicker(onDateTimeSelected: (value) {
+                      masterProvider.setSelectedDateTime(value);
+                    })
                   ],
                 ),
               ),
@@ -645,9 +726,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Visibility(
             visible: masterProvider.selectedHousehold == 4,
             child: Card(
-              elevation: 5, // Increased elevation for a more modern shadow effect
+              elevation: 5,
+              // Increased elevation for a more modern shadow effect
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+                borderRadius: BorderRadius.circular(
+                    12), // Slightly increased border radius for a smooth look
               ),
               color: Colors.white,
               child: Padding(
@@ -672,7 +755,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.setSelectedWaterSourceInformation(value);
                       },
                     ),
-                    CustomDateTimePicker(onDateTimeSelected: (value) {})
+                    CustomDateTimePicker(onDateTimeSelected: (value) {
+                      masterProvider.setSelectedDateTime(value);
+                    })
                   ],
                 ),
               ),
@@ -691,11 +776,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
             color: Colors.white,
             child: Container(
-
               padding: EdgeInsets.all(10),
               // Inner padding
               margin: EdgeInsets.only(top: 12),
@@ -736,11 +821,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 1 && masterProvider.selectedWtsfilter=="4",
+          visible: masterProvider.selectedHandpumpPrivate == 1 &&
+              masterProvider.selectedWtsfilter == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
             color: Colors.white,
             child: Padding(
@@ -766,7 +853,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {})
+                  CustomDateTimePicker(onDateTimeSelected: (value) {
+                    masterProvider.setSelectedDateTime(value);
+                  })
                 ],
               ),
             ),
@@ -777,7 +866,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), // Slightly increased border radius for a smooth look
+              borderRadius: BorderRadius.circular(
+                  12), // Slightly increased border radius for a smooth look
             ),
             color: Colors.white,
             child: Padding(
@@ -795,7 +885,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     hintText: 'Enter Location',
                     prefixIcon: Icons.dehaze,
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {})
+                  CustomDateTimePicker(onDateTimeSelected: (value) {
+                    masterProvider.setSelectedDateTime(value);
+                  })
                 ],
               ),
             ),
