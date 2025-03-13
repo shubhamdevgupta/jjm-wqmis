@@ -86,10 +86,12 @@ class BaseApiService {
       log('Response Body: ${response.body}');
 
       return _processResponse(response);
-    } on Exception catch (e) {
-      log('Error during GET request: $e');
-      GlobalExceptionHandler.handleException(e); // No context needed
-      rethrow;
+    } on SocketException catch (e) {
+      log('SocketException: ${e.message}');
+      throw NetworkException('No internet connection');
+    } catch (e) {
+      log('Exception during POST request: $e');
+      throw Exception('Error during POST request');
     }
   }
 

@@ -208,8 +208,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
 
-  Future<void> fetchSchemes(
-      String villageId, String habitationId, String districtid) async {
+  Future<void> fetchSchemes(String villageId, String habitationId, String districtid) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -269,8 +268,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String villageId, String habitationId,
-      String stateId, String schemeId) async {
+  Future<void> fetchWTPList(String villageId, String habitationId, String stateId, String schemeId) async {
     isLoading = true;
     try {
       wtpList = await _masterRepository.fetchWTPlist(

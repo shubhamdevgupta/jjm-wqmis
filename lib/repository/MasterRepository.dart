@@ -20,7 +20,6 @@ class MasterRepository {
 
   Future<List<Stateresponse>> fetchStates() async {
     try {
-      // Call the GET method from BaseApiService
       final response = await _apiService.get('/apimaster/GetState');
       log('API Response: $response');
 

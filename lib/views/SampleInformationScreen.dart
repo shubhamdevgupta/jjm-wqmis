@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -62,23 +63,29 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-              return Padding(
-                padding: EdgeInsets.all(5.0),
-                child: SingleChildScrollView(
+                  return Stack(
+                      children: [
+                         Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //card for state district selection
-                      buildSampleTaken(masterProvider),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      // card for location of source from where sample taken
-                    ],
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                  //card for state district selection
+                  buildSampleTaken(masterProvider),
+                  SizedBox(
+                  height: 12,
                   ),
-                ),
-              );
-            })),
+                  // card for location of source from where sample taken
+                  ],
+                  ),
+                  ),
+                  ),
+                        if(masterProvider.isLoading)
+                          LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                  ],
+                  );
+                })),
       ),
     );
   }
@@ -147,7 +154,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         width: 2), // Red border for error state
                   ),
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   fillColor: Colors.white,
                   // Set background color to white
                   filled: true, // Ensures background color is applied
@@ -199,7 +206,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               padding: const EdgeInsets.all(8.0),
               child: CustomDropdown(
                 title:
-                    "Please select the location of source from where sample is taken:",
+                "Please select the location of source from where sample is taken:",
                 value: masterProvider.selectedWtsfilter,
                 items: masterProvider.wtsFilterList.map((wtsFilter) {
                   return DropdownMenuItem<String>(
@@ -459,7 +466,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        masterProvider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1");
+                        masterProvider.fetchAllLabs(
+                            masterProvider.selectedStateId!,
+                            masterProvider.selectedDistrictId!,
+                            masterProvider.selectedBlockId!,
+                            masterProvider.selectedGramPanchayat!,
+                            masterProvider.selectedVillage!, "1");
                         Navigator.push(
                           context,
                           MaterialPageRoute(

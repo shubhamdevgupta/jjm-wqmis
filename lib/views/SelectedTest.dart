@@ -400,7 +400,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                         "mydeviceid",
                                         "",
                                         0,
-                                        masterProvider.waterSource,
+                                        paramProvider.cart!.sublist(0,2).join(","),
                                         "M");
                                   },
                                   child: Text(

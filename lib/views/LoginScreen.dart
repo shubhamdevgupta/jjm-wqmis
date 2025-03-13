@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 // Login Page
@@ -237,14 +238,7 @@ class _LoginpageState extends State<Loginscreen> {
                   ),
                   // Loading Overlay
                   if (provider.isLoading)
-                    Container(
-                      color: Colors.black.withOpacity(0.5), // Background opacity
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                  LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
             ),

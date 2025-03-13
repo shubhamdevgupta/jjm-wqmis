@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
-import 'SampleInformationScreen.dart';
 
 class Locationscreen extends StatefulWidget {
   const Locationscreen({super.key});
@@ -32,7 +31,6 @@ class _LocationscreenState extends State<Locationscreen> {
                 ),
               ),
 
-
               //elevation
               flexibleSpace: Container(
                 decoration: BoxDecoration(
@@ -54,10 +52,15 @@ class _LocationscreenState extends State<Locationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [buildStateVillage(masterProvider)],
-                ),
+              return Stack(
+                children: [
+                  SingleChildScrollView(
+                      child: Column(
+                    children: [buildStateVillage(masterProvider)],
+                  )),
+                  if (masterProvider.isLoading)
+                    LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                ],
               );
             })));
   }
@@ -76,7 +79,6 @@ class _LocationscreenState extends State<Locationscreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -96,8 +98,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         labelStyle: TextStyle(color: Colors.blueAccent),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 2),
+                          borderSide: BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -106,10 +107,10 @@ class _LocationscreenState extends State<Locationscreen> {
                         ),
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                                color: Colors.redAccent, width: 2)),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
+                            borderSide:
+                                BorderSide(color: Colors.redAccent, width: 2)),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: masterProvider.states.map((state) {
                         print('master provider in the calll $state');
@@ -195,8 +196,7 @@ class _LocationscreenState extends State<Locationscreen> {
               CustomDropdown(
                 title: "GP *",
                 value: masterProvider.selectedGramPanchayat,
-                items:
-                    masterProvider.gramPanchayat.map((gramPanchayat) {
+                items: masterProvider.gramPanchayat.map((gramPanchayat) {
                   return DropdownMenuItem<String>(
                       value: gramPanchayat.jjmPanchayatId,
                       child: Text(
@@ -266,58 +266,28 @@ class _LocationscreenState extends State<Locationscreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-
-                    if(validateStateVillate(masterProvider)){
+                    if (validateStateVillate(masterProvider)) {
                       Navigator.pushReplacementNamed(context, '/savesample');
-                    }else{
-                      ToastHelper.showToastMessage(masterProvider.errorMsg,backgroundColor: Colors.red);
-                    }
-
-                  /*  if (_selectedState.stateName == "--Select State--") {
-                      ToastHelper.showToastMessage("Please select all dropdown options before proceeding.", backgroundColor: Colors.red,);
-                    } else if (_selectedState == null || _selectedDistrict == null || _selectedBlock == null || _selectedGP == null || _selectedVillage == null) {
-                      // Show a toast message if validation fails
-                      ToastHelper.showToastMessage("Please select all dropdown options before proceeding.", backgroundColor: Colors.red,);
-
-                      // Optionally, use a Snackbar or AlertDialog for better visibility
-                      CustomSnackBar.showError(context, 'Please select all dropdown options before proceeding.');
-                    } else if (_selectedState == getStateListData[0] ||
-                        _selectedDistrict == getDistrictListData[0] ||
-                        _selectedBlock == getBlockListData[0] ||
-                        _selectedGP == getGPListData[0] ||
-                        _selectedVillage == getVillageListData[0]) {
-                      // Show a toast message if validation fails
-                      ToastHelper.showToastMessage("Please select all dropdown options before proceeding.", backgroundColor: Colors.red,);
-
-                      // Optionally, use a Snackbar or AlertDialog for better visibility
-                      CustomSnackBar.showError(context, 'Please select all dropdown options before proceeding.');
                     } else {
-                      // Navigate and pass the selected values to the next screen
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => CatList(
-                            state: _selectedState.stateName,
-                            district: _selectedDistrict.districtName,
-                            block: _selectedBlock.blockName,
-                            panchayat: _selectedGP.grampanchayatName,
-                            village: _selectedVillage.villageName,
-                            stateid: _selectedState.stateId.toString(),
-                            districtid: _selectedDistrict.districtId.toString(),
-                            blockid: _selectedBlock.blockId.toString(),
-                            panchayatid: _selectedGP.grampanchayatId.toString(),
-                            villageid: _selectedVillage.villageId.toString(),
-                            lgdvillagecode: lgdCodes.toString(),
-                          ),
-                        ),
-                      );
-                    }*/
+                      ToastHelper.showToastMessage(masterProvider.errorMsg,
+                          backgroundColor: Colors.red);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF096DA8), // Button color
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 100.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: const Text('Next', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
               )
             ],
@@ -328,20 +298,19 @@ class _LocationscreenState extends State<Locationscreen> {
   }
 
   bool validateStateVillate(Masterprovider provider) {
-      provider.errorMsg = (provider.selectedStateId!.isNotEmpty
-          ? (provider.selectedDistrictId!.isNotEmpty
-          ? (provider.selectedBlockId!.isNotEmpty
-          ? (provider.selectedGramPanchayat!.isNotEmpty
-          ? (provider.village.isNotEmpty
-          ? (provider.habitationId.isNotEmpty
-          ? ""
-          : "Please select habitation dropdown before proceeding.")
-          : "Please select village dropdown before proceeding.")
-          : "Please select GramPanchayat dropdown before proceeding.")
-          : "Please select Block dropdown before proceeding.")
-          : "Please select District dropdown before proceeding.")
-          : "Please select State dropdown before proceeding.");
-      return provider.errorMsg.isEmpty;
-
+    provider.errorMsg = (provider.selectedStateId!.isNotEmpty
+        ? (provider.selectedDistrictId!.isNotEmpty
+            ? (provider.selectedBlockId!.isNotEmpty
+                ? (provider.selectedGramPanchayat!.isNotEmpty
+                    ? (provider.village.isNotEmpty
+                        ? (provider.habitationId.isNotEmpty
+                            ? ""
+                            : "Please select habitation dropdown before proceeding.")
+                        : "Please select village dropdown before proceeding.")
+                    : "Please select GramPanchayat dropdown before proceeding.")
+                : "Please select Block dropdown before proceeding.")
+            : "Please select District dropdown before proceeding.")
+        : "Please select State dropdown before proceeding.");
+    return provider.errorMsg.isEmpty;
   }
 }
