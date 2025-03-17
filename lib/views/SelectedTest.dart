@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/SampleSubProvider.dart';
@@ -15,10 +16,11 @@ class SelectedTestScreen extends StatefulWidget {
 class _SelectedTestScreenState extends State<SelectedTestScreen> {
   final TextEditingController remarkController = TextEditingController();
 
+  TextStyle _headerTextStyle() => TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+  TextStyle _rowTextStyle() => TextStyle(fontSize: 14);
   @override
   Widget build(BuildContext context) {
-    final paramProvider =
-    Provider.of<ParameterProvider>(context, listen: false);
+    final paramProvider = context.watch<ParameterProvider>();
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     return ChangeNotifierProvider(
@@ -39,7 +41,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                         if (Navigator.of(context).canPop()) {
                           Navigator.pop(context);
                         } else {
-                          Navigator.pushReplacementNamed(context, '/dashboard');
+                          Navigator.pushReplacementNamed(context, '/labParam');
                         }
                       },
                     ),
@@ -78,87 +80,71 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: SizedBox(
-                                  height: 250, // Fixed height
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-                                        Expanded(
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.vertical, // Enables vertical scrolling
+                                        // Dynamic height adjustment
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxHeight: 250, // Maximum height before scrolling starts
+                                          ),
+                                          child: paramProvider.cart!.isEmpty
+                                              ? Center(child: Text("No tests selected")) // Show message if no items
+                                              : Container(
+                                            constraints: BoxConstraints(
+                                              minHeight: 0, // Allow shrinking when few items
+                                              maxHeight: 250, // Max height to enable scrolling
+                                            ),
                                             child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal, // Enables horizontal scrolling
-                                              child: ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  minWidth: MediaQuery.of(context).size.width,
-                                                ),
-                                                child: DataTable(
-                                                  headingRowColor: MaterialStateProperty.all(Colors.blue),
-                                                  columnSpacing: MediaQuery.of(context).size.width * 0.05, // Dynamic spacing
-                                                  columns: [
-                                                    DataColumn(
-                                                      label: Text('Sr. No.',
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold)),
-                                                    ),
-                                                    DataColumn(
-                                                      label: Text('Test Name',
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold)),
-                                                    ),
-                                                    DataColumn(
-                                                      label: Text('Price',
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold)),
-                                                    ),
-                                                  ],
-                                                  rows: paramProvider.cart!.asMap().entries.map((entry) {
-                                                    int index = entry.key;
-                                                    var param = entry.value;
-                                                    return DataRow(
-                                                      cells: <DataCell>[
-                                                        DataCell(Text('${index + 1}', style: TextStyle(fontSize: 14))),
-                                                        DataCell(SizedBox(
-                                                          width: MediaQuery.of(context).size.width * 0.4, // Dynamic width
-                                                          child: Text(
-                                                            param.parameterName,
-                                                            overflow: TextOverflow.ellipsis,
-                                                            style: TextStyle(fontSize: 14),
-                                                          ),
-                                                        )),
-                                                        DataCell(Text(param.deptRate.toString(), style: TextStyle(fontSize: 14))),
-                                                      ],
-                                                    );
-                                                  }).toList(),
-                                                ),
+                                              scrollDirection: Axis.horizontal,
+                                              child: DataTable(
+                                                headingRowColor: MaterialStateProperty.all(Colors.blue),
+                                                columnSpacing: MediaQuery.of(context).size.width * 0.02,
+                                                columns: [
+                                                  DataColumn(label: Text('Sr. No.', style: _headerTextStyle())),
+                                                  DataColumn(label: Text('Test Name', style: _headerTextStyle())),
+                                                  DataColumn(label: Text('Price', style: _headerTextStyle())),
+                                                  DataColumn(label: Text('Action', style: _headerTextStyle())),
+                                                ],
+                                                rows: paramProvider.cart!.asMap().entries.map((entry) {
+                                                  int index = entry.key;
+                                                  var param = entry.value;
+
+                                                  return DataRow(
+                                                    cells: <DataCell>[
+                                                      DataCell(Text('${index + 1}', style: _rowTextStyle())),
+                                                      DataCell(SizedBox(
+                                                        width: MediaQuery.of(context).size.width * 0.4,
+                                                        child: Text(param.parameterName, overflow: TextOverflow.ellipsis, style: _rowTextStyle()),
+                                                      )),
+                                                      DataCell(Text(param.deptRate.toString(), style: _rowTextStyle())),
+                                                      DataCell(
+                                                        IconButton(
+                                                          icon: Icon(Icons.delete, color: Colors.red),
+                                                          onPressed: () {
+                                                            paramProvider.removeFromCart(param);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }).toList(),
                                               ),
                                             ),
                                           ),
                                         ),
+
                                         Divider(),
+
                                         Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
-                                              Text(
-                                                "Total Price",
-                                                style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                              Text("Total Price", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                                               SizedBox(width: 20),
-                                              Text(
-                                                "₹ 0 /-",
-                                                style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                              Text("₹ ${paramProvider.calculateTotal()} /-", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                                             ],
                                           ),
                                         ),
@@ -314,7 +300,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                 border: Border.all(color: Colors.grey.withOpacity(0.3)),
                                               ),
                                               child: Text(
-                                                "${provider.latitude}", // Display placeholder text if null
+                                                "${masterProvider.currentPosition!.latitude}", // Display placeholder text if null
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.black.withOpacity(0.7),
@@ -323,6 +309,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                             ),
                                           ],
                                         ) ,
+                                        SizedBox(height: 10,),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
@@ -342,7 +329,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                 border: Border.all(color: Colors.grey.withOpacity(0.3)),
                                               ),
                                               child: Text(
-                                                "${provider.longitude}", // Display placeholder text if null
+                                                "${masterProvider.currentPosition!.longitude}", // Display placeholder text if null
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.black.withOpacity(0.7),
@@ -351,9 +338,6 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                             ),
                                           ],
                                         ),
-
-                                        const SizedBox(height: 16),
-
                                       ],
                                     ),
                                   ),
@@ -363,45 +347,30 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                               SizedBox(height: 20,),
                               ElevatedButton(
                                   onPressed: () {
-                                    print('device id--->${provider.deviceId}');
-                                    print('watersource id--->${masterProvider.waterSource}');
-                                    var cartData= paramProvider.cart!.sublist(0,2).join(",");
+                                    validateAndSubmit(context, provider, masterProvider, paramProvider, remarkController);
 
-                                    provider.sampleSubmit(
-                                        int.parse(paramProvider.selectedLab
-                                            .toString()),
-                                        0,
-                                        4,
-                                        masterProvider.selectedDatetime,
-                                        int.parse(masterProvider.selectedSubSource
-                                            .toString()),
-                                        int.parse(masterProvider
-                                            .selectedWaterSource
-                                            .toString()),
-                                        int.parse(masterProvider.selectedStateId
-                                            .toString()),
-                                        int.parse(masterProvider.selectedDistrictId
-                                            .toString()),
-                                        int.parse(masterProvider.selectedBlockId
-                                            .toString()),
-                                        int.parse(masterProvider
-                                            .selectedGramPanchayat
-                                            .toString()),
-                                        int.parse(masterProvider.selectedVillage
-                                            .toString()),
-                                        int.parse(masterProvider.selectedHabitation.toString()),
-                                        int.parse(masterProvider.selectedWtsfilter.toString()),
-                                        int.parse(masterProvider.selectedScheme.toString()),
-                                        "",
-                                        "", // source name
-                                        provider.latitude,
-                                        provider.longitude,
-                                        remarkController.text,
-                                        "mydeviceid",
-                                        "",
-                                        0,
-                                        paramProvider.cart!.sublist(0,2).join(","),
-                                        "M");
+                                    if(provider.isSubmitData){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text("Success"),
+                                            content: Text(provider.sampleresponse!.message),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context); // Close dialog
+                                                  Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false); // Go to Dashboard
+                                                },
+                                                child: Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }else{
+                                      ToastHelper.showErrorSnackBar(context, provider.sampleresponse!.message);
+                                    }
                                   },
                                   child: Text(
                                     'Submit Sample',
@@ -443,6 +412,59 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
               );
             }));
   }
+
+  void validateAndSubmit(BuildContext context, Samplesubprovider provider, Masterprovider masterProvider, ParameterProvider paramProvider, TextEditingController remarkController) {
+
+    if (remarkController.text.isEmpty) {
+      showSnackbar(context, "Please enter a remark.");
+      return;
+    }
+
+    if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
+      showSnackbar(context, "Please select at least one test.");
+      return;
+    }
+
+    // If all validations pass, proceed with submission
+    provider.sampleSubmit(
+      int.parse(paramProvider.selectedLab.toString()),
+      0,
+      4,
+      masterProvider.selectedDatetime,
+      int.parse(masterProvider.selectedSubSource.toString()),
+      int.parse(masterProvider.selectedWaterSource.toString()),
+      int.parse(masterProvider.selectedStateId.toString()),
+      int.parse(masterProvider.selectedDistrictId.toString()),
+      int.parse(masterProvider.selectedBlockId.toString()),
+      int.parse(masterProvider.selectedGramPanchayat.toString()),
+      int.parse(masterProvider.selectedVillage.toString()),
+      int.parse(masterProvider.selectedHabitation.toString()),
+      int.parse(masterProvider.selectedWtsfilter.toString()),
+      int.parse(masterProvider.selectedScheme.toString()),
+      "",
+      "",
+      masterProvider.currentPosition!.latitude,
+      masterProvider.currentPosition!.longitude,
+      remarkController.text,
+      "mydeviceid",
+      "",
+      0,
+      paramProvider.cart!.sublist(0, 2).join(","),
+      "M",
+    );
+  }
+
+  void showSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+
 }
 
 

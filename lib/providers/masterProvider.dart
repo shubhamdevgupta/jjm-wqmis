@@ -1,6 +1,7 @@
 // lib/providers/state_provider.dart
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
@@ -16,6 +17,7 @@ import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -76,11 +78,9 @@ class Masterprovider extends ChangeNotifier {
   List<Alllabresponse> labList = [];
   String? selectedLab;
 
+  Position? _currentPosition;
+  Position? get currentPosition => _currentPosition;
 
-
-  Masterprovider() {
-    fetchStates();
-  }
 
   Future<void> fetchStates() async {
     print('Calling the state function...');
@@ -302,6 +302,16 @@ class Masterprovider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
+    }
+  }
+
+  Future<void> fetchLocation() async {
+    try {
+      _currentPosition = await LocationService.getCurrentLocation();
+      notifyListeners(); // Notify UI to update
+    } catch (e) {
+      errorMsg = e.toString();
+      notifyListeners(); // Notify UI about error
     }
   }
 

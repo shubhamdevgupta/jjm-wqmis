@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/providers/SampleSubProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Masterprovider()),
         ChangeNotifierProvider(create: (context) => ErrorProvider()),
         ChangeNotifierProvider(create: (context) => ParameterProvider()),
+        ChangeNotifierProvider(create: (context) => Samplesubprovider()),
       ],
       child: MyApp(),
     ),

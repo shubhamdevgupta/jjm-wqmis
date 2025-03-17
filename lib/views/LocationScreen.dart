@@ -113,7 +113,6 @@ class _LocationscreenState extends State<Locationscreen> {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: masterProvider.states.map((state) {
-                        print('master provider in the calll $state');
                         return DropdownMenuItem<String>(
                           value: state.jjmStateId,
                           child: Text(state.stateName),

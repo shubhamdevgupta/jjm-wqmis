@@ -39,7 +39,7 @@ class LoaderUtils {
   static Widget conditionalLoader({required bool isLoading, Widget? child}) {
     return isLoading
         ? Container(
-          color: Colors.black.withOpacity(0.3), // Background opacity
+          color: Colors.black.withOpacity(0.2), // Background opacity
           child: const Center(
                 child: CircularProgressIndicator(
           color: Colors.white,

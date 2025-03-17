@@ -157,7 +157,7 @@ class _SearchDialogState extends State<SearchDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select an Item"),
+        title: const Text("Select Lab"),
         backgroundColor: Colors.blue,
       ),
       body: Column(

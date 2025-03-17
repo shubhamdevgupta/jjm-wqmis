@@ -49,7 +49,7 @@ class ParameterProvider with ChangeNotifier {
       parameterList = await _lapparameterrepository.fetchAllParameter(
           labid, stateid, sid, reg_id, parameteetype);
       if (parameterList.isNotEmpty) {
-        selectedParameter = parameterList.first.parameterIdAlt;
+        selectedParameter = parameterList.first.parameterId;
         allParameters =
             parameterList.map((param) => param.parameterName).toList();
       }
@@ -100,15 +100,22 @@ class ParameterProvider with ChangeNotifier {
     parameterType = value;
     notifyListeners();
   }
+  void removeFromCart(Parameterresponse param) {
+    cart!.remove(param);
+    notifyListeners(); // Notify UI to update
+  }
 
+  double calculateTotal() {
+    return cart!.fold(0.0, (sum, item) => sum + item.deptRate);
+  }
 
   void toggleCart(Parameterresponse? parameter) {
-    if (parameter == null || parameter.parameterIdAlt == null)
+    if (parameter == null || parameter.parameterId == null)
       return; // Null safety check
 
-    if (cart!.any((item) => item.parameterIdAlt == parameter.parameterIdAlt)) {
+    if (cart!.any((item) => item.parameterId == parameter.parameterId)) {
       cart!.removeWhere(
-          (item) => item.parameterIdAlt == parameter.parameterIdAlt);
+          (item) => item.parameterId == parameter.parameterId);
     } else {
       cart!.add(parameter);
       fetchLabIncharge(int.parse(selectedLab!));

@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
 import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
 
 class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
-  bool _isSubmitData = false;
-  Sampleresponse? _sampleresponse;
+  bool isSubmitData = false;
+  Sampleresponse? sampleresponse;
   String errorMsg = '';
 
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 
-  String latitude = '';
-  String longitude = '';
   String? deviceId = '';
 
   Future<void> sampleSubmit(
@@ -48,7 +44,7 @@ class Samplesubprovider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      _sampleresponse = await _samplesubrepo.sampleSubmit(
+      sampleresponse = await _samplesubrepo.sampleSubmit(
           Lab_id,
           Reg_Id,
           roldId,
@@ -73,19 +69,19 @@ class Samplesubprovider extends ChangeNotifier {
           wtp_id,
           test_selected,
           sample_submit_type);
-      if (_sampleresponse?.status == 1) {
-        _isSubmitData = true;
+      if (sampleresponse?.status == 1) {
+        isSubmitData = true;
         notifyListeners();
       } else {
-        errorMsg = _sampleresponse!.message;
+        errorMsg = sampleresponse!.message;
       }
     } catch (e) {
       print("unhandeled exception-----$e");
       GlobalExceptionHandler.handleException(e as Exception);
-      _sampleresponse = null;
+      sampleresponse = null;
     } finally {
       _isLoading=false;
-      _isSubmitData = false;
+      isSubmitData = false;
       notifyListeners();
     }
   }
