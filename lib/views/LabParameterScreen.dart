@@ -37,7 +37,8 @@ class _LabParameterScreen extends State<Labparameterscreen> {
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.shopping_cart),
                   onPressed: (){
-                if(provider.cart!.isNotEmpty)
+                  provider.fetchLocation();
+                if(provider.cart!.isNotEmpty && provider.currentPosition!=null)
                   Navigator.push(
                     context,
                     MaterialPageRoute(

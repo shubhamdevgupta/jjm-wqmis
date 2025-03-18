@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+import '../utils/LocationUtils.dart';
+
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
@@ -25,6 +28,9 @@ class ParameterProvider with ChangeNotifier {
   List<Alllabresponse> labList = [];
   String? selectedLab;
   Labinchargeresponse? labIncharge;
+
+  Position? _currentPosition;
+  Position? get currentPosition => _currentPosition;
 
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
@@ -79,7 +85,15 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
+  Future<void> fetchLocation() async {
+    try {
+      _currentPosition = await LocationService.getCurrentLocation();
+      notifyListeners(); // Notify UI to update
+    } catch (e) {
+      debugPrint(" Error fetching  Location: $e");
+      notifyListeners(); // Notify UI about error
+    }
+  }
 
   void setSelectedParameter(int? value) {
     selectedParameter = value;

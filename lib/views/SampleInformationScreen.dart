@@ -558,7 +558,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                    masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!, "0", "0",masterProvider.selectedWtp!,
-                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);
+                              masterProvider.selectedStateId!, masterProvider.selectedScheme!);
                           masterProvider.setSelectedSubSource(value);
                         },
                       ),

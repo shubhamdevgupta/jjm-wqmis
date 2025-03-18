@@ -306,15 +306,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchLocation() async {
-    try {
-      _currentPosition = await LocationService.getCurrentLocation();
-      notifyListeners(); // Notify UI to update
-    } catch (e) {
-      errorMsg = e.toString();
-      notifyListeners(); // Notify UI about error
-    }
-  }
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
