@@ -34,6 +34,27 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                   image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
             ),
             child: Scaffold(
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.shopping_cart),
+                  onPressed: (){
+                if(provider.cart!.isNotEmpty)
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider.value(
+                              value: masterProvider),
+                          // Pass masterProvider
+                          ChangeNotifierProvider.value(value: provider),
+                          // Pass parameterProvider if needed
+                        ],
+                        child: SelectedTestScreen(),
+                      ),
+                    ),
+                  );
+                else ToastHelper.showErrorSnackBar(context, "Please Select Test");
+              }),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 title: const Text(
@@ -386,7 +407,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                     ),
                                     const SizedBox(height: 20),
                                     Text(
-                                      'Cart: ${provider.cart!.join(', ')}',
+                                      'Cart: ${provider.cart!.length}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,

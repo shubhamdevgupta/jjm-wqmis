@@ -52,6 +52,7 @@ class MasterRepository {
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
+      print("catch in master repo fetch district $e");
       rethrow;
     }
   }

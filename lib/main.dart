@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/SampleSubProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
@@ -27,6 +28,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ErrorProvider()),
         ChangeNotifierProvider(create: (context) => ParameterProvider()),
         ChangeNotifierProvider(create: (context) => Samplesubprovider()),
+        ChangeNotifierProvider(create: (context) => DashboardProvider()),
       ],
       child: MyApp(),
     ),
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(),
         '/savesample': (context) => Sampleinformationscreen(),
-        '/dashboard': (context) => DashboardScreen(),
+        '/dashboard': (context) => Dashboardscreen(),
         '/login': (context) => Loginscreen(),
         '/location': (context) => Locationscreen(),
         '/labParam': (context) => Labparameterscreen(),

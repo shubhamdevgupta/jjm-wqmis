@@ -90,8 +90,8 @@ class BaseApiService {
       log('SocketException: ${e.message}');
       throw NetworkException('No internet connection');
     } catch (e) {
-      log('Exception during POST request: $e');
-      throw Exception('Error during POST request');
+      log('Exception during GET request: $e');
+      throw ApiException('Error during GET request $e');
     }
   }
 
@@ -117,7 +117,7 @@ class BaseApiService {
       case 500:
         throw ApiException('Internal Server Error: ${response.body}');
       default:
-        throw ApiException('Unexpected error: ${response.statusCode}');
+        throw ApiException('Unexpected error: ${response.statusCode} - ${response.body}');
     }
   }
 }
