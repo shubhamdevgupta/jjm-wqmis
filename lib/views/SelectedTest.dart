@@ -96,44 +96,51 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                               minHeight: 0, // Allow shrinking when few items
                                               maxHeight: 250, // Max height to enable scrolling
                                             ),
-                                            child: SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: DataTable(
-                                                headingRowColor: MaterialStateProperty.all(Colors.blue),
-                                                columnSpacing: MediaQuery.of(context).size.width * 0.02,
-                                                columns: [
-                                                  DataColumn(label: Text('Sr. No.', style: _headerTextStyle())),
-                                                  DataColumn(label: Text('Test Name', style: _headerTextStyle())),
-                                                  DataColumn(label: Text('Price', style: _headerTextStyle())),
-                                                  DataColumn(label: Text('Action', style: _headerTextStyle())),
-                                                ],
-                                                rows: paramProvider.cart!.asMap().entries.map((entry) {
-                                                  int index = entry.key;
-                                                  var param = entry.value;
-
-                                                  return DataRow(
-                                                    cells: <DataCell>[
-                                                      DataCell(Text('${index + 1}', style: _rowTextStyle())),
-                                                      DataCell(SizedBox(
-                                                        width: MediaQuery.of(context).size.width * 0.4,
-                                                        child: Text(param.parameterName, overflow: TextOverflow.ellipsis, style: _rowTextStyle()),
-                                                      )),
-                                                      DataCell(Text(param.deptRate.toString(), style: _rowTextStyle())),
-                                                      DataCell(
-                                                        IconButton(
-                                                          icon: Icon(Icons.delete, color: Colors.red),
-                                                          onPressed: () {
-                                                            paramProvider.removeFromCart(param);
-                                                          },
-                                                        ),
-                                                      ),
+                                            child: Scrollbar(
+                                              thumbVisibility: true, // Show scrollbar when scrolling
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.vertical, // Enables vertical scrolling inside the card
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.horizontal, // Enables horizontal scrolling if needed
+                                                  child: DataTable(
+                                                    headingRowColor: MaterialStateProperty.all(Colors.blue),
+                                                    columnSpacing: MediaQuery.of(context).size.width * 0.02,
+                                                    columns: [
+                                                      DataColumn(label: Text('Sr. No.', style: _headerTextStyle())),
+                                                      DataColumn(label: Text('Test Name', style: _headerTextStyle())),
+                                                      DataColumn(label: Text('Price', style: _headerTextStyle())),
+                                                      DataColumn(label: Text('Action', style: _headerTextStyle())),
                                                     ],
-                                                  );
-                                                }).toList(),
+                                                    rows: paramProvider.cart!.asMap().entries.map((entry) {
+                                                      int index = entry.key;
+                                                      var param = entry.value;
+
+                                                      return DataRow(
+                                                        cells: <DataCell>[
+                                                          DataCell(Text('${index + 1}', style: _rowTextStyle())),
+                                                          DataCell(SizedBox(
+                                                            width: MediaQuery.of(context).size.width * 0.4,
+                                                            child: Text(param.parameterName, overflow: TextOverflow.ellipsis, style: _rowTextStyle()),
+                                                          )),
+                                                          DataCell(Text(param.deptRate.toString(), style: _rowTextStyle())),
+                                                          DataCell(
+                                                            IconButton(
+                                                              icon: Icon(Icons.delete, color: Colors.red),
+                                                              onPressed: () {
+                                                                paramProvider.removeFromCart(param);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
+
 
                                         Divider(),
 
@@ -281,8 +288,15 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        Text(
+                                          "Geo Location of Sample Taken:",
+                                          style: TextStyle(
+                                            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey,
+                                          ),
+                                        ),
+                                        Divider(thickness: 1, color: Colors.grey.shade300),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             const Text(
                                               'Latitude:',
@@ -292,48 +306,34 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                 color: Colors.black87,
                                               ),
                                             ),
-                                            Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(12),
-                                                border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                                              ),
-                                              child: Text(
-                                                "${masterProvider.currentPosition!.latitude}", // Display placeholder text if null
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black.withOpacity(0.7),
-                                                ),
+                                            SizedBox(width: 16,),
+                                            Text(
+                                              "${masterProvider.currentPosition!.latitude}", // Display placeholder text if null
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black.withOpacity(0.7),
                                               ),
                                             ),
                                           ],
                                         ) ,
                                         SizedBox(height: 10,),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             const Text(
-                                              'Longitude:',
+                                              'Longitude :',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600,
                                                 color: Colors.black87,
                                               ),
                                             ),
-                                            Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(12),
-                                                border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                                              ),
-                                              child: Text(
-                                                "${masterProvider.currentPosition!.longitude}", // Display placeholder text if null
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black.withOpacity(0.7),
-                                                ),
+                                            SizedBox(width: 16,),
+                                            Text(
+                                              "${masterProvider.currentPosition!.longitude}", // Display placeholder text if null
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black.withOpacity(0.7),
                                               ),
                                             ),
                                           ],
@@ -347,9 +347,10 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                               SizedBox(height: 20,),
                               ElevatedButton(
                                   onPressed: () {
-                                    validateAndSubmit(context, provider, masterProvider, paramProvider, remarkController);
+                                    validateAndSubmit(context, provider, masterProvider, paramProvider);
 
                                     if(provider.isSubmitData){
+                                      print('submitdata succesful------ ${provider.isSubmitData}');
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
@@ -369,7 +370,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                         },
                                       );
                                     }else{
-                                      ToastHelper.showErrorSnackBar(context, provider.sampleresponse!.message);
+                                      print('submitdata failed------ ${provider.isSubmitData}');
+                                      ToastHelper.showErrorSnackBar(context, provider.errorMsg);
                                     }
                                   },
                                   child: Text(
@@ -413,19 +415,13 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
             }));
   }
 
-  void validateAndSubmit(BuildContext context, Samplesubprovider provider, Masterprovider masterProvider, ParameterProvider paramProvider, TextEditingController remarkController) {
-
-    if (remarkController.text.isEmpty) {
-      showSnackbar(context, "Please enter a remark.");
-      return;
-    }
+  void validateAndSubmit(BuildContext context, Samplesubprovider provider, Masterprovider masterProvider, ParameterProvider paramProvider) {
 
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
       showSnackbar(context, "Please select at least one test.");
       return;
     }
 
-    // If all validations pass, proceed with submission
     provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       0,
@@ -443,8 +439,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       "",
       "",
-      masterProvider.currentPosition!.latitude,
-      masterProvider.currentPosition!.longitude,
+      masterProvider.currentPosition!.latitude.toString(),
+      masterProvider.currentPosition!.longitude.toString(),
       remarkController.text,
       "mydeviceid",
       "",

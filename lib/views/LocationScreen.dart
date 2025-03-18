@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
+import '../services/LocalStorageService.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class Locationscreen extends StatefulWidget {
 }
 
 class _LocationscreenState extends State<Locationscreen> {
+  final LocalStorageService _localStorage = LocalStorageService();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -93,8 +95,10 @@ class _LocationscreenState extends State<Locationscreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: masterProvider.selectedStateId,
+                      value: _localStorage.getString('stateId'), // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
+                        filled: true, // Grey background to indicate it's non-editable
+                        fillColor: Colors.grey[300],
                         labelStyle: TextStyle(color: Colors.blueAccent),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -102,37 +106,26 @@ class _LocationscreenState extends State<Locationscreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide:
-                              BorderSide(color: Colors.blueGrey, width: 2),
+                          borderSide: BorderSide(color: Colors.grey, width: 2), // Avoid focus effect
                         ),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide:
-                                BorderSide(color: Colors.redAccent, width: 2)),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
-                      items: masterProvider.states.map((state) {
-                        return DropdownMenuItem<String>(
-                          value: state.jjmStateId,
-                          child: Text(state.stateName),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        masterProvider.setSelectedState(value);
-                        if (value != null) {
-                          masterProvider.fetchDistricts(value);
-                        }
-                      },
+                      items: [
+                        DropdownMenuItem<String>(
+                          value: _localStorage.getString('stateId'), // Ensure this matches the selected value
+                          child: Text(_localStorage.getString('stateName') ?? 'Unknown State'), // Display state name
+                        ),
+                      ],
+                      onChanged: null, // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          overflow: TextOverflow.ellipsis),
-                      icon: Icon(Icons.arrow_drop_down),
+                        color: Colors.black,
+                        fontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                  )
+                  ),
                 ],
               ),
               SizedBox(width: 10),

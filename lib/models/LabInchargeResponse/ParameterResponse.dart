@@ -43,13 +43,8 @@ class Parameterresponse {
     };
   }
 
-  /// Create a list of `ParameterModel` from a JSON list
-  static List<Parameterresponse> fromJsonList(List<dynamic> jsonList) {
-    return jsonList.map((json) => Parameterresponse.fromJson(json)).toList();
-  }
-
-  /// Convert a list of `ParameterModel` to JSON
-  static List<Map<String, dynamic>> toJsonList(List<Parameterresponse> parameters) {
-    return parameters.map((param) => param.toJson()).toList();
+  @override
+  String toString() {
+    return '$parameterId';
   }
 }

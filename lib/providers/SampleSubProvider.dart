@@ -11,7 +11,6 @@ class Samplesubprovider extends ChangeNotifier {
   String errorMsg = '';
 
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
 
   String? deviceId = '';
@@ -69,7 +68,7 @@ class Samplesubprovider extends ChangeNotifier {
           wtp_id,
           test_selected,
           sample_submit_type);
-      if (sampleresponse?.status == 1) {
+      if (sampleresponse!.status ==1) {
         isSubmitData = true;
         notifyListeners();
       } else {
@@ -81,7 +80,6 @@ class Samplesubprovider extends ChangeNotifier {
       sampleresponse = null;
     } finally {
       _isLoading=false;
-      isSubmitData = false;
       notifyListeners();
     }
   }

@@ -103,6 +103,7 @@ class Masterprovider extends ChangeNotifier {
 
   Future<void> fetchDistricts(String stateId) async {
     print('Fetching districts for state: $stateId');
+    setSelectedState(stateId);
     isLoading = true;
     notifyListeners(); // Start loading
     try {
@@ -112,7 +113,7 @@ class Masterprovider extends ChangeNotifier {
             districts.first.jJMDistrictId; // Default to first district
       }
     } catch (e) {
-      debugPrint('Error in fetching districts: $e');
+      debugPrint('Error in fetching districts: master provider  $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;

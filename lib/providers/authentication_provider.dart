@@ -64,6 +64,12 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoggedIn = true;
         _localStorage.saveBool('isLoggedIn', true);
         _localStorage.saveString('token', _loginResponse!.token.toString());
+        _localStorage.saveString('userId', _loginResponse!.regId.toString());
+        _localStorage.saveString('roleId', _loginResponse!.roleId.toString());
+        _localStorage.saveString('name', _loginResponse!.name.toString());
+        _localStorage.saveString('mobile', _loginResponse!.mobileNumber.toString());
+        _localStorage.saveString('stateId', _loginResponse!.stateId.toString());
+        _localStorage.saveString('stateName', _loginResponse!.stateName.toString());
         notifyListeners();
         onSuccess();
       } else {
