@@ -103,7 +103,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       // Set background color of the card to white
       child: Padding(
         padding: EdgeInsets.all(8.0),
-        // Increased padding for more spacing inside the card
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -263,7 +262,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" && masterProvider.selectedScheme!=null,
+          visible: masterProvider.selectedWtsfilter == "2" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -516,7 +515,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildWtpWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "5" && masterProvider.selectedScheme!=null,
+      visible: masterProvider.selectedWtsfilter == "5" &&(masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Card(
         elevation: 5, // Increased elevation for a more modern shadow effect
         shape: RoundedRectangleBorder(
@@ -702,7 +701,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "6" && masterProvider.selectedScheme!=null,
+      visible: masterProvider.selectedWtsfilter == "6" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         // Align text to the left
@@ -734,7 +733,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "3" && masterProvider.selectedScheme!=null,
+      visible: masterProvider.selectedWtsfilter == "3" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         children: [
           Card(
@@ -872,7 +871,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "4" && masterProvider.selectedScheme!=null,
+          visible: masterProvider.selectedWtsfilter == "4" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
