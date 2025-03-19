@@ -168,12 +168,24 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  print('scheme value------$value');
                     masterProvider.setSelectedScheme(value);
                   if(masterProvider.selectedWtsfilter=="5"){
                     masterProvider.fetchWTPList(
                         masterProvider.selectedVillage!,
                         masterProvider.selectedHabitation!,
+                        masterProvider.selectedStateId!,
+                        masterProvider.selectedScheme!);
+                  }else if(masterProvider.selectedWtsfilter=="6"){
+                    masterProvider.setSelectedSubSource(1);
+                    masterProvider.setSelectedPwsSource(1);
+                    masterProvider.setSelectedWTP("0");
+                    masterProvider.fetchSourceInformation(
+                        masterProvider.selectedVillage!,
+                        "0",//habitaion
+                        masterProvider.selectedWtsfilter!,
+                        masterProvider.selectedSubSource.toString(),
+                        masterProvider.selectedPwsType.toString(),
+                        masterProvider.selectedWtp!,
                         masterProvider.selectedStateId!,
                         masterProvider.selectedScheme!);
                   }
@@ -226,18 +238,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   masterProvider.setSelectedWaterSourcefilter(value);
                   if(value!=null){
                     masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
-                  }
-                  if (masterProvider.selectedWtsfilter == "6") {
-                    print("----calling for Storage and strucute-----");
-                    masterProvider.fetchSourceInformation(
-                        masterProvider.selectedVillage!,
-                        masterProvider.selectedHabitation!,
-                        value!,
-                        "0",
-                        "0",
-                        "0",
-                        masterProvider.selectedStateId!,
-                        masterProvider.selectedScheme!);
                   }
                 },
               ),
@@ -517,10 +517,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5" &&(masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Card(
-        elevation: 5, // Increased elevation for a more modern shadow effect
+        elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-              12), // Slightly increased border radius for a smooth look
+              12),
         ),
         color: Colors.white,
         child: Padding(
@@ -542,7 +542,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 title: "Select water treatment plant (WTP)",
                 onChanged: (value) {
                   masterProvider.setSelectedWTP(value);
-                  print("---------> ${masterProvider.selectedWtp}");
                 },
               ),
               SizedBox(
@@ -557,8 +556,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 5,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print(
-                              "----calling for wtp but now have to stop -----");
                           masterProvider.setSelectedSubSource(value);
                                    masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
@@ -723,9 +720,49 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               masterProvider.setSelectedWaterSourceInformation(value);
             },
           ),
+          SizedBox(height: 10,),
           CustomDateTimePicker(onDateTimeSelected: (value) {
             masterProvider.setSelectedDateTime(value);
-          })
+          }),
+          SizedBox(height: 18,),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                masterProvider.fetchAllLabs(
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedDistrictId!,
+                    masterProvider.selectedBlockId!,
+                    masterProvider.selectedGramPanchayat!,
+                    masterProvider.selectedVillage!,
+                    "1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider.value(
+                            value: masterProvider,
+                            child: Labparameterscreen(),
+                          )),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF096DA8),
+                // Button color
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 100.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Next',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          )
         ],
       ),
     );
