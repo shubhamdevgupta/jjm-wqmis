@@ -93,7 +93,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
     return Card(
       elevation: 5,
-      // Increased elevation for a more modern shadow effect
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
             12), // Slightly increased border radius for a smooth look
@@ -170,9 +169,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  if (value != "0") {
+                  print('scheme value------$value');
                     masterProvider.setSelectedScheme(value);
-                  }
                   if(masterProvider.selectedWtsfilter=="5"){
                     masterProvider.fetchWTPList(
                         masterProvider.selectedVillage!,
@@ -226,8 +224,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0");
                   masterProvider.setSelectedWaterSourcefilter(value);
+                  if(value!=null){
+                    masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
+                  }
                   if (masterProvider.selectedWtsfilter == "6") {
                     print("----calling for Storage and strucute-----");
                     masterProvider.fetchSourceInformation(
@@ -263,8 +263,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" &&
-              masterProvider.selectedScheme!.isNotEmpty,
+          visible: masterProvider.selectedWtsfilter == "2" && masterProvider.selectedScheme!=null,
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -296,17 +295,20 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchSourceInformation(
+
+                          Future.delayed(Duration.zero,(){
+                            masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
                               "0",
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
-                              "0",
-                              //pws zero
-                              "0",
-                              // wtp zero
+                              "0", // PWS zero
+                              "0", // WTP zero
                               masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                              masterProvider.selectedScheme!,
+                            );
+                          });
+
                         },
                       ),
                       Text('Ground water sources (GW)'),
@@ -319,17 +321,20 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!,
-                              value.toString(),
-                              "0",
-                              //pws zero
-                              "0",
-                              // wtp zero
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                          Future.delayed(Duration.zero,(){
+                            masterProvider.fetchSourceInformation(
+                                masterProvider.selectedVillage!,
+                                masterProvider.selectedHabitation!,
+                                masterProvider.selectedWtsfilter!,
+                                value.toString(),
+                                "0",
+                                //pws zero
+                                "0",
+                                // wtp zero
+                                masterProvider.selectedStateId!,
+                                masterProvider.selectedScheme!);
+                          });
+
                         },
                       ),
                       Text('Surface water sources (SW)'),
@@ -343,7 +348,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         SizedBox(
           height: 10,
         ),
-        Visibility(
+    //pws type
+    /*    Visibility(
           visible: masterProvider.selectedSubSource == 6 && masterProvider.selectedWtsfilter == "2",
           child: Card(
             elevation: 5,
@@ -420,7 +426,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
         SizedBox(
           height: 10,
-        ),
+        ),*/
         Visibility(
           visible: masterProvider.selectedSubSource != null && masterProvider.selectedWtsfilter == "2",
           child: Card(
@@ -696,7 +702,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "6",
+      visible: masterProvider.selectedWtsfilter == "6" && masterProvider.selectedScheme!=null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         // Align text to the left
@@ -724,12 +730,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ],
       ),
     );
-    ;
   }
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "3",
+      visible: masterProvider.selectedWtsfilter == "3" && masterProvider.selectedScheme!=null,
       child: Column(
         children: [
           Card(
@@ -867,7 +872,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "4",
+          visible: masterProvider.selectedWtsfilter == "4" && masterProvider.selectedScheme!=null,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(

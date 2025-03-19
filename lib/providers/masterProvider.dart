@@ -69,7 +69,7 @@ class Masterprovider extends ChangeNotifier {
 
   int? get selectedPwsType => _selectedPwsType;
 
-  String? _selectedDatetime;
+  String? _selectedDatetime="";
 
   String? get selectedDatetime => _selectedDatetime;
 
@@ -209,12 +209,12 @@ class Masterprovider extends ChangeNotifier {
   }
 
 
-  Future<void> fetchSchemes(String villageId, String habitationId, String districtid) async {
+  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
     isLoading = true;
     notifyListeners();
     try {
       schemes = await _masterRepository.fetchSchemes(
-          villageId, habitationId, districtid);
+          villageId, habitationId, districtid,filter);
 
       List<SchemeResponse> filteredSchemes = [
         SchemeResponse(schemeId: "", schemeName: "--Select--")

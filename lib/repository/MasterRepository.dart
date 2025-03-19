@@ -132,10 +132,10 @@ class MasterRepository {
     }
   }
 
-  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId,String districtId) async {
+  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId,String districtId,String filter) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId');
+          '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId&filter=$filter');
 
       log('Scheme API Response: $response');
 

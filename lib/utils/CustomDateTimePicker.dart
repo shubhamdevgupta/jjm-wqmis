@@ -12,24 +12,27 @@ class CustomDateTimePicker extends StatefulWidget {
 }
 
 class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
-  late String _selectedDateTime;
+  String _selectedDateTime = "";
 
   @override
   void initState() {
     super.initState();
-    _setCurrentDateTime();
-  }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setCurrentDateTime();
+    });  }
 
   void _setCurrentDateTime() {
     DateTime now = DateTime.now();
     String formattedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(now);
 
-    setState(() {
-      _selectedDateTime = formattedDateTime;
-    });
+    _selectedDateTime = formattedDateTime;
 
-    widget.onDateTimeSelected(_selectedDateTime);
+    Future.delayed(Duration.zero, () {
+      widget.onDateTimeSelected(_selectedDateTime);
+    });
   }
+
+
 
   Future<void> _selectDateTime(BuildContext context) async {
     DateTime now = DateTime.now();
