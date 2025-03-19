@@ -176,8 +176,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.selectedStateId!,
                         masterProvider.selectedScheme!);
                   }else if(masterProvider.selectedWtsfilter=="6"){
-                    masterProvider.setSelectedSubSource(1);
-                    masterProvider.setSelectedPwsSource(1);
+                    masterProvider.setSelectedSubSource(0);
+                    masterProvider.setSelectedPwsSource(0);
                     masterProvider.setSelectedWTP("0");
                     masterProvider.fetchSourceInformation(
                         masterProvider.selectedVillage!,
