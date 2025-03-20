@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/providers/SampleSubProvider.dart';
+import 'package:jjm_wqmis/providers/SampleListProvider.dart';
+import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/LoginScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
@@ -29,6 +31,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ParameterProvider()),
         ChangeNotifierProvider(create: (context) => Samplesubprovider()),
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
+        ChangeNotifierProvider(create: (context) => Samplelistprovider()),
       ],
       child: MyApp(),
     ),
@@ -55,7 +58,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Loginscreen(),
         '/location': (context) => Locationscreen(),
         '/labParam': (context) => Labparameterscreen(),
-        'test': (context) => SelectedTestScreen()
+        'test': (context) => SelectedTestScreen(),
+        '/sampleList': (context) => SampleListScreen()
       },
     );
   }
