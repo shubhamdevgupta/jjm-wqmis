@@ -21,7 +21,8 @@ import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
-  final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
+  final Lapparameterrepository _lapparameterrepository =
+      Lapparameterrepository();
   List<Stateresponse> states = [];
   bool isLoading = false;
   String? selectedStateId;

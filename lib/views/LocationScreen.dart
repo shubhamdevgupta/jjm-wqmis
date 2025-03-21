@@ -16,6 +16,7 @@ class Locationscreen extends StatefulWidget {
 
 class _LocationscreenState extends State<Locationscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -258,7 +259,7 @@ class _LocationscreenState extends State<Locationscreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    if (validateStateVillate(masterProvider)) {
+                    if (validateStateVillage(masterProvider)) {
                       Navigator.pushReplacementNamed(context, '/savesample');
                     } else {
                       ToastHelper.showToastMessage(masterProvider.errorMsg,
@@ -289,20 +290,23 @@ class _LocationscreenState extends State<Locationscreen> {
     );
   }
 
-  bool validateStateVillate(Masterprovider provider) {
-    provider.errorMsg = (provider.selectedStateId!.isNotEmpty
-        ? (provider.selectedDistrictId!.isNotEmpty
-            ? (provider.selectedBlockId!.isNotEmpty
-                ? (provider.selectedGramPanchayat!.isNotEmpty
-                    ? (provider.village.isNotEmpty
-                        ? (provider.habitationId.isNotEmpty
+  bool validateStateVillage(Masterprovider provider) {
+    provider.errorMsg = provider.selectedStateId?.isNotEmpty == true
+        ? provider.selectedDistrictId?.isNotEmpty == true
+            ? provider.selectedBlockId?.isNotEmpty == true
+                ? provider.selectedGramPanchayat?.isNotEmpty == true
+                    ? (provider.selectedVillage != null &&
+                            provider.selectedVillage != "0"
+                        ? (provider.selectedHabitation != null &&
+                                provider.selectedHabitation != "0"
                             ? ""
-                            : "Please select habitation dropdown before proceeding.")
-                        : "Please select village dropdown before proceeding.")
-                    : "Please select GramPanchayat dropdown before proceeding.")
-                : "Please select Block dropdown before proceeding.")
-            : "Please select District dropdown before proceeding.")
-        : "Please select State dropdown before proceeding.");
+                            : "Please select habitation before proceeding.")
+                        : "Please select village before proceeding.")
+                    : "Please select Gram Panchayat before proceeding."
+                : "Please select Block before proceeding."
+            : "Please select District before proceeding."
+        : "Please select State before proceeding.";
+
     return provider.errorMsg.isEmpty;
   }
 }

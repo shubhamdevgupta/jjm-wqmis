@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
+import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
 class Samplesubprovider extends ChangeNotifier {
@@ -82,6 +83,10 @@ class Samplesubprovider extends ChangeNotifier {
       _isLoading=false;
       notifyListeners();
     }
+  }
+  void fetchDeviceInfo() async {
+    Map<String, dynamic> deviceInfo = await DeviceInfoUtil.getDeviceInfo();
+    print(deviceInfo);
   }
 
 

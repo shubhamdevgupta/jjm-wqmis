@@ -5,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final IconData? prefixIcon;
   final bool isRequired;
+  final TextEditingController controller; // Added controller
 
   const CustomTextField({
     super.key,
@@ -12,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     this.prefixIcon,
     this.isRequired = false,
+    required this.controller, // Required parameter for text controller
   });
 
   @override
@@ -24,28 +26,29 @@ class CustomTextField extends StatelessWidget {
             text: labelText.contains('*')
                 ? labelText.replaceAll('*', '')
                 : labelText, // Use the title as-is if no asterisk is present
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            children: labelText.contains('*')
+            children: isRequired
                 ? [
-                    TextSpan(
-                      text: ' *', // Add a red asterisk with a space before it
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ]
-                : [], // If no asterisk, don't add any children
+              const TextSpan(
+                text: ' *', // Add a red asterisk
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ]
+                : [],
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: TextField(
+            controller: controller, // Assign controller here
             decoration: InputDecoration(
               hintText: hintText,
               border: OutlineInputBorder(

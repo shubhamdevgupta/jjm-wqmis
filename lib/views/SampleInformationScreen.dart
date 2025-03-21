@@ -18,6 +18,9 @@ class Sampleinformationscreen extends StatefulWidget {
 }
 
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
+  final TextEditingController householdController = TextEditingController();
+  final TextEditingController handpumpSourceController = TextEditingController();
+  final TextEditingController handpumpLocationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -795,6 +798,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
                           masterProvider.setSelectedHouseHold(value);
+                          masterProvider.setSelectedSubSource(1);
                         },
                       ),
                       Text('At household'),
@@ -806,14 +810,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 4,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
-                          print(
-                              "----calling for house hold /school / aganwadi -----");
                           masterProvider.setSelectedHouseHold(value);
+                          masterProvider.setSelectedSubSource(1);
                           masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!,
-                              "0",
+                              masterProvider.selectedSubSource.toString(),
                               "0",
                               "0",
                               masterProvider.selectedStateId!,
@@ -850,10 +853,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       labelText: 'Name of household *',
                       hintText: 'Enter Location',
                       prefixIcon: Icons.cabin_rounded,
+                      controller: householdController,
                     ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
-                    })
+                    }),
+                    SizedBox(height: 18,),
                   ],
                 ),
               ),
@@ -875,7 +880,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomDropdown(
-                      title: "Select school / AWCs *",
+                      title: "Select School / AWCs *",
                       value: masterProvider.selectedWaterSource,
                       items: masterProvider.waterSource.map((waterSource) {
                         return DropdownMenuItem<String>(
@@ -896,6 +901,46 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     })
                   ],
                 ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10,),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                print('household-------------${householdController.text}');
+                masterProvider.fetchAllLabs(
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedDistrictId!,
+                    masterProvider.selectedBlockId!,
+                    masterProvider.selectedGramPanchayat!,
+                    masterProvider.selectedVillage!,
+                    "1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ChangeNotifierProvider.value(
+                            value: masterProvider,
+                            child: Labparameterscreen(),
+                          )),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF096DA8),
+                // Button color
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 100.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Next',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           )
@@ -1015,11 +1060,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     labelText: 'Type of source *',
                     hintText: 'Enter Source type',
                     prefixIcon: Icons.edit_calendar_sharp,
+                    controller: handpumpSourceController,
                   ),
                   CustomTextField(
                     labelText: 'Enter Location *',
                     hintText: 'Enter Location',
                     prefixIcon: Icons.dehaze,
+                    controller: handpumpLocationController,
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
