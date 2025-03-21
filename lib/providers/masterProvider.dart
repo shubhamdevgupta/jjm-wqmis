@@ -75,6 +75,8 @@ class Masterprovider extends ChangeNotifier {
   String? get selectedDatetime => _selectedDatetime;
 
   String errorMsg = '';
+  String otherSourceLocation = '';
+  String sampleTypeOther = '';
 
   List<Alllabresponse> labList = [];
   String? selectedLab;
@@ -194,6 +196,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+    print('lab call in master provider ');
     isLoading = true;
     try {
       labList = await _lapparameterrepository.fetchAllLab(

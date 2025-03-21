@@ -1,16 +1,16 @@
 class Alllabresponse {
-  final bool disabled;
+  final bool? disabled;
   final String? group;
-  final bool selected;
-  final String text;
-  final String value;
+  final bool? selected;
+  final String? text;
+  final String? value;
 
   Alllabresponse({
-    required this.disabled,
-    required this.group,
-    required this.selected,
-    required this.text,
-    required this.value,
+     this.disabled,
+     this.group,
+     this.selected,
+     this.text,
+     this.value,
   });
 
   factory Alllabresponse.fromJson(Map<String, dynamic> json) {

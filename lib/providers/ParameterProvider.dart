@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
@@ -34,16 +36,20 @@ class ParameterProvider with ChangeNotifier {
 
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+    print("lab call in parameter provider");
     isLoading = true;
     try {
       labList = await _lapparameterrepository.fetchAllLab(
           StateId, districtId, blockid, gpid, villageid, isall);
+      log('Fetched Lab List: $labList');
       if (labList.isNotEmpty) {
         selectedLab = labList.first.value;
       }
-    } catch (e) {
-      debugPrint('Error in fetching lab list: $e');
-    } finally {
+    } catch (e, stackTrace) {
+      log('Error in fetching lab list provider: $e');
+      log('StackTrace: $stackTrace');
+    }
+    finally {
       isLoading = false;
       notifyListeners();
     }
@@ -60,7 +66,7 @@ class ParameterProvider with ChangeNotifier {
             parameterList.map((param) => param.parameterName).toList();
       }
     } catch (e) {
-      debugPrint('Error in fetching lab list: $e');
+      debugPrint('Error in fetching All Parameter list: $e');
     } finally {
       isLoading = false;
       notifyListeners();

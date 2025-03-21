@@ -1,29 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/SampleListResponse.dart';
-import 'package:jjm_wqmis/models/SampleResponse.dart';
-import 'package:jjm_wqmis/repository/SampleListRepo.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../models/SampleListResponse.dart';
+import '../repository/SampleListRepo.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
 class Samplelistprovider extends ChangeNotifier {
-  final SampleListRepo _repository=SampleListRepo();
+  final SampleListRepo _repository = SampleListRepo();
 
-  List<Samplelistresponse> samples = [];
+  int status = 0;
+  String message = '';
+  List<Sample> samples = []; // Correctly storing List<Sample>
   bool isLoading = false;
 
-
-  Future<void> fetchSampleList(int regId, int page,String search, int cstatus, int sampleId) async {
-    print('Calling the sample list function...');
+  Future<void> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId) async {
+    print('Fetching full sample response...');
     isLoading = true;
     notifyListeners();
 
     try {
-      samples = await _repository.fetchSampleList(regId, page,search, cstatus, sampleId);
+      // Get the FULL response
+      Samplelistresponse response = await _repository.fetchSampleList(regId, page, search, cstatus, sampleId);
+
+      // Store status and message
+      status = response.status;
+      message = response.message;
+
+      // ✅ Extract the `result` list correctly
+      samples = response.result; // `result` is already `List<Sample>`
+
+      print('Status: $status, Message: $message');
+      print('Samples updated in provider: ${samples.length} items');
     } catch (e) {
       debugPrint('Error in SampleProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 }

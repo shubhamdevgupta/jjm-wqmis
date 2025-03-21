@@ -797,6 +797,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 3,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
+                          masterProvider.setSelectedWaterSourceInformation("0");
                           masterProvider.setSelectedHouseHold(value);
                           masterProvider.setSelectedSubSource(1);
                         },
@@ -811,7 +812,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
                           masterProvider.setSelectedHouseHold(value);
-                          masterProvider.setSelectedSubSource(1);
+                          masterProvider.setSelectedSubSource(2);
                           masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
                               masterProvider.selectedHabitation!,
@@ -879,23 +880,26 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomDropdown(
-                      title: "Select School / AWCs *",
-                      value: masterProvider.selectedWaterSource,
-                      items: masterProvider.waterSource.map((waterSource) {
-                        return DropdownMenuItem<String>(
-                          value: waterSource.locationId,
-                          child: Text(
-                            waterSource.locationName,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        masterProvider.setSelectedWaterSourceInformation(value);
-                      },
-                    ),
+                  CustomDropdown(
+                  title: "Select School / AWCs *",
+                  value: masterProvider.waterSource
+                      .any((item) => item.locationId == masterProvider.selectedWaterSource)
+                      ? masterProvider.selectedWaterSource
+                      : null, // Ensure valid value
+                  items: masterProvider.waterSource.map((waterSource) {
+                    return DropdownMenuItem<String>(
+                      value: waterSource.locationId,
+                      child: Text(
+                        waterSource.locationName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    masterProvider.setSelectedWaterSourceInformation(value);
+                  },
+                ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
                     })
@@ -908,7 +912,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                print('household-------------${householdController.text}');
+                masterProvider.otherSourceLocation=householdController.text;
                 masterProvider.fetchAllLabs(
                     masterProvider.selectedStateId!,
                     masterProvider.selectedDistrictId!,
@@ -958,7 +962,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
-                  12), // Slightly increased border radius for a smooth look
+                  12),
             ),
             color: Colors.white,
             child: Container(
@@ -976,6 +980,16 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
                           masterProvider.setSelectedHandpump(value);
+                          masterProvider.setSelectedSubSource(1);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!,
+                              masterProvider.selectedSubSource.toString(),
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
                         },
                       ),
                       Text('Govt. Handpump'),
@@ -988,6 +1002,16 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
                           masterProvider.setSelectedHandpump(value);
+                          masterProvider.setSelectedSubSource(2);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedWtsfilter!,
+                              masterProvider.selectedSubSource.toString(),
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
                         },
                       ),
                       Text('Private source location'),
@@ -1033,10 +1057,69 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     onChanged: (value) {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
-                  ),
+                  )
+              /*    CustomDropdown(
+                    title: "Select Govt. Handpump *",
+                    value: masterProvider.selectedWaterSource,
+                    items: masterProvider.waterSource.map((waterSource) {
+                      return DropdownMenuItem<String>(
+                        value: waterSource.locationId,
+                        child: Text(
+                          waterSource.locationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      masterProvider.setSelectedWaterSourceInformation(value);
+                      print('select handpump------ ${masterProvider.selectedWaterSource}');
+                    },
+                  )*/,
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
-                  })
+                  }),
+                  SizedBox(height: 10,),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        masterProvider.sampleTypeOther=handpumpSourceController.text;
+                        masterProvider.otherSourceLocation=handpumpLocationController.text;
+                        masterProvider.setSelectedWaterSourceInformation("0");
+                        masterProvider.fetchAllLabs(
+                            masterProvider.selectedStateId!,
+                            masterProvider.selectedDistrictId!,
+                            masterProvider.selectedBlockId!,
+                            masterProvider.selectedGramPanchayat!,
+                            masterProvider.selectedVillage!, "1");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeNotifierProvider.value(
+                                    value: masterProvider,
+                                    child: Labparameterscreen(),
+                                  )),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF096DA8),
+                        // Button color
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -1070,12 +1153,53 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
-                  })
+                  }),
+                  SizedBox(height: 10,),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        masterProvider.sampleTypeOther=handpumpSourceController.text;
+                        masterProvider.otherSourceLocation=handpumpLocationController.text;
+                        masterProvider.setSelectedWaterSourceInformation("0");
+                        masterProvider.fetchAllLabs(
+                            masterProvider.selectedStateId!,
+                            masterProvider.selectedDistrictId!,
+                            masterProvider.selectedBlockId!,
+                            masterProvider.selectedGramPanchayat!,
+                            masterProvider.selectedVillage!, "1");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangeNotifierProvider.value(
+                                    value: masterProvider,
+                                    child: Labparameterscreen(),
+                                  )),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF096DA8),
+                        // Button color
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

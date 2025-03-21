@@ -11,10 +11,10 @@ import '../utils/GlobalExceptionHandler.dart';
 class SampleListRepo{
   final BaseApiService _apiService = BaseApiService();
 
-  Future<List<Samplelistresponse>> fetchSampleList(int regId, int page,String search, int cstatus, int sampleId) async {
+  Future<Samplelistresponse> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId) async {
     try {
       final String endpoint =
-          '/api/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId';
+          '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId';
 
       final response = await _apiService.get(endpoint);
 
@@ -22,15 +22,17 @@ class SampleListRepo{
 
       if (response is Map<String, dynamic> && response.containsKey('Result')) {
         print('Response success: ${response['Result']}');
-        return (response['Result'] as List<dynamic>)
-            .map((item) => Samplelistresponse.fromJson(item))
-            .toList();
+
+        // ✅ Ensure we return only one `Samplelistresponse`
+        return Samplelistresponse.fromJson(response);
       } else {
         throw ApiException('API Error: $response');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
-      rethrow; // Allows provider to handle the exception
+      rethrow;
     }
   }
+
+
 }

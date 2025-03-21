@@ -3,7 +3,7 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/SampleSubProvider.dart';
+import '../providers/SampleSubmitProvider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 
@@ -551,7 +551,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       showSnackbar(context, "Please select at least one test.");
       return;
     }
-
+print("---------${masterProvider.selectedWaterSource.toString()}");
     provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       int.parse(userId),
@@ -567,13 +567,13 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       int.parse(masterProvider.selectedHabitation.toString()),
       int.parse(masterProvider.selectedWtsfilter.toString()),
       int.parse(masterProvider.selectedScheme.toString()),
-      "",
+      masterProvider.otherSourceLocation,
       "",
       paramProvider.currentPosition!.latitude.toString(),
       paramProvider.currentPosition!.longitude.toString(),
       remarkController.text,
       "mydeviceid",
-      "",
+      masterProvider.sampleTypeOther,
       0,
       paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",

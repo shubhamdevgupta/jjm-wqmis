@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:provider/provider.dart';
 
+import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../providers/ParameterProvider.dart';
 import '../utils/CustomSearchableDropdown.dart';
 
@@ -38,7 +39,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                 child: Icon(Icons.shopping_cart),
                   onPressed: (){
                   provider.fetchLocation();
-                if(provider.cart!.isNotEmpty && provider.currentPosition!=null)
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -46,7 +46,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                         providers: [
                           ChangeNotifierProvider.value(
                               value: masterProvider),
-                          // Pass masterProvider
                           ChangeNotifierProvider.value(value: provider),
                           // Pass parameterProvider if needed
                         ],
@@ -54,7 +53,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                       ),
                     ),
                   );
-                else ToastHelper.showErrorSnackBar(context, "Please Select Test");
               }),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
@@ -220,19 +218,19 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             CustomSearchableDropdown(
                               title: "Select Lab *",
                               value: provider.selectedLab,
-                              items: provider.labList
-                                  .map((lab) => lab.text)
-                                  .toList(),
+                              items: provider.labList.map((lab) => lab.text ?? '').toList(),
                               onChanged: (selectedLabText) {
+                                if (selectedLabText == null) return; // Handle null case
+
                                 final selectedLab = provider.labList.firstWhere(
-                                  (lab) => lab.text == selectedLabText,
-                                  orElse: () => provider.labList.first, // Default fallback (to avoid crashes)
+                                      (lab) => lab.text == selectedLabText,
+                                  orElse: () => Alllabresponse(value: null, text: null), // Default to a nullable object
                                 );
                                 provider.setSelectedLab(selectedLab.value);
                                 if (selectedLab.value != null) {
                                   provider.fetchAllParameter(
-                                    selectedLab.value,
-                                    masterProvider.selectedStateId!,
+                                    selectedLab.value!,
+                                    masterProvider.selectedStateId ?? "0",
                                     "0",
                                     "1151455",
                                     "0",
@@ -240,6 +238,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 }
                               },
                             ),
+
                           ],
                           SizedBox(
                             height: 10,
