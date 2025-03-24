@@ -976,7 +976,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 1,
+                        value: 5,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
                           masterProvider.setSelectedHandpump(value);
@@ -998,7 +998,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 2,
+                        value: 6,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
                           masterProvider.setSelectedHandpump(value);
@@ -1026,7 +1026,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 1 &&
+          visible: masterProvider.selectedHandpumpPrivate == 5 &&
               masterProvider.selectedWtsfilter == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
@@ -1043,7 +1043,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 children: [
                   CustomDropdown(
                     title: "Select Govt. Handpump *",
-                    value: masterProvider.selectedWaterSource,
+                    value: masterProvider.waterSource
+                        .any((item) => item.locationId == masterProvider.selectedWaterSource)
+                        ? masterProvider.selectedWaterSource
+                        : null, // Ensure value exists in items
                     items: masterProvider.waterSource.map((waterSource) {
                       return DropdownMenuItem<String>(
                         value: waterSource.locationId,
@@ -1055,27 +1058,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       );
                     }).toList(),
                     onChanged: (value) {
+                      print('Selected Water Source: $value');
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
-                  )
-              /*    CustomDropdown(
-                    title: "Select Govt. Handpump *",
-                    value: masterProvider.selectedWaterSource,
-                    items: masterProvider.waterSource.map((waterSource) {
-                      return DropdownMenuItem<String>(
-                        value: waterSource.locationId,
-                        child: Text(
-                          waterSource.locationName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      masterProvider.setSelectedWaterSourceInformation(value);
-                      print('select handpump------ ${masterProvider.selectedWaterSource}');
-                    },
-                  )*/,
+                  ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
@@ -1085,7 +1071,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       onPressed: () {
                         masterProvider.sampleTypeOther=handpumpSourceController.text;
                         masterProvider.otherSourceLocation=handpumpLocationController.text;
-                        masterProvider.setSelectedWaterSourceInformation("0");
                         masterProvider.fetchAllLabs(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
@@ -1126,7 +1111,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 2,
+          visible: masterProvider.selectedHandpumpPrivate == 6,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -1179,7 +1164,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF096DA8),
-                        // Button color
                         padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 100.0),
                         shape: RoundedRectangleBorder(

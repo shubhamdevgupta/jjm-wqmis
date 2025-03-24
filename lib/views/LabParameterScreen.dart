@@ -37,8 +37,8 @@ class _LabParameterScreen extends State<Labparameterscreen> {
             child: Scaffold(
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.shopping_cart),
-                  onPressed: (){
-                  provider.fetchLocation();
+                  onPressed: () async{
+                await provider.fetchLocation();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

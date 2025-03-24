@@ -322,6 +322,7 @@ class Masterprovider extends ChangeNotifier {
     _selectedSubSource = null;
     _selectedHouseHoldType = null;
     _selectedHandpumpPrivate = null;
+
     selectedWtp=null;
     selectedScheme=null;
     notifyListeners(); // Notify listeners to rebuild the widget
