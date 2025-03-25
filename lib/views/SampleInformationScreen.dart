@@ -47,22 +47,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 'Sample Collection Form',
                 style: TextStyle(color: Colors.white),
               ),
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  // Background color for the container
-                  borderRadius: BorderRadius.circular(8),
-                  // Rounded corners
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF096DA8), // Dark blue color
-                      Color(0xFF3C8DBC), // jjm blue color
-                    ],
-                    begin: Alignment.topCenter, // Start at the top center
-                    end: Alignment.bottomCenter, // End at the bottom center
-                  ),
-                ),
-              ),
+              backgroundColor: Colors.blueAccent, // Consistent theme
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {

@@ -92,12 +92,24 @@ class ParameterProvider with ChangeNotifier {
     }
   }
   Future<void> fetchLocation() async {
+    if (isLoading) return; // Prevent duplicate calls
+
+    isLoading = true;
+    notifyListeners(); // Notify UI to show loader
+
     try {
       _currentPosition = await LocationService.getCurrentLocation();
-      notifyListeners(); // Notify UI to update
+
+      if (_currentPosition != null) {
+        debugPrint('Fetched Location: ${_currentPosition!.latitude}, ${_currentPosition!.longitude}');
+      } else {
+        debugPrint("Location is null");
+      }
     } catch (e) {
-      debugPrint(" Error fetching  Location: $e");
-      notifyListeners(); // Notify UI about error
+      debugPrint("Error fetching location: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners(); // Notify UI to hide loader
     }
   }
 

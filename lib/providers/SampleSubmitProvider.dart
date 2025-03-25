@@ -14,7 +14,8 @@ class Samplesubprovider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? deviceId = '';
+  String? _deviceId;
+  String? get deviceId => _deviceId;
 
   Future<void> sampleSubmit(
       Lab_id,
@@ -84,9 +85,10 @@ class Samplesubprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  void fetchDeviceInfo() async {
-    Map<String, dynamic> deviceInfo = await DeviceInfoUtil.getDeviceInfo();
-    print(deviceInfo);
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
   }
 
 

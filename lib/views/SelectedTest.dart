@@ -17,64 +17,56 @@ class SelectedTestScreen extends StatefulWidget {
 class _SelectedTestScreenState extends State<SelectedTestScreen> {
   final TextEditingController remarkController = TextEditingController();
   final LocalStorageService _localStorage = LocalStorageService();
+  final ScrollController _scrollController = ScrollController();
 
   TextStyle _headerTextStyle() =>
       TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
 
   TextStyle _rowTextStyle() => TextStyle(fontSize: 14);
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Clean up controller when widget is disposed
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider = context.watch<ParameterProvider>();
+    final paramProvider =Provider.of<ParameterProvider>(context, listen: false);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     return ChangeNotifierProvider(
         create: (_) => Samplesubprovider(),
         child: Consumer<Samplesubprovider>(builder: (context, provider, child) {
-          return Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
-            ),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    if (Navigator.of(context).canPop()) {
-                      Navigator.pop(context);
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/labParam');
-                    }
-                  },
-                ),
-                title: const Text(
-                  'Selected Test',
-                  style: TextStyle(color: Colors.white),
-                ),
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    // Background color for the container
-                    borderRadius: BorderRadius.circular(8),
-                    // Rounded corners
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF096DA8), // Dark blue color
-                        Color(0xFF3C8DBC), // jjm blue color
-                      ],
-                      begin: Alignment.topCenter, // Start at the top center
-                      end: Alignment.bottomCenter, // End at the bottom center
-                    ),
+          return Scrollbar(
+            thumbVisibility: true,
+            controller: _scrollController,
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+              ),
+              child: Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pushReplacementNamed(context, '/labParam');
+                      }
+                    },
+                  ),
+                  backgroundColor: Colors.blueAccent, // Consistent theme
+                  title: const Text(
+                    'Selected Test',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-              body: Stack(
-                children: [
-                  Scrollbar(
-                    thumbVisibility: true,
-                    child: SingleChildScrollView(
+                body: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      controller: _scrollController,
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Column(
@@ -154,7 +146,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                             .map((entry) {
                                                           int index = entry.key;
                                                           var param = entry.value;
-                    
+
                                                           return DataRow(
                                                             cells: <DataCell>[
                                                               DataCell(Text(
@@ -204,9 +196,9 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                 ),
                                               ),
                                       ),
-                    
+
                                       Divider(),
-                    
+
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 8.0, horizontal: 8.0),
@@ -312,7 +304,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                         color: Colors.grey.shade300),
                                     // Divider for separation
                                     SizedBox(height: 8),
-                    
+
                                     Row(
                                       children: [
                                         Icon(Icons.person,
@@ -329,7 +321,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 10),
-                    
+
                                     Row(
                                       children: [
                                         Icon(Icons.business, color: Colors.green),
@@ -345,7 +337,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 10),
-                    
+
                                     Row(
                                       children: [
                                         Icon(Icons.location_on,
@@ -467,7 +459,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                 onPressed: () {
                                   validateAndSubmit(context, provider,
                                       masterProvider, paramProvider);
-                    
+
                                   if (provider.isSubmitData!=false) {
                                     print('submitdata succesfully------ ${provider.isSubmitData}');
                                     showDialog(
@@ -524,18 +516,18 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                         ),
                       ),
                     ),
-                  ),
-                  if (provider.isLoading)
-                    Container(
-                      color: Colors.black.withOpacity(0.5),
-                      // Background opacity
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
+                    if (provider.isLoading)
+                      Container(
+                        color: Colors.black.withOpacity(0.5),
+                        // Background opacity
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -543,7 +535,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
   }
 
   void validateAndSubmit(BuildContext context, Samplesubprovider provider,
-      Masterprovider masterProvider, ParameterProvider paramProvider) {
+      Masterprovider masterProvider, ParameterProvider paramProvider) async{
     String userId = _localStorage.getString('userId')!;
     String roleId = _localStorage.getString('roleId')!;
     
@@ -552,6 +544,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       return;
     }
 print("---------${masterProvider.selectedWaterSource.toString()}");
+  await provider.fetchDeviceId();
     provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       int.parse(userId),
@@ -572,7 +565,7 @@ print("---------${masterProvider.selectedWaterSource.toString()}");
       paramProvider.currentPosition!.latitude.toString(),
       paramProvider.currentPosition!.longitude.toString(),
       remarkController.text,
-      "mydeviceid",
+      provider.deviceId,
       masterProvider.sampleTypeOther,
       0,
       paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
