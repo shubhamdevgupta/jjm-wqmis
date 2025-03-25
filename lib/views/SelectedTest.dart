@@ -468,9 +468,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                   validateAndSubmit(context, provider,
                                       masterProvider, paramProvider);
                     
-                                  if (provider.isSubmitData) {
-                                    print(
-                                        'submitdata succesfully------ ${provider.isSubmitData}');
+                                  if (provider.isSubmitData!=false) {
+                                    print('submitdata succesfully------ ${provider.isSubmitData}');
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -496,10 +495,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                       },
                                     );
                                   } else {
-                                    print(
-                                        'submitdata failed------ ${provider.isSubmitData}');
-                                    ToastHelper.showErrorSnackBar(
-                                        context, provider.errorMsg);
+                                    print('submitdata failed------ ${provider.isSubmitData}');
+                                    ToastHelper.showErrorSnackBar(context, provider.errorMsg);
                                   }
                                 },
                                 child: Text(

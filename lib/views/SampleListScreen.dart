@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';
@@ -48,9 +49,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
           int.parse(masterprovider.selectedVillage!),
         );
 
-        print("stateid------>${masterprovider.selectedStateId}");
-        print("stateid------>${masterprovider.selectedDistrictId}");
-        print("stateid------>${masterprovider.selectedBlockId}");
       } else {
         print("Fetching default sample list...");
         Provider.of<Samplelistprovider>(context, listen: false)
@@ -73,6 +71,19 @@ class _SampleListScreenState extends State<SampleListScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Dashboardscreen()),
+                      (route) => false, // Removes all previous routes
+                );              }
+            },
+          ),
           title: Text(
             'JJM-WQMIS',
             style: TextStyle(

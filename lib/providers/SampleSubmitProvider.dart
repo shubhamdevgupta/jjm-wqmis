@@ -69,7 +69,7 @@ class Samplesubprovider extends ChangeNotifier {
           wtp_id,
           test_selected,
           sample_submit_type);
-      if (sampleresponse!.status ==1) {
+      if (sampleresponse!.status =="1") {
         isSubmitData = true;
         notifyListeners();
       } else {
