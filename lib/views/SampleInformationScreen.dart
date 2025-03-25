@@ -25,70 +25,81 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
-        ),
-        child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  if (Navigator.of(context).canPop()) {
-                    Navigator.pop(context);
-                  } else {
-                    Navigator.pushReplacementNamed(context, '/location');
-                  }
-                },
-              ),
-              title: Text(
-                'Sample Collection Form',
-                style: TextStyle(color: Colors.white),
-              ),
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  // Background color for the container
-                  borderRadius: BorderRadius.circular(8),
-                  // Rounded corners
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF096DA8), // Dark blue color
-                      Color(0xFF3C8DBC), // jjm blue color
-                    ],
-                    begin: Alignment.topCenter, // Start at the top center
-                    end: Alignment.bottomCenter, // End at the bottom center
+      home: WillPopScope(
+        onWillPop: () async {
+          // Navigate back to Dashboard when pressing back button
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/dashboard',
+                (route) => false, // Clears all previous routes
+          );
+          return false; // Prevents default back action
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+          ),
+          child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pushReplacementNamed(context, '/dashboard');
+                    }
+                  },
+                ),
+                title: Text(
+                  'Sample Collection Form',
+                  style: TextStyle(color: Colors.white),
+                ),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    // Background color for the container
+                    borderRadius: BorderRadius.circular(8),
+                    // Rounded corners
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF096DA8), // Dark blue color
+                        Color(0xFF3C8DBC), // jjm blue color
+                      ],
+                      begin: Alignment.topCenter, // Start at the top center
+                      end: Alignment.bottomCenter, // End at the bottom center
+                    ),
                   ),
                 ),
               ),
-            ),
-            body: Consumer<Masterprovider>(
-                builder: (context, masterProvider, child) {
-                  return Stack(
-                      children: [
-                         Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: SingleChildScrollView(
-                  child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                  //card for state district selection
-                  buildSampleTaken(masterProvider),
-                  SizedBox(
-                  height: 12,
-                  ),
-                  // card for location of source from where sample taken
-                  ],
-                  ),
-                  ),
-                  ),
-                        if(masterProvider.isLoading)
-                          LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                  ],
-                  );
-                })),
+              body: Consumer<Masterprovider>(
+                  builder: (context, masterProvider, child) {
+                    return Stack(
+                        children: [
+                           Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: SingleChildScrollView(
+                    child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                    //card for state district selection
+                    buildSampleTaken(masterProvider),
+                    SizedBox(
+                    height: 12,
+                    ),
+                    // card for location of source from where sample taken
+                    ],
+                    ),
+                    ),
+                    ),
+                          if(masterProvider.isLoading)
+                            LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                    ],
+                    );
+                  })),
+        ),
       ),
     );
   }

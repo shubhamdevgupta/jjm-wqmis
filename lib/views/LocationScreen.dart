@@ -263,13 +263,13 @@ class _LocationscreenState extends State<Locationscreen> {
                 if (widget.flag == 1) {
                   print('Going to Sample List screen');
 
-                  Navigator.pushReplacementNamed(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/sampleList',
-                    arguments: {
-                      'flag': widget.flag,
-                    },
+                    ModalRoute.withName('/dashboard'), // This removes all previous routes up to Dashboard
+                    arguments: {'flag': widget.flag},
                   );
+
                 } else if (widget.flag == 0) {
                   print('Going to Save Sample screen');
                   Navigator.pushReplacementNamed(context, '/savesample');
