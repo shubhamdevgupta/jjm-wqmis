@@ -268,7 +268,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           gradientColors: [
                             Colors.lightBlueAccent,
                             Colors.blue
-                          ], // Example gradient colors
+                          ],
+                          onTap: (){}// Example gradient colors
                         ),
                         _buildDashboardCard(
                           title: 'Total Physical Submitted',
@@ -279,6 +280,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Color(0xFFFCE889),
                             Color(0xFFFFAA00)
                           ], // Example gradient colors
+                            onTap: (){}// Example gradient colors
                         ),
                         _buildDashboardCard(
                           title: 'Total Sample Tested',
@@ -289,6 +291,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.lightGreen,
                             Colors.green
                           ], // Example gradient colors
+                            onTap: (){
+
+                            }// Example gradient colors
                         ),
                         _buildDashboardCard(
                           title: 'Total Retest',
@@ -299,6 +304,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.redAccent,
                             Colors.red
                           ], // Example gradient colors
+                            onTap: (){}// Example gradient colors
                         )
                       ],
                     ),
@@ -363,51 +369,55 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     required String value,
     required IconData icon,
     required List<Color> gradientColors, // Gradient colors as List
+    required VoidCallback onTap, // Added onTap callback
   }) {
-    return Container(
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: gradientColors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+    return GestureDetector(
+      onTap: onTap, // Trigger onTap when the card is tapped
+      child: Container(
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 6,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 6,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: Colors.white.withOpacity(0.2),
-            child: Icon(icon, color: Colors.white, size: 30),
-          ),
-          SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.white.withOpacity(0.2),
+              child: Icon(icon, color: Colors.white, size: 30),
             ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
+            SizedBox(height: 8),
+            Text(
+              value,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 4),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

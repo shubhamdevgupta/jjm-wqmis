@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import '../models/DashboardResponse/DashboardResponse.dart';
 import '../repository/AuthenticaitonRepository.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/DeviceUtils.dart';
 
 class DashboardProvider extends ChangeNotifier{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();

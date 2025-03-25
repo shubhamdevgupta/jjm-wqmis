@@ -35,25 +35,61 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                   image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
             ),
             child: Scaffold(
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.shopping_cart),
-                  onPressed: () async{
-                await provider.fetchLocation();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MultiProvider(
-                        providers: [
-                          ChangeNotifierProvider.value(
-                              value: masterProvider),
-                          ChangeNotifierProvider.value(value: provider),
-                          // Pass parameterProvider if needed
-                        ],
-                        child: SelectedTestScreen(),
+              floatingActionButton: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () async {
+                      await provider.fetchLocation();
+                      print('-------2222222${provider.currentPosition!.latitude}');
+                      if (provider.cart!.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiProvider(
+                              providers: [
+                                ChangeNotifierProvider.value(value: masterProvider),
+                                ChangeNotifierProvider.value(value: provider),
+                              ],
+                              child: SelectedTestScreen(),
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a test."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: const Icon(Icons.shopping_cart),
+                  ),
+
+                  // Cart Badge - Show if cart is not empty
+                  if (provider.cart!.isNotEmpty)
+                    Positioned(
+                      right: 0,
+                      top: -4,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${provider.cart!.length}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  );
-              }),
+                ],
+              ),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 title: const Text(
@@ -79,23 +115,26 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             color: Colors.white),
                         // Cart icon
                         onPressed: () {
-                          if(provider.cart!.isNotEmpty)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MultiProvider(
-                                providers: [
-                                  ChangeNotifierProvider.value(
-                                      value: masterProvider),
-                                  // Pass masterProvider
-                                  ChangeNotifierProvider.value(value: provider),
-                                  // Pass parameterProvider if needed
-                                ],
-                                child: SelectedTestScreen(),
+                          if (provider.cart!.isNotEmpty) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MultiProvider(
+                                  providers: [
+                                    ChangeNotifierProvider.value(
+                                        value: masterProvider),
+                                    // Pass masterProvider
+                                    ChangeNotifierProvider.value(
+                                        value: provider),
+                                    // Pass parameterProvider if needed
+                                  ],
+                                  child: SelectedTestScreen(),
+                                ),
                               ),
-                            ),
-                          );
-                          else ToastHelper.showErrorSnackBar(context, "Please Select Test");
+                            );
+                          } else
+                            ToastHelper.showErrorSnackBar(
+                                context, "Please Select Test");
                         },
                       ),
                       if (provider.cart!
@@ -159,9 +198,11 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                         children: [
                                           Radio(
                                               value: 1,
-                                              groupValue: provider.selectionType,
+                                              groupValue:
+                                                  provider.selectionType,
                                               onChanged: (value) => {
-                                                    provider.parameterList.clear(),
+                                                    provider.parameterList
+                                                        .clear(),
                                                     provider.parameterType = 0,
                                                     provider.cart!.clear(),
                                                     provider.fetchAllLabs(
@@ -176,35 +217,38 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                         masterProvider
                                                             .selectedVillage!,
                                                         "1"),
-                                                    provider
-                                                        .setSelectionType(value!),
+                                                    provider.setSelectionType(
+                                                        value!),
                                                   }),
                                           const Text('As per laboratory'),
                                         ],
                                       ),
-                                      Row(children: [
-                                        Radio(
-                                            value: 2,
-                                            groupValue: provider.selectionType,
-                                            onChanged: (value) => {
-                                              provider.labIncharge = null,
-                                              provider.parameterType = 0,
-                                              provider.cart!.clear(),
-                                              provider
-                                                  .setSelectionType(value!),
-                                              if (value == 2)
-                                                {
-                                                  provider.fetchAllParameter(
-                                                      "0",
-                                                      masterProvider
-                                                          .selectedStateId!,
-                                                      "0",
-                                                      "1151455",
-                                                      "1"),
-                                                }
-                                            }),
-                                        const Text('As per parameters'),
-                                      ],)
+                                      Row(
+                                        children: [
+                                          Radio(
+                                              value: 2,
+                                              groupValue:
+                                                  provider.selectionType,
+                                              onChanged: (value) => {
+                                                    provider.labIncharge = null,
+                                                    provider.parameterType = 0,
+                                                    provider.cart!.clear(),
+                                                    provider.setSelectionType(
+                                                        value!),
+                                                    if (value == 2)
+                                                      {
+                                                        provider.fetchAllParameter(
+                                                            "0",
+                                                            masterProvider
+                                                                .selectedStateId!,
+                                                            "0",
+                                                            "1151455",
+                                                            "1"),
+                                                      }
+                                                  }),
+                                          const Text('As per parameters'),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ],
@@ -218,13 +262,19 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                             CustomSearchableDropdown(
                               title: "Select Lab *",
                               value: provider.selectedLab,
-                              items: provider.labList.map((lab) => lab.text ?? '').toList(),
+                              items: provider.labList
+                                  .map((lab) => lab.text ?? '')
+                                  .toList(),
                               onChanged: (selectedLabText) {
-                                if (selectedLabText == null) return; // Handle null case
+                                if (selectedLabText == null)
+                                  return; // Handle null case
 
                                 final selectedLab = provider.labList.firstWhere(
-                                      (lab) => lab.text == selectedLabText,
-                                  orElse: () => Alllabresponse(value: null, text: null), // Default to a nullable object
+                                  (lab) => lab.text == selectedLabText,
+                                  orElse: () => Alllabresponse(
+                                      value: null,
+                                      text:
+                                          null), // Default to a nullable object
                                 );
                                 provider.setSelectedLab(selectedLab.value);
                                 if (selectedLab.value != null) {
@@ -238,7 +288,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                 }
                               },
                             ),
-
                           ],
                           SizedBox(
                             height: 10,
@@ -369,17 +418,21 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                             ),
                                           ),
                                         ],
-                                        rows: provider.parameterList.map((param) {
+                                        rows:
+                                            provider.parameterList.map((param) {
                                           return DataRow(
                                             cells: <DataCell>[
                                               DataCell(
                                                 Checkbox(
                                                   value: provider.cart!.any(
-                                                        (item) => item.parameterId == param.parameterId,
+                                                    (item) =>
+                                                        item.parameterId ==
+                                                        param.parameterId,
                                                   ),
                                                   onChanged: (bool? value) {
                                                     if (value != null) {
-                                                      provider.toggleCart(param);
+                                                      provider
+                                                          .toggleCart(param);
                                                     }
                                                   },
                                                 ),
@@ -389,15 +442,18 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                   width: 150,
                                                   child: Text(
                                                     param.parameterName,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(fontSize: 14),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        TextStyle(fontSize: 14),
                                                   ),
                                                 ),
                                               ),
                                               DataCell(
                                                 Text(
                                                   param.deptRate.toString(),
-                                                  style: TextStyle(fontSize: 14),
+                                                  style:
+                                                      TextStyle(fontSize: 14),
                                                 ),
                                               ),
                                             ],
@@ -422,7 +478,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                       ),
                     ),
                   ),
-                  if(provider.isLoading)
+                  if (provider.isLoading)
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
