@@ -11,10 +11,9 @@ import '../utils/GlobalExceptionHandler.dart';
 class SampleListRepo{
   final BaseApiService _apiService = BaseApiService();
 
-  Future<Samplelistresponse> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId) async {
+  Future<Samplelistresponse> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId, int stateid, int districtid, int blockid, int gpid, int villageid) async {
     try {
-      final String endpoint =
-          '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId';
+      final String endpoint = '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId&stateid=$stateid,districtid=$districtid&blockid=$blockid&gpid=$gpid&villageid=$villageid';
 
       final response = await _apiService.get(endpoint);
 

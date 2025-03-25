@@ -8,12 +8,13 @@ import '../services/LocalStorageService.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
-  const Locationscreen({super.key});
+  final int flag; // Declare flag parameter
+
+  const Locationscreen({super.key, required this.flag});
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
 }
-
 class _LocationscreenState extends State<Locationscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -256,33 +257,37 @@ class _LocationscreenState extends State<Locationscreen> {
                 },
               ),
               SizedBox(height: 12),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (validateStateVillage(masterProvider)) {
-                      Navigator.pushReplacementNamed(context, '/savesample');
-                    } else {
-                      ToastHelper.showToastMessage(masterProvider.errorMsg,
-                          backgroundColor: Colors.red);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF096DA8), // Button color
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 100.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                if (widget.flag == 1) {
+                  print('Going to Sample List screen');
+
+                  Navigator.pushReplacementNamed(
+                    context,
+                    '/sampleList',
+                    arguments: {
+                      'flag': widget.flag,
+                    },
+                  );
+                } else if (widget.flag == 0) {
+                  print('Going to Save Sample screen');
+                  Navigator.pushReplacementNamed(context, '/savesample');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF096DA8),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              )
+              ),
+              child: Text(
+                'Next',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
+          ),
             ],
           ),
         ),

@@ -319,8 +319,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
                                   // Set a fixed height for the content
-                                  child:
-                                      Locationscreen(), // Replace with your widget
+                                  child: Locationscreen(flag: 0,), // Replace with your widget
                                 ),
                               );
                             },

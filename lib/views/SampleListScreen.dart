@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';
@@ -17,15 +18,44 @@ class _SampleListScreenState extends State<SampleListScreen> {
   bool isLoading = false;
   List<Map<String, dynamic>> filteredList = [];
   TextEditingController searchController = TextEditingController();
+  int flag = 1; // Define flag
 
   @override
   void initState() {
     super.initState();
     getToken();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userId = _localStorage.getString("userId");
-      Provider.of<Samplelistprovider>(context, listen: false)
-          .fetchSampleList(int.parse(userId!), 1, "0", 0, "0");
+
+      // Fetch arguments passed to this screen
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+      Masterprovider masterprovider=Provider.of<Masterprovider>(context, listen: false);
+
+      if (args != null && args['flag'] == 1) {
+        print("Fetching sample list with selected location parameters...");
+
+        Provider.of<Samplelistprovider>(context, listen: false).fetchSampleList(
+          int.parse(userId!),
+          1,
+          "0",
+          0,
+          "0",
+          int.parse(masterprovider.selectedStateId!),
+          int.parse(masterprovider.selectedDistrictId!),
+          int.parse(masterprovider.selectedBlockId!),
+          int.parse(masterprovider.selectedGramPanchayat!),
+          int.parse(masterprovider.selectedVillage!),
+        );
+
+        print("stateid------>${masterprovider.selectedStateId}");
+        print("stateid------>${masterprovider.selectedDistrictId}");
+        print("stateid------>${masterprovider.selectedBlockId}");
+      } else {
+        print("Fetching default sample list...");
+        Provider.of<Samplelistprovider>(context, listen: false)
+            .fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+      }
     });
   }
 
@@ -77,22 +107,22 @@ class _SampleListScreenState extends State<SampleListScreen> {
                     color: Colors.white,
                     height: screenHeight * 0.8,
                     width: screenHeight * 0.4,
-                    child: Locationscreen(),
+                    child: Locationscreen(flag: flag,),
                   ),
                 );
               },
             );
+
           },
           backgroundColor: Color(0xFF0468B1),
           shape: CircleBorder(),
-          // Ensures circular shape
           elevation: 4,
           child: Padding(
-            padding: EdgeInsets.all(16), // Ensures better touch area
+            padding: EdgeInsets.all(16),
             child: Icon(
               Icons.search,
               color: Colors.white,
-              size: 24, // Adjust size if needed
+              size: 24,
             ),
           ),
         ),
@@ -125,9 +155,13 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           textStyle: TextStyle(fontSize: 16),
                         ),
                         onPressed: () {
-                          String sampleID = searchController.text.toString();
-                          provider.fetchSampleList(int.parse(userId!), 1, "", 0,
-                              searchController.text);
+                          if (searchController.text.isNotEmpty) {
+                            provider.fetchSampleList(int.parse(userId!), 1, "",
+                                0, searchController.text, 0, 0, 0, 0, 0);
+                          } else {
+                            ToastHelper.showErrorSnackBar(
+                                context, "Please enter sample id");
+                          }
                         },
                         child: Text(
                           "Search",

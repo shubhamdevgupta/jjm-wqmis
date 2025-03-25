@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         '/savesample': (context) => Sampleinformationscreen(),
         '/dashboard': (context) => Dashboardscreen(),
         '/login': (context) => Loginscreen(),
-        '/location': (context) => Locationscreen(),
+        '/location': (context) => Locationscreen(flag: 0,),
         '/labParam': (context) => Labparameterscreen(),
         'test': (context) => SelectedTestScreen(),
         '/sampleList': (context) => SampleListScreen()
