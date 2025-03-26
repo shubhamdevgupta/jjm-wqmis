@@ -297,7 +297,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Next',
                     style: TextStyle(
                         fontSize: 16,
