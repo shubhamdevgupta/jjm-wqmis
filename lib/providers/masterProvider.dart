@@ -11,6 +11,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/WtpLabRespons.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
@@ -62,6 +63,9 @@ class Masterprovider extends ChangeNotifier {
 
   ValidateVillageResponse? _validateVillageResponse;
   ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
+
+  List<WtpLabResponse> _wtpLabs = [];
+  List<WtpLabResponse> get wtpLabs => _wtpLabs;
 
   int? _selectedSubSource;
 
@@ -215,6 +219,24 @@ class Masterprovider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error in fetching lab list: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> fetchWtpLabs(String stateId, String wtpId) async {
+    isLoading = true;
+    errorMsg = '';
+    notifyListeners();
+
+    try {
+      _wtpLabs = await _lapparameterrepository.fetchWtpLabs(stateId, wtpId);
+      if (_wtpLabs.isEmpty) {
+        _wtpLabs.add(WtpLabResponse(labName: "No Labs Available", labId: ""));
+      }
+    } catch (e) {
+      errorMsg = 'Error loading WTP Labs';
+      debugPrint('Error in fetchWtpLabs: $e');
     } finally {
       isLoading = false;
       notifyListeners();

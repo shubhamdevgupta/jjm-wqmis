@@ -571,19 +571,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 5,
+                        value: 1,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!,
-                              "0",
-                              "0",
-                              masterProvider.selectedWtp!,
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
                           masterProvider.setSelectedSubSource(value);
                         },
                       ),
@@ -593,17 +583,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 6,
+                        value: 2,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print(
-                              "----calling for wtp but now have to stop -----");
-
                           masterProvider.setSelectedSubSource(value);
-                          /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
                         },
                       ),
                       Text('Outlet of WTP')
@@ -612,112 +595,47 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 7,
+                        value: 3,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print(
-                              "----calling for wtp but now have to stop -----");
-
-                          masterProvider.setSelectedSubSource(value);
-                          /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
                         },
                       ),
                       Text('Disinfection')
                     ],
                   ),
-                  Visibility(
-                    visible: masterProvider.selectedSubSource != null &&
-                        masterProvider.selectedWtsfilter == "5",
-                    child: Card(
-                      elevation: 5,
-                      // Increased elevation for a more modern shadow effect
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            12), // Slightly increased border radius for a smooth look
-                      ),
-                      margin: EdgeInsets.all(5),
-                      // Margin to ensure spacing around the card
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // Align text to the left
-                          children: [
-                            Visibility(
-                              visible: masterProvider.selectedSubSource == 5,
-                              child: CustomDropdown(
-                                title: "Select Water Source *",
-                                value: masterProvider.selectedWaterSource,
-                                items: masterProvider.waterSource
-                                    .map((waterSource) {
-                                  return DropdownMenuItem<String>(
-                                    value: waterSource.locationId,
-                                    child: Text(
-                                      waterSource.locationName,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  masterProvider
-                                      .setSelectedWaterSourceInformation(value);
-                                },
-                              ),
-                            ),
-                            CustomDateTimePicker(onDateTimeSelected: (value) {
-                              masterProvider.setSelectedDateTime(value);
-                            }),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  masterProvider.fetchAllLabs(
-                                      masterProvider.selectedStateId!,
-                                      masterProvider.selectedDistrictId!,
-                                      masterProvider.selectedBlockId!,
-                                      masterProvider.selectedGramPanchayat!,
-                                      masterProvider.selectedVillage!,
-                                      "1");
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                              value: masterProvider,
-                                              child: Labparameterscreen(),
-                                            )),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF096DA8),
-                                  // Button color
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 100.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Next',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        masterProvider.fetchWtpLabs(
+                            masterProvider.selectedStateId!, masterProvider.selectedSubSource.toString());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider.value(
+                                value: masterProvider,
+                                child: Labparameterscreen(),
+                              )),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF096DA8),
+                        // Button color
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
-                  ),
+                  )
+
                 ],
               )
             ],

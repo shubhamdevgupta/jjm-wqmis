@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/LoginResponse.dart';
+import '../models/authresponse/LoginResponse.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
