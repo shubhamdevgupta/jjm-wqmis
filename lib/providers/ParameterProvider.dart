@@ -154,4 +154,20 @@ class ParameterProvider with ChangeNotifier {
     }
     notifyListeners(); // Notify UI of changes
   }
+
+  void updateSomeValue(
+      String selectedStateId,
+      String selectedDistrictId,
+      String selectedBlockId,
+      String selectedGramPanchayat,
+      String selectedVillage) {
+    parameterList.clear();
+    parameterType = 0;
+    cart!.clear();
+    fetchAllLabs(selectedStateId!, selectedDistrictId!, selectedBlockId!,
+        selectedGramPanchayat!, selectedVillage!, "1");
+    setSelectionType(1);
+
+    notifyListeners();
+  }
 }
