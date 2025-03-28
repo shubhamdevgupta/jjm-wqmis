@@ -5,11 +5,15 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 
+import '../repository/MasterRepository.dart';
 import '../utils/CustomException.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
+  static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
+  static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
+
 
   // POST Request Function
   Future<dynamic> post(
@@ -58,10 +62,13 @@ class BaseApiService {
   }
 
   Future<dynamic> get(
-    String endpoint, {
-    Map<String, String>? headers,
-  }) async {
-    final Uri url = Uri.parse('$_baseUrl$endpoint');
+      String endpoint, {
+        ApiType apiType = ApiType.ejalShakti, // Default to ejalShakti
+        Map<String, String>? headers,
+      }) async {
+    final String baseUrl = getBaseUrl(apiType);
+    final Uri url = Uri.parse('$baseUrl$endpoint');
+
     // Ensure headers are not null and set default Content-Type
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
@@ -120,4 +127,13 @@ class BaseApiService {
         throw ApiException('Unexpected error: ${response.statusCode} - ${response.body}');
     }
   }
+  String getBaseUrl(ApiType apiType) {
+    switch (apiType) {
+      case ApiType.ejalShakti:
+        return ejalShakti;
+      case ApiType.reverseGeocoding:
+        return reverseGeocoding;
+    }
+  }
+
 }
