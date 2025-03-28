@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
@@ -8,6 +9,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/ValidateVillage.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
 import '../models/LgdResponse.dart';
@@ -236,7 +238,7 @@ class MasterRepository {
         apiType: ApiType.reverseGeocoding,
       );
 
-      log('API Response: $response');
+      log('API Response: from reverse geo tagging $response');
 
       // Check if response is a List<dynamic>
       if (response is List) {
@@ -247,6 +249,28 @@ class MasterRepository {
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
+    }
+  }
+
+  Future<ValidateVillageResponse> validateVillage(
+      String villageId, String lgdCode) async {
+    try {
+      final response = await _apiService.get(
+        '/apimaster/validateVillage?villageid=$villageId&lgdcode=$lgdCode',
+      );
+
+      // Log the API response
+      print('Validate Village API Response: $response');
+
+      // Validate the response and return the model
+      if (response is Map<String, dynamic> && response['Status'] == 1) {
+        return ValidateVillageResponse.fromJson(response);
+      } else {
+        throw ApiException('API Error: ${response['Message']}');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow; // Propagate the exception for further handling
     }
   }
 

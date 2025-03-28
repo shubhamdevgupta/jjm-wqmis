@@ -16,6 +16,7 @@ import 'package:jjm_wqmis/repository/MasterRepository.dart';
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
+import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
@@ -57,6 +58,10 @@ class Masterprovider extends ChangeNotifier {
 
   List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
   List<Lgdresponse> get villageDetails => _villageDetails;
+
+
+  ValidateVillageResponse? _validateVillageResponse;
+  ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
 
   int? _selectedSubSource;
 
@@ -341,6 +346,20 @@ class Masterprovider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('Error in fetchVillageDetails: $e');
+      errorMsg = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> validateVillage(String villageId, String lgdCode) async {
+    isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+    try {
+      _validateVillageResponse = await _masterRepository.validateVillage(villageId, lgdCode);
+    } catch (e) {
       errorMsg = e.toString();
     } finally {
       isLoading = false;

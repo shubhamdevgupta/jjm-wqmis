@@ -298,7 +298,16 @@ class _LocationscreenState extends State<Locationscreen> {
                           paramProvider.currentPosition!.longitude,
                           paramProvider.currentPosition!.latitude);
                       print('Going to Save Sample screen');
-                      Navigator.pushReplacementNamed(context, '/savesample');
+                      final hasData = masterProvider.villageDetails.isNotEmpty;
+                      final villageLgd = hasData
+                          ? masterProvider.villageDetails.first.villageLgd
+                          : "0";
+                      masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
+                      if(masterProvider.validateVillageResponse!.status==1) {
+                        Navigator.pushReplacementNamed(context, '/savesample');
+                      }else{
+                        ToastHelper.showErrorSnackBar(context, 'please check the location ');
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
