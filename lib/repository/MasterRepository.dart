@@ -10,6 +10,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dar
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
+import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/MasterApiResponse/HabitationResponse.dart';
 import '../services/BaseApiService.dart';
@@ -218,4 +219,33 @@ class MasterRepository {
     }
   }
 
+  Future<List<Lgdresponse>> fetchVillageLgd(double lon, double lat) async {
+    try {
+      String formattedLon = lon.toStringAsFixed(8);
+      String formattedLat = lat.toStringAsFixed(8);
+
+      final response = await _apiService.get(
+        'GetVillageDetails/api/GeoData/getVillageDetails?lon=$formattedLon&lat=$formattedLat',
+        apiType: ApiType.reverseGeocoding,
+      );
+
+      log('API Response: $response');
+
+      // Check if response is a List<dynamic>
+      if (response is List) {
+        return response.map((json) => Lgdresponse.fromJson(json)).toList();
+      } else {
+        throw ApiException('Unexpected API Response Format: $response');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+
+}
+enum ApiType {
+  ejalShakti,
+  reverseGeocoding,
 }

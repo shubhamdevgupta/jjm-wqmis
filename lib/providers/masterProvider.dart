@@ -14,6 +14,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
+import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
@@ -53,6 +54,9 @@ class Masterprovider extends ChangeNotifier {
 
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
+
+  List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
+  List<Lgdresponse> get villageDetails => _villageDetails;
 
   int? _selectedSubSource;
 
@@ -307,6 +311,32 @@ class Masterprovider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
+    }
+  }
+
+  Future<void> fetchVillageDetails(double lon, double lat) async {
+    isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+
+    try {
+      String formattedLon = lon.toStringAsFixed(8);
+      String formattedLat = lat.toStringAsFixed(8);
+
+      _villageDetails = await _masterRepository.fetchVillageLgd(
+        double.parse(formattedLon),
+        double.parse(formattedLat),
+      );
+
+      if (_villageDetails.isEmpty) {
+        errorMsg = "No village details found.";
+      }
+    } catch (e) {
+      debugPrint('Error in fetchVillageDetails: $e');
+      errorMsg = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

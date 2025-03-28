@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/ParameterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/CustomDropdown.dart';
 
@@ -15,11 +16,20 @@ class Locationscreen extends StatefulWidget {
   @override
   State<Locationscreen> createState() => _LocationscreenState();
 }
+
 class _LocationscreenState extends State<Locationscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext) {
+
+    final paramProvider = Provider.of<ParameterProvider>(
+        context, listen: false);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -56,20 +66,22 @@ class _LocationscreenState extends State<Locationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-              return Stack(
-                children: [
-                  SingleChildScrollView(
-                      child: Column(
-                    children: [buildStateVillage(masterProvider)],
-                  )),
-                  if (masterProvider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                ],
-              );
-            })));
+                  return Stack(
+                    children: [
+                      SingleChildScrollView(
+                          child: Column(
+                              children: [buildStateVillage(masterProvider, paramProvider)
+                              ]
+                          )),
+                      if (masterProvider.isLoading)
+                        LoaderUtils.conditionalLoader(
+                            isLoading: masterProvider.isLoading)
+                    ],
+                  );
+                })));
   }
 
-  Widget buildStateVillage(Masterprovider masterProvider) {
+  Widget buildStateVillage(Masterprovider masterProvider, ParameterProvider paramProvider) {
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(
@@ -97,9 +109,11 @@ class _LocationscreenState extends State<Locationscreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: _localStorage.getString('stateId'), // Ensure this matches the DropdownMenuItem value
+                      value: _localStorage.getString('stateId'),
+                      // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
-                        filled: true, // Grey background to indicate it's non-editable
+                        filled: true,
+                        // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
                         labelStyle: TextStyle(color: Colors.blueAccent),
                         enabledBorder: OutlineInputBorder(
@@ -108,17 +122,22 @@ class _LocationscreenState extends State<Locationscreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey, width: 2), // Avoid focus effect
+                          borderSide: BorderSide(color: Colors.grey,
+                              width: 2), // Avoid focus effect
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: _localStorage.getString('stateId'), // Ensure this matches the selected value
-                          child: Text(_localStorage.getString('stateName') ?? 'Unknown State'), // Display state name
+                          value: _localStorage.getString('stateId'),
+                          // Ensure this matches the selected value
+                          child: Text(_localStorage.getString('stateName') ??
+                              'Unknown State'), // Display state name
                         ),
                       ],
-                      onChanged: null, // Disable selection (non-editable)
+                      onChanged: null,
+                      // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
                         color: Colors.black,
@@ -257,37 +276,47 @@ class _LocationscreenState extends State<Locationscreen> {
                 },
               ),
               SizedBox(height: 12),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                if (widget.flag == 1) {
-                  print('Going to Sample List screen');
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await paramProvider.fetchLocation();
 
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/sampleList',
-                    ModalRoute.withName('/dashboard'), // This removes all previous routes up to Dashboard
-                    arguments: {'flag': widget.flag},
-                  );
+                    if (widget.flag == 1) {
+                      print('Going to Sample List screen');
 
-                } else if (widget.flag == 0) {
-                  print('Going to Save Sample screen');
-                  Navigator.pushReplacementNamed(context, '/savesample');
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF096DA8),
-                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/sampleList',
+                        ModalRoute.withName('/dashboard'),
+                        // This removes all previous routes up to Dashboard
+                        arguments: {'flag': widget.flag},
+                      );
+                    } else if (widget.flag == 0) {
+                      print('location---> ${paramProvider.currentPosition!.longitude}');
+                      print('location---> ${paramProvider.currentPosition!.latitude}');
+                      masterProvider.fetchVillageDetails(
+                          paramProvider.currentPosition!.longitude,
+                          paramProvider.currentPosition!.latitude);
+                      print('Going to Save Sample screen');
+                      Navigator.pushReplacementNamed(context, '/savesample');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF096DA8),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 100.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Next',
+                    style: TextStyle(fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
               ),
-              child: Text(
-                'Next',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ),
-          ),
             ],
           ),
         ),
@@ -298,18 +327,18 @@ class _LocationscreenState extends State<Locationscreen> {
   bool validateStateVillage(Masterprovider provider) {
     provider.errorMsg = provider.selectedStateId?.isNotEmpty == true
         ? provider.selectedDistrictId?.isNotEmpty == true
-            ? provider.selectedBlockId?.isNotEmpty == true
-                ? provider.selectedGramPanchayat?.isNotEmpty == true
-                    ? (provider.selectedVillage != null &&
-                            provider.selectedVillage != "0"
-                        ? (provider.selectedHabitation != null &&
-                                provider.selectedHabitation != "0"
-                            ? ""
-                            : "Please select habitation before proceeding.")
-                        : "Please select village before proceeding.")
-                    : "Please select Gram Panchayat before proceeding."
-                : "Please select Block before proceeding."
-            : "Please select District before proceeding."
+        ? provider.selectedBlockId?.isNotEmpty == true
+        ? provider.selectedGramPanchayat?.isNotEmpty == true
+        ? (provider.selectedVillage != null &&
+        provider.selectedVillage != "0"
+        ? (provider.selectedHabitation != null &&
+        provider.selectedHabitation != "0"
+        ? ""
+        : "Please select habitation before proceeding.")
+        : "Please select village before proceeding.")
+        : "Please select Gram Panchayat before proceeding."
+        : "Please select Block before proceeding."
+        : "Please select District before proceeding."
         : "Please select State before proceeding.";
 
     return provider.errorMsg.isEmpty;
