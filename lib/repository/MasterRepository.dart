@@ -200,24 +200,31 @@ class MasterRepository {
     }
   }
 
-  Future<List<Wtplistresponse>> fetchWTPlist(String villageId,
-      String habitationId, String stateId, String schemeId) async {
+  Future<List<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/GetWTP?villageid=$villageId&habitationid=$habitationId&stateid=$stateId&schemeid=$schemeId');
+        '/apimaster/GetWTP?stateid=$stateId&schemeid=$schemeId',
+      );
 
-      log('WTP List  API Response: $response');
+      log('WTP List API Response: $response');
 
-      if (response is List) {
-        return response.map((item) => Wtplistresponse.fromJson(item)).toList();
-      } else {
-        throw ApiException('Api Error :$response');
+      if (response is Map<String, dynamic>) {
+        if (response['Status'] == 1 && response['Result'] is List && response['Result'].isNotEmpty) {
+          return (response['Result'] as List)
+              .map((item) => Wtp.fromJson(item))
+              .toList();
+        }
+        return [
+          Wtp(wtpName: 'No record available', wtpId: 'not_available'),
+        ];
       }
+      throw ApiException('API Error: Invalid response format');
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
+
 
   Future<List<Lgdresponse>> fetchVillageLgd(double lon, double lat) async {
     try {
