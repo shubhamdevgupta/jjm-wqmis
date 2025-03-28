@@ -187,8 +187,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   masterProvider.setSelectedScheme(value);
                   if (masterProvider.selectedWtsfilter == "5") {
                     masterProvider.fetchWTPList(
-                        masterProvider.selectedVillage!,
-                        masterProvider.selectedHabitation!,
                         masterProvider.selectedStateId!,
                         masterProvider.selectedScheme!);
                   } else if (masterProvider.selectedWtsfilter == "6") {

@@ -48,7 +48,7 @@ class Masterprovider extends ChangeNotifier {
   List<WaterSourceResponse> waterSource = [];
   String? selectedWaterSource;
 
-  List<Wtplistresponse> wtpList = [];
+  List<Wtp> wtpList = [];
   String? selectedWtp;
 
   List<Watersourcefilterresponse> wtsFilterList = [];
@@ -273,16 +273,24 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String villageId, String habitationId, String stateId, String schemeId) async {
+  Future<void> fetchWTPList( String stateId, String schemeId) async {
     isLoading = true;
+    notifyListeners();
     try {
-      wtpList = await _masterRepository.fetchWTPlist(
-          villageId, habitationId, stateId, schemeId);
-      if (wtpList.isNotEmpty) {
-        selectedWtp = wtpList.first.wtpId;
+      final fetchedList = await _masterRepository.fetchWTPlist(stateId, schemeId);
+
+      if (fetchedList.isNotEmpty) {
+        wtpList = fetchedList;
+
+        // Ensure a valid default value is set
+        if (wtpList.any((wtp) => wtp.wtpId == selectedWtp)) {
+          selectedWtp = selectedWtp; // Keep the existing if valid
+        } else {
+          selectedWtp = wtpList.first.wtpId; // Reset if invalid
+        }
       }
     } catch (e) {
-      debugPrint('Error in fetching wtp list: $e');
+      debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
