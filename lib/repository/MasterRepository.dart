@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
@@ -8,8 +9,10 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/ValidateVillage.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
+import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/MasterApiResponse/HabitationResponse.dart';
 import '../services/BaseApiService.dart';
@@ -199,18 +202,49 @@ class MasterRepository {
     }
   }
 
-  Future<List<Wtplistresponse>> fetchWTPlist(String villageId,
-      String habitationId, String stateId, String schemeId) async {
+  Future<List<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/GetWTP?villageid=$villageId&habitationid=$habitationId&stateid=$stateId&schemeid=$schemeId');
+        '/apimaster/GetWTP?stateid=$stateId&schemeid=$schemeId',
+      );
 
-      log('WTP List  API Response: $response');
+      log('WTP List API Response: $response');
 
+      if (response is Map<String, dynamic>) {
+        if (response['Status'] == 1 && response['Result'] is List && response['Result'].isNotEmpty) {
+          return (response['Result'] as List)
+              .map((item) => Wtp.fromJson(item))
+              .toList();
+        }
+        return [
+          Wtp(wtpName: 'No record available', wtpId: 'not_available'),
+        ];
+      }
+      throw ApiException('API Error: Invalid response format');
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+
+  Future<List<Lgdresponse>> fetchVillageLgd(double lon, double lat) async {
+    try {
+      String formattedLon = lon.toStringAsFixed(8);
+      String formattedLat = lat.toStringAsFixed(8);
+
+      final response = await _apiService.get(
+        'GetVillageDetails/api/GeoData/getVillageDetails?lon=$formattedLon&lat=$formattedLat',
+        apiType: ApiType.reverseGeocoding,
+      );
+
+      log('API Response: from reverse geo tagging $response');
+
+      // Check if response is a List<dynamic>
       if (response is List) {
-        return response.map((item) => Wtplistresponse.fromJson(item)).toList();
+        return response.map((json) => Lgdresponse.fromJson(json)).toList();
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Unexpected API Response Format: $response');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -218,4 +252,31 @@ class MasterRepository {
     }
   }
 
+  Future<ValidateVillageResponse> validateVillage(
+      String villageId, String lgdCode) async {
+    try {
+      final response = await _apiService.get(
+        '/apimaster/validateVillage?villageid=$villageId&lgdcode=$lgdCode',
+      );
+
+      // Log the API response
+      print('Validate Village API Response: $response');
+
+      // Validate the response and return the model
+      if (response is Map<String, dynamic> && response['Status'] == 1) {
+        return ValidateVillageResponse.fromJson(response);
+      } else {
+        throw ApiException('API Error: ${response['Message']}');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow; // Propagate the exception for further handling
+    }
+  }
+
+
+}
+enum ApiType {
+  ejalShakti,
+  reverseGeocoding,
 }

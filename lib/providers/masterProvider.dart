@@ -11,10 +11,13 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/WtpLabRespons.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
+import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
+import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
@@ -48,11 +51,21 @@ class Masterprovider extends ChangeNotifier {
   List<WaterSourceResponse> waterSource = [];
   String? selectedWaterSource;
 
-  List<Wtplistresponse> wtpList = [];
+  List<Wtp> wtpList = [];
   String? selectedWtp;
 
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
+
+  List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
+  List<Lgdresponse> get villageDetails => _villageDetails;
+
+
+  ValidateVillageResponse? _validateVillageResponse;
+  ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
+
+  List<WtpLabResponse> _wtpLabs = [];
+  List<WtpLabResponse> get wtpLabs => _wtpLabs;
 
   int? _selectedSubSource;
 
@@ -193,6 +206,43 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
+
+  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+    print('lab call in master provider ');
+    isLoading = true;
+    try {
+      labList = await _lapparameterrepository.fetchAllLab(
+          StateId, districtId, blockid, gpid, villageid, isall);
+      if (labList.isNotEmpty) {
+        selectedLab = labList.first.value;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching lab list: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> fetchWtpLabs(String stateId, String wtpId) async {
+    isLoading = true;
+    errorMsg = '';
+    notifyListeners();
+
+    try {
+      _wtpLabs = await _lapparameterrepository.fetchWtpLabs(stateId, wtpId);
+      if (_wtpLabs.isEmpty) {
+        _wtpLabs.add(WtpLabResponse(labName: "No Labs Available", labId: ""));
+      }
+    } catch (e) {
+      errorMsg = 'Error loading WTP Labs';
+      debugPrint('Error in fetchWtpLabs: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
   Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
     isLoading = true;
     notifyListeners();
@@ -253,16 +303,24 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String villageId, String habitationId, String stateId, String schemeId) async {
+  Future<void> fetchWTPList( String stateId, String schemeId) async {
     isLoading = true;
+    notifyListeners();
     try {
-      wtpList = await _masterRepository.fetchWTPlist(
-          villageId, habitationId, stateId, schemeId);
-      if (wtpList.isNotEmpty) {
-        selectedWtp = wtpList.first.wtpId;
+      final fetchedList = await _masterRepository.fetchWTPlist(stateId, schemeId);
+
+      if (fetchedList.isNotEmpty) {
+        wtpList = fetchedList;
+
+        // Ensure a valid default value is set
+        if (wtpList.any((wtp) => wtp.wtpId == selectedWtp)) {
+          selectedWtp = selectedWtp; // Keep the existing if valid
+        } else {
+          selectedWtp = wtpList.first.wtpId; // Reset if invalid
+        }
       }
     } catch (e) {
-      debugPrint('Error in fetching wtp list: $e');
+      debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
@@ -287,6 +345,46 @@ class Masterprovider extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
+    }
+  }
+
+  Future<void> fetchVillageDetails(double lon, double lat) async {
+    isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+
+    try {
+      String formattedLon = lon.toStringAsFixed(8);
+      String formattedLat = lat.toStringAsFixed(8);
+
+      _villageDetails = await _masterRepository.fetchVillageLgd(
+        double.parse(formattedLon),
+        double.parse(formattedLat),
+      );
+
+      if (_villageDetails.isEmpty) {
+        errorMsg = "No village details found.";
+      }
+    } catch (e) {
+      debugPrint('Error in fetchVillageDetails: $e');
+      errorMsg = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> validateVillage(String villageId, String lgdCode) async {
+    isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+    try {
+      _validateVillageResponse = await _masterRepository.validateVillage(villageId, lgdCode);
+    } catch (e) {
+      errorMsg = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

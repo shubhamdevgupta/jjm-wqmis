@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
+import 'package:jjm_wqmis/models/WtpLabRespons.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
@@ -32,6 +33,27 @@ class Lapparameterrepository {
       rethrow;
     }
   }
+  Future<List<WtpLabResponse>> fetchWtpLabs(String stateId, String wtpId) async {
+    try {
+      // API call
+      final response = await _apiService.get(
+          '/apimaster/GetwtpLab?stateid=$stateId&wtpid=$wtpId');
+
+      log('WTP Lab API Response: $response');
+
+      // Check for valid response structure
+      if (response is Map<String, dynamic> && response['Status'] == 1) {
+        final results = response['Result'] as List;
+        return results.map((item) => WtpLabResponse.fromJson(item)).toList();
+      } else {
+        throw ApiException('API Error: ${response['Message']}');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow; // Rethrow to propagate error
+    }
+  }
+
 
   Future<List<Parameterresponse>> fetchAllParameter(String labid,
       String stateid, String sid, String reg_id, String parameteetype) async {

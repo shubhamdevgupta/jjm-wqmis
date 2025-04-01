@@ -262,50 +262,52 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       children: [
                         _buildDashboardCard(
                           title: 'Total Samples Submitted',
-                          value:
-                              '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                          value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
                           icon: Icons.analytics,
                           gradientColors: [
                             Colors.lightBlueAccent,
                             Colors.blue
                           ],
-                          onTap: (){}// Example gradient colors
+                          onTap: () {
+                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 0});
+                          },
                         ),
                         _buildDashboardCard(
                           title: 'Total Physical Submitted',
-                          value:
-                              '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                          value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
                           icon: Icons.hourglass_empty,
                           gradientColors: [
                             Color(0xFFFCE889),
                             Color(0xFFFFAA00)
-                          ], // Example gradient colors
-                            onTap: (){}// Example gradient colors
+                          ],
+                          onTap: () {
+                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 2});
+                          },
                         ),
                         _buildDashboardCard(
                           title: 'Total Sample Tested',
-                          value:
-                              '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                          value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
                           icon: Icons.check_circle,
                           gradientColors: [
                             Colors.lightGreen,
                             Colors.green
-                          ], // Example gradient colors
-                            onTap: (){
-
-                            }// Example gradient colors
+                          ],
+                          onTap: () {
+                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 6});
+                          },
                         ),
                         _buildDashboardCard(
                           title: 'Total Retest',
-                          value:
-                              '${dashboardProvider.dashboardData!.totalRetest}',
+                          value: '${dashboardProvider.dashboardData!.totalRetest}',
                           icon: Icons.refresh,
                           gradientColors: [
                             Colors.redAccent,
                             Colors.red
-                          ], // Example gradient colors
-                            onTap: (){}// Example gradient colors
-                        )
+                          ],
+                          onTap: () {
+                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 8});
+                          },
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),

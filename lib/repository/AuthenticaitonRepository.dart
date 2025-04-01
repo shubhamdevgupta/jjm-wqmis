@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DashboardResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
 
-import '../models/LoginResponse.dart';
+import '../models/authresponse/LoginResponse.dart';
 import '../utils/CustomException.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
