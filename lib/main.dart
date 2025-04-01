@@ -60,7 +60,6 @@ class MyApp extends StatelessWidget {
         '/labParam': (context) => Labparameterscreen(),
         'test': (context) => SelectedTestScreen(),
         '/sampleList': (context) => SampleListScreen()
-
       },
     );
   }
