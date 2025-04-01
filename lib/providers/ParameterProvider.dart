@@ -21,14 +21,15 @@ class ParameterProvider with ChangeNotifier {
   int? selectedParameter;
 
   int selectionType = 0;
-  int parameterType = 0;
+  int parameterType = 1;
 
   List<String> allParameters = [];
 
   List<Parameterresponse>? cart = [];
 
   List<Alllabresponse> labList = [];
-  String? selectedLab;
+  String? selectedLab="";
+  bool isLabSelected=false;
   Labinchargeresponse? labIncharge;
 
   Position? _currentPosition;
@@ -42,9 +43,6 @@ class ParameterProvider with ChangeNotifier {
       labList = await _lapparameterrepository.fetchAllLab(
           StateId, districtId, blockid, gpid, villageid, isall);
       log('Fetched Lab List: $labList');
-      if (labList.isNotEmpty) {
-        selectedLab = labList.first.value;
-      }
     } catch (e, stackTrace) {
       log('Error in fetching lab list provider: $e');
       log('StackTrace: $stackTrace');
@@ -72,7 +70,6 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> fetchLabIncharge(int labId) async {
     isLoading = true;
@@ -120,6 +117,7 @@ class ParameterProvider with ChangeNotifier {
 
   void setSelectedLab(String? value) {
     selectedLab = value;
+    isLabSelected = value != null && value.isNotEmpty;
     notifyListeners();
   }
 
@@ -154,4 +152,5 @@ class ParameterProvider with ChangeNotifier {
     }
     notifyListeners(); // Notify UI of changes
   }
+
 }
