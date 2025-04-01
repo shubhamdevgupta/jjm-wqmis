@@ -91,6 +91,8 @@ class Masterprovider extends ChangeNotifier {
   String otherSourceLocation = '';
   String sampleTypeOther = '';
 
+  List<Alllabresponse> labList = [];
+  String? selectedLab;
 
   Position? _currentPosition;
   Position? get currentPosition => _currentPosition;
@@ -205,7 +207,6 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners(); // Finish loading
     }
   }
-
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     print('lab call in master provider ');

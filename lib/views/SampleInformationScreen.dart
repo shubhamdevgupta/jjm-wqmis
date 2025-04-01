@@ -7,7 +7,6 @@ import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
-import 'package:jjm_wqmis/views/view_test/LabParameterScreenTest.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
@@ -487,16 +486,21 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ),
                   Center(
                     child: ElevatedButton(
-
-                      onPressed: ()  {
-
+                      onPressed: () {
+                        masterProvider.fetchAllLabs(
+                            masterProvider.selectedStateId!,
+                            masterProvider.selectedDistrictId!,
+                            masterProvider.selectedBlockId!,
+                            masterProvider.selectedGramPanchayat!,
+                            masterProvider.selectedVillage!,
+                            "1");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
                                     value: masterProvider,
-                                    child: LabParameterScreenTest(),
+                                    child: Labparameterscreen(),
                                   )),
                         );
                       },
@@ -599,86 +603,27 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       Text('Disinfection')
                     ],
                   ),
-
-
-                  Visibility(
-                    visible: masterProvider.selectedSubSource != null && masterProvider.selectedWtsfilter == "5" ,
-                    child: Card(
-                      elevation: 5,
-                      // Increased elevation for a more modern shadow effect
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            12), // Slightly increased border radius for a smooth look
-                      ),
-                      margin: EdgeInsets.all(5),
-                      // Margin to ensure spacing around the card
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // Align text to the left
-                          children: [
-                            Visibility(
-                              visible: masterProvider.selectedSubSource == 5,
-                              child: CustomDropdown(
-                                title: "Select Water Source *",
-                                value: masterProvider.selectedWaterSource,
-                                items: masterProvider.waterSource.map((waterSource) {
-                                  return DropdownMenuItem<String>(
-                                    value: waterSource.locationId,
-                                    child: Text(
-                                      waterSource.locationName,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  masterProvider.setSelectedWaterSourceInformation(value);
-                                },
-                              ),
-                            ),
-                            CustomDateTimePicker(onDateTimeSelected: (value) {
-                              masterProvider.setSelectedDateTime(value);
-                            }),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                 // masterProvider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1");
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                              value: masterProvider,
-                                              child: Labparameterscreen(),
-                                            )),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF096DA8),
-                                  // Button color
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 100.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Next',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
-
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        masterProvider.fetchWtpLabs(
+                            masterProvider.selectedStateId!, masterProvider.selectedSubSource.toString());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider.value(
+                                value: masterProvider,
+                                child: Labparameterscreen(),
+                              )),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF096DA8),
+                        // Button color
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 100.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       child: const Text(
@@ -737,13 +682,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-              /*  masterProvider.fetchAllLabs(
+                masterProvider.fetchAllLabs(
                     masterProvider.selectedStateId!,
                     masterProvider.selectedDistrictId!,
                     masterProvider.selectedBlockId!,
                     masterProvider.selectedGramPanchayat!,
                     masterProvider.selectedVillage!,
-                    "1");*/
+                    "1");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -923,8 +868,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                masterProvider.otherSourceLocation=householdController.text;
-
+                masterProvider.otherSourceLocation = householdController.text;
+                masterProvider.fetchAllLabs(
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedDistrictId!,
+                    masterProvider.selectedBlockId!,
+                    masterProvider.selectedGramPanchayat!,
+                    masterProvider.selectedVillage!,
+                    "1");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -1076,17 +1027,17 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-
-                        masterProvider.sampleTypeOther=handpumpSourceController.text;
-                        masterProvider.otherSourceLocation=handpumpLocationController.text;
-                    /*    masterProvider.fetchAllLabs(
-
+                        masterProvider.sampleTypeOther =
+                            handpumpSourceController.text;
+                        masterProvider.otherSourceLocation =
+                            handpumpLocationController.text;
+                        masterProvider.fetchAllLabs(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
                             masterProvider.selectedBlockId!,
                             masterProvider.selectedGramPanchayat!,
-                            masterProvider.selectedVillage!, "1");*/
-
+                            masterProvider.selectedVillage!,
+                            "1");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -1160,11 +1111,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.otherSourceLocation =
                             handpumpLocationController.text;
                         masterProvider.setSelectedWaterSourceInformation("0");
-
-
+                        masterProvider.fetchAllLabs(
+                            masterProvider.selectedStateId!,
+                            masterProvider.selectedDistrictId!,
+                            masterProvider.selectedBlockId!,
+                            masterProvider.selectedGramPanchayat!,
                             masterProvider.selectedVillage!,
                             "1");
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
