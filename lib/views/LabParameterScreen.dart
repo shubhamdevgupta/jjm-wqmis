@@ -40,8 +40,6 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                 children: [
                   FloatingActionButton(
                     onPressed: () async {
-                      await provider.fetchLocation();
-                      print('-------2222222${provider.currentPosition!.latitude}');
                       if (provider.cart!.isNotEmpty) {
                         Navigator.push(
                           context,
@@ -194,7 +192,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                   ),
                                   Column(
                                     children: [
-                                      Row(
+                                 /*     Row(
                                         children: [
                                           Radio(
                                               value: 1,
@@ -222,7 +220,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                   }),
                                           const Text('As per laboratory'),
                                         ],
-                                      ),
+                                      )*/
                                       Row(
                                         children: [
                                           Radio(
