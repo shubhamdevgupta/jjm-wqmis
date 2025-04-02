@@ -224,16 +224,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                           ),
                                           DataColumn(
                                             label: Text(
-                                              'Test Name',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
-                                              ),
-                                            ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
                                               'Test Price',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -243,42 +233,50 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                             ),
                                           ),
                                         ],
-                                        rows:
-                                            provider.parameterList.map((param) {
+                                        rows: provider.parameterList.map((param) {
+                                          bool isSelected = provider.cart!.any(
+                                                (item) => item.parameterId == param.parameterId,
+                                          );
+
                                           return DataRow(
                                             cells: <DataCell>[
                                               DataCell(
-                                                Checkbox(
-                                                  value: provider.cart!.any(
-                                                    (item) =>
-                                                        item.parameterId ==
-                                                        param.parameterId,
-                                                  ),
-                                                  onChanged: (bool? value) {
-                                                    if (value != null) {
-                                                      provider
-                                                          .toggleCart(param);
-                                                    }
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    provider.toggleCart(param);
                                                   },
-                                                ),
-                                              ),
-                                              DataCell(
-                                                SizedBox(
-                                                  width: 150,
-                                                  child: Text(
-                                                    param.parameterName,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style:
-                                                        TextStyle(fontSize: 14),
+                                                  child: Row(
+                                                    children: [
+                                                      Checkbox(
+                                                        value: isSelected,
+                                                        onChanged: (bool? value) {
+                                                          if (value != null) {
+                                                            provider.toggleCart(param);
+                                                          }
+                                                        },
+                                                      ),
+                                                      SizedBox(width: 10),
+                                                      SizedBox(
+                                                        width: 150,
+                                                        child: Text(
+                                                          param.parameterName,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(fontSize: 14),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
                                               DataCell(
-                                                Text(
-                                                  param.deptRate.toString(),
-                                                  style:
-                                                      TextStyle(fontSize: 14),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    provider.toggleCart(param);
+                                                  },
+                                                  child: Text(
+                                                    param.deptRate.toString(),
+                                                    style: TextStyle(fontSize: 14),
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -286,10 +284,12 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         }).toList(),
                                       ),
                                     ),
+
+
                                     const SizedBox(height: 20),
                                     Text(
                                       'Cart: ${provider.cart!.length}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),

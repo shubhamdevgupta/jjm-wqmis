@@ -71,7 +71,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 children: [
                   SingleChildScrollView(
                       child: Column(
-                    children: [buildStateVillage(masterProvider)],
+                    children: [buildStateVillage(masterProvider,paramProvider)],
                   )),
                   if (masterProvider.isLoading)
                     LoaderUtils.conditionalLoader(
