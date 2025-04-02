@@ -28,31 +28,44 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userId = _localStorage.getString("userId");
-
-      // Fetch arguments passed to this screen
       final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-      Masterprovider masterprovider=Provider.of<Masterprovider>(context, listen: false);
 
-      if (args != null && args['flag'] == 1) {
-        print("Fetching sample list with selected location parameters...");
+      Masterprovider masterprovider = Provider.of<Masterprovider>(context, listen: false);
+      Samplelistprovider sampleListProvider = Provider.of<Samplelistprovider>(context, listen: false);
 
-        Provider.of<Samplelistprovider>(context, listen: false).fetchSampleList(
-          int.parse(userId!),
-          1,
-          "0",
-          0,
-          "0",
-          int.parse(masterprovider.selectedStateId!),
-          int.parse(masterprovider.selectedDistrictId!),
-          int.parse(masterprovider.selectedBlockId!),
-          int.parse(masterprovider.selectedGramPanchayat!),
-          int.parse(masterprovider.selectedVillage!),
-        );
+      if (args != null) {
+        int flag = args['flag'];
 
+        if (flag == 0) {
+          print("Fetching sample list with flag 0...");
+          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+        } else if (flag == 2) {
+          print("Fetching sample list with flag 2...");
+          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 2, "0", 0, 0, 0, 0, 0);
+        } else if (flag == 6) {
+          print("Fetching sample list with flag 6...");
+          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
+        } else if (flag == 1) {
+          print("Fetching sample list with selected location parameters...");
+          sampleListProvider.fetchSampleList(
+            int.parse(userId!),
+            1,
+            "0",
+            0,
+            "0",
+            int.parse(masterprovider.selectedStateId!),
+            int.parse(masterprovider.selectedDistrictId!),
+            int.parse(masterprovider.selectedBlockId!),
+            int.parse(masterprovider.selectedGramPanchayat!),
+            int.parse(masterprovider.selectedVillage!),
+          );
+        } else {
+          print("Fetching default sample list...");
+          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+        }
       } else {
         print("Fetching default sample list...");
-        Provider.of<Samplelistprovider>(context, listen: false)
-            .fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+        sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
       }
     });
   }
@@ -323,40 +336,32 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                         ),
                                                       ),
                                                       Container(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
+                                                        padding: EdgeInsets.symmetric(
                                                           horizontal: 10,
                                                           vertical: 4,
                                                         ),
                                                         decoration: BoxDecoration(
-                                                          color:
-                                                              sample.testResult ==
-                                                                      '2'
-                                                                  ? Colors
-                                                                      .green[100]
-                                                                  : Colors
-                                                                      .blue[100],
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(16),
+                                                          color: sample.testResult == "Report Approved"
+                                                              ? Colors.green[100]
+                                                              : sample.testResult == "Under Process"
+                                                              ? Colors.yellow[100]
+                                                              : Colors.blue[100],
+                                                          borderRadius: BorderRadius.circular(16),
                                                         ),
                                                         child: Text(
-                                                          sample.testResult ??
-                                                              'N/A',
+                                                          sample.testResult ?? 'N/A',
                                                           style: TextStyle(
-                                                            color:
-                                                                sample.currentStatus ==
-                                                                        6
-                                                                    ? Colors.green[
-                                                                        800]
-                                                                    : Colors.blue[
-                                                                        800],
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                            color: sample.testResult == "Report Approved"
+                                                                ? Colors.green[800]
+                                                                : sample.testResult == "Under Process"
+                                                                ? Colors.orange[800]
+                                                                : Colors.blue[800],
+                                                            fontWeight: FontWeight.bold,
                                                             fontSize: 14,
                                                           ),
                                                         ),
                                                       ),
+
                                                     ],
                                                   ),
                                                 ),
