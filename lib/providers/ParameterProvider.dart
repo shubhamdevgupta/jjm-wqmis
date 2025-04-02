@@ -131,6 +131,7 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
   }
   void removeFromCart(Parameterresponse param) {
+    print("delted value---$param");
     cart!.remove(param);
     notifyListeners(); // Notify UI to update
   }
@@ -139,16 +140,19 @@ class ParameterProvider with ChangeNotifier {
     return cart!.fold(0.0, (sum, item) => sum + item.deptRate);
   }
 
-  void toggleCart(Parameterresponse? parameter) {
-    if (parameter == null || parameter.parameterId == null)
+  void toggleCart(Parameterresponse? parameter, bool isLab ) {
+
+    if (parameter == null)
       return; // Null safety check
 
     if (cart!.any((item) => item.parameterId == parameter.parameterId)) {
       cart!.removeWhere(
           (item) => item.parameterId == parameter.parameterId);
-    } else {
+    } else if(isLab) {
       cart!.add(parameter);
       fetchLabIncharge(int.parse(selectedLab!));
+    }else{
+      cart!.add(parameter);
     }
     notifyListeners(); // Notify UI of changes
   }

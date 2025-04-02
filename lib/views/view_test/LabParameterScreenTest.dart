@@ -101,12 +101,15 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
           backgroundColor: Colors.blueAccent,
           bottom: TabBar(controller: mTabController, tabs: myTabs),
         ),
-        body: TabBarView(
-          controller: mTabController,
-          children: [
-            AsPerLabTabView(),
-            Asperparameterview(),
-          ],
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: TabBarView(
+            controller: mTabController,
+            children: [
+              AsPerLabTabView(),
+              Asperparameterview(),
+            ],
+          ),
         ),
       ),
     );
