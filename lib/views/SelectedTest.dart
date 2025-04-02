@@ -31,7 +31,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider =Provider.of<ParameterProvider>(context, listen: false);
+    final paramProvider =Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     return ChangeNotifierProvider(
