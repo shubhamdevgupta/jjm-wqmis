@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/view_test/LabParameterScreenTest.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
@@ -486,21 +487,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        masterProvider.fetchAllLabs(
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedDistrictId!,
-                            masterProvider.selectedBlockId!,
-                            masterProvider.selectedGramPanchayat!,
-                            masterProvider.selectedVillage!,
-                            "1");
+
+                      onPressed: ()  {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
                                     value: masterProvider,
-                                    child: Labparameterscreen(),
+                                    child: LabParameterScreenTest(),
                                   )),
                         );
                       },
@@ -678,13 +673,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  masterProvider.fetchAllLabs(
-                                      masterProvider.selectedStateId!,
-                                      masterProvider.selectedDistrictId!,
-                                      masterProvider.selectedBlockId!,
-                                      masterProvider.selectedGramPanchayat!,
-                                      masterProvider.selectedVillage!,
-                                      "1");
+
+                                 // masterProvider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1");
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -764,13 +755,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                masterProvider.fetchAllLabs(
+              /*  masterProvider.fetchAllLabs(
                     masterProvider.selectedStateId!,
                     masterProvider.selectedDistrictId!,
                     masterProvider.selectedBlockId!,
                     masterProvider.selectedGramPanchayat!,
                     masterProvider.selectedVillage!,
-                    "1");
+                    "1");*/
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -950,14 +941,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                masterProvider.otherSourceLocation = householdController.text;
-                masterProvider.fetchAllLabs(
+
+                masterProvider.otherSourceLocation=householdController.text;
+              /*  masterProvider.fetchAllLabs(
                     masterProvider.selectedStateId!,
                     masterProvider.selectedDistrictId!,
                     masterProvider.selectedBlockId!,
                     masterProvider.selectedGramPanchayat!,
                     masterProvider.selectedVillage!,
-                    "1");
+                    "1");*/
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -1109,17 +1101,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        masterProvider.sampleTypeOther =
-                            handpumpSourceController.text;
-                        masterProvider.otherSourceLocation =
-                            handpumpLocationController.text;
-                        masterProvider.fetchAllLabs(
+
+                        masterProvider.sampleTypeOther=handpumpSourceController.text;
+                        masterProvider.otherSourceLocation=handpumpLocationController.text;
+                    /*    masterProvider.fetchAllLabs(
+
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
                             masterProvider.selectedBlockId!,
                             masterProvider.selectedGramPanchayat!,
-                            masterProvider.selectedVillage!,
-                            "1");
+
+                            masterProvider.selectedVillage!, "1");*/
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -1193,13 +1186,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.otherSourceLocation =
                             handpumpLocationController.text;
                         masterProvider.setSelectedWaterSourceInformation("0");
-                        masterProvider.fetchAllLabs(
+                    /*    masterProvider.fetchAllLabs(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
                             masterProvider.selectedBlockId!,
                             masterProvider.selectedGramPanchayat!,
-                            masterProvider.selectedVillage!,
-                            "1");
+
+                            masterProvider.selectedVillage!, "1");*/
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
