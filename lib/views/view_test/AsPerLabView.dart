@@ -36,7 +36,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                 clipBehavior: Clip.none,
                 children: [
                   FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
                         Navigator.push(
