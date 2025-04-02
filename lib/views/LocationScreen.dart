@@ -291,8 +291,15 @@ class _LocationscreenState extends State<Locationscreen> {
                         // This removes all previous routes up to Dashboard
                         arguments: {'flag': widget.flag},
                       );
-                    } else if (widget.flag == 0) {
-                      print('location---> ${paramProvider.currentPosition!.longitude}');
+                    } else if (widget.flag == 0 &&
+                        validateStateVillage(masterProvider)) {
+                      print('Going to Save Sample screen');
+                      Navigator.pushReplacementNamed(context, '/savesample');
+                    } else {
+                      ToastHelper.showErrorSnackBar(
+                          context, masterProvider.errorMsg);
+                    }
+                   /*   print('location---> ${paramProvider.currentPosition!.longitude}');
                       print('location---> ${paramProvider.currentPosition!.latitude}');
                       masterProvider.fetchVillageDetails(
                           paramProvider.currentPosition!.longitude,
@@ -307,8 +314,9 @@ class _LocationscreenState extends State<Locationscreen> {
                         Navigator.pushReplacementNamed(context, '/savesample');
                       }else{
                         ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }
-                    }
+                      }*/
+
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF096DA8),
