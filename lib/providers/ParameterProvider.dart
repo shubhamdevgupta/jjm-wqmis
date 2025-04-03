@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
+import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 import '../utils/LocationUtils.dart';
@@ -32,8 +33,18 @@ class ParameterProvider with ChangeNotifier {
   bool isLabSelected=false;
   Labinchargeresponse? labIncharge;
 
+  bool isLab=true;
   Position? _currentPosition;
   Position? get currentPosition => _currentPosition;
+
+  Paramlabresponse? _labResponse;
+  Paramlabresponse? get labResponse => _labResponse;
+
+  int? _selectedParamLabId;
+  String? _selectedParamLabName;
+
+  int? get selectedParamLabId => _selectedParamLabId;
+  String? get selectedParamLabName => _selectedParamLabName;
 
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
@@ -109,6 +120,41 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
+  /// Fetch Labs from API
+  Future<void> fetchParamLabs(String stateId, String parameterIds) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
+
+      if (response != null) {
+        _labResponse = response;
+      }
+      if (_labResponse!.status == false) {
+        debugPrint("API Message: ${_labResponse!.message}");
+        _labResponse = Paramlabresponse(
+          status: _labResponse!.status,
+          message: _labResponse!.message,
+          labs: [], // Ensure labs list is empty
+        );
+      }
+    } catch (e) {
+      debugPrint("Error fetching Lab Incharge: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  /// Set Selected Lab ID and Name
+  void setSelectedParamLabs(int labId, String labName) {
+    _selectedParamLabId = labId;
+    _selectedParamLabName = labName;
+    notifyListeners();
+  }
+
   void setSelectedParameter(int? value) {
     selectedParameter = value;
     notifyListeners();
@@ -139,8 +185,7 @@ class ParameterProvider with ChangeNotifier {
     return cart!.fold(0.0, (sum, item) => sum + item.deptRate);
   }
 
-  void toggleCart(Parameterresponse? parameter, bool isLab ) {
-
+  void toggleCart(Parameterresponse? parameter ) {
     if (parameter == null)
       return; // Null safety check
 
@@ -152,6 +197,9 @@ class ParameterProvider with ChangeNotifier {
       fetchLabIncharge(int.parse(selectedLab!));
     }else{
       cart!.add(parameter);
+      var paramterId=cart!.sublist(0,cart!.length).join(",");
+      print('card selected param-------- ${cart!.sublist(0,cart!.length).join(",")}');
+      fetchParamLabs("31",paramterId);
     }
     notifyListeners(); // Notify UI of changes
   }
