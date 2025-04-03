@@ -89,7 +89,6 @@ class ParameterProvider with ChangeNotifier {
     }
   }
   Future<void> fetchLocation() async {
-    if (isLoading) return; // Prevent duplicate calls
 
     isLoading = true;
     notifyListeners(); // Notify UI to show loader

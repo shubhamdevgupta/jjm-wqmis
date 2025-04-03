@@ -32,6 +32,7 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
+        paramProvider.isLabSelected=false;
         paramProvider.selectedLab=null;
         fetchAllLabs();
       } else if (mTabController.index == 1) {
@@ -76,8 +77,8 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      const Tab(icon: Icon(Icons.import_contacts_sharp), text: "As Per Laboratory"),
-      const Tab(icon: Icon(Icons.arrow_back), text: 'As Per Parameter'),
+      const Tab(icon: Icon(Icons.import_contacts_sharp,color: Colors.white,), child: Text('As Per Laboratory',style: TextStyle(color: Colors.white,))),
+      const Tab(icon: Icon(Icons.arrow_back,color: Colors.white,), child: Text('As Per Parameter',style: TextStyle(color: Colors.white),),),
     ];
 
     return Container(
@@ -98,8 +99,23 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
               }
             },
           ),
-          backgroundColor: Colors.blueAccent,
           bottom: TabBar(controller: mTabController, tabs: myTabs),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              // Background color for the container
+              borderRadius: BorderRadius.circular(8),
+              // Rounded corners
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF096DA8), // Dark blue color
+                  Color(0xFF3C8DBC), // jjm blue color
+                ],
+                begin: Alignment.topCenter, // Start at the top center
+                end: Alignment.bottomCenter, // End at the bottom center
+              ),
+            ),
+          ),
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height * 0.75,

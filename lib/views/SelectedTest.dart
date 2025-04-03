@@ -25,7 +25,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
   TextStyle _rowTextStyle() => TextStyle(fontSize: 14);
   @override
   void dispose() {
-    _scrollController.dispose(); // Clean up controller when widget is disposed
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -57,7 +57,22 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                       }
                     },
                   ),
-                  backgroundColor: Colors.blueAccent, // Consistent theme
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      // Background color for the container
+                      borderRadius: BorderRadius.circular(8),
+                      // Rounded corners
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF096DA8), // Dark blue color
+                          Color(0xFF3C8DBC), // jjm blue color
+                        ],
+                        begin: Alignment.topCenter, // Start at the top center
+                        end: Alignment.bottomCenter, // End at the bottom center
+                      ),
+                    ),
+                  ),
                   title: const Text(
                     'Selected Test',
                     style: TextStyle(color: Colors.white),
