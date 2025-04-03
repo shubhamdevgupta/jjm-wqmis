@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/masterProvider.dart';
@@ -18,7 +19,9 @@ class _AsperparameterviewState extends State<Asperparameterview> {
     // TODO: implement initState
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-  
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ParameterProvider>(context, listen: false).isLab=false;
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -83,122 +86,129 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                 ],
               ),
               backgroundColor: Colors.transparent,
-              body: SingleChildScrollView(
-                child: Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  margin: EdgeInsets.all(5),
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Tests Available:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.blueAccent,
-                          ),
+              body: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Center(
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 15),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            columnSpacing: 20,
-                            headingRowHeight: 50,
-                            dataRowHeight: 60,
-                            columns: const <DataColumn>[
-                              DataColumn(
-                                label: Text(
-                                  'Select Test',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.blueGrey,
-                                  ),
+                        margin: EdgeInsets.all(5),
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child:  Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Tests Available:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.blueAccent,
                                 ),
                               ),
-                              DataColumn(
-                                label: Text(
-                                  'Test Price',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.blueGrey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            rows: provider.parameterList.map((param) {
-                              bool isSelected = provider.cart!.any(
-                                    (item) => item.parameterId == param.parameterId,
-                              );
-                
-                              return DataRow(
-                                cells: <DataCell>[
-                                  DataCell(
-                                    GestureDetector(
-                                      onTap: () {
-                                        provider.toggleCart(param,false);
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Checkbox(
-                                            value: isSelected,
-                                            onChanged: (bool? value) {
-                                              if (value != null) {
-                                                provider.toggleCart(param,false);
-                                                print('parmm -----$param');
-                                              }
+                              const SizedBox(height: 15),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  columnSpacing: 20,
+                                  headingRowHeight: 50,
+                                  dataRowHeight: 60,
+                                  columns: const <DataColumn>[
+                                    DataColumn(
+                                      label: Text(
+                                        'Select Test',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.blueGrey,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Test Price',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.blueGrey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  rows: provider.parameterList.map((param) {
+                                    bool isSelected = provider.cart!.any(
+                                          (item) => item.parameterId == param.parameterId,
+                                    );
+
+                                    return DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(
+                                          GestureDetector(
+                                            onTap: () {
+                                              provider.toggleCart(param);
                                             },
+                                            child: Row(
+                                              children: [
+                                                Checkbox(
+                                                  value: isSelected,
+                                                  onChanged: (bool? value) {
+                                                    if (value != null) {
+                                                      provider.toggleCart(param);
+                                                      print('parmm -----$param');
+                                                    }
+                                                  },
+                                                ),
+                                                SizedBox(width: 10),
+                                                SizedBox(
+                                                  width: 150,
+                                                  child: Text(
+                                                    param.parameterName,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(fontSize: 14),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(width: 10),
-                                          SizedBox(
-                                            width: 150,
+                                        ),
+                                        DataCell(
+                                          GestureDetector(
+                                            onTap: () {
+                                              provider.toggleCart(param);
+                                            },
                                             child: Text(
-                                              param.parameterName,
-                                              overflow: TextOverflow.ellipsis,
+                                              param.deptRate.toString(),
                                               style: TextStyle(fontSize: 14),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    GestureDetector(
-                                      onTap: () {
-                                        provider.toggleCart(param,false);
-                                      },
-                                      child: Text(
-                                        param.deptRate.toString(),
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+
+
+                              const SizedBox(height: 20),
+                              Text(
+                                'Cart: ${provider.cart!.length}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                
-                
-                        const SizedBox(height: 20),
-                        Text(
-                          'Cart: ${provider.cart!.length}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                ],
               ),
             ),
           );

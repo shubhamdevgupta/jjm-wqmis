@@ -29,7 +29,7 @@ class _LocationscreenState extends State<Locationscreen> {
   Widget build(BuildContext) {
 
     final paramProvider = Provider.of<ParameterProvider>(
-        context, listen: false);
+        context, listen: true);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -76,6 +76,8 @@ class _LocationscreenState extends State<Locationscreen> {
                   if (masterProvider.isLoading)
                     LoaderUtils.conditionalLoader(
                         isLoading: masterProvider.isLoading)
+                  else if(paramProvider.isLoading)
+                    LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
                 ],
               );
             })));
@@ -285,8 +287,9 @@ class _LocationscreenState extends State<Locationscreen> {
                 child: ElevatedButton(
 
                   onPressed: () async {
+                    print("loading--------->${paramProvider.isLoading}");
                     await paramProvider.fetchLocation();
-
+                    print("loading--------->${paramProvider.isLoading}");
                     if (widget.flag == 1) {
 
                       print('Going to Sample List screen');

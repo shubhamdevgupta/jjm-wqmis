@@ -401,7 +401,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                               DataCell(
                                                 GestureDetector(
                                                   onTap: () {
-                                                    provider.toggleCart(param,true);
+                                                    provider.toggleCart(param);
                                                   },
                                                   child: Row(
                                                     children: [
@@ -409,7 +409,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                                         value: isSelected,
                                                         onChanged: (bool? value) {
                                                           if (value != null) {
-                                                            provider.toggleCart(param,true);
+                                                            provider.toggleCart(param);
                                                           }
                                                         },
                                                       ),
@@ -429,7 +429,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                                               DataCell(
                                                 GestureDetector(
                                                   onTap: () {
-                                                    provider.toggleCart(param,true);
+                                                    provider.toggleCart(param);
                                                   },
                                                   child: Text(
                                                     param.deptRate.toString(),

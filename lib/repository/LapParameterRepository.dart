@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
+import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
@@ -71,4 +72,27 @@ class Lapparameterrepository {
       rethrow;
     }
   }
-}
+
+
+  Future<Paramlabresponse?> fetchParamLabs(String stateId, String parameterIds) async {
+    try {
+      final response = await _apiService.get(
+          "APIMaster/getLaboratoriesby_parameter_ids?StateId=$stateId&parameter_ids=$parameterIds");
+
+      log('fetch param labs Response: $response');
+
+      if (response is Map<String, dynamic>) {
+        Paramlabresponse labResponse = Paramlabresponse.fromJson(response);
+
+        if (response.isNotEmpty) {
+          return labResponse; // Return the full response if status is true
+        }
+      } else {
+        throw ApiException('Unexpected API response format: $response');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      return null; // Return null in case of an error
+    }
+  }
+ }

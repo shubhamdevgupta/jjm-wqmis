@@ -20,6 +20,9 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
+    });
   }
 
   @override
@@ -241,7 +244,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                               DataCell(
                                                 GestureDetector(
                                                   onTap: () {
-                                                    provider.toggleCart(param,true);
+                                                    provider.toggleCart(param);
                                                   },
                                                   child: Row(
                                                     children: [
@@ -250,7 +253,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                         onChanged: (bool? value) {
                                                           print('the selected value labview------- $value');
                                                           if (value != null) {
-                                                            provider.toggleCart(param,true);
+                                                            provider.toggleCart(param);
                                                           }
                                                         },
                                                       ),
@@ -270,7 +273,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                               DataCell(
                                                 GestureDetector(
                                                   onTap: () {
-                                                    provider.toggleCart(param,true);
+                                                    provider.toggleCart(param);
                                                   },
                                                   child: Text(
                                                     param.deptRate.toString(),
