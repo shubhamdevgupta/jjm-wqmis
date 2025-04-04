@@ -1,6 +1,7 @@
 class Strings {
 
   static const String appTitle = 'JJM-WQMIS';
+
   /////////////////////   Routes literals  //////////////////////////////////
   static const String navigateToSaveSample = '/savesample';
   static const String navigateToDashboard = '/dashboard';
@@ -9,6 +10,7 @@ class Strings {
   static const String navigateToLabParam = '/labParam';
   static const String navigateToSampleList = '/sampleList';
   static const String navigateToTest = 'test';
+
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
   static const String dashboard = 'Dashboard';
