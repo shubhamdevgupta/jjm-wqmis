@@ -40,7 +40,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:  BoxDecoration(
+      decoration:  const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
       ),
@@ -50,7 +50,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  Text(
+            title:  const Text(
               'JJM-WQMIS',
               style: TextStyle(
                 fontSize: 20,
@@ -102,19 +102,19 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration:  BoxDecoration(
+                  decoration:  const BoxDecoration(
                     color: Colors.blue,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
-                      Text(
+                      const Text(
                         'Departmental User',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
                         stateName,  // Provide a fallback value if null
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                        style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),
@@ -171,8 +171,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: const Text(
+                    const Center(
+                      child: Text(
                         'Dashboard Overview',
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
@@ -180,8 +180,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: EdgeInsets.only(top: 20),
+                          const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -189,7 +189,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 6,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -200,11 +200,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                AssetImage('assets/user_image.png'),
+                                const AssetImage('assets/user_image.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
-                          SizedBox(width: 16), // Space between image and text
+                          const SizedBox(width: 16), // Space between image and text
 
                           // Text column
                           Expanded(
@@ -213,7 +213,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome message
                                 Text(
-                                  'Welcome, ${userName}',
+                                  'Welcome, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
                                     fontSize: 20,
@@ -225,19 +225,19 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ),
                                 ),
 
-                                SizedBox(height: 8), // Space between lines
+                                const SizedBox(height: 8), // Space between lines
 
                                 // Phone Row
                                 Row(
                                   children: [
-                                    Icon(Icons.phone_android,
+                                    const Icon(Icons.phone_android,
                                         color: Colors.teal, size: 20),
                                     // Using an icon for consistency
-                                    SizedBox(width: 6),
+                                    const SizedBox(width: 6),
                                     Text(
                                       '$mobile',
                                       // Replace with dynamic phone number
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w500,
@@ -277,8 +277,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
                           icon: Icons.hourglass_empty,
                           gradientColors: [
-                            Color(0xFFFCE889),
-                            Color(0xFFFFAA00)
+                            const Color(0xFFFCE889),
+                            const Color(0xFFFFAA00)
                           ],
                           onTap: () {
                             Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 2});
@@ -320,26 +320,26 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               double screenHeight =
                                   MediaQuery.of(context).size.height;
                               return AlertDialog(
-                                contentPadding: EdgeInsets.all(10),
+                                contentPadding: const EdgeInsets.all(10),
                                 // Adjust the padding to reduce space
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
                                   // Set a fixed height for the content
-                                  child: Locationscreen(flag: 0,), // Replace with your widget
+                                  child: const Locationscreen(flag: 0,), // Replace with your widget
                                 ),
                               );
                             },
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF0468B1),
-                          textStyle: TextStyle(fontSize: 16),
-                          minimumSize: Size(300,
+                          backgroundColor: const Color(0xFF0468B1),
+                          textStyle: const TextStyle(fontSize: 16),
+                          minimumSize: const Size(300,
                               50), // Set a minimum width (200) and height (50)
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           // Ensures the button adjusts its size based on content
                           children: [
