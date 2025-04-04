@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -57,7 +58,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                       if (Navigator.of(context).canPop()) {
                         Navigator.pop(context);
                       } else {
-                        Navigator.pushReplacementNamed(context, '/labParam');
+                        Navigator.pushReplacementNamed(context, Strings.navigateToLabParam);
                       }
                     },
                   ),

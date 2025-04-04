@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
@@ -53,13 +54,13 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreen(),
-        '/savesample': (context) => Sampleinformationscreen(),
-        '/dashboard': (context) => Dashboardscreen(),
-        '/login': (context) => Loginscreen(),
-        '/location': (context) => Locationscreen(flag: 0,),
-        '/labParam': (context) => Labparameterscreen(),
-        'test': (context) => SelectedTestScreen(),
-        '/sampleList': (context) => SampleListScreen()
+        Strings.navigateToSaveSample: (context) => Sampleinformationscreen(),
+        Strings.navigateToDashboard: (context) => Dashboardscreen(),
+        Strings.navigateToLogin: (context) => Loginscreen(),
+        Strings.navigateToLocation: (context) => Locationscreen(flag: 0,),
+        Strings.navigateToLabParam: (context) => Labparameterscreen(),
+        Strings.navigateToTest: (context) => SelectedTestScreen(),
+        Strings.navigateToSampleList: (context) => SampleListScreen()
       },
     );
   }

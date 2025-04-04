@@ -5,6 +5,8 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/Strings.dart';
+
 class LabParameterScreenTest extends StatefulWidget {
   @override
   _LabParameterScreenTest createState() => _LabParameterScreenTest();
@@ -97,7 +99,7 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
               if (Navigator.of(context).canPop()) {
                 Navigator.pop(context);
               } else {
-                Navigator.pushReplacementNamed(context, '/savesample');
+                Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
               }
             },
           ),

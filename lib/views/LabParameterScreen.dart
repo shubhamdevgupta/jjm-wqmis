@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class _LabParameterScreen extends State<Labparameterscreen> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pushReplacementNamed(context, '/savesample');
+                      Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
                     }
                   },
                 ),

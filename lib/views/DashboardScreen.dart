@@ -131,14 +131,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   leading: const Icon(Icons.list),
                   title: const Text(Strings.submitSampleInfo),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/savesample');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
                   title: const Text(Strings.listOfSamples),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/sampleList');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToSampleList);
                   },
                 ),
                 ListTile(
@@ -154,7 +154,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToLogin);
                   },
                 ),
               ],

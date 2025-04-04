@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/LabParameterScreen.dart';
 import 'package:jjm_wqmis/views/view_test/LabParameterScreenTest.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pushReplacementNamed(context, '/dashboard');
+                      Navigator.pushReplacementNamed(context, Strings.navigateToDashboard);
                     }
                   },
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -307,7 +308,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == 0 &&
                         validateStateVillage(masterProvider)) {
                       print('Going to Save Sample screen');
-                      Navigator.pushReplacementNamed(context, '/savesample');
+                      Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
                     } else {
                       ToastHelper.showErrorSnackBar(
                           context, masterProvider.errorMsg);
