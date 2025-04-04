@@ -78,9 +78,9 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
       const Tab(icon: Icon(Icons.add_business,color: Colors.white),
-        child: Text("As Per Laboratory", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
+        child: Text("Select Laboratory", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
       const Tab(icon: Icon(Icons.compare_arrows,color: Colors.white,),
-        child: Text('As Per Parameter', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
+        child: Text('Test by Parameter', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
     ];
 
     return Container(

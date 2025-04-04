@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             // Removes the default back button
             centerTitle: true,
             title:  const Text(
-              'JJM-WQMIS',
+              Strings.appTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -109,7 +110,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
                       const Text(
-                        'Departmental User',
+                        Strings.departmentalUser,
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
@@ -121,33 +122,33 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text('Dashboard'),
+                  title: const Text(Strings.dashboard),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text('Submit Sample Info '),
+                  title: const Text(Strings.submitSampleInfo),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/savesample');
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text('List of Samples'),
+                  title: const Text(Strings.listOfSamples),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, '/sampleList');
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text('Maintenance'),
+                  title: const Text(Strings.maintenance),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
+                  title: const Text(Strings.logout),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
@@ -173,7 +174,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   children: [
                     const Center(
                       child: Text(
-                        'Dashboard Overview',
+                        Strings.dashboardOverview,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -213,7 +214,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome message
                                 Text(
-                                  'Welcome, $userName',
+                                  '${Strings.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
                                     fontSize: 20,
@@ -261,7 +262,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         _buildDashboardCard(
-                          title: 'Total Samples Submitted',
+                          title: Strings.totalSamplesSubmitted,
                           value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
                           icon: Icons.analytics,
                           gradientColors: [
@@ -273,7 +274,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Physical Submitted',
+                          title: Strings.totalPhysicalSubmitted,
                           value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
                           icon: Icons.hourglass_empty,
                           gradientColors: [
@@ -285,7 +286,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Sample Tested',
+                          title: Strings.totalSampleTested,
                           value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
                           icon: Icons.check_circle,
                           gradientColors: [
@@ -297,7 +298,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Retest',
+                          title: Strings.totalRetest,
                           value: '${dashboardProvider.dashboardData!.totalRetest}',
                           icon: Icons.refresh,
                           gradientColors: [
@@ -351,7 +352,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             SizedBox(width: 8),
                             // Add spacing between icon and text
                             Text(
-                              'Add Sample',
+                              Strings.addSample,
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
