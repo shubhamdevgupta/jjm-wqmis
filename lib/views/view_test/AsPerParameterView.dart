@@ -12,7 +12,7 @@ class Asperparameterview extends StatefulWidget {
 
 class _AsperparameterviewState extends State<Asperparameterview> {
   late Masterprovider masterProvider;
-  
+  bool isLoading =false;
   @override
   void initState() {
     // TODO: implement initState
@@ -83,7 +83,13 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                 ],
               ),
               backgroundColor: Colors.transparent,
-              body: SingleChildScrollView(
+              body:isLoading || provider.parameterList.isEmpty // Show loader if data is loading or list is empty
+                  ? const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent), // Loader color
+                ),
+              )
+                  : SingleChildScrollView(
                 child: Center(
                   child: Card(
                     elevation: 5,

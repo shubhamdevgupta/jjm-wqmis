@@ -77,8 +77,8 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      const Tab(icon: Icon(Icons.import_contacts_sharp,color: Colors.white,), child: Text('As Per Laboratory',style: TextStyle(color: Colors.white,))),
-      const Tab(icon: Icon(Icons.arrow_back,color: Colors.white,), child: Text('As Per Parameter',style: TextStyle(color: Colors.white),),),
+      const Tab(icon: Icon(Icons.import_contacts_sharp,color: Colors.white,), child: Text('Select Laboratory',style: TextStyle(color: Colors.white,))),
+      const Tab(icon: Icon(Icons.arrow_back,color: Colors.white,), child: Text('Test by Parameter',style: TextStyle(color: Colors.white),),),
     ];
 
     return Container(
@@ -87,7 +87,7 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        appBar:AppBar(
           title: const Text("Select Lab/Parameter", style: TextStyle(color: Colors.white)),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -99,24 +99,38 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
               }
             },
           ),
-          bottom: TabBar(controller: mTabController, tabs: myTabs),
+          bottom: TabBar(
+            controller: mTabController,
+            tabs: myTabs,
+            labelColor: Colors.white, // White for selected tab text
+            unselectedLabelColor: Colors.white70, // Slightly faded for unselected tabs
+            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            unselectedLabelStyle: const TextStyle(fontSize: 14),
+            indicator: BoxDecoration(
+              color: Color(0xFF5FAFE5), // Light blue indicator
+              borderRadius: BorderRadius.circular(8),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent,
-              // Background color for the container
               borderRadius: BorderRadius.circular(8),
-              // Rounded corners
               gradient: const LinearGradient(
                 colors: [
-                  Color(0xFF096DA8), // Dark blue color
-                  Color(0xFF3C8DBC), // jjm blue color
+                  Color(0xFF096DA8), // Dark blue
+                  Color(0xFF3C8DBC), // JJM blue
                 ],
-                begin: Alignment.topCenter, // Start at the top center
-                end: Alignment.bottomCenter, // End at the bottom center
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
           ),
         ),
+
+
+
         body: SizedBox(
           height: MediaQuery.of(context).size.height * 0.75,
           child: TabBarView(

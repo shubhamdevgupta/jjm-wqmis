@@ -16,6 +16,7 @@ class ParameterProvider with ChangeNotifier {
       Lapparameterrepository();
 
   bool isLoading = false;
+  bool AsperLabisLoading = false;
 
   List<Parameterresponse> parameterList = [];
   int? selectedParameter;
@@ -52,7 +53,10 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
+  Future<void> UpdateLoader(bool updatedValue) async {
+    AsperLabisLoading = updatedValue;
+    notifyListeners(); // ✅ Notify UI to update
+  }
   Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
     isLoading = true;
     try {
