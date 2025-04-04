@@ -96,7 +96,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "Select Lab *",
+                            title: "",
                             value: provider.selectedLab,
                             items: provider.labList
                                 .map((lab) =>
@@ -164,8 +164,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                       ],
                                       onChanged: (value) {
                                         if (value == null) return;
-
                                         provider.setParameterType(value);
+                                        provider.cart!.clear();
                                         provider.fetchAllParameter(
                                           provider.selectedLab!,
                                           masterProvider.selectedStateId!,
@@ -193,19 +193,10 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                               margin: EdgeInsets.all(5),
                               color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.all(10.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'Tests Available:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.blueAccent,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
                                     SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
