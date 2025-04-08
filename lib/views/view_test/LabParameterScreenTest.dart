@@ -134,8 +134,11 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
             ),
           ),
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
+        /*body: Padding*//*SizedBox*//*(
+        //  height: MediaQuery.of(context).size.height * 0.75,
+       //   height: MediaQuery.of(context).size.height - 215, // 100 is the bottom margin
+          padding: const EdgeInsets.only(bottom: 45),
+
           child: TabBarView(
             controller: mTabController,
             children: [
@@ -143,6 +146,20 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
               Asperparameterview(),
             ],
           ),
+        ),*/
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              height: constraints.maxHeight - 45,
+              child: TabBarView(
+                controller: mTabController,
+                children: [
+                  AsPerLabTabView(),
+                  Asperparameterview(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

@@ -14,6 +14,7 @@ class Strings {
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
   static const String dashboard = 'Dashboard';
+  static const String submitSample = 'Submit Sample';
   static const String submitSampleInfo = 'Submit Sample Info ';
   static const String listOfSamples = 'List of Samples';
   static const String maintenance = 'Maintenance';
@@ -25,4 +26,7 @@ class Strings {
   static const String totalSampleTested = 'Total Sample Tested';
   static const String totalRetest = 'Total Retest';
   static const String addSample = 'Add Sample';
+
+  static const String selectedTest = 'Selected Test';
+
 }

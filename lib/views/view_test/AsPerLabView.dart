@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/views/testScreen/SelectedTestNew.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/LabInchargeResponse/AllLabResponse.dart';
@@ -50,7 +51,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                              child: const SelectedTestScreen(),
+                            // child: const SelectedTestScreen(),
+                             child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );
@@ -305,10 +307,14 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       ),
                     ),
                   ),
+
                   if (provider.isLoading)
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
+
+
+
             ),
           );
         },

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
+import 'package:jjm_wqmis/views/testScreen/webview.dart';
 import 'package:provider/provider.dart';
 
 import '../services/LocalStorageService.dart';
@@ -23,10 +25,18 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String userName = '';
   String mobile = '';
   String stateId = '';
+  final encryption = AesEncryption();
 
   @override
   void initState() {
     super.initState();
+
+    var enc = encryption.encryptText("Beneficiaryname");
+
+    print("Aesen-----> $enc");
+    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
+    print("Aesen-----> $dep");
+
 
     getToken();
 
@@ -254,6 +264,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     const SizedBox(height: 15),
                     const SizedBox(height: 10),
+
+                  Center(child: const Text("All figures are based on current year data.",style: TextStyle(fontSize: 15,color: Colors.red),)),
+
+                    const SizedBox(height: 10),
                     GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 20.0,
@@ -270,7 +284,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.blue
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 0});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 0});
                           },
                         ),
                         _buildDashboardCard(
@@ -282,7 +296,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             const Color(0xFFFFAA00)
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 2});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 2});
                           },
                         ),
                         _buildDashboardCard(
@@ -294,7 +308,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.green
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 6});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 6});
                           },
                         ),
                         _buildDashboardCard(
@@ -306,7 +320,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.red
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 8});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 8});
                           },
                         ),
                       ],
@@ -359,6 +373,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ),
                       ),
                     )
+
+
                   ],
                 ),
               );
@@ -377,7 +393,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     return GestureDetector(
       onTap: onTap, // Trigger onTap when the card is tapped
       child: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
@@ -389,7 +405,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 6,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -400,20 +416,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               backgroundColor: Colors.white.withOpacity(0.2),
               child: Icon(icon, color: Colors.white, size: 30),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
