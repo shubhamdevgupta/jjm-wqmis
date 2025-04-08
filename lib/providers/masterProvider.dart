@@ -8,9 +8,10 @@ import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
-import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
@@ -62,6 +63,12 @@ class Masterprovider extends ChangeNotifier {
 
   ValidateVillageResponse? _validateVillageResponse;
   ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
+
+  WtpLabResponse? _wtpLabModel;
+  WtpLabResponse? get wtpLabModel => _wtpLabModel;
+
+  List<WtpLab>  wtpLab =[];
+  String? selectedWtpLab;
 
   int? _selectedSubSource;
 
@@ -341,6 +348,45 @@ class Masterprovider extends ChangeNotifier {
       _validateVillageResponse = await _masterRepository.validateVillage(villageId, lgdCode);
     } catch (e) {
       errorMsg = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Fetch WTP Labs from API
+  Future<void> fetchWTPLab(String stateId, String wtpId) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _masterRepository.fetchWtpLabs(stateId, wtpId);
+
+      if (response != null) {
+        _wtpLabModel = response;
+
+        if (_wtpLabModel!.status == 1) {
+          wtpLab = _wtpLabModel!.result;
+
+          if (wtpLab.any((wtp) => wtp.labId == selectedWtpLab)) {
+            selectedWtpLab = selectedWtpLab; // Keep current selected if still valid
+          } else if (wtpLab.isNotEmpty) {
+            selectedWtpLab = wtpLab.first.labId; // Reset if invalid or select first
+          } else {
+            selectedWtpLab = ''; // Handle if list is empty
+          }
+        } else {
+          debugPrint("API Message: ${_wtpLabModel!.message}");
+          _wtpLabModel = WtpLabResponse(
+            status: 0,
+            message: _wtpLabModel!.message,
+            result: [], // Ensure empty labs list
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Error fetching WTP Labs: $e");
+      _wtpLabModel = null;
     } finally {
       isLoading = false;
       notifyListeners();

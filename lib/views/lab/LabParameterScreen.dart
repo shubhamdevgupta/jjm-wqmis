@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/views/view_test/AsPerLabView.dart';
-import 'package:jjm_wqmis/views/view_test/AsPerParameterView.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-class LabParameterScreenTest extends StatefulWidget {
+import 'AsPerLabView.dart';
+import 'AsPerParameterView.dart';
+
+class Labparameterscreen extends StatefulWidget {
   @override
-  _LabParameterScreenTest createState() => _LabParameterScreenTest();
+  _LabParameterScreen createState() => _LabParameterScreen();
 }
 
-class _LabParameterScreenTest extends State<LabParameterScreenTest>
+class _LabParameterScreen extends State<Labparameterscreen>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
   late ParameterProvider paramProvider;
@@ -131,7 +132,7 @@ class _LabParameterScreenTest extends State<LabParameterScreenTest>
           ),
         ),
         body: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.75,
+          height: MediaQuery.of(context).size.height * 0.8,
           child: TabBarView(
             controller: mTabController,
             children: [

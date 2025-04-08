@@ -7,14 +7,14 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
-import 'package:jjm_wqmis/views/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/LoginScreen.dart';
+import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
-import 'package:jjm_wqmis/views/SplashScreen.dart';
+import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

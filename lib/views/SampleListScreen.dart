@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/DashboardScreen.dart';
+import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';

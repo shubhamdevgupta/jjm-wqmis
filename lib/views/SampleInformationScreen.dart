@@ -1,13 +1,11 @@
 // Flutter layout for the 'Sample Information' form
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/views/LabParameterScreen.dart';
-import 'package:jjm_wqmis/views/view_test/LabParameterScreenTest.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
@@ -187,8 +185,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 onChanged: (value) {
                   masterProvider.setSelectedScheme(value);
                   if (masterProvider.selectedWtsfilter == "5") {
-                    masterProvider.fetchWTPList(
-                        masterProvider.selectedStateId!,
+                    masterProvider.fetchWTPList(masterProvider.selectedStateId!,
                         masterProvider.selectedScheme!);
                   } else if (masterProvider.selectedWtsfilter == "6") {
                     masterProvider.setSelectedSubSource(0);
@@ -487,15 +484,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ),
                   Center(
                     child: ElevatedButton(
-
-                      onPressed: ()  {
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
                                     value: masterProvider,
-                                    child: LabParameterScreenTest(),
+                                    child: Labparameterscreen(),
                                   )),
                         );
                       },
@@ -580,6 +576,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!);
                           masterProvider.setSelectedSubSource(value);
+                          print('------------>>>>>>>${masterProvider.wtpLabModel}');
+                          print('------------>>>>>>>${masterProvider.wtpLab}');
+                          masterProvider.fetchWTPLab(
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Inlet of WTP')
@@ -591,14 +592,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 6,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print(
-                              "----calling for wtp but now have to stop -----");
-
                           masterProvider.setSelectedSubSource(value);
-                          /*                  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
+                          masterProvider.fetchWTPLab(
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Outlet of WTP')
@@ -610,14 +607,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 7,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                          print(
-                              "----calling for wtp but now have to stop -----");
-
                           masterProvider.setSelectedSubSource(value);
-                          /*  masterProvider.fetchSourceInformation(masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!, "0", "0", value.toString(),
-                              masterProvider.selectedStateId!, masterProvider.selectedStateId!);*/
+                          masterProvider.fetchWTPLab(
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Disinfection')
@@ -630,11 +623,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       elevation: 5,
                       // Increased elevation for a more modern shadow effect
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            12), // Slightly increased border radius for a smooth look
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       margin: EdgeInsets.all(5),
-                      // Margin to ensure spacing around the card
                       color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -664,19 +655,37 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 },
                               ),
                             ),
-                            CustomDateTimePicker(onDateTimeSelected: (value) {
-                              masterProvider.setSelectedDateTime(value);
-                            }),
                             SizedBox(
                               height: 20,
                             ),
+                            CustomDropdown(
+                              title: "Select Lab *",
+                              value: masterProvider.selectedWtpLab,
+                              items:
+                                  masterProvider.wtpLab.map((wtpLab) {
+                                return DropdownMenuItem<String>(
+                                  value: wtpLab.labId,
+                                  child: Text(
+                                    wtpLab.labName,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                masterProvider
+                                    .setSelectedWaterSourceInformation(value);
+                              },
+                            ),
+                            CustomDateTimePicker(onDateTimeSelected: (value) {
+                              masterProvider.setSelectedDateTime(value);
+                            }),
+                            SizedBox(height: 20,),
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-
-                                 // masterProvider.fetchAllLabs(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedBlockId!,masterProvider.selectedGramPanchayat!,masterProvider.selectedVillage!,"1");
-
-                                  Navigator.push(
+                                ToastHelper.showSnackBar(context, "work on progress");
+                               /*   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
@@ -684,7 +693,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                               value: masterProvider,
                                               child: Labparameterscreen(),
                                             )),
-                                  );
+                                  );*/
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF096DA8),
@@ -724,7 +733,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        // Align text to the left
         children: [
           CustomDropdown(
             title: "Select ESR/GSR *",
@@ -755,13 +763,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-              /*  masterProvider.fetchAllLabs(
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedDistrictId!,
-                    masterProvider.selectedBlockId!,
-                    masterProvider.selectedGramPanchayat!,
-                    masterProvider.selectedVillage!,
-                    "1");*/
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -941,15 +942,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-
-                masterProvider.otherSourceLocation=householdController.text;
-              /*  masterProvider.fetchAllLabs(
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedDistrictId!,
-                    masterProvider.selectedBlockId!,
-                    masterProvider.selectedGramPanchayat!,
-                    masterProvider.selectedVillage!,
-                    "1");*/
+                masterProvider.otherSourceLocation = householdController.text;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -1101,17 +1094,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-
-                        masterProvider.sampleTypeOther=handpumpSourceController.text;
-                        masterProvider.otherSourceLocation=handpumpLocationController.text;
-                    /*    masterProvider.fetchAllLabs(
-
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedDistrictId!,
-                            masterProvider.selectedBlockId!,
-                            masterProvider.selectedGramPanchayat!,
-
-                            masterProvider.selectedVillage!, "1");*/
+                        masterProvider.sampleTypeOther =
+                            handpumpSourceController.text;
+                        masterProvider.otherSourceLocation =
+                            handpumpLocationController.text;
 
                         Navigator.push(
                           context,
@@ -1186,7 +1172,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.otherSourceLocation =
                             handpumpLocationController.text;
                         masterProvider.setSelectedWaterSourceInformation("0");
-                    /*    masterProvider.fetchAllLabs(
+                        /*    masterProvider.fetchAllLabs(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
                             masterProvider.selectedBlockId!,
