@@ -33,7 +33,6 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => Samplelistprovider()),
       ],
-
       child: MyApp(),
     ),
   );
