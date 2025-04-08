@@ -14,9 +14,9 @@
     <!-- OPTIONAL: FOREGROUND SERVICE (For location tracking in the background) -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application
-        android:label="jjm_wqmis"
+        android:label="JJM WQMIS"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/wqmis_lunching5">
         <activity
             android:name=".MainActivity"
             android:exported="true"

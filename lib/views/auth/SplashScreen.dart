@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
 import 'dart:async';
 
-import 'package:jjm_wqmis/views/LoginScreen.dart';
+import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:provider/provider.dart';
 
 // Splash Screen

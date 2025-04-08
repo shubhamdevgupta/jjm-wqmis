@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/testScreen/webview.dart';
 import 'package:provider/provider.dart';
@@ -196,31 +197,18 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           ),
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
-                              provider.fetchSampleList(
-                                int.parse(userId!),
-                                1,
-                                "",
-                                0,
-                                searchController.text,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                              );
+                              provider.fetchSampleList(int.parse(userId!), 1, "",
+                                  0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
                               ToastHelper.showErrorSnackBar(
-                                context,
-                                "Please enter sample id",
-                              );
+                                  context, "Please enter sample id");
                             }
                           },
                           child: Text(
                             "Search",
                             style: TextStyle(color: Colors.white),
                           ),
-                        )
-
+                        ),
                       ],
                     ),
                   ),

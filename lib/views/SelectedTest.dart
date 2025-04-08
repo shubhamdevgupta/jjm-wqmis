@@ -644,38 +644,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                           validateAndSubmit(
                               context, provider, masterProvider, paramProvider);
 
-                          if (provider.isSubmitData != false) {
-                            print(
-                                'submitdata succesfully------ ${provider.isSubmitData}');
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Success"),
-                                  content:
-                                      Text(provider.sampleresponse!.message),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Close dialog
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            '/dashboard',
-                                            (route) =>
-                                                false); // Go to Dashboard
-                                      },
-                                      child: Text("OK"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            print(
-                                'submitdata failed------ ${provider.isSubmitData}');
-                            ToastHelper.showErrorSnackBar(
-                                context, provider.errorMsg);
-                          }
+
                         },
                         child: Text(
                           Strings.submitSample,
@@ -703,7 +672,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
     );
   }
 
-  void validateAndSubmit(BuildContext context, Samplesubprovider provider,
+  Future<void> validateAndSubmit(BuildContext context, Samplesubprovider provider,
       Masterprovider masterProvider, ParameterProvider paramProvider) async {
     String userId = _localStorage.getString('userId')!;
     String roleId = _localStorage.getString('roleId')!;
@@ -740,6 +709,37 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",
     );
+    if (provider.sampleresponse!.status == 1) {
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Success"),
+            content:
+            Text(provider.sampleresponse!.message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close dialog
+                  Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/dashboard',
+                          (route) =>
+                      false); // Go to Dashboard
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      print(
+          'submitdata failed------ ${provider.isSubmitData}');
+      ToastHelper.showErrorSnackBar(
+          context, provider.errorMsg);
+    }
   }
 
   void showSnackbar(BuildContext context, String message) {

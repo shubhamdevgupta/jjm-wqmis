@@ -10,7 +10,7 @@ import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/testScreen/webview.dart';
 import 'package:provider/provider.dart';
 
-import '../services/LocalStorageService.dart';
+import '../../services/LocalStorageService.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});

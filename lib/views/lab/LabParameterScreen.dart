@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/views/view_test/AsPerLabView.dart';
-import 'package:jjm_wqmis/views/view_test/AsPerParameterView.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
+import 'AsPerLabView.dart';
+import 'AsPerParameterView.dart';
 import '../../utils/Strings.dart';
+
+class Labparameterscreen extends StatefulWidget {
 
 class LabParameterScreenTest extends StatefulWidget {
   @override
-  _LabParameterScreenTest createState() => _LabParameterScreenTest();
+  _LabParameterScreen createState() => _LabParameterScreen();
 }
 
-class _LabParameterScreenTest extends State<LabParameterScreenTest>
+class _LabParameterScreen extends State<Labparameterscreen>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
   late ParameterProvider paramProvider;

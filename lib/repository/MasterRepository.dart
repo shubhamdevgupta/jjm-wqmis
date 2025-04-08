@@ -6,10 +6,11 @@ import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
-import 'package:jjm_wqmis/models/MasterApiResponse/WTPListResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/ValidateVillage.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
 import '../models/LgdResponse.dart';
@@ -273,6 +274,29 @@ class MasterRepository {
       rethrow; // Propagate the exception for further handling
     }
   }
+
+  Future<WtpLabResponse?> fetchWtpLabs(String stateId, String wtpId) async {
+    try {
+      final response = await _apiService.get('/apimaster/GetwtpLab?stateid=$stateId&wtpid=$wtpId');
+
+      log('WTP Lab API Response: $response');
+
+      if (response is Map<String, dynamic>) {
+        WtpLabResponse labResponse = WtpLabResponse.fromJson(response);
+
+        if (response.isNotEmpty) {
+          return labResponse; // Return full response if data exists
+        }
+      } else {
+        throw ApiException('Unexpected API response format: $response');
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      return null; // Return null if any error occurs
+    }
+  }
+
+
 
 
 }

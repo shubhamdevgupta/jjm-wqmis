@@ -51,31 +51,34 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title
-        RichText(
-          text: TextSpan(
-            text: widget.title.contains('*')
-                ? widget.title.replaceAll('*', '')
-                : widget.title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-            children: widget.title.contains('*')
-                ? [
-              const TextSpan(
-                text: ' *',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+        Visibility(
+          visible: widget.title.isNotEmpty,
+          child: RichText(
+            text: TextSpan(
+              text: widget.title.contains('*')
+                  ? widget.title.replaceAll('*', '')
+                  : widget.title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
-            ]
-                : [],
+              children: widget.title.contains('*')
+                  ? [
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ]
+                  : [],
+            ),
           ),
         ),
-        const SizedBox(height: 8),
+
 
         // Custom Dropdown Button with Search
         GestureDetector(
@@ -101,7 +104,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
                 // Selected Value - Show ellipsis if too long
                 Flexible(
                   child: Text(
-                    selectedValue ?? "- Select -",
+                    selectedValue ?? "--Select Laboratory--",
                     style: TextStyle(
                       fontSize: 16,
                       color: selectedValue == null ? Colors.black54 : Colors.black,
@@ -157,7 +160,8 @@ class _SearchDialogState extends State<SearchDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Laboratory"),
+        leading: Icon(Icons.arrow_back, color: Colors.white,),
+        title: const Text("Select Laboratory",style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),
       body: Column(
