@@ -51,7 +51,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                     fit: BoxFit.cover),
               ),
               child: Scaffold(
-                resizeToAvoidBottomInset: true,
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -74,7 +74,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                           Color(0xFF096DA8), // Dark blue color
                           Color(0xFF3C8DBC), // jjm blue color
                         ],
-                        begin: Alignment.topCenter, // Start at the top center
+                        begin: Alignment.topCenter,   // Start at the top center
                         end: Alignment.bottomCenter, // End at the bottom center
                       ),
                     ),
