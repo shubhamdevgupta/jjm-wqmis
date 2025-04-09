@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
@@ -45,6 +44,13 @@ class _LabParameterScreen extends State<Labparameterscreen>
         paramProvider.cart!.clear();
         paramProvider.selectedLab=null;
         fetchAllParameters();
+      } else if(mTabController.index == 0 && masterProvider.isWtp==true){
+        paramProvider.parameterList.clear();
+        paramProvider.parameterType = 1;
+        paramProvider.cart!.clear();
+        paramProvider.isLabSelected=false;
+        paramProvider.selectedLab=null;
+        masterProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
       }
     });
 

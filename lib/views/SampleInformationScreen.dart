@@ -657,28 +657,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 },
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            CustomDropdown(
-                              title: "Select Lab *",
-                              value: masterProvider.selectedWtpLab,
-                              items:
-                                  masterProvider.wtpLab.map((wtpLab) {
-                                return DropdownMenuItem<String>(
-                                  value: wtpLab.labId,
-                                  child: Text(
-                                    wtpLab.labName,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                masterProvider
-                                    .setSelectedWaterSourceInformation(value);
-                              },
-                            ),
+
                             CustomDateTimePicker(onDateTimeSelected: (value) {
                               masterProvider.setSelectedDateTime(value);
                             }),
@@ -686,8 +665,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             Center(
                               child: ElevatedButton(
                                 onPressed: () {
-                                ToastHelper.showSnackBar(context, "work on progress");
-                               /*   Navigator.push(
+                                  masterProvider.isWtp=true;
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
@@ -695,7 +674,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                               value: masterProvider,
                                               child: Labparameterscreen(),
                                             )),
-                                  );*/
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF096DA8),
@@ -1174,13 +1153,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.otherSourceLocation =
                             handpumpLocationController.text;
                         masterProvider.setSelectedWaterSourceInformation("0");
-                        /*    masterProvider.fetchAllLabs(
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedDistrictId!,
-                            masterProvider.selectedBlockId!,
-                            masterProvider.selectedGramPanchayat!,
-
-                            masterProvider.selectedVillage!, "1");*/
 
                         Navigator.push(
                           context,

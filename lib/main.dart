@@ -16,7 +16,6 @@ import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
-import 'package:jjm_wqmis/views/testScreen/SelectedTestNew.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

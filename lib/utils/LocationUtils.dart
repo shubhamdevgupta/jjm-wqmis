@@ -1,29 +1,40 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
 
-class LocationService {
-  static Future<Position?> getCurrentLocation() async {
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+
+class LocationUtils {
+  static const MethodChannel _permissionChannel = MethodChannel('com.example/location_permission');
+
+  /// Request Location Permission
+  static Future<bool> requestLocationPermission() async {
+    if (Platform.isAndroid) {
+      try {
+        final bool isGranted = await _permissionChannel.invokeMethod('requestPermission');
+        debugPrint('Permission request result: $isGranted');
+        return isGranted;
+      } on PlatformException catch (e) {
+        debugPrint('Error requesting location permission: $e');
+        return false;
+      }
+    } else {
+      // For iOS we assume permission is handled differently
+      return true;
+    }
+  }
+
+  /// Fetch Current Location
+  static Future<Map<String, dynamic>?> getCurrentLocation() async {
     try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        throw 'Location services are disabled.';
-      }
+      final Map<dynamic, dynamic> location = await _permissionChannel.invokeMethod('getLocation');
+      debugPrint('Fetched Location Data: $location');
 
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          throw 'Location permissions are denied.';
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        throw 'Location permissions are permanently denied, we cannot request permissions.';
-      }
-
-      return await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-    } catch (e) {
-      print('Error fetching location:   $e');
+      return {
+        "latitude": location['latitude'],
+        "longitude": location['longitude'],
+      };
+    } on PlatformException catch (e) {
+      debugPrint('PlatformException while fetching location: ${e.message}');
       return null;
     }
   }
