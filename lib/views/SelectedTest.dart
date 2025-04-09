@@ -577,7 +577,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                   width: 16,
                                                 ),
                                                 Text(
-                                                  "${paramProvider.currentPosition!.latitude}",
+                                                  "${paramProvider.currentLatitude}",
                                                   // Display placeholder text if null
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -606,7 +606,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                                   width: 16,
                                                 ),
                                                 Text(
-                                                  "${paramProvider.currentPosition!.longitude}",
+                                                  "${paramProvider.currentLongitude}",
                                                   // Display placeholder text if null
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -699,8 +699,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       "",
-      paramProvider.currentPosition!.latitude.toString(),
-      paramProvider.currentPosition!.longitude.toString(),
+      paramProvider.currentLatitude.toString(),
+      paramProvider.currentLongitude.toString(),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
@@ -34,8 +33,12 @@ class ParameterProvider with ChangeNotifier {
   Labinchargeresponse? labIncharge;
 
   bool isLab=true;
-  Position? _currentPosition;
-  Position? get currentPosition => _currentPosition;
+  double? _currentLatitude;
+  double? _currentLongitude;
+
+  double? get currentLatitude => _currentLatitude;
+  double? get currentLongitude => _currentLongitude;
+
 
   Paramlabresponse? _labResponse;
   Paramlabresponse? get labResponse => _labResponse;
@@ -99,26 +102,39 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  Future<void> fetchLocation() async {
 
+  Future<void> fetchLocation() async {
     isLoading = true;
-    notifyListeners(); // Notify UI to show loader
+    notifyListeners();
 
     try {
-      _currentPosition = await LocationService.getCurrentLocation();
+      debugPrint('Requesting location permission...');
+      bool permissionGranted = await LocationUtils.requestLocationPermission();
 
-      if (_currentPosition != null) {
-        debugPrint('Fetched Location: ${_currentPosition!.latitude}, ${_currentPosition!.longitude}');
+      if (permissionGranted) {
+        debugPrint('Permission granted. Fetching location...');
+        final locationData = await LocationUtils.getCurrentLocation();
+
+        if (locationData != null) {
+          _currentLatitude = locationData['latitude'];
+          _currentLongitude = locationData['longitude'];
+
+          debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
+        } else {
+          debugPrint("Location fetch failed (locationData is null)");
+        }
       } else {
-        debugPrint("Location is null");
+        debugPrint("Permission denied. Cannot fetch location.");
       }
     } catch (e) {
-      debugPrint("Error fetching location: $e");
+      debugPrint("Error during fetchLocation(): $e");
     } finally {
       isLoading = false;
-      notifyListeners(); // Notify UI to hide loader
+      notifyListeners();
     }
   }
+
+
 
   /// Fetch Labs from API
   Future<void> fetchParamLabs(String stateId, String parameterIds) async {

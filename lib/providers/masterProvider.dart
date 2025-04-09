@@ -1,7 +1,6 @@
 // lib/providers/state_provider.dart
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
@@ -60,6 +59,7 @@ class Masterprovider extends ChangeNotifier {
   List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
   List<Lgdresponse> get villageDetails => _villageDetails;
 
+  bool isWtp=false;
 
   ValidateVillageResponse? _validateVillageResponse;
   ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
@@ -93,11 +93,6 @@ class Masterprovider extends ChangeNotifier {
   String errorMsg = '';
   String otherSourceLocation = '';
   String sampleTypeOther = '';
-
-
-  Position? _currentPosition;
-  Position? get currentPosition => _currentPosition;
-
 
   Future<void> fetchStates() async {
     print('Calling the state function...');
