@@ -20,8 +20,9 @@ import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
+import 'BaseResettableProvider.dart';
 
-class Masterprovider extends ChangeNotifier {
+class Masterprovider extends Resettable {
   final MasterRepository _masterRepository = MasterRepository();
   final Lapparameterrepository _lapparameterrepository =
       Lapparameterrepository();
@@ -509,5 +510,10 @@ class Masterprovider extends ChangeNotifier {
     village.clear();
     habitationId.clear();
     notifyListeners();
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 }

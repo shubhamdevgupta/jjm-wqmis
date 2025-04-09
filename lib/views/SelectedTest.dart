@@ -682,7 +682,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
     await provider.fetchDeviceId();
-    provider.sampleSubmit(
+   await provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       int.parse(userId),
       int.parse(roleId),
@@ -726,6 +726,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                       '/dashboard',
                           (route) =>
                       false); // Go to Dashboard
+
                 },
                 child: Text("OK"),
               ),
@@ -733,6 +734,9 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
           );
         },
       );
+
+//
+
     } else {
       print(
           'submitdata failed------ ${provider.isSubmitData}');

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/BaseResettableProvider.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
@@ -10,7 +11,7 @@ import '../models/LoginResponse.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
-class AuthenticationProvider extends ChangeNotifier {
+class AuthenticationProvider extends Resettable {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -122,5 +123,10 @@ class AuthenticationProvider extends ChangeNotifier {
   void togglePasswordVisibility() {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 }

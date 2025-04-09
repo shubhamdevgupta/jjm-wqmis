@@ -6,8 +6,9 @@ import '../models/LgdResponse.dart';
 import '../repository/AuthenticaitonRepository.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/DeviceUtils.dart';
+import 'BaseResettableProvider.dart';
 
-class DashboardProvider extends ChangeNotifier{
+class DashboardProvider extends Resettable{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -30,6 +31,11 @@ class DashboardProvider extends ChangeNotifier{
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 
 }
