@@ -3,7 +3,7 @@ import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/testScreen/webview.dart';
+import 'package:jjm_wqmis/views/webView/webview.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';
