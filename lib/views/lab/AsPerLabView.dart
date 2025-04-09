@@ -51,8 +51,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            // child: const SelectedTestScreen(),
-                             child: const SelectedTestScreenNew(),
+                            child: const SelectedTestScreen(),
+                             // child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );

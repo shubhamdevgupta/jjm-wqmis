@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
@@ -9,7 +10,6 @@ import '../../utils/Strings.dart';
 
 class Labparameterscreen extends StatefulWidget {
 
-class LabParameterScreenTest extends StatefulWidget {
   @override
   _LabParameterScreen createState() => _LabParameterScreen();
 }

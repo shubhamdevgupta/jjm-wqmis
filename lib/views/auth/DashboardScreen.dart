@@ -6,8 +6,6 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
-import 'package:jjm_wqmis/views/testScreen/webview.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -36,7 +34,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $enc");
     var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
     print("Aesen-----> $dep");
-
 
     getToken();
 

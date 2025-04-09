@@ -87,8 +87,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                 body: Column(
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.8, // Adjust 0.8 as needed
+                      height: MediaQuery.of(context).size.height * 0.8, // Adjust 0.8 as needed
                       child: Stack(
                         children: [
                           SingleChildScrollView(

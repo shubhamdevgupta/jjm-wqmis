@@ -5,13 +5,12 @@ import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 import 'package:jjm_wqmis/utils/Strings.dart';
-import 'package:jjm_wqmis/views/LabParameterScreen.dart';
-import 'package:jjm_wqmis/views/view_test/LabParameterScreenTest.dart';
+
 import 'package:provider/provider.dart';
 
 import '../utils/CustomDropdown.dart';
+import 'lab/LabParameterScreen.dart';
 
 class Sampleinformationscreen extends StatefulWidget {
   @override
