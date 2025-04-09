@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
+import 'package:jjm_wqmis/views/testScreen/webview.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/Aesen.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -20,7 +23,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
   List<Map<String, dynamic>> filteredList = [];
   TextEditingController searchController = TextEditingController();
   int flag = 1; // Define flag
-
+  final encryption = AesEncryption();
   @override
   void initState() {
     super.initState();
@@ -107,8 +110,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                   );              }
               },
             ),
-            title: Text(
-              'JJM-WQMIS',
+            title: const Text(Strings.appTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -187,6 +189,10 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF0468B1),
                             textStyle: TextStyle(fontSize: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6), // less = more squared
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14), // optional: adjust size
                           ),
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
@@ -239,6 +245,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                           children: [
                                             // ID Row
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 CircleAvatar(
                                                   backgroundColor: Colors.blue,
@@ -250,7 +257,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                //SizedBox(width: 10),
+
                                                 Container(
                                                   padding: EdgeInsets.symmetric(
                                                     horizontal: 10,
@@ -267,6 +275,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                       color: Colors.white,
                                                       fontWeight: FontWeight.bold,
                                                     ),
+                                                  ),
+                                                ),
+
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    Navigator.push(context, MaterialPageRoute(
+                                                      builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption..encryptText(sample.sampleId!)}'),
+                                                    ),
+                                                    );
+                                                  },
+                                                  child: CircleAvatar(
+                                                    backgroundColor: Colors.brown,
+                                                    child: Icon(Icons.download,color: Colors.white,),
+
                                                   ),
                                                 ),
                                               ],

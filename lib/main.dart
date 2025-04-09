@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
@@ -15,6 +16,7 @@ import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SelectedTest.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/testScreen/SelectedTestNew.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -52,14 +54,15 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
-        '/savesample': (context) => Sampleinformationscreen(),
-        '/dashboard': (context) => Dashboardscreen(),
-        '/login': (context) => Loginscreen(),
-        '/location': (context) => Locationscreen(flag: 0,),
-        '/labParam': (context) => Labparameterscreen(),
-        'test': (context) => SelectedTestScreen(),
-        '/sampleList': (context) => SampleListScreen()
+        // '/': (context) => SelectedTestNew(),
+       '/': (context) => SplashScreen(),
+        Strings.navigateToSaveSample: (context) => Sampleinformationscreen(),
+        Strings.navigateToDashboard: (context) => Dashboardscreen(),
+        Strings.navigateToLogin: (context) => Loginscreen(),
+        Strings.navigateToLocation: (context) => Locationscreen(flag: 0,),
+        Strings.navigateToLabParam: (context) => Labparameterscreen(),
+        Strings.navigateToTest: (context) => SelectedTestScreen(),
+        Strings.navigateToSampleList: (context) => SampleListScreen()
       },
     );
   }

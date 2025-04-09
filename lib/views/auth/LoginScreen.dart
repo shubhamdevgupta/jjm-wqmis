@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:provider/provider.dart';
 
 // Login Page
@@ -197,7 +198,7 @@ class _LoginpageState extends State<Loginscreen> {
                                               () {
                                             print('Successful login');
                                          //   provider.loadDashboardData(roleId, userId, stateId)
-                                            Navigator.pushReplacementNamed(context, '/dashboard');
+                                            Navigator.pushReplacementNamed(context, Strings.navigateToDashboard);
                                           },
                                               (errorMessage) {
                                             ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -50,6 +51,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                     fit: BoxFit.cover),
               ),
               child: Scaffold(
+                resizeToAvoidBottomInset: true,
                 appBar: AppBar(
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -57,7 +59,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                       if (Navigator.of(context).canPop()) {
                         Navigator.pop(context);
                       } else {
-                        Navigator.pushReplacementNamed(context, '/labParam');
+                        Navigator.pushReplacementNamed(context, Strings.navigateToLabParam);
                       }
                     },
                   ),
@@ -78,15 +80,14 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                     ),
                   ),
                   title: const Text(
-                    'Selected Test',
+                    Strings.selectedTest,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
                 body: Column(
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.8, // Adjust 0.8 as needed
+                      height: MediaQuery.of(context).size.height * 0.8, // Adjust 0.8 as needed
                       child: Stack(
                         children: [
                           SingleChildScrollView(
@@ -108,7 +109,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                           children: [
                                             // Dynamic height adjustment
                                             ConstrainedBox(
-                                              constraints: BoxConstraints(
+                                              constraints: const BoxConstraints(
                                                 maxHeight: 250, // Maximum height before scrolling starts
                                               ),
                                               child: paramProvider.cart!.isEmpty
@@ -238,17 +239,14 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  !paramProvider.isLab &&
-                                          !paramProvider.labResponse!.status
-                                      ? Text(
-                                        paramProvider.labResponse!.message,
+                                  !paramProvider.isLab && !paramProvider.labResponse!.status ? Text(
+                                    paramProvider.labResponse!.message,
                                         // Message when dropdown is hidden
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red),
-                                      )
-                                      : Visibility(
+                                      ) : Visibility(
                                           visible: !paramProvider.isLab &&
                                               paramProvider.labResponse!.status,
                                           child: Column(
@@ -648,7 +646,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
 
                         },
                         child: Text(
-                          'Submit Sample',
+                          Strings.submitSample,
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -668,7 +666,9 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
               ),
             ),
           );
-        }));
+        }
+        )
+    );
   }
 
   Future<void> validateAndSubmit(BuildContext context, Samplesubprovider provider,

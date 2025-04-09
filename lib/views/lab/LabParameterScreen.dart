@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
+import '../../utils/Strings.dart';
 
 class Labparameterscreen extends StatefulWidget {
+
   @override
   _LabParameterScreen createState() => _LabParameterScreen();
 }
@@ -78,8 +81,10 @@ class _LabParameterScreen extends State<Labparameterscreen>
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      const Tab(icon: Icon(Icons.import_contacts_sharp,color: Colors.white,), child: Text('Select Laboratory',style: TextStyle(color: Colors.white,))),
-      const Tab(icon: Icon(Icons.arrow_back,color: Colors.white,), child: Text('Test by Parameter',style: TextStyle(color: Colors.white),),),
+      const Tab(icon: Icon(Icons.add_business,color: Colors.white),
+        child: Text("Select Laboratory", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
+      const Tab(icon: Icon(Icons.compare_arrows,color: Colors.white,),
+        child: Text('Test by Parameter', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
     ];
 
     return Container(
@@ -96,7 +101,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
               if (Navigator.of(context).canPop()) {
                 Navigator.pop(context);
               } else {
-                Navigator.pushReplacementNamed(context, '/savesample');
+                Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
               }
             },
           ),
@@ -131,8 +136,11 @@ class _LabParameterScreen extends State<Labparameterscreen>
             ),
           ),
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.8,
+        /*body: Padding*//*SizedBox*//*(
+        //  height: MediaQuery.of(context).size.height * 0.75,
+       //   height: MediaQuery.of(context).size.height - 215, // 100 is the bottom margin
+          padding: const EdgeInsets.only(bottom: 45),
+
           child: TabBarView(
             controller: mTabController,
             children: [
@@ -140,6 +148,20 @@ class _LabParameterScreen extends State<Labparameterscreen>
               Asperparameterview(),
             ],
           ),
+        ),*/
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              height: constraints.maxHeight - 45,
+              child: TabBarView(
+                controller: mTabController,
+                children: [
+                  AsPerLabTabView(),
+                  Asperparameterview(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

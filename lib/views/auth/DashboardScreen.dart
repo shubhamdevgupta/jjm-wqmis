@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/Aesen.dart';
+import 'package:jjm_wqmis/utils/Strings.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -22,10 +23,17 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String userName = '';
   String mobile = '';
   String stateId = '';
+  final encryption = AesEncryption();
 
   @override
   void initState() {
     super.initState();
+
+    var enc = encryption.encryptText("Beneficiaryname");
+
+    print("Aesen-----> $enc");
+    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
+    print("Aesen-----> $dep");
 
     getToken();
 
@@ -40,7 +48,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:  BoxDecoration(
+      decoration:  const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
       ),
@@ -50,8 +58,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  Text(
-              'JJM-WQMIS',
+            title:  const Text(
+              Strings.appTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -102,58 +110,58 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration:  BoxDecoration(
+                  decoration:  const BoxDecoration(
                     color: Colors.blue,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
-                      Text(
-                        'Departmental User',
+                      const Text(
+                        Strings.departmentalUser,
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
                         stateName,  // Provide a fallback value if null
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
+                        style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text('Dashboard'),
+                  title: const Text(Strings.dashboard),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text('Submit Sample Info '),
+                  title: const Text(Strings.submitSampleInfo),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/savesample');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text('List of Samples'),
+                  title: const Text(Strings.listOfSamples),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/sampleList');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text('Maintenance'),
+                  title: const Text(Strings.maintenance),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text('Logout'),
+                  title: const Text(Strings.logout),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushReplacementNamed(context, Strings.navigateToLogin);
                   },
                 ),
               ],
@@ -171,17 +179,17 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: const Text(
-                        'Dashboard Overview',
+                    const Center(
+                      child: Text(
+                        Strings.dashboardOverview,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: EdgeInsets.only(top: 20),
+                          const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -189,7 +197,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 6,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -200,11 +208,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                AssetImage('assets/user_image.png'),
+                                const AssetImage('assets/user_image.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
-                          SizedBox(width: 16), // Space between image and text
+                          const SizedBox(width: 16), // Space between image and text
 
                           // Text column
                           Expanded(
@@ -213,7 +221,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome message
                                 Text(
-                                  'Welcome, ${userName}',
+                                  '${Strings.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
                                     fontSize: 20,
@@ -225,19 +233,19 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ),
                                 ),
 
-                                SizedBox(height: 8), // Space between lines
+                                const SizedBox(height: 8), // Space between lines
 
                                 // Phone Row
                                 Row(
                                   children: [
-                                    Icon(Icons.phone_android,
+                                    const Icon(Icons.phone_android,
                                         color: Colors.teal, size: 20),
                                     // Using an icon for consistency
-                                    SizedBox(width: 6),
+                                    const SizedBox(width: 6),
                                     Text(
                                       '$mobile',
                                       // Replace with dynamic phone number
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w500,
@@ -253,6 +261,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     const SizedBox(height: 15),
                     const SizedBox(height: 10),
+
+                  Center(child: const Text("All figures are based on current year data.",style: TextStyle(fontSize: 15,color: Colors.red),)),
+
+                    const SizedBox(height: 10),
                     GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 20.0,
@@ -261,7 +273,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         _buildDashboardCard(
-                          title: 'Total Samples Submitted',
+                          title: Strings.totalSamplesSubmitted,
                           value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
                           icon: Icons.analytics,
                           gradientColors: [
@@ -269,23 +281,23 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.blue
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 0});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 0});
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Physical Submitted',
+                          title: Strings.totalPhysicalSubmitted,
                           value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
                           icon: Icons.hourglass_empty,
                           gradientColors: [
-                            Color(0xFFFCE889),
-                            Color(0xFFFFAA00)
+                            const Color(0xFFFCE889),
+                            const Color(0xFFFFAA00)
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 2});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 2});
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Sample Tested',
+                          title: Strings.totalSampleTested,
                           value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
                           icon: Icons.check_circle,
                           gradientColors: [
@@ -293,11 +305,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.green
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 6});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 6});
                           },
                         ),
                         _buildDashboardCard(
-                          title: 'Total Retest',
+                          title: Strings.totalRetest,
                           value: '${dashboardProvider.dashboardData!.totalRetest}',
                           icon: Icons.refresh,
                           gradientColors: [
@@ -305,7 +317,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.red
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, '/sampleList', arguments: {'flag': 8});
+                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 8});
                           },
                         ),
                       ],
@@ -320,26 +332,26 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               double screenHeight =
                                   MediaQuery.of(context).size.height;
                               return AlertDialog(
-                                contentPadding: EdgeInsets.all(10),
+                                contentPadding: const EdgeInsets.all(10),
                                 // Adjust the padding to reduce space
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
                                   // Set a fixed height for the content
-                                  child: Locationscreen(flag: 0,), // Replace with your widget
+                                  child: const Locationscreen(flag: 0,), // Replace with your widget
                                 ),
                               );
                             },
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF0468B1),
-                          textStyle: TextStyle(fontSize: 16),
-                          minimumSize: Size(300,
+                          backgroundColor: const Color(0xFF0468B1),
+                          textStyle: const TextStyle(fontSize: 16),
+                          minimumSize: const Size(300,
                               50), // Set a minimum width (200) and height (50)
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           // Ensures the button adjusts its size based on content
                           children: [
@@ -351,13 +363,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             SizedBox(width: 8),
                             // Add spacing between icon and text
                             Text(
-                              'Add Sample',
+                              Strings.addSample,
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
                         ),
                       ),
                     )
+
+
                   ],
                 ),
               );
@@ -376,7 +390,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     return GestureDetector(
       onTap: onTap, // Trigger onTap when the card is tapped
       child: Container(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
@@ -388,7 +402,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 6,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -399,20 +413,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               backgroundColor: Colors.white.withOpacity(0.2),
               child: Icon(icon, color: Colors.white, size: 30),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,

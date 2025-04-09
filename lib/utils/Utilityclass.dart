@@ -9,11 +9,11 @@ class Utilityclass{
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
           title: Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              child: Text(
+              child: const Text(
                 '⚠ No Internet Connection',
                 style: TextStyle(
                     fontSize: 18,
@@ -21,12 +21,12 @@ class Utilityclass{
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               )),
-          content: SingleChildScrollView(
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(10.0),
                       child: Text(
                           'You need to have mobile data or wifi to access this. '),
                     )),
@@ -43,7 +43,7 @@ class Utilityclass{
                 child: Container(
 
                     width: 100,
-                    child: Center(child: Text('Close'))),
+                    child: const Center(child: Text('Close'))),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
