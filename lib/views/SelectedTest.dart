@@ -682,7 +682,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
     await provider.fetchDeviceId();
-    provider.sampleSubmit(
+    await  provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       int.parse(userId),
       int.parse(roleId),
