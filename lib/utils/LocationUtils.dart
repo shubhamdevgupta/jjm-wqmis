@@ -23,7 +23,7 @@ class LocationService {
       return await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
     } catch (e) {
-      print('Error fetching location: $e');
+      print('Error fetching location:   $e');
       return null;
     }
   }
