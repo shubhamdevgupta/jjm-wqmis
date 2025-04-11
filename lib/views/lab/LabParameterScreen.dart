@@ -4,9 +4,10 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/LocalStorageService.dart';
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
-import '../../utils/Strings.dart';
+import '../../utils/AppConstants.dart';
 
 class Labparameterscreen extends StatefulWidget {
 
@@ -19,6 +20,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   late TabController mTabController;
   late ParameterProvider paramProvider;
   late Masterprovider masterProvider;
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
@@ -72,12 +74,10 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllParameters() {
+    String regId = _localStorage.getString('reg_id') ?? '';
     paramProvider.fetchAllParameter(
       "0",
-      masterProvider.selectedStateId ?? "0",
-      "0",
-      "1151455",
-      "1",
+      masterProvider.selectedStateId ?? "0", "0", regId, "1",
     );
   }
 
@@ -90,10 +90,31 @@ class _LabParameterScreen extends State<Labparameterscreen>
   @override
   Widget build(BuildContext context) {
     final List<Tab> myTabs = <Tab>[
-      const Tab(icon: Icon(Icons.add_business,color: Colors.white),
-        child: Text("Select Laboratory", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
-      const Tab(icon: Icon(Icons.compare_arrows,color: Colors.white,),
-        child: Text('Test by Parameter', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold,),),),
+      const Tab(
+        icon: Icon(Icons.add_business, color: Colors.white),
+        child: Text(
+          "Select Laboratory",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      const Tab(
+        icon: Icon(
+          Icons.compare_arrows,
+          color: Colors.white,
+        ),
+        child: Text(
+          'Test by Parameter',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     ];
 
     return Container(
@@ -119,7 +140,8 @@ class _LabParameterScreen extends State<Labparameterscreen>
               if (Navigator.of(context).canPop()) {
                 Navigator.pop(context);
               } else {
-                Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
+                Navigator.pushReplacementNamed(
+                    context, AppConstants.navigateToSaveSample);
               }
             },
           ),

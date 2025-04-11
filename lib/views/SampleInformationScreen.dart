@@ -5,7 +5,7 @@ import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 import 'package:provider/provider.dart';
 
@@ -60,7 +60,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pushReplacementNamed(context, Strings.navigateToDashboard);
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
                     }
                   },
                 ),
