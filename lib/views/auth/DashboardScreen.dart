@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +63,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             // Removes the default back button
             centerTitle: true,
             title:  const Text(
-              Strings.appTitle,
+              AppConstants.appTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
                       const Text(
-                        Strings.departmentalUser,
+                        AppConstants.departmentalUser,
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
@@ -133,39 +133,39 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text(Strings.dashboard),
+                  title: const Text(AppConstants.dashboard),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(Strings.submitSampleInfo),
+                  title: const Text(AppConstants.submitSampleInfo),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(Strings.listOfSamples),
+                  title: const Text(AppConstants.listOfSamples),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, Strings.navigateToSampleList);
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text(Strings.maintenance),
+                  title: const Text(AppConstants.maintenance),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text(Strings.logout),
+                  title: const Text(AppConstants.logout),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(context, Strings.navigateToLogin);
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
                   },
                 ),
               ],
@@ -185,7 +185,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   children: [
                     const Center(
                       child: Text(
-                        Strings.dashboardOverview,
+                        AppConstants.dashboardOverview,
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -225,7 +225,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome message
                                 Text(
-                                  '${Strings.welcome}, $userName',
+                                  '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
                                     fontSize: 20,
@@ -277,7 +277,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         _buildDashboardCard(
-                          title: Strings.totalSamplesSubmitted,
+                          title: AppConstants.totalSamplesSubmitted,
                           value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
                           icon: Icons.analytics,
                           gradientColors: [
@@ -285,11 +285,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.blue
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 0});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 0});
                           },
                         ),
                         _buildDashboardCard(
-                          title: Strings.totalPhysicalSubmitted,
+                          title: AppConstants.totalPhysicalSubmitted,
                           value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
                           icon: Icons.hourglass_empty,
                           gradientColors: [
@@ -297,11 +297,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             const Color(0xFFFFAA00)
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 2});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 2});
                           },
                         ),
                         _buildDashboardCard(
-                          title: Strings.totalSampleTested,
+                          title: AppConstants.totalSampleTested,
                           value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
                           icon: Icons.check_circle,
                           gradientColors: [
@@ -309,11 +309,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.green
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 6});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 6});
                           },
                         ),
                         _buildDashboardCard(
-                          title: Strings.totalRetest,
+                          title: AppConstants.totalRetest,
                           value: '${dashboardProvider.dashboardData!.totalRetest}',
                           icon: Icons.refresh,
                           gradientColors: [
@@ -321,7 +321,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.red
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, Strings.navigateToSampleList, arguments: {'flag': 8});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 8});
                           },
                         ),
                       ],
@@ -364,7 +364,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              Strings.addSample,
+                              AppConstants.addSample,
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
@@ -438,11 +438,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   }
 
   String getToken() {
-    String? token = _localStorage.getString('token') ?? '';
-    stateName = _localStorage.getString('stateName') ?? '';
-    userName = _localStorage.getString('name') ?? '';
-    mobile = _localStorage.getString('mobile') ?? '';
-    stateId = _localStorage.getString('stateId') ?? '';
+    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
+    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
+    userName = _localStorage.getString(AppConstants.prefName) ?? '';
+    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
+    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

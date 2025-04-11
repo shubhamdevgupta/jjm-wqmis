@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/LabInchargeResponse/AllLabResponse.dart';
 import '../../providers/masterProvider.dart';
+import '../../services/LocalStorageService.dart';
 import '../../utils/CustomSearchableDropdown.dart';
 import '../../utils/LoaderUtils.dart';
 
@@ -15,6 +17,7 @@ class AsPerLabTabView extends StatefulWidget {
 
 class _AsPerLabTabView extends State<AsPerLabTabView> {
   late Masterprovider masterProvider;
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
@@ -120,7 +123,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                   selectedLab.value!,
                                   masterProvider.selectedStateId ?? "0",
                                   "0",
-                                  "1151455",
+                                  _localStorage.getString(AppConstants.prefRegId).toString(),
                                   "0",
                                 );
                               }
@@ -171,7 +174,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                           provider.selectedLab!,
                                           masterProvider.selectedStateId!,
                                           "0",
-                                          "1151455",
+                                          _localStorage.getString(AppConstants.prefRegId).toString(),
                                           value.toString(),
                                         );
                                       },

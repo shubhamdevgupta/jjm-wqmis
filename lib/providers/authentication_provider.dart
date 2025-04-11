@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/BaseResettableProvider.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 import '../models/LoginResponse.dart';
 import '../services/LocalStorageService.dart';
@@ -40,13 +41,13 @@ class AuthenticationProvider extends Resettable {
   String errorMsg = '';
 
   Future<void> checkLoginStatus() async {
-    _isLoggedIn = _localStorage.getBool('isLoggedIn') ?? false;
+    _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
   }
 
   Future<void> logoutUser() async {
     _isLoggedIn = false;
-    await _localStorage.remove('isLoggedIn');
+    await _localStorage.remove(AppConstants.prefIsLoggedIn);
     notifyListeners();
   }
 
@@ -63,14 +64,15 @@ class AuthenticationProvider extends Resettable {
       _loginResponse = await _authRepository.loginUser(phoneNumber, encryPass, roldId, txtSalt);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
-        _localStorage.saveBool('isLoggedIn', true);
-        _localStorage.saveString('token', _loginResponse!.token.toString());
-        _localStorage.saveString('userId', _loginResponse!.regId.toString());
-        _localStorage.saveString('roleId', _loginResponse!.roleId.toString());
-        _localStorage.saveString('name', _loginResponse!.name.toString());
-        _localStorage.saveString('mobile', _loginResponse!.mobileNumber.toString());
-        _localStorage.saveString('stateId', _loginResponse!.stateId.toString());
-        _localStorage.saveString('stateName', _loginResponse!.stateName.toString());
+        _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
+        _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
+        _localStorage.saveString(AppConstants.prefUserId, _loginResponse!.regId.toString());
+        _localStorage.saveString(AppConstants.prefRoleId, _loginResponse!.roleId.toString());
+        _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
+        _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
+        _localStorage.saveString(AppConstants.prefStateId, _loginResponse!.stateId.toString());
+        _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
+        _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
         notifyListeners();
         onSuccess();
       } else {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +59,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       if (Navigator.of(context).canPop()) {
                         Navigator.pop(context);
                       } else {
-                        Navigator.pushReplacementNamed(context, Strings.navigateToLabParam);
+                        Navigator.pushReplacementNamed(context, AppConstants.navigateToLabParam);
                       }
                     },
                   ),
@@ -80,7 +80,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     ),
                   ),
                   title: const Text(
-                    Strings.selectedTest,
+                    AppConstants.selectedTest,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -644,7 +644,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                               context, provider, masterProvider, paramProvider);
                         },
                         child: Text(
-                          Strings.submitSample,
+                          AppConstants.submitSample,
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -671,8 +671,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
 
   Future<void> validateAndSubmit(BuildContext context, Samplesubprovider provider,
       Masterprovider masterProvider, ParameterProvider paramProvider) async {
-    String userId = _localStorage.getString('userId')!;
-    String roleId = _localStorage.getString('roleId')!;
+    String userId = _localStorage.getString(AppConstants.prefUserId)!;
+    String roleId = _localStorage.getString(AppConstants.prefRoleId)!;
 
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
       showSnackbar(context, "Please select at least one test.");

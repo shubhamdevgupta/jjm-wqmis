@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -115,7 +115,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     child: DropdownButtonFormField<String>(
 
                       value: _localStorage.getString(
-                          'stateId'), // Ensure this matches the DropdownMenuItem value
+                          AppConstants.prefStateId), // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled:
                             true, // Grey background to indicate it's non-editable
@@ -138,9 +138,9 @@ class _LocationscreenState extends State<Locationscreen> {
                       items: [
                         DropdownMenuItem<String>(
                           value: _localStorage.getString(
-                              'stateId'), // Ensure this matches the selected value
+                              AppConstants.prefStateId), // Ensure this matches the selected value
 
-                          child: Text(_localStorage.getString('stateName') ??
+                          child: Text(_localStorage.getString(AppConstants.prefStateName) ??
                               'Unknown State'), // Display state name
                         ),
                       ],
@@ -309,7 +309,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         validateStateVillage(masterProvider)) {
                       print('Going to Save Sample screen');
                       Navigator.pop(context, true);
-                      Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                     } else {
                       ToastHelper.showErrorSnackBar(
                           context, masterProvider.errorMsg);
