@@ -117,6 +117,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     text:
                                     null), // Default to a nullable object
                               );
+                              provider.cart!.clear();
                               provider.setSelectedLab(selectedLab.value);
                               if (provider.isLabSelected) {
                                 provider.fetchAllParameter(

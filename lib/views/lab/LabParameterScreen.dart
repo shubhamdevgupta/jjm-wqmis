@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -9,6 +10,7 @@ import 'AsPerParameterView.dart';
 import '../../utils/AppConstants.dart';
 
 class Labparameterscreen extends StatefulWidget {
+
   @override
   _LabParameterScreen createState() => _LabParameterScreen();
 }
@@ -28,7 +30,9 @@ class _LabParameterScreen extends State<Labparameterscreen>
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ParameterProvider>(context, listen: false).clearData();
+    });
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
 
@@ -36,23 +40,22 @@ class _LabParameterScreen extends State<Labparameterscreen>
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
-        paramProvider.isLabSelected = false;
-        paramProvider.selectedLab = null;
+        paramProvider.isLabSelected=false;
+        paramProvider.selectedLab=null;
         fetchAllLabs();
       } else if (mTabController.index == 1) {
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
-        paramProvider.selectedLab = null;
+        paramProvider.selectedLab=null;
         fetchAllParameters();
-      } else if (mTabController.index == 0 && masterProvider.isWtp == true) {
+      } else if(mTabController.index == 0 && masterProvider.isWtp==true){
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
-        paramProvider.isLabSelected = false;
-        paramProvider.selectedLab = null;
-        masterProvider.fetchWTPLab(
-            masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+        paramProvider.isLabSelected=false;
+        paramProvider.selectedLab=null;
+        masterProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
       }
     });
 
@@ -79,7 +82,6 @@ class _LabParameterScreen extends State<Labparameterscreen>
       regId,
       "1",
     );
-
   }
 
   @override
@@ -125,8 +127,16 @@ class _LabParameterScreen extends State<Labparameterscreen>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select Lab/Parameter",
-              style: TextStyle(color: Colors.white)),
+          title: const Text("Select Lab/Parameter", style: TextStyle(color: Colors.white)),
+            automaticallyImplyLeading: false,
+            elevation: 5,
+            centerTitle: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(8),
+                right: Radius.circular(8),
+              ),
+            ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -141,51 +151,31 @@ class _LabParameterScreen extends State<Labparameterscreen>
           bottom: TabBar(
             controller: mTabController,
             tabs: myTabs,
-            labelColor: Colors.white,
-            // White for selected tab text
-            unselectedLabelColor: Colors.white70,
-            // Slightly faded for unselected tabs
-            labelStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            labelColor: Colors.white, // White for selected tab text
+            unselectedLabelColor: Colors.white70, // Slightly faded for unselected tabs
+            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
               color: Color(0xFF5FAFE5), // Light blue indicator
               borderRadius: BorderRadius.circular(8),
             ),
             indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent,
-              // Background color for the container
-              borderRadius: BorderRadius.circular(8),
-              // Rounded corners
               gradient: const LinearGradient(
                 colors: [
                   Color(0xFF096DA8), // Dark blue
-                  Color(0xFF3C8DBC), // jjm blue color
+                  Color(0xFF3C8DBC),  // jjm blue color
                 ],
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter, // End at the bottom center
+                end: Alignment.bottomCenter,// End at the bottom center
               ),
             ),
           ),
         ),
-        /*body: Padding*/ /*SizedBox*/ /*(
-        //  height: MediaQuery.of(context).size.height * 0.75,
-       //   height: MediaQuery.of(context).size.height - 215, // 100 is the bottom margin
-          padding: const EdgeInsets.only(bottom: 45),
-
-          child: TabBarView(
-            controller: mTabController,
-            children: [
-              AsPerLabTabView(),
-              Asperparameterview(),
-            ],
-          ),
-        ),*/
         body: LayoutBuilder(
           builder: (context, constraints) {
             return SizedBox(
@@ -195,6 +185,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
                 children: [
                   AsPerLabTabView(),
                   Asperparameterview(),
+                  LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
                 ],
               ),
             );

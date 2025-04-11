@@ -45,8 +45,17 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
+                automaticallyImplyLeading: false,
+                elevation: 5,
+                centerTitle: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.horizontal(
+                    left: Radius.circular(8),
+                    right: Radius.circular(8),
+                  ),
+                ),
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
@@ -55,17 +64,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     }
                   },
                 ),
-                title: Text(
+                title: const Text(
                   'Sample Collection Form',
                   style: TextStyle(color: Colors.white),
                 ),
                 flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    // Background color for the container
-                    borderRadius: BorderRadius.circular(8),
-                    // Rounded corners
-                    gradient: const LinearGradient(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
                       colors: [
                         Color(0xFF096DA8), // Dark blue color
                         Color(0xFF3C8DBC), // jjm blue color
@@ -75,7 +80,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     ),
                   ),
                 ),
-              ),
+              )
+              ,
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
                 return Stack(
