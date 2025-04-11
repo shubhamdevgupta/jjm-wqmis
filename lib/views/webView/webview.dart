@@ -57,6 +57,5 @@ class _MyWebViewState extends State<MyWebView> {
         ),
       ),
       body: WebViewWidget(controller: _controller),
-    );
-  }
+    );}
 }
