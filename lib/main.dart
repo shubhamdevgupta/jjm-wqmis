@@ -13,7 +13,7 @@ import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
-import 'package:jjm_wqmis/views/SelectedTest.dart';
+import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         Strings.navigateToLogin: (context) => Loginscreen(),
         Strings.navigateToLocation: (context) => Locationscreen(flag: 0,),
         Strings.navigateToLabParam: (context) => Labparameterscreen(),
-        Strings.navigateToTest: (context) => SelectedTestScreen(),
+        Strings.navigateToTest: (context) => SubmitSampleScreen(),
         Strings.navigateToSampleList: (context) => SampleListScreen()
       },
     );

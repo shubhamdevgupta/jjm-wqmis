@@ -191,15 +191,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         masterProvider.selectedScheme!);
                   } else if (masterProvider.selectedWtsfilter == "6") {
                     masterProvider.setSelectedSubSource(0);
-                    masterProvider.setSelectedPwsSource(0);
                     masterProvider.setSelectedWTP("0");
                     masterProvider.fetchSourceInformation(
                         masterProvider.selectedVillage!,
                         "0",
+                        "0",
                         //habitaion
                         masterProvider.selectedWtsfilter!,
                         masterProvider.selectedSubSource.toString(),
-                        masterProvider.selectedPwsType.toString(),
                         masterProvider.selectedWtp!,
                         masterProvider.selectedStateId!,
                         masterProvider.selectedScheme!);

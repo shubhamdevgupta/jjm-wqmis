@@ -219,5 +219,35 @@ class ParameterProvider with ChangeNotifier {
     }
     notifyListeners(); // Notify UI of changes
   }
+  void clearData() {
+    isLoading = false;
+
+    parameterList.clear();
+    selectedParameter = null;
+
+    selectionType = 0;
+    parameterType = 1;
+
+    allParameters.clear();
+
+    cart?.clear();
+
+    labList.clear();
+    selectedLab = "";
+    isLabSelected = false;
+    labIncharge = null;
+
+    isLab = true;
+
+    _currentLatitude = null;
+    _currentLongitude = null;
+
+    _labResponse = null;
+
+    _selectedParamLabId = null;
+    _selectedParamLabName = null;
+
+    notifyListeners();
+  }
 
 }

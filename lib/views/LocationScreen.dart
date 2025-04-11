@@ -308,6 +308,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == 0 &&
                         validateStateVillage(masterProvider)) {
                       print('Going to Save Sample screen');
+                      Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, Strings.navigateToSaveSample);
                     } else {
                       ToastHelper.showErrorSnackBar(
