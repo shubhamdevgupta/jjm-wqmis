@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/LabInchargeResponse/AllLabResponse.dart';
 import '../../providers/masterProvider.dart';
 import '../../utils/CustomSearchableDropdown.dart';
 import '../../utils/LoaderUtils.dart';
-import '../SelectedTest.dart';
 
 class AsPerLabTabView extends StatefulWidget {
   @override
@@ -50,7 +50,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            child: const SelectedTestScreen(),
+                            child: const SubmitSampleScreen(),
                              // child: const SelectedTestScreenNew(),
                             ),
                           ),

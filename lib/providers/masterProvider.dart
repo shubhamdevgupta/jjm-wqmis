@@ -13,19 +13,15 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
-import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
-import 'BaseResettableProvider.dart';
 
-class Masterprovider extends Resettable {
+class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
-  final Lapparameterrepository _lapparameterrepository =
-      Lapparameterrepository();
+
   List<Stateresponse> states = [];
   bool isLoading = false;
   String? selectedStateId;
@@ -82,10 +78,6 @@ class Masterprovider extends Resettable {
   int? _selectedHandpumpPrivate;
 
   int? get selectedHandpumpPrivate => _selectedHandpumpPrivate;
-
-  int? _selectedPwsType;
-
-  int? get selectedPwsType => _selectedPwsType;
 
   String? _selectedDatetime="";
 
@@ -397,7 +389,6 @@ class Masterprovider extends Resettable {
 
   void setSelectedWaterSourcefilter(String? value) {
     selectedWtsfilter = value;
-    _selectedPwsType = null;
     _selectedSubSource = null;
     _selectedHouseHoldType = null;
     _selectedHandpumpPrivate = null;
@@ -429,14 +420,9 @@ class Masterprovider extends Resettable {
 
   void setSelectedSubSource(int? value) {
     _selectedSubSource = value;
-    _selectedPwsType = null;
     notifyListeners();
   }
 
-  void setSelectedPwsSource(int? value) {
-    _selectedPwsType = value;
-    notifyListeners();
-  }
 
   void setSelectedScheme(String? schemeId) {
     selectedScheme = schemeId;
@@ -512,8 +498,49 @@ class Masterprovider extends Resettable {
     notifyListeners();
   }
 
-  @override
-  void reset() {
-    // TODO: implement reset
+  void clearData() {
+    states.clear();
+    isLoading = false;
+    selectedStateId = null;
+
+    districts.clear();
+    selectedDistrictId = null;
+
+    blocks.clear();
+    selectedBlockId = null;
+
+    gramPanchayat.clear();
+    selectedGramPanchayat = null;
+
+    village.clear();
+    selectedVillage = null;
+
+    habitationId.clear();
+    selectedHabitation = null;
+
+    schemes.clear();
+    selectedScheme = null;
+
+    waterSource.clear();
+    selectedWaterSource = null;
+
+    wtpList.clear();
+    selectedWtp = null;
+
+    wtsFilterList.clear();
+    selectedWtsfilter = null;
+
+    _villageDetails.clear();
+
+    isWtp = false;
+
+    _validateVillageResponse = null;
+
+    _wtpLabModel = null;
+
+    wtpLab.clear();
+
+    notifyListeners();
   }
+
 }

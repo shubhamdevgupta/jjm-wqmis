@@ -30,7 +30,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
 
     var enc = encryption.encryptText("Beneficiaryname");
-
     print("Aesen-----> $enc");
     var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
     print("Aesen-----> $dep");
@@ -38,11 +37,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     getToken();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData();
+      final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
+      dashboardProvider.loadDashboardData();
+
+      masterProvider.clearData();
+      masterProvider.fetchDistricts(stateId);
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<Masterprovider>(context, listen: false).fetchDistricts(stateId);
-    });
+
+
   }
 
   @override
@@ -325,43 +329,40 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          final result = await showDialog<bool>( // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
-                              double screenHeight =
-                                  MediaQuery.of(context).size.height;
+                              double screenHeight = MediaQuery.of(context).size.height;
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
-                                // Adjust the padding to reduce space
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
-                                  // Set a fixed height for the content
-                                  child: const Locationscreen(flag: 0,), // Replace with your widget
+                                  child: const Locationscreen(flag: 0), // Your widget
                                 ),
                               );
                             },
                           );
+                          if (result == false) {
+                            Provider.of<Masterprovider>(context, listen: false).clearData();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),
                           textStyle: const TextStyle(fontSize: 16),
-                          minimumSize: const Size(300,
-                              50), // Set a minimum width (200) and height (50)
+                          minimumSize: const Size(300, 50),
                         ),
                         child: const Row(
                           mainAxisSize: MainAxisSize.min,
-                          // Ensures the button adjusts its size based on content
                           children: [
                             Icon(
-                              Icons.add, // Plus symbol icon
-                              color: Colors.white, // Match text color
-                              size: 18, // Adjust the size as needed
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
                             ),
                             SizedBox(width: 8),
-                            // Add spacing between icon and text
                             Text(
                               Strings.addSample,
                               style: TextStyle(color: Colors.white),
@@ -370,8 +371,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ),
                       ),
                     )
-
-
                   ],
                 ),
               );

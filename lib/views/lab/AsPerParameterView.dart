@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/masterProvider.dart';
-import '../SelectedTest.dart';
+import '../SubmitSampleScreen.dart';
 
 class Asperparameterview extends StatefulWidget {
   @override
@@ -48,7 +47,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                              child: const SelectedTestScreen(),
+                              child: const SubmitSampleScreen(),
                             ),
                           ),
                         );

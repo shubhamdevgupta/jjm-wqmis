@@ -10,14 +10,14 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/CustomDropdown.dart';
 
-class SelectedTestScreen extends StatefulWidget {
-  const SelectedTestScreen({super.key});
+class SubmitSampleScreen extends StatefulWidget {
+  const SubmitSampleScreen({super.key});
 
   @override
-  State<SelectedTestScreen> createState() => _SelectedTestScreenState();
+  State<SubmitSampleScreen> createState() => _SelectedSampleScreenState();
 }
 
-class _SelectedTestScreenState extends State<SelectedTestScreen> {
+class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final TextEditingController remarkController = TextEditingController();
   final LocalStorageService _localStorage = LocalStorageService();
   final ScrollController _scrollController = ScrollController();
@@ -74,7 +74,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                           Color(0xFF096DA8), // Dark blue color
                           Color(0xFF3C8DBC), // jjm blue color
                         ],
-                        begin: Alignment.topCenter,   // Start at the top center
+                        begin: Alignment.topCenter, // Start at the top center
                         end: Alignment.bottomCenter, // End at the bottom center
                       ),
                     ),
@@ -642,8 +642,6 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                         onPressed: () {
                           validateAndSubmit(
                               context, provider, masterProvider, paramProvider);
-
-
                         },
                         child: Text(
                           Strings.submitSample,
@@ -682,7 +680,7 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
     await provider.fetchDeviceId();
-   await provider.sampleSubmit(
+    await  provider.sampleSubmit(
       int.parse(paramProvider.selectedLab.toString()),
       int.parse(userId),
       int.parse(roleId),
@@ -726,7 +724,6 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
                       '/dashboard',
                           (route) =>
                       false); // Go to Dashboard
-
                 },
                 child: Text("OK"),
               ),
@@ -734,9 +731,8 @@ class _SelectedTestScreenState extends State<SelectedTestScreen> {
           );
         },
       );
-
-//
-
+      masterProvider.clearData();
+      paramProvider.clearData();
     } else {
       print(
           'submitdata failed------ ${provider.isSubmitData}');

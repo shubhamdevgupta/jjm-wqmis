@@ -24,6 +24,38 @@ class _SampleListScreenState extends State<SampleListScreen> {
   TextEditingController searchController = TextEditingController();
   int flag = 1; // Define flag
   final encryption = AesEncryption();
+
+  int? selectedYear;
+
+  void _selectYear(BuildContext context) async {
+    final currentYear = DateTime.now().year;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Year'),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: YearPicker(
+              firstDate: DateTime(currentYear - 100),
+              lastDate: DateTime(currentYear + 10),
+              initialDate: DateTime(selectedYear ?? currentYear),
+              selectedDate: DateTime(selectedYear ?? currentYear),
+              onChanged: (DateTime dateTime) {
+                setState(() {
+                  selectedYear = dateTime.year;
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -106,17 +138,25 @@ class _SampleListScreenState extends State<SampleListScreen> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => Dashboardscreen()),
-                        (route) => false, // Removes all previous routes
-                  );              }
+                        (route) => false,
+                  );
+                }
               },
             ),
-            title: const Text(Strings.appTitle,
+            title: const Text(
+              'JJM-WQMIS',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.calendar_month_outlined, color: Colors.white),
+                onPressed: () => _selectYear(context),
+              ),
+            ],
             flexibleSpace: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -170,16 +210,28 @@ class _SampleListScreenState extends State<SampleListScreen> {
       
                   // Search Bar
                   Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
                         Expanded(
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: "Search...",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                          child:Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Search...',
+                                border: InputBorder.none,
                               ),
                             ),
                           ),
@@ -211,7 +263,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       ],
                     ),
                   ),
-      
+
                   // Expanded to prevent infinite height issue
                   Expanded(
                     child: provider.isLoading
