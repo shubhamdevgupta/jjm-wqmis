@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import 'AsPerLabView.dart';
@@ -27,7 +28,9 @@ class _LabParameterScreen extends State<Labparameterscreen>
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    paramProvider.clearData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ParameterProvider>(context, listen: false).clearData();
+    });
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
 
@@ -157,6 +160,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
                 children: [
                   AsPerLabTabView(),
                   Asperparameterview(),
+                  LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
                 ],
               ),
             );
