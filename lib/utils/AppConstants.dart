@@ -1,6 +1,18 @@
-class Strings {
-
+class AppConstants {
   static const String appTitle = 'JJM-WQMIS';
+
+  /////////////////////   Preference Data  //////////////////////////////////
+
+
+  static const String prefIsLoggedIn = 'isLoggedIn';
+  static const String prefToken = 'token';
+  static const String prefUserId = 'userId';
+  static const String prefRoleId = 'roleId';
+  static const String prefName = 'name';
+  static const String prefMobile = 'mobile';
+  static const String prefStateId = 'stateId';
+  static const String prefStateName = 'stateName';
+  static const String prefRegId = 'reg_id';
 
   /////////////////////   Routes literals  //////////////////////////////////
   static const String navigateToSaveSample = '/savesample';
@@ -28,5 +40,6 @@ class Strings {
   static const String addSample = 'Add Sample';
 
   static const String selectedTest = 'Selected Test';
+
 
 }
