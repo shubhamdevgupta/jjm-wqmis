@@ -53,6 +53,15 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
               child: Scaffold(
                 resizeToAvoidBottomInset: false,
                 appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    elevation: 5,
+                    centerTitle: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.horizontal(
+                        left: Radius.circular(8),
+                        right: Radius.circular(8),
+                      ),
+                    ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                     onPressed: () {
@@ -66,9 +75,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                   flexibleSpace: Container(
                     decoration: BoxDecoration(
                       color: Colors.blueAccent,
-                      // Background color for the container
-                      borderRadius: BorderRadius.circular(8),
-                      // Rounded corners
+
                       gradient: const LinearGradient(
                         colors: [
                           Color(0xFF096DA8), // Dark blue color

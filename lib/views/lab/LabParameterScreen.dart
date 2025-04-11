@@ -27,7 +27,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
+    paramProvider.clearData();
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
 
@@ -101,6 +101,15 @@ class _LabParameterScreen extends State<Labparameterscreen>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text("Select Lab/Parameter", style: TextStyle(color: Colors.white)),
+            automaticallyImplyLeading: false,
+            elevation: 5,
+            centerTitle: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(8),
+                right: Radius.circular(8),
+              ),
+            ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -128,9 +137,6 @@ class _LabParameterScreen extends State<Labparameterscreen>
           flexibleSpace: Container(
             decoration: BoxDecoration(
               color: Colors.blueAccent,
-              // Background color for the container
-              borderRadius: BorderRadius.circular(8),
-              // Rounded corners
               gradient: const LinearGradient(
                 colors: [
                   Color(0xFF096DA8), // Dark blue
@@ -142,19 +148,6 @@ class _LabParameterScreen extends State<Labparameterscreen>
             ),
           ),
         ),
-        /*body: Padding*//*SizedBox*//*(
-        //  height: MediaQuery.of(context).size.height * 0.75,
-       //   height: MediaQuery.of(context).size.height - 215, // 100 is the bottom margin
-          padding: const EdgeInsets.only(bottom: 45),
-
-          child: TabBarView(
-            controller: mTabController,
-            children: [
-              AsPerLabTabView(),
-              Asperparameterview(),
-            ],
-          ),
-        ),*/
         body: LayoutBuilder(
           builder: (context, constraints) {
             return SizedBox(

@@ -129,6 +129,13 @@ class _SampleListScreenState extends State<SampleListScreen> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
+              elevation: 5,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(8),
+                  right: Radius.circular(8),
+                ),
+              ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
@@ -169,7 +176,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 ),
               ),
             ),
-            elevation: 5,
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
