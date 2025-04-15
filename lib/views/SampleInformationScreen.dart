@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -670,7 +671,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                               value: masterProvider,
-                                              child: Labparameterscreen(),
+                                              child: Wtplabscreen(),
                                             )),
                                   );
                                 },

@@ -381,6 +381,10 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
+  void setSelectedWtpLab(String? value){
+    selectedWtpLab=value;
+    notifyListeners();
+  }
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
