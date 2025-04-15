@@ -6,8 +6,10 @@ import '../models/LgdResponse.dart';
 import '../repository/AuthenticaitonRepository.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/DeviceUtils.dart';
+import '../utils/AppConstants.dart';
+import 'BaseResettableProvider.dart';
 
-class DashboardProvider extends ChangeNotifier{
+class DashboardProvider extends Resettable{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -19,9 +21,9 @@ class DashboardProvider extends ChangeNotifier{
   Future<void> loadDashboardData() async {
     _isLoading = true;
     notifyListeners();
-    String roleId=_localStorage.getString('roleId') ?? '';
-    String userId=_localStorage.getString('userId') ?? '';
-    String stateId=_localStorage.getString('stateId') ?? '';
+    String roleId=_localStorage.getString(AppConstants.prefRoleId) ?? '';
+    String userId=_localStorage.getString(AppConstants.prefUserId) ?? '';
+    String stateId=_localStorage.getString(AppConstants.prefStateId) ?? '';
     try {
       dashboardData = await _authRepository.fetchDashboardData(int.parse(roleId), int.parse(userId), int.parse(stateId));
     } catch (e) {
@@ -30,6 +32,11 @@ class DashboardProvider extends ChangeNotifier{
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 
 }

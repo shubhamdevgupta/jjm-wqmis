@@ -1,7 +1,7 @@
 // Import necessary packages
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'dart:async';
 
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
@@ -28,9 +28,9 @@ class _SplashScreenState extends State<SplashScreen> {
     await authProvider.checkLoginStatus();
 
     if (authProvider.isLoggedIn) {
-      Navigator.pushReplacementNamed(context, Strings.navigateToDashboard);
+      Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
     } else {
-      Navigator.pushReplacementNamed(context, Strings.navigateToLogin);
+      Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
     }
   }
 

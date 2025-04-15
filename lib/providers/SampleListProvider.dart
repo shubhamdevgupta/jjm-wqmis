@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../models/SampleListResponse.dart';
 import '../repository/SampleListRepo.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import 'BaseResettableProvider.dart';
 
-class Samplelistprovider extends ChangeNotifier {
+class Samplelistprovider extends Resettable {
   final SampleListRepo _repository = SampleListRepo();
 
   int status = 0;
@@ -37,5 +38,10 @@ class Samplelistprovider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 }

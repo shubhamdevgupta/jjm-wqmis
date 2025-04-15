@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
-import 'package:jjm_wqmis/utils/Strings.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/testScreen/webview.dart';
+import 'package:jjm_wqmis/views/webView/webview.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/masterProvider.dart';
@@ -484,8 +484,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
   }
 
   String getToken() {
-    String? token = _localStorage.getString('token') ?? '';
-    userId = _localStorage.getString('userId') ?? '';
+    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
+    userId = _localStorage.getString(AppConstants.prefUserId) ?? '';
     return token;
   }
 }

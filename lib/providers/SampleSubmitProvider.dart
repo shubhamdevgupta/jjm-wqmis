@@ -4,8 +4,9 @@ import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import 'BaseResettableProvider.dart';
 
-class Samplesubprovider extends ChangeNotifier {
+class Samplesubprovider extends Resettable {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
   bool isSubmitData = false;
   Sampleresponse? sampleresponse;
@@ -90,6 +91,11 @@ class Samplesubprovider extends ChangeNotifier {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
     notifyListeners();
+  }
+
+  @override
+  void reset() {
+    // TODO: implement reset
   }
 
 
