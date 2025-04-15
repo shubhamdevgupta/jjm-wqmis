@@ -37,29 +37,30 @@ class _LabParameterScreen extends State<Labparameterscreen>
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
 
       if (mTabController.index == 0) {
-        paramProvider.parameterList.clear();
-        paramProvider.parameterType = 1;
-        paramProvider.cart!.clear();
-        paramProvider.isLabSelected=false;
-        paramProvider.selectedLab=null;
-        fetchAllLabs();
+        if (masterProvider.isWtp == true) {
+          paramProvider.parameterList.clear();
+          paramProvider.parameterType = 1;
+          paramProvider.cart!.clear();
+          paramProvider.isLabSelected = false;
+          paramProvider.selectedLab = null;
+          masterProvider.fetchWTPLab(
+              masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+        } else {
+          paramProvider.parameterList.clear();
+          paramProvider.parameterType = 1;
+          paramProvider.cart!.clear();
+          paramProvider.isLabSelected = false;
+          paramProvider.selectedLab = null;
+          fetchAllLabs();
+        }
       } else if (mTabController.index == 1) {
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
-        paramProvider.selectedLab=null;
+        paramProvider.selectedLab = null;
         fetchAllParameters();
-      } else if(mTabController.index == 0 && masterProvider.isWtp==true){
-        paramProvider.parameterList.clear();
-        paramProvider.parameterType = 1;
-        paramProvider.cart!.clear();
-        paramProvider.isLabSelected=false;
-        paramProvider.selectedLab=null;
-        masterProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
       }
     });
-
-    fetchAllLabs();
   }
 
   void fetchAllLabs() {
@@ -125,15 +126,15 @@ class _LabParameterScreen extends State<Labparameterscreen>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text("Select Lab/Parameter", style: TextStyle(color: Colors.white)),
-            automaticallyImplyLeading: false,
-            elevation: 5,
-            centerTitle: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(8),
-                right: Radius.circular(8),
-              ),
+          automaticallyImplyLeading: false,
+          elevation: 5,
+          centerTitle: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.horizontal(
+              left: Radius.circular(8),
+              right: Radius.circular(8),
             ),
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -175,16 +176,19 @@ class _LabParameterScreen extends State<Labparameterscreen>
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
-            return SizedBox(
-              height: constraints.maxHeight - 45,
-              child: TabBarView(
-                controller: mTabController,
-                children: [
-                  AsPerLabTabView(),
-                  Asperparameterview(),
-                  LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
-                ],
-              ),
+            return Stack(
+              children: [
+                SizedBox(
+                  height: constraints.maxHeight - 45,
+                  child: TabBarView(
+                    controller: mTabController,
+                    children: [
+                      AsPerLabTabView(),
+                      Asperparameterview(),
+                    ],
+                  ),
+                )
+              ],
             );
           },
         ),
