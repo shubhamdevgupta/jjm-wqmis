@@ -74,7 +74,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllParameters() {
-    String regId = _localStorage.getString('reg_id') ?? '';
+    String regId = _localStorage.getString(AppConstants.prefRegId) ?? '';
     paramProvider.fetchAllParameter(
       "0",
       masterProvider.selectedStateId ?? "0", "0", regId, "1",
