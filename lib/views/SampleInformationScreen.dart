@@ -583,11 +583,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!);
                           masterProvider.setSelectedSubSource(value);
-                          print('------------>>>>>>>${masterProvider.wtpLabModel}');
-                          print('------------>>>>>>>${masterProvider.wtpLab}');
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Inlet of WTP')
@@ -600,9 +595,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Outlet of WTP')
@@ -615,9 +607,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Disinfection')
@@ -669,8 +658,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             SizedBox(height: 20,),
                             Center(
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   masterProvider.isWtp=true;
+                                  print('------------>>>>>>>${masterProvider.wtpLabModel}');
+                                  print('------------>>>>>>>${masterProvider.wtpLab}');
+                                  await  masterProvider.fetchWTPLab(masterProvider.selectedStateId!,
+                                      masterProvider.selectedWtp!);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
