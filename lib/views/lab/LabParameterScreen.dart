@@ -18,14 +18,15 @@ class _LabParameterScreen extends State<Labparameterscreen>
   late TabController mTabController;
   late ParameterProvider paramProvider;
   late Masterprovider masterProvider;
+  late var regId;
   final LocalStorageService _localStorage = LocalStorageService();
-  var regId;
 
   @override
   void initState() {
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
-
+     regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
+  print('registerUserId is $regId');
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
@@ -55,7 +56,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllLabs() {
-    regId = _localStorage.getString(AppConstants.prefRegId);
+     regId = _localStorage.getString(AppConstants.prefRegId) ?? "0";
     paramProvider.fetchAllLabs(
       masterProvider.selectedStateId!,
       masterProvider.selectedDistrictId!,
