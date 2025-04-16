@@ -709,7 +709,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
-      0,
+      int.parse(masterProvider.selectedWtp!),
       paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",
     );

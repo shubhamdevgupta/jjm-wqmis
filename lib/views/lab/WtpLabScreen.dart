@@ -35,7 +35,6 @@ class _WtpLabScreen extends State<Wtplabscreen> {
   Widget build(BuildContext context) {
     return Consumer<ParameterProvider>(
         builder: (context, provider, child) {
-          print("providee ---- ${provider.wtpLab}");
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -44,8 +43,8 @@ class _WtpLabScreen extends State<Wtplabscreen> {
             child: Scaffold(
               floatingActionButton: FloatingActionButton(
                   child: Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    provider.fetchLocation();
+                  onPressed: () async{
+                   await provider.fetchLocation();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
