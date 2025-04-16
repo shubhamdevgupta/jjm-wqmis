@@ -56,16 +56,9 @@ class Masterprovider extends ChangeNotifier {
   List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
   List<Lgdresponse> get villageDetails => _villageDetails;
 
-  bool isWtp=false;
 
   ValidateVillageResponse? _validateVillageResponse;
   ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
-
-  WtpLabResponse? _wtpLabModel;
-  WtpLabResponse? get wtpLabModel => _wtpLabModel;
-
-  List<WtpLab>  wtpLab =[];
-  String? selectedWtpLab;
 
   int? _selectedSubSource;
 
@@ -343,48 +336,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
   /// Fetch WTP Labs from API
-  Future<void> fetchWTPLab(String stateId, String wtpId) async {
-    isLoading = true;
-    notifyListeners();
 
-    try {
-      final response = await _masterRepository.fetchWtpLabs(stateId, wtpId);
 
-      if (response != null) {
-        _wtpLabModel = response;
-
-        if (_wtpLabModel!.status == 1) {
-          wtpLab = _wtpLabModel!.result;
-
-          if (wtpLab.any((wtp) => wtp.labId == selectedWtpLab)) {
-            selectedWtpLab = selectedWtpLab; // Keep current selected if still valid
-          } else if (wtpLab.isNotEmpty) {
-            selectedWtpLab = wtpLab.first.labId; // Reset if invalid or select first
-          } else {
-            selectedWtpLab = ''; // Handle if list is empty
-          }
-        } else {
-          debugPrint("API Message: ${_wtpLabModel!.message}");
-          _wtpLabModel = WtpLabResponse(
-            status: 0,
-            message: _wtpLabModel!.message,
-            result: [], // Ensure empty labs list
-          );
-        }
-      }
-    } catch (e) {
-      debugPrint("Error fetching WTP Labs: $e");
-      _wtpLabModel = null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  void setSelectedWtpLab(String? value){
-    selectedWtpLab=value;
-    notifyListeners();
-  }
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
@@ -536,13 +489,7 @@ class Masterprovider extends ChangeNotifier {
 
     _villageDetails.clear();
 
-    isWtp = false;
-
     _validateVillageResponse = null;
-
-    _wtpLabModel = null;
-
-    wtpLab.clear();
 
     notifyListeners();
   }

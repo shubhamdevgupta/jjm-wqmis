@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
@@ -6,6 +7,8 @@ import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/ParameterProvider.dart';
+import '../../services/LocalStorageService.dart';
+import '../../utils/AppConstants.dart';
 import '../../utils/CustomDropdown.dart';
 
 class Wtplabscreen extends StatefulWidget {
@@ -15,19 +18,24 @@ class Wtplabscreen extends StatefulWidget {
 
 class _WtpLabScreen extends State<Wtplabscreen> {
   late Masterprovider masterProvider;
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    final paramProvider=  Provider.of<ParameterProvider>(context, listen: false);
+    paramProvider.isLab=true;
+    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ParameterProvider(),
-      child: Consumer<ParameterProvider>(
+    return Consumer<ParameterProvider>(
         builder: (context, provider, child) {
+          print("providee ---- ${provider.wtpLab}");
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -146,8 +154,8 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                         children: [
                           CustomDropdown(
                             title: "Select WTP Lab *",
-                            value: masterProvider.selectedWtpLab,
-                            items: masterProvider.wtpLab.map((wtpLab) {
+                            value: provider.selectedWtpLab,
+                            items: provider.wtpLab.map((wtpLab) {
                               return DropdownMenuItem<String>(
                                 value: wtpLab.labId,
                                 child: Text(
@@ -157,65 +165,80 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (value) {
-                              masterProvider.setSelectedWtpLab(value);
+                            onChanged: (selectedLabId) {
+                              if (selectedLabId == null) return;
+
+                              final selectedLab = provider.wtpLab.firstWhere(
+                                    (lab) => lab.labId == selectedLabId,
+                                orElse: () => WtpLab(labId: "0", labName: ''),
+                              );
+
+                              provider.cart!.clear();
+                              provider.setSelectedWtpLab(selectedLab.labId);
+
+                              if (provider.selectedWtpLab != null) {
+                                provider.fetchAllParameter(
+                                  selectedLab.labId!,
+                                  masterProvider.selectedStateId ?? "0",
+                                  "0",
+                                  _localStorage.getString(AppConstants.prefRegId).toString(),
+                                  "0",
+                                );
+                              }
                             },
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Card(
-                            elevation: 5,
-                            // Increased elevation for a more modern shadow effect
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  12), // Slightly increased border radius for a smooth look
-                            ),
-                            margin: EdgeInsets.all(5),
-                            // Margin to ensure spacing around the card
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Parameter Type:',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  DropdownButton<int>(
+                          Visibility(
+                            visible: provider.isLabSelected,
+                            child: Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              margin: EdgeInsets.all(5),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Select Parameter Type:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    DropdownButton<int>(
                                       isExpanded: true,
-                                      value: provider.parameterType,
-                                      items: [
-                                        const DropdownMenuItem(
-                                            value: 0,
-                                            child: Text('Select Parameter')),
-                                        const DropdownMenuItem(
+                                      value: provider.parameterType ?? 1,
+                                      items: const [
+                                        DropdownMenuItem(
                                             value: 1,
                                             child: Text('All Parameter')),
                                         const DropdownMenuItem(
                                             value: 2,
                                             child: Text('Chemical Parameter')),
-                                        const DropdownMenuItem(
+                                        DropdownMenuItem(
                                             value: 3,
                                             child: Text(
                                                 'Bacteriological Parameter')),
                                       ],
-                                      onChanged: (value) => {
-                                            provider.setParameterType(value!),
-                                            if (value != 0)
-                                              {
-                                                provider.fetchAllParameter(
-                                                    provider.selectedLab!,
-                                                    masterProvider
-                                                        .selectedStateId!,
-                                                    "0",
-                                                    "1151455",
-                                                    value.toString()),
-                                              }
-                                          }),
-                                ],
+                                      onChanged: (value) {
+                                        if (value == null) return;
+                                        provider.setParameterType(value);
+                                        provider.cart!.clear();
+                                        provider.fetchAllParameter(
+                                          provider.selectedWtpLab!,
+                                          masterProvider.selectedStateId!,
+                                          "0",
+                                          _localStorage.getString(AppConstants.prefRegId).toString(),
+                                          value.toString(),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -353,7 +376,6 @@ class _WtpLabScreen extends State<Wtplabscreen> {
             ),
           );
         },
-      ),
-    );
+      );
   }
 }
