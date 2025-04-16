@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import '../../utils/AppConstants.dart';
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
-import '../../utils/AppConstants.dart';
 
 class Labparameterscreen extends StatefulWidget {
-
   @override
   _LabParameterScreen createState() => _LabParameterScreen();
 }
@@ -21,6 +19,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   late ParameterProvider paramProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
+  var regId;
 
   @override
   void initState() {
@@ -37,22 +36,12 @@ class _LabParameterScreen extends State<Labparameterscreen>
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
 
       if (mTabController.index == 0) {
-        if (masterProvider.isWtp == true) {
-          paramProvider.parameterList.clear();
-          paramProvider.parameterType = 1;
-          paramProvider.cart!.clear();
-          paramProvider.isLabSelected = false;
-          paramProvider.selectedLab = null;
-          masterProvider.fetchWTPLab(
-              masterProvider.selectedStateId!, masterProvider.selectedWtp!);
-        } else {
-          paramProvider.parameterList.clear();
-          paramProvider.parameterType = 1;
-          paramProvider.cart!.clear();
-          paramProvider.isLabSelected = false;
-          paramProvider.selectedLab = null;
-          fetchAllLabs();
-        }
+        paramProvider.parameterList.clear();
+        paramProvider.parameterType = 1;
+        paramProvider.cart!.clear();
+        paramProvider.isLabSelected = false;
+        paramProvider.selectedLab = null;
+        fetchAllLabs();
       } else if (mTabController.index == 1) {
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
@@ -61,9 +50,12 @@ class _LabParameterScreen extends State<Labparameterscreen>
         fetchAllParameters();
       }
     });
+
+    fetchAllLabs();
   }
 
   void fetchAllLabs() {
+    regId = _localStorage.getString(AppConstants.prefRegId);
     paramProvider.fetchAllLabs(
       masterProvider.selectedStateId!,
       masterProvider.selectedDistrictId!,
@@ -75,10 +67,13 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllParameters() {
-    String regId = _localStorage.getString('reg_id') ?? '';
+    print('register usedId $regId');
     paramProvider.fetchAllParameter(
       "0",
-      masterProvider.selectedStateId ?? "0", "0", regId, "1",
+      masterProvider.selectedStateId ?? "0",
+      "0",
+      regId,
+      "1",
     );
   }
 
@@ -125,7 +120,8 @@ class _LabParameterScreen extends State<Labparameterscreen>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select Lab/Parameter", style: TextStyle(color: Colors.white)),
+          title: const Text("Select Lab/Parameter",
+              style: TextStyle(color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,
@@ -149,16 +145,20 @@ class _LabParameterScreen extends State<Labparameterscreen>
           bottom: TabBar(
             controller: mTabController,
             tabs: myTabs,
-            labelColor: Colors.white, // White for selected tab text
-            unselectedLabelColor: Colors.white70, // Slightly faded for unselected tabs
-            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            labelColor: Colors.white,
+            // White for selected tab text
+            unselectedLabelColor: Colors.white70,
+            // Slightly faded for unselected tabs
+            labelStyle:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
               color: Color(0xFF5FAFE5), // Light blue indicator
               borderRadius: BorderRadius.circular(8),
             ),
             indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            indicatorPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -166,29 +166,25 @@ class _LabParameterScreen extends State<Labparameterscreen>
               gradient: const LinearGradient(
                 colors: [
                   Color(0xFF096DA8), // Dark blue
-                  Color(0xFF3C8DBC),  // jjm blue color
+                  Color(0xFF3C8DBC), // jjm blue color
                 ],
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,// End at the bottom center
+                end: Alignment.bottomCenter, // End at the bottom center
               ),
             ),
           ),
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
-            return Stack(
-              children: [
-                SizedBox(
-                  height: constraints.maxHeight - 45,
-                  child: TabBarView(
-                    controller: mTabController,
-                    children: [
-                      AsPerLabTabView(),
-                      Asperparameterview(),
-                    ],
-                  ),
-                )
-              ],
+            return SizedBox(
+              height: constraints.maxHeight - 45,
+              child: TabBarView(
+                controller: mTabController,
+                children: [
+                  AsPerLabTabView(),
+                  Asperparameterview(),
+                ],
+              ),
             );
           },
         ),

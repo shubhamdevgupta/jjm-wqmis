@@ -1,11 +1,13 @@
 // Flutter layout for the 'Sample Information' form
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -659,18 +661,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             Center(
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  masterProvider.isWtp=true;
-                                  print('------------>>>>>>>${masterProvider.wtpLabModel}');
-                                  print('------------>>>>>>>${masterProvider.wtpLab}');
-                                  await  masterProvider.fetchWTPLab(masterProvider.selectedStateId!,
-                                      masterProvider.selectedWtp!);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                               value: masterProvider,
-                                              child: Labparameterscreen(),
+                                              child: Wtplabscreen(),
                                             )),
                                   );
                                 },
