@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 
 import '../models/DashboardResponse/DashboardResponse.dart';
 import '../models/LgdResponse.dart';
@@ -17,6 +18,7 @@ class DashboardProvider extends Resettable{
   bool get isLoading => _isLoading;
 
   Dashboardresponse? dashboardData;
+  Dwsmdashboardresponse? dwsmdashboardresponse;
 
   Future<void> loadDashboardData() async {
     _isLoading = true;
@@ -26,6 +28,20 @@ class DashboardProvider extends Resettable{
     String stateId=_localStorage.getString(AppConstants.prefStateId) ?? '';
     try {
       dashboardData = await _authRepository.fetchDashboardData(int.parse(roleId), int.parse(userId), int.parse(stateId));
+    } catch (e) {
+      debugPrint("Dashboard Error: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> loadDwsmDashboardData() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      //make them dynamic
+      dwsmdashboardresponse = await _authRepository.fetchDwsmDashboardData(31,451);
     } catch (e) {
       debugPrint("Dashboard Error: $e");
     } finally {
