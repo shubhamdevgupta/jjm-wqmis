@@ -336,17 +336,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   ),
                                                 ),
 
-                                                GestureDetector(
-                                                  onTap: (){
-                                                    Navigator.push(context, MaterialPageRoute(
-                                                      builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
-                                                    ),
-                                                    );
-                                                  },
-                                                  child: CircleAvatar(
-                                                    backgroundColor: Colors.brown,
-                                                    child: Icon(Icons.download,color: Colors.white,),
+                                                Visibility(
+                                                  visible:sample.testResult == "Report Approved",
+                                                  child: GestureDetector(
+                                                    onTap: (){
+                                                      Navigator.push(context, MaterialPageRoute(
+                                                        builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
+                                                      ),
+                                                      );
+                                                    },
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.brown,
+                                                      child: Icon(Icons.download,color: Colors.white,),
 
+                                                    ),
                                                   ),
                                                 ),
                                               ],

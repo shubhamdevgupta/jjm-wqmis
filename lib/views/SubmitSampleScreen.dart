@@ -705,35 +705,40 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
-      int.parse(masterProvider.selectedWtp!),
-      paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
+        int.parse(masterProvider.selectedWtp ?? '0'),
+        paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",
     );
     if (provider.sampleresponse!.status == 1) {
 
+
       showDialog(
         context: context,
+        barrierDismissible: false, // Disable tap outside to dismiss
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Success"),
-            content:
-            Text(provider.sampleresponse!.message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pushNamedAndRemoveUntil(
+          return WillPopScope(
+            onWillPop: () async => false, // Disable back button
+            child: AlertDialog(
+              title: Text("Success"),
+              content: Text(provider.sampleresponse!.message),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
                       '/dashboard',
-                          (route) =>
-                      false); // Go to Dashboard
-                },
-                child: Text("OK"),
-              ),
-            ],
+                          (route) => false, // Clear back stack
+                    );
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            ),
           );
         },
       );
+
       masterProvider.clearData();
       paramProvider.clearData();
     } else {

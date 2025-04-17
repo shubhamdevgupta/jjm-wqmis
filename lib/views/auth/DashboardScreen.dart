@@ -192,8 +192,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     Container(
                       padding:
-                          const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 20),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -212,7 +212,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                const AssetImage('assets/user.png'),
+                            const AssetImage('assets/user_image.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
@@ -228,7 +228,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.blue[800],
                                     // Slightly dark blue color for warmth
@@ -248,6 +248,24 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     const SizedBox(width: 6),
                                     Text(
                                       '$mobile',
+                                      // Replace with dynamic phone number
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.account_balance_sharp,
+                                        color: Colors.teal, size: 20),
+                                    // Using an icon for consistency
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Departmental Official',
                                       // Replace with dynamic phone number
                                       style: const TextStyle(
                                         fontSize: 16,
@@ -333,12 +351,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight = MediaQuery.of(context).size.height;
+                              double screenwidth = MediaQuery.of(context).size.width;
+
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
-                                  width: screenHeight * 0.4,
+                                  width: screenwidth * 0.99,
                                   child: const Locationscreen(flag: 0), // Your widget
                                 ),
                               );
