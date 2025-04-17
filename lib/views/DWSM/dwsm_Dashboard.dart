@@ -30,7 +30,7 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
     required IconData icon,
     required Color iconColor,
     required String title,
-    required String value,
+    required int value,
   }) {
     return Container(
       width: 135,
@@ -72,12 +72,7 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
               color: iconColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: iconColor,
+            child: Text(value.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: iconColor,
               ),
             ),
           ),
@@ -101,10 +96,11 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
       final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
-      dashboardProvider.loadDashboardData();
+
 
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
+      dashboardProvider.loadDwsmDashboardData(31,471);
     });
 
 
@@ -234,7 +230,7 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
-              final dashboardData = dashboardProvider.dashboardData;
+              final dashboardData = dashboardProvider.dwsmdashboardresponse;
 
               if (dashboardData == null) {
                 return const Center(child: CircularProgressIndicator());
@@ -312,6 +308,23 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
                                     ),
                                   ],
                                 ),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.account_balance_sharp,
+                                        color: Colors.teal, size: 20),
+                                    // Using an icon for consistency
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'DWSM',
+                                      // Replace with dynamic phone number
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -360,25 +373,25 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
                                 icon: Icons.school_rounded,
                                 iconColor: Colors.blueAccent,
                                 title: "Schools",
-                                value: "5",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalSchools,
                               ),
                               _buildInfoCard(
                                 icon: Icons.local_activity,
                                 iconColor: Colors.deepOrange,
                                 title: "Demonstrations",
-                                value: "2",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration,
                               ),
                               _buildInfoCard(
                                 icon: Icons.child_care,
                                 iconColor: Colors.teal,
                                 title: "Anganwadi",
-                                value: "5",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalAWCs,
                               ),
                               _buildInfoCard(
                                 icon: Icons.lightbulb_outline,
                                 iconColor: Colors.purple,
                                 title: "Awareness",
-                                value: "3",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration,
                               ),
                             ],
                           ),

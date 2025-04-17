@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+import '../models/DWSM/SchoolinfoResponse.dart';
 import '../utils/LocationUtils.dart';
 
 
@@ -31,6 +32,10 @@ class ParameterProvider with ChangeNotifier {
   String? selectedLab="";
   bool isLabSelected=false;
   Labinchargeresponse? labIncharge;
+
+  List<SchoolResult> Schoolinfo= [] ;
+  int? selectedSchoolId;
+  String? selectedSchoolName;
 
   bool isLab=true;
   double? _currentLatitude;
@@ -101,6 +106,28 @@ class ParameterProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      Schoolinfo = await _lapparameterrepository.fetchSchoolInfo(Stateid, Districtid, Blockid, Gpid, Villageid, type);
+      if (Schoolinfo == null) {
+        throw ApiException("Lab Incharge data is null");
+      }
+
+    } catch (e) {
+      debugPrint(" Error fetching Lab Incharge: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+  void setSelectedSchool(int id) {
+    selectedSchoolId = id;
+
+    notifyListeners();
   }
 
   Future<void> fetchLocation() async {

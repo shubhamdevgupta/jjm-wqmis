@@ -35,13 +35,13 @@ class DashboardProvider extends Resettable{
       notifyListeners();
     }
   }
-  Future<void> loadDwsmDashboardData() async {
+  Future<void> loadDwsmDashboardData(int stateId, int DistrictId) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       //make them dynamic
-      dwsmdashboardresponse = await _authRepository.fetchDwsmDashboardData(31,451);
+      dwsmdashboardresponse = await _authRepository.fetchDwsmDashboardData(stateId,DistrictId);
     } catch (e) {
       debugPrint("Dashboard Error: $e");
     } finally {

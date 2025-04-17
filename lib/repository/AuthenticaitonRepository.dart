@@ -40,6 +40,7 @@ class AuthenticaitonRepository {
       String endpoint = '/apiMobile/dashbord?role_id=$roleId&userid=$userId&stateid=$stateId';
       final response = await _apiService.get(endpoint);
 
+      print("----->response $response");
       if (response is Map<String, dynamic>) {
         return Dashboardresponse.fromJson(response);
       } else {
