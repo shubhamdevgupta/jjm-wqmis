@@ -11,6 +11,7 @@ import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 
 import 'package:provider/provider.dart';
 
+import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 import 'lab/LabParameterScreen.dart';
 
@@ -66,9 +67,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     }
                   },
                 ),
-                title: const Text(
+                title:  Text(
                   'Sample Collection Form',
-                  style: TextStyle(color: Colors.white),
+                  style: AppStyles.appBarTitle,
                 ),
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(
@@ -515,10 +516,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )
@@ -682,10 +680,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 ),
                                 child: const Text(
                                   'Next',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                  style: AppStyles.buttonStyle,
                                 ),
                               ),
                             )
@@ -759,10 +754,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               child: const Text(
                 'Next',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: AppStyles.buttonStyle,
               ),
             ),
           )
@@ -939,10 +931,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               child: const Text(
                 'Next',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: AppStyles.buttonStyle,
               ),
             ),
           )
@@ -1096,10 +1085,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )
@@ -1169,10 +1155,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )

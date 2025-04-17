@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/ParameterProvider.dart';
 import '../../services/LocalStorageService.dart';
+import '../../utils/AppStyles.dart';
 import '../../utils/CustomDropdown.dart';
 
 class DwsmLocation extends StatefulWidget {
@@ -299,12 +300,9 @@ class _DwsmLocation extends State<DwsmLocation> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Next',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    style: AppStyles.buttonStyle,
                   ),
                 ),
               ),

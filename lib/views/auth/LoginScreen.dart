@@ -6,6 +6,8 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/AppStyles.dart';
+
 // Login Page
 class Loginscreen extends StatefulWidget {
   @override
@@ -30,10 +32,7 @@ class _LoginpageState extends State<Loginscreen> {
                 centerTitle: true,
                 title: Text(
                   'Login ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
+                   style: AppStyles.appBarTitle,
                 ),
                 backgroundColor: Appcolor.btncolor,
               ),

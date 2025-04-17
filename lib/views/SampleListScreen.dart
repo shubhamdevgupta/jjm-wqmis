@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
+import '../utils/AppStyles.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -150,13 +151,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 }
               },
             ),
-            title: const Text(
+            title:  Text(
               'JJM-WQMIS',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppStyles.appBarTitle,
             ),
             actions: [
               IconButton(
