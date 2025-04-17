@@ -41,24 +41,61 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                   image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
             ),
             child: Scaffold(
-              floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.shopping_cart),
-                  onPressed: () async{
-                   await provider.fetchLocation();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MultiProvider(
-                          providers: [
-                            ChangeNotifierProvider.value(value: masterProvider),
-                            ChangeNotifierProvider.value(value: provider),
-                            // Pass parameterProvider if needed
-                          ],
-                          child: SubmitSampleScreen(),
+              floatingActionButton: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () async{
+                      await provider.fetchLocation();
+                      print('selected labb   ${provider.selectedLab}');
+                      if (provider.cart!.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MultiProvider(
+                              providers: [
+                                ChangeNotifierProvider.value(
+                                    value: masterProvider),
+                                ChangeNotifierProvider.value(value: provider),
+                              ],
+                              child: const SubmitSampleScreen(),
+                              // child: const SelectedTestScreenNew(),
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a test."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    child: const Icon(Icons.shopping_cart),
+                  ),
+                  if (provider.cart!.isNotEmpty)
+                    Positioned(
+                      right: 0,
+                      top: -4,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${provider.cart!.length}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    );
-                  }),
+                    ),
+                ],
+              ),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 title: const Text(
@@ -349,7 +386,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                     ),
                                     const SizedBox(height: 20),
                                     Text(
-                                      'Cart: ${provider.cart!.length}',
+                                      'Selected Param: ${provider.cart!.length}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,

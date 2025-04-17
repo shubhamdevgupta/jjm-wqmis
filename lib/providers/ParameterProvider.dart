@@ -285,7 +285,6 @@ class ParameterProvider with ChangeNotifier {
     parameterType = 1;
 
     allParameters.clear();
-
     cart?.clear();
 
     labList.clear();
