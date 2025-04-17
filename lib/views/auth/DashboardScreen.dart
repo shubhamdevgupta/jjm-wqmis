@@ -9,6 +9,7 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import '../../utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -62,13 +63,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  const Text(
+            title:  Text(
               AppConstants.appTitle,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppStyles.appBarTitle,
             ),
             leading: Builder(
               builder: (context) {
@@ -120,46 +117,46 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
-                      const Text(
+                      Text(
                         AppConstants.departmentalUser,
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: AppStyles.appBarTitle,
                       ),
                       Text(
                         stateName,  // Provide a fallback value if null
-                        style: const TextStyle(color: Colors.white70, fontSize: 16),
+                        style: AppStyles.setTextStyle(16, FontWeight.normal, Colors.white70),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text(AppConstants.dashboard),
+                  title: Text(AppConstants.dashboard,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.submitSampleInfo),
+                  title: Text(AppConstants.submitSampleInfo,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.listOfSamples),
+                  title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text(AppConstants.maintenance),
+                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text(AppConstants.logout),
+                  title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
@@ -415,21 +412,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppStyles.setTextStyle(24, FontWeight.bold, Colors.white),
             ),
+
             const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
+              style: AppStyles.setTextStyle(14, FontWeight.w400, Colors.white),
+
             ),
           ],
         ),

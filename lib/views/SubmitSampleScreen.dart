@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/SampleSubmitProvider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
@@ -86,9 +87,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       ),
                     ),
                   ),
-                  title: const Text(
+                  title: Text(
                     AppConstants.selectedTest,
-                    style: TextStyle(color: Colors.white),
+                    style: AppStyles.appBarTitle,
                   ),
                 ),
                 body: Column(

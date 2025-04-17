@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../providers/ParameterProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppConstants.dart';
+import '../../utils/AppStyles.dart';
 import '../../utils/CustomDropdown.dart';
 
 class Wtplabscreen extends StatefulWidget {
@@ -61,9 +62,9 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                   }),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                title: const Text(
+                title: Text(
                   'Wtp Lab',
-                  style: TextStyle(color: Colors.white),
+                    style: AppStyles.appBarTitle,
                 ),
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),

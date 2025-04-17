@@ -123,6 +123,8 @@ class BaseApiService {
         throw ApiException('Unauthorized: ${response.body}');
       case 500:
         throw ApiException('Internal Server Error: ${response.body}');
+      case 502:
+        throw ApiException('Bad Gateway: ${response.body}');
       default:
         throw ApiException('Unexpected error: ${response.statusCode} - ${response.body}');
     }
