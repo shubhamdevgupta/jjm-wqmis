@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ErrorProvider.dart';
+import '../utils/AppStyles.dart';
 
 class ExceptionScreen extends StatelessWidget {
   final String errorMessage;
@@ -14,7 +15,7 @@ class ExceptionScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Something Went Wrong'),
+        title: Text('Something Went Wrong', style: AppStyles.appBarTitle,),
       ),
       body: SingleChildScrollView( // ✅ Added ScrollView
         child: Center(

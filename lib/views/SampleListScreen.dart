@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
+import '../utils/AppStyles.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -150,13 +151,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 }
               },
             ),
-            title: const Text(
+            title:  Text(
               'JJM-WQMIS',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppStyles.appBarTitle,
             ),
             actions: [
               IconButton(
@@ -336,17 +333,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   ),
                                                 ),
 
-                                                GestureDetector(
-                                                  onTap: (){
-                                                    Navigator.push(context, MaterialPageRoute(
-                                                      builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
-                                                    ),
-                                                    );
-                                                  },
-                                                  child: CircleAvatar(
-                                                    backgroundColor: Colors.brown,
-                                                    child: Icon(Icons.download,color: Colors.white,),
+                                                Visibility(
+                                                  visible:sample.testResult == "Report Approved",
+                                                  child: GestureDetector(
+                                                    onTap: (){
+                                                      Navigator.push(context, MaterialPageRoute(
+                                                        builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
+                                                      ),
+                                                      );
+                                                    },
+                                                    child: CircleAvatar(
+                                                      backgroundColor: Colors.brown,
+                                                      child: Icon(Icons.download,color: Colors.white,),
 
+                                                    ),
                                                   ),
                                                 ),
                                               ],
