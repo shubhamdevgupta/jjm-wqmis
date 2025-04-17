@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-
 import '../../utils/AppConstants.dart';
 import 'AnganwadiPage.dart';
 import 'Schoolpage.dart';
 
 class SubmitInfo extends StatefulWidget {
-
   @override
   _SubmitInfo createState() => _SubmitInfo();
 }
@@ -32,20 +29,12 @@ class _SubmitInfo extends State<SubmitInfo>
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).clearData();
+      Provider.of<ParameterProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
     });
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls
-
-
     });
-
-
   }
-
-
-
-
 
   @override
   void dispose() {
@@ -90,7 +79,8 @@ class _SubmitInfo extends State<SubmitInfo>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select School/ Angawadi", style: TextStyle(color: Colors.white)),
+          title: const Text("Select School/ Angawadi",
+              style: TextStyle(color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,
@@ -114,16 +104,20 @@ class _SubmitInfo extends State<SubmitInfo>
           bottom: TabBar(
             controller: mTabController,
             tabs: myTabs,
-            labelColor: Colors.white, // White for selected tab text
-            unselectedLabelColor: Colors.white70, // Slightly faded for unselected tabs
-            labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            labelColor: Colors.white,
+            // White for selected tab text
+            unselectedLabelColor: Colors.white70,
+            // Slightly faded for unselected tabs
+            labelStyle:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
               color: Color(0xFF5FAFE5), // Light blue indicator
               borderRadius: BorderRadius.circular(8),
             ),
             indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            indicatorPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -131,10 +125,10 @@ class _SubmitInfo extends State<SubmitInfo>
               gradient: const LinearGradient(
                 colors: [
                   Color(0xFF096DA8), // Dark blue
-                  Color(0xFF3C8DBC),  // jjm blue color
+                  Color(0xFF3C8DBC), // jjm blue color
                 ],
                 begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,// End at the bottom center
+                end: Alignment.bottomCenter, // End at the bottom center
               ),
             ),
           ),
@@ -148,7 +142,6 @@ class _SubmitInfo extends State<SubmitInfo>
                 children: [
                   Schoolpage(),
                   Anganwadipage(),
-                  LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
                 ],
               ),
             );

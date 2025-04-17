@@ -260,7 +260,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                             children: [
                                               CustomDropdown(
                                                 title: "Select Lab *",
-                                                value: paramProvider.Schoolinfo
+                                                value: paramProvider.selectedParamLabId
                                                     ?.toString(), // Selected value
                                                 items: paramProvider
                                                     .labResponse?.labs

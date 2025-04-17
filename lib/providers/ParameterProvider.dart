@@ -55,6 +55,12 @@ class ParameterProvider with ChangeNotifier {
   String? get selectedParamLabName => _selectedParamLabName;
 
 
+  SchoolinfoResponse? _schoolinfoResponse;
+  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
+
+  List<SchoolResult>  schoolResult =[];
+  String? selectedSchoolResult;
+
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     print("lab call in parameter provider");
     isLoading = true;
@@ -112,21 +118,41 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      Schoolinfo = await _lapparameterrepository.fetchSchoolInfo(Stateid, Districtid, Blockid, Gpid, Villageid, type);
-      if (Schoolinfo == null) {
-        throw ApiException("Lab Incharge data is null");
-      }
+      final response = await _lapparameterrepository.fetchSchoolInfo(Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
+      if (response != null) {
+        _schoolinfoResponse = response;
+
+        if (_schoolinfoResponse!.status == 1) {
+          schoolResult = _schoolinfoResponse!.result;
+
+          if (schoolResult.any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
+            selectedSchoolResult = selectedSchoolResult; // Keep current selected if still valid
+          } else if (schoolResult.isNotEmpty) {
+            selectedSchoolResult = schoolResult.first.name; // Reset if invalid or select first
+          } else {
+            selectedSchoolResult = ''; // Handle if list is empty
+          }
+        } else {
+          debugPrint("API Message: ${_schoolinfoResponse!.message}");
+          _schoolinfoResponse = SchoolinfoResponse(
+            status: 0,
+            message: _schoolinfoResponse!.message,
+            result: [], // Ensure empty labs list
+          );
+        }
+      }
     } catch (e) {
-      debugPrint(" Error fetching Lab Incharge: $e");
+      debugPrint("Error fetching WTP Labs: $e");
+      _schoolinfoResponse = null;
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
-  void setSelectedSchool(int id) {
-    selectedSchoolId = id;
 
+  void setSelectedSchool(String? value){
+    selectedSchoolResult=value;
     notifyListeners();
   }
 

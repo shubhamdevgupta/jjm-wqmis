@@ -74,17 +74,17 @@ class Lapparameterrepository {
     }
   }
 
-  Future<List<SchoolResult>> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
+  Future<SchoolinfoResponse> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
     try {
       final response =
-          await _apiService.get('GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
+          await _apiService.get('ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
 
       log('Response: $response'); // No need to use response.body
 
       if (response != null) {
-        return SchoolResult.fromJson(response); // Directly pass response
+        return SchoolinfoResponse.fromJson(response); // Directly pass response
       } else {
-        throw ApiException("Lab Incharge data is null");
+        throw ApiException("School Infor data is null");
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
