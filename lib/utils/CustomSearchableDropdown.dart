@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../views/lab/LabParameterScreen.dart';
+
 class CustomSearchableDropdown extends StatefulWidget {
   final String? value;
   final List<String> items;
@@ -160,7 +162,20 @@ class _SearchDialogState extends State<SearchDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back, color: Colors.white,),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Labparameterscreen()),
+                    (route) => false,
+              );
+            }
+          },
+        ),
         title: const Text("Select Laboratory",style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.blue,
       ),
