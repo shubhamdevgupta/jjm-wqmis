@@ -22,6 +22,7 @@ class AppConstants {
   static const String navigateToLabParam = '/labParam';
   static const String navigateToSampleList = '/sampleList';
   static const String navigateToTest = 'test';
+  static const String navigateToSubmit_info = 'submit_info';
 
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
@@ -32,12 +33,14 @@ class AppConstants {
   static const String maintenance = 'Maintenance';
   static const String logout = 'Logout';
   static const String dashboardOverview = 'Dashboard Overview';
+  static const String dwsm_dashboardOverview = 'DWSM Dashboard';
   static const String welcome = 'Welcome';
   static const String totalSamplesSubmitted = 'Total Samples Submitted';
   static const String totalPhysicalSubmitted = 'Total Physical Submitted';
   static const String totalSampleTested = 'Total Sample Tested';
   static const String totalRetest = 'Total Retest';
-  static const String addSample = 'Add Sample';
+  static const String addSchool= 'Select Village';
+  static const String addSample= 'Add Sample';
 
   static const String selectedTest = 'Selected Test';
 

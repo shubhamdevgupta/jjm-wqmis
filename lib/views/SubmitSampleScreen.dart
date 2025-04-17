@@ -260,8 +260,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                             children: [
                                               CustomDropdown(
                                                 title: "Select Lab *",
-                                                value: paramProvider
-                                                    .selectedParamLabId
+                                                value: paramProvider.selectedParamLabId
                                                     ?.toString(), // Selected value
                                                 items: paramProvider
                                                     .labResponse?.labs
@@ -283,8 +282,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                 onChanged: (value) {
                                                   if (value != null) {
                                                     final selectedLab =
-                                                    paramProvider
-                                                        .labResponse?.labs
+                                                    paramProvider.labResponse?.labs
                                                         .firstWhere(
                                                           (lab) =>
                                                       lab.labId.toString() ==
@@ -292,9 +290,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       orElse: () => Lab(
                                                           labId: 0, labName: ''),
                                                     );
-                                                    paramProvider.setSelectedParamLabs(
-                                                        selectedLab!.labId,
-                                                        selectedLab.labName);
+                                                    paramProvider.setSelectedParamLabs(selectedLab!.labId, selectedLab.labName);
                                                     paramProvider.fetchLabIncharge(selectedLab.labId);
                                                   }
                                                 },

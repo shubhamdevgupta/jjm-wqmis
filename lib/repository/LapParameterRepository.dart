@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 
+import '../models/DWSM/SchoolinfoResponse.dart';
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
 import '../models/Wtp/WtpLabResponse.dart';
@@ -67,6 +68,24 @@ class Lapparameterrepository {
         return Labinchargeresponse.fromJson(response); // Directly pass response
       } else {
         throw ApiException("Lab Incharge data is null");
+      }
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+  Future<SchoolinfoResponse> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
+    try {
+      final response =
+          await _apiService.get('ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
+
+      log('Response: $response'); // No need to use response.body
+
+      if (response != null) {
+        return SchoolinfoResponse.fromJson(response); // Directly pass response
+      } else {
+        throw ApiException("School Infor data is null");
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

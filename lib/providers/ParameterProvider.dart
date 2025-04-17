@@ -5,7 +5,11 @@ import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+
+import '../models/DWSM/SchoolinfoResponse.dart';
+
 import '../models/Wtp/WtpLabResponse.dart';
+
 import '../utils/LocationUtils.dart';
 
 
@@ -33,6 +37,10 @@ class ParameterProvider with ChangeNotifier {
   bool isLabSelected=false;
   Labinchargeresponse? labIncharge;
 
+  List<SchoolResult> Schoolinfo= [] ;
+  int? selectedSchoolId;
+  String? selectedSchoolName;
+
   bool isLab=true;
   double? _currentLatitude;
   double? _currentLongitude;
@@ -55,6 +63,12 @@ class ParameterProvider with ChangeNotifier {
 
   List<WtpLab>  wtpLab =[];
   String? selectedWtpLab;
+
+  SchoolinfoResponse? _schoolinfoResponse;
+  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
+
+  List<SchoolResult>  schoolResult =[];
+  String? selectedSchoolResult;
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     print("lab call in parameter provider");
@@ -107,6 +121,48 @@ class ParameterProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _lapparameterrepository.fetchSchoolInfo(Stateid, Districtid, Blockid, Gpid, Villageid, type);
+
+      if (response != null) {
+        _schoolinfoResponse = response;
+
+        if (_schoolinfoResponse!.status == 1) {
+          schoolResult = _schoolinfoResponse!.result;
+
+          if (schoolResult.any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
+            selectedSchoolResult = selectedSchoolResult; // Keep current selected if still valid
+          } else if (schoolResult.isNotEmpty) {
+            selectedSchoolResult = schoolResult.first.name; // Reset if invalid or select first
+          } else {
+            selectedSchoolResult = ''; // Handle if list is empty
+          }
+        } else {
+          debugPrint("API Message: ${_schoolinfoResponse!.message}");
+          _schoolinfoResponse = SchoolinfoResponse(
+            status: 0,
+            message: _schoolinfoResponse!.message,
+            result: [], // Ensure empty labs list
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Error fetching WTP Labs: $e");
+      _schoolinfoResponse = null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setSelectedSchool(String? value){
+    selectedSchoolResult=value;
+    notifyListeners();
   }
 
   Future<void> fetchLocation() async {
