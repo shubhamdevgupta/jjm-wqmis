@@ -212,7 +212,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                const AssetImage('assets/user_image.png'),
+                                const AssetImage('assets/user.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
@@ -263,12 +263,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 25),
 
                   Center(child: const Text("All figures are based on current year data.",style: TextStyle(fontSize: 15,color: Colors.red),)),
 
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     GridView.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 20.0,

@@ -101,11 +101,13 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                         children: [
                           CustomSearchableDropdown(
                             title: "",
-                            value: provider.selectedLab,
-                            items: provider.labList
-                                .map((lab) =>
-                                    lab.text ?? '') // Display text, not value
-                                .toList(),
+                            value: provider.labList
+                                .firstWhere(
+                                  (lab) => lab.value == provider.selectedLab,
+                              orElse: () => Alllabresponse(value: null, text: null),
+                            )
+                                .text,
+                            items: provider.labList.map((lab) => lab.text ?? '').toList(),
                             onChanged: (selectedLabText) {
                               if (selectedLabText == null)
                                 return; // Handle null case
@@ -286,7 +288,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
 
                                     const SizedBox(height: 20),
                                     Text(
-                                      'Cart: ${provider.cart!.length}',
+                                      'Selected Param: ${provider.cart!.length}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
