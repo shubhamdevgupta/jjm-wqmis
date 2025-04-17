@@ -267,7 +267,7 @@ class _LocationscreenState extends State<Locationscreen> {
               SizedBox(height: 12),
               ///// habitation  data heree ----------
               CustomDropdown(
-                title: "Habitation *",
+                title: "Habitation ",
                 value: masterProvider.selectedHabitation,
                 items: masterProvider.habitationId.map((habitation) {
                   return DropdownMenuItem<String>(
@@ -365,12 +365,8 @@ class _LocationscreenState extends State<Locationscreen> {
         ? provider.selectedDistrictId?.isNotEmpty == true
         ? provider.selectedBlockId?.isNotEmpty == true
         ? provider.selectedGramPanchayat?.isNotEmpty == true
-        ? (provider.selectedVillage != null &&
-        provider.selectedVillage != "0"
-        ? (provider.selectedHabitation != null &&
-        provider.selectedHabitation != "0"
+        ? (provider.selectedVillage != null && provider.selectedVillage != "0"
         ? ""
-        : "Please select habitation before proceeding.")
         : "Please select village before proceeding.")
         : "Please select Gram Panchayat before proceeding."
         : "Please select Block before proceeding."

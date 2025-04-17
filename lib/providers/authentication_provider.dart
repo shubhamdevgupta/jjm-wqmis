@@ -73,6 +73,7 @@ class AuthenticationProvider extends Resettable {
         _localStorage.saveString(AppConstants.prefStateId, _loginResponse!.stateId.toString());
         _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
         _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
+        _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
         notifyListeners();
         onSuccess();
       } else {

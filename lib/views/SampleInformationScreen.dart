@@ -1,11 +1,13 @@
 // Flutter layout for the 'Sample Information' form
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -583,11 +585,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!);
                           masterProvider.setSelectedSubSource(value);
-                          print('------------>>>>>>>${masterProvider.wtpLabModel}');
-                          print('------------>>>>>>>${masterProvider.wtpLab}');
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Inlet of WTP')
@@ -600,9 +597,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Outlet of WTP')
@@ -615,9 +609,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.setSelectedSubSource(value);
-                          masterProvider.fetchWTPLab(
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedWtp!);
                         },
                       ),
                       Text('Disinfection')
@@ -669,15 +660,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             SizedBox(height: 20,),
                             Center(
                               child: ElevatedButton(
-                                onPressed: () {
-                                  masterProvider.isWtp=true;
+                                onPressed: () async {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                               value: masterProvider,
-                                              child: Labparameterscreen(),
+                                              child: Wtplabscreen(),
                                             )),
                                   );
                                 },

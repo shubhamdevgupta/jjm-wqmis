@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/LabInchargeResponse/AllLabResponse.dart';
-import '../../providers/masterProvider.dart';
+import '../../providers/ParameterProvider.dart';
 import '../../services/LocalStorageService.dart';
-import '../../utils/CustomSearchableDropdown.dart';
-import '../../utils/LoaderUtils.dart';
+import '../../utils/AppConstants.dart';
+import '../../utils/CustomDropdown.dart';
 
-class AsPerLabTabView extends StatefulWidget {
+class Wtplabscreen extends StatefulWidget {
   @override
-  _AsPerLabTabView createState() => _AsPerLabTabView();
+  _WtpLabScreen createState() => _WtpLabScreen();
 }
 
-class _AsPerLabTabView extends State<AsPerLabTabView> {
+class _WtpLabScreen extends State<Wtplabscreen> {
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -24,17 +25,21 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
+    final paramProvider=  Provider.of<ParameterProvider>(context, listen: false);
+    paramProvider.isLab=true;
+    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: Provider.of<ParameterProvider>(context, listen: false),
-      child: Consumer<ParameterProvider>(
+    return Consumer<ParameterProvider>(
         builder: (context, provider, child) {
           return Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+            ),
             child: Scaffold(
               floatingActionButton: Stack(
                 clipBehavior: Clip.none,
@@ -53,8 +58,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            child: const SubmitSampleScreen(),
-                             // child: const SelectedTestScreenNew(),
+                              child: const SubmitSampleScreen(),
+                              // child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );
@@ -92,6 +97,90 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                 ],
               ),
               backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                title: const Text(
+                  'Wtp Lab',
+                  style: TextStyle(color: Colors.white),
+                ),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pushReplacementNamed(context, '/savesample');
+                    }
+                  },
+                ),
+                backgroundColor: Colors.blueAccent, // Consistent theme
+                actions: [
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.shopping_cart,
+                            color: Colors.white),
+                        // Cart icon
+                        onPressed: () {
+                          if (provider.cart!.isNotEmpty)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MultiProvider(
+                                  providers: [
+                                    ChangeNotifierProvider.value(
+                                        value: masterProvider),
+                                    // Pass masterProvider
+                                    ChangeNotifierProvider.value(
+                                        value: provider),
+                                    // Pass parameterProvider if needed
+                                  ],
+                                  child: SubmitSampleScreen(),
+                                ),
+                              ),
+                            );
+                          else
+                            ToastHelper.showErrorSnackBar(
+                                context, "Please Select Test");
+                        },
+                      ),
+                      if (provider.cart!
+                          .isNotEmpty) // Show badge only when cart is not empty
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '${provider.cart!.length}',
+                              // Show count dynamically
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF096DA8), // Dark blue
+                          Color(0xFF3C8DBC),  // jjm blue color
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,// End at the bottom center
+                      ),
+                    ),
+                  )
+              ),
               body: Stack(
                 children: [
                   SingleChildScrollView(
@@ -99,31 +188,33 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          CustomSearchableDropdown(
-                            title: "",
-                            value: provider.labList
-                                .firstWhere(
-                                  (lab) => lab.value == provider.selectedLab,
-                              orElse: () => Alllabresponse(value: null, text: null),
-                            )
-                                .text,
-                            items: provider.labList.map((lab) => lab.text ?? '').toList(),
-                            onChanged: (selectedLabText) {
-                              if (selectedLabText == null)
-                                return; // Handle null case
-
-                              final selectedLab = provider.labList.firstWhere(
-                                    (lab) => lab.text == selectedLabText,
-                                orElse: () => Alllabresponse(
-                                    value: null,
-                                    text:
-                                    null), // Default to a nullable object
+                          CustomDropdown(
+                            title: "Select WTP Lab *",
+                            value: provider.selectedWtpLab,
+                            items: provider.wtpLab.map((wtpLab) {
+                              return DropdownMenuItem<String>(
+                                value: wtpLab.labId,
+                                child: Text(
+                                  wtpLab.labName,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               );
+                            }).toList(),
+                            onChanged: (selectedLabId) {
+                              if (selectedLabId == null) return;
+
+                              final selectedLab = provider.wtpLab.firstWhere(
+                                    (lab) => lab.labId == selectedLabId,
+                                orElse: () => WtpLab(labId: "0", labName: ''),
+                              );
+
                               provider.cart!.clear();
-                              provider.setSelectedLab(selectedLab.value);
-                              if (provider.isLabSelected) {
+                              provider.setSelectedWtpLab(selectedLab.labId);
+
+                              if (provider.selectedWtpLab != null) {
                                 provider.fetchAllParameter(
-                                  selectedLab.value!,
+                                  selectedLab.labId!,
                                   masterProvider.selectedStateId ?? "0",
                                   "0",
                                   _localStorage.getString(AppConstants.prefRegId).toString(),
@@ -132,7 +223,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                               }
                             },
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 10,
                           ),
                           Visibility(
@@ -161,7 +252,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         DropdownMenuItem(
                                             value: 1,
                                             child: Text('All Parameter')),
-                                        DropdownMenuItem(
+                                        const DropdownMenuItem(
                                             value: 2,
                                             child: Text('Chemical Parameter')),
                                         DropdownMenuItem(
@@ -174,7 +265,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         provider.setParameterType(value);
                                         provider.cart!.clear();
                                         provider.fetchAllParameter(
-                                          provider.selectedLab!,
+                                          provider.selectedWtpLab!,
                                           masterProvider.selectedStateId!,
                                           "0",
                                           _localStorage.getString(AppConstants.prefRegId).toString(),
@@ -187,7 +278,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                               ),
                             ),
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 10,
                           ),
                           Visibility(
@@ -200,10 +291,19 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                               margin: EdgeInsets.all(5),
                               color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    const Text(
+                                      'Tests Available:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
                                     SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: DataTable(
@@ -284,8 +384,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         }).toList(),
                                       ),
                                     ),
-
-
                                     const SizedBox(height: 20),
                                     Text(
                                       'Selected Param: ${provider.cart!.length}',
@@ -303,31 +401,13 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       ),
                     ),
                   ),
-
                   if (provider.isLoading)
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
-
-
-
             ),
           );
         },
-      ),
-    );
-  }
-
-  Future<void> fetchLab(ParameterProvider paramProvider) async {
-    paramProvider.parameterList.clear();
-    paramProvider.parameterType = 1;
-    paramProvider.cart!.clear();
-    await paramProvider.fetchAllLabs(
-        masterProvider.selectedStateId!,
-        masterProvider.selectedDistrictId!,
-        masterProvider.selectedBlockId!,
-        masterProvider.selectedGramPanchayat!,
-        masterProvider.selectedVillage!,
-        "1");
+      );
   }
 }

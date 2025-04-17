@@ -275,26 +275,7 @@ class MasterRepository {
     }
   }
 
-  Future<WtpLabResponse?> fetchWtpLabs(String stateId, String wtpId) async {
-    try {
-      final response = await _apiService.get('/apimaster/GetwtpLab?stateid=$stateId&wtpid=$wtpId');
 
-      log('WTP Lab API Response: $response');
-
-      if (response is Map<String, dynamic>) {
-        WtpLabResponse labResponse = WtpLabResponse.fromJson(response);
-
-        if (response.isNotEmpty) {
-          return labResponse; // Return full response if data exists
-        }
-      } else {
-        throw ApiException('Unexpected API response format: $response');
-      }
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      return null; // Return null if any error occurs
-    }
-  }
 
 
 

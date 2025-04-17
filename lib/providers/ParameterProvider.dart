@@ -5,7 +5,11 @@ import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+
 import '../models/DWSM/SchoolinfoResponse.dart';
+
+import '../models/Wtp/WtpLabResponse.dart';
+
 import '../utils/LocationUtils.dart';
 
 
@@ -54,6 +58,11 @@ class ParameterProvider with ChangeNotifier {
   int? get selectedParamLabId => _selectedParamLabId;
   String? get selectedParamLabName => _selectedParamLabName;
 
+  WtpLabResponse? _wtpLabModel;
+  WtpLabResponse? get wtpLabModel => _wtpLabModel;
+
+  List<WtpLab>  wtpLab =[];
+  String? selectedWtpLab;
 
   SchoolinfoResponse? _schoolinfoResponse;
   SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
@@ -216,6 +225,50 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchWTPLab(String stateId, String wtpId) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _lapparameterrepository.fetchWtpLabs(stateId, wtpId);
+
+      if (response != null) {
+        _wtpLabModel = response;
+
+        if (_wtpLabModel!.status == 1) {
+          wtpLab = _wtpLabModel!.result;
+
+          if (wtpLab.any((wtp) => wtp.labId == selectedWtpLab)) {
+            selectedWtpLab = selectedWtpLab; // Keep current selected if still valid
+          } else if (wtpLab.isNotEmpty) {
+            selectedWtpLab = wtpLab.first.labId; // Reset if invalid or select first
+          } else {
+            selectedWtpLab = ''; // Handle if list is empty
+          }
+        } else {
+          debugPrint("API Message: ${_wtpLabModel!.message}");
+          _wtpLabModel = WtpLabResponse(
+            status: 0,
+            message: _wtpLabModel!.message,
+            result: [], // Ensure empty labs list
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Error fetching WTP Labs: $e");
+      _wtpLabModel = null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setSelectedWtpLab(String? value){
+    selectedLab=value;
+    selectedWtpLab=value;
+    isLabSelected = value != null && value.isNotEmpty;
+    notifyListeners();
+  }
 
   /// Set Selected Lab ID and Name
   void setSelectedParamLabs(int labId, String labName) {
@@ -263,7 +316,13 @@ class ParameterProvider with ChangeNotifier {
           (item) => item.parameterId == parameter.parameterId);
     } else if(isLab) {
       cart!.add(parameter);
-      fetchLabIncharge(int.parse(selectedLab!));
+      final labId = selectedLab?.isNotEmpty == true
+          ? selectedLab
+          : selectedWtpLab;
+      print("---------- $selectedLab");
+      if (labId != null && labId.isNotEmpty) {
+        fetchLabIncharge(int.parse(labId));
+      }
     }else{
       cart!.add(parameter);
       var paramterId=cart!.sublist(0,cart!.length).join(",");
@@ -282,7 +341,6 @@ class ParameterProvider with ChangeNotifier {
     parameterType = 1;
 
     allParameters.clear();
-
     cart?.clear();
 
     labList.clear();
@@ -300,6 +358,9 @@ class ParameterProvider with ChangeNotifier {
     _selectedParamLabId = null;
     _selectedParamLabName = null;
 
+    _wtpLabModel = null;
+
+    wtpLab.clear();
     notifyListeners();
   }
 
