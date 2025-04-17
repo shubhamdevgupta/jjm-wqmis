@@ -647,13 +647,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                           validateAndSubmit(
                               context, provider, masterProvider, paramProvider);
                         },
-                        child: Text(
-                          AppConstants.submitSample,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF096DA8),
                           // Button color
@@ -662,6 +655,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
+                        ),
+                        child: const Text(
+                          AppConstants.submitSample,
+                          style: AppStyles.buttonStyle,
                         )),
                   ],
                 ),

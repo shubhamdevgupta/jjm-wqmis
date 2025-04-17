@@ -341,12 +341,9 @@ class _LocationscreenState extends State<Locationscreen> {
                     ),
                   ),
 
-                  child: Text(
+                  child: const Text(
                     'Next',
-                    style: TextStyle(fontSize: 16,
-
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    style: AppStyles.buttonStyle,
                   ),
                 ),
               ),

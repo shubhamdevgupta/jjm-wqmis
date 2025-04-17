@@ -25,13 +25,10 @@ class AppStyles {
     color: Colors.black,
   );
 
-
-
-
-
-  static const TextStyle caption = TextStyle(
-    fontSize: 12,
-    color: Colors.grey,
+  static const TextStyle buttonStyle = TextStyle(
+    fontSize: 16,
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
   );
 
   // Padding & Margin

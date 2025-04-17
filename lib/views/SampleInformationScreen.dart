@@ -516,10 +516,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )
@@ -683,10 +680,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 ),
                                 child: const Text(
                                   'Next',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                  style: AppStyles.buttonStyle,
                                 ),
                               ),
                             )
@@ -760,10 +754,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               child: const Text(
                 'Next',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: AppStyles.buttonStyle,
               ),
             ),
           )
@@ -940,10 +931,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               child: const Text(
                 'Next',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                style: AppStyles.buttonStyle,
               ),
             ),
           )
@@ -1097,10 +1085,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )
@@ -1170,10 +1155,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ),
                       child: const Text(
                         'Next',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                        style: AppStyles.buttonStyle,
                       ),
                     ),
                   )
