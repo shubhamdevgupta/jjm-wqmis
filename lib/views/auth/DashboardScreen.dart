@@ -394,7 +394,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
-
   Widget _buildDashboardCard({
     required String title,
     required String value,
