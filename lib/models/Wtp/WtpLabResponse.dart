@@ -10,12 +10,20 @@ class WtpLabResponse {
   });
 
   factory WtpLabResponse.fromJson(Map<String, dynamic> json) {
+    final labs = (json['Result'] as List)
+        .map((lab) => WtpLab.fromJson(lab))
+        .toList();
+
+    // 🔥 Add default "Select Lab" at the top
+    labs.insert(
+      0,
+      WtpLab(labName: 'Select Lab', labId: 'null'),
+    );
+
     return WtpLabResponse(
       status: json['Status'],
       message: json['Message'],
-      result: (json['Result'] as List)
-          .map((lab) => WtpLab.fromJson(lab))
-          .toList(),
+      result: labs,
     );
   }
 }
