@@ -9,22 +9,77 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
+import 'DWSM_Location.dart';
 
-class Dashboardscreen extends StatefulWidget {
-  const Dashboardscreen({super.key});
+class dwsm_Dashboard extends StatefulWidget {
+  const dwsm_Dashboard({super.key});
 
   @override
-  State<Dashboardscreen> createState() => _DashboardscreenState();
+  State<dwsm_Dashboard> createState() => _dwsm_Dashboard();
 }
 
-class _DashboardscreenState extends State<Dashboardscreen> {
+class _dwsm_Dashboard extends State<dwsm_Dashboard> {
   final LocalStorageService _localStorage = LocalStorageService();
   String stateName = '';
   String userName = '';
   String mobile = '';
   String stateId = '';
   final encryption = AesEncryption();
+  /// Custom Widget for the info blocks
+  Widget _buildInfoCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required int value,
+  }) {
+    return Container(
+      width: 135,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.07),
+            blurRadius: 8,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: iconColor, size: 30),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(value.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: iconColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -41,10 +96,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
-      dashboardProvider.loadDashboardData();
+
 
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
+      dashboardProvider.loadDwsmDashboardData(31,471);
     });
 
 
@@ -63,9 +119,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  Text(
+            title:  const Text(
               AppConstants.appTitle,
-              style: AppStyles.appBarTitle,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             leading: Builder(
               builder: (context) {
@@ -117,46 +177,46 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
-                      Text(
+                      const Text(
                         AppConstants.departmentalUser,
-                        style: AppStyles.appBarTitle,
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
                         stateName,  // Provide a fallback value if null
-                        style: AppStyles.setTextStyle(16, FontWeight.normal, Colors.white70),
+                        style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: Text(AppConstants.dashboard,style: AppStyles.style16NormalBlack,),
+                  title: const Text(AppConstants.dashboard),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(AppConstants.submitSampleInfo,style: AppStyles.style16NormalBlack,),
+                  title: const Text(AppConstants.submitSampleInfo),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
+                  title: const Text(AppConstants.listOfSamples),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
+                  title: const Text(AppConstants.maintenance),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
+                  title: const Text(AppConstants.logout),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
@@ -170,27 +230,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
-              final dashboardData = dashboardProvider.dashboardData;
+              final dashboardData = dashboardProvider.dwsmdashboardresponse;
 
               if (dashboardData == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
-                      child: Text(
-                        AppConstants.dashboardOverview,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                    ),
+
                     Container(
                       padding:
-                          const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 20),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -209,7 +263,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                const AssetImage('assets/user.png'),
+                            const AssetImage('assets/user_image.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
@@ -225,7 +279,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.blue[800],
                                     // Slightly dark blue color for warmth
@@ -254,6 +308,23 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     ),
                                   ],
                                 ),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.account_balance_sharp,
+                                        color: Colors.teal, size: 20),
+                                    // Using an icon for consistency
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'DWSM',
+                                      // Replace with dynamic phone number
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -262,66 +333,75 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     const SizedBox(height: 25),
 
-                  Center(child: const Text("All figures are based on current year data.",style: TextStyle(fontSize: 15,color: Colors.red),)),
 
-                    const SizedBox(height: 15),
-                    GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 20.0,
-                      mainAxisSpacing: 20.0,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _buildDashboardCard(
-                          title: AppConstants.totalSamplesSubmitted,
-                          value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                          icon: Icons.analytics,
-                          gradientColors: [
-                            Colors.lightBlueAccent,
-                            Colors.blue
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 0});
-                          },
+                    Container(
+                      width: 500,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFe0f7fa), Color(0xFFffffff)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalPhysicalSubmitted,
-                          value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                          icon: Icons.hourglass_empty,
-                          gradientColors: [
-                            const Color(0xFFFCE889),
-                            const Color(0xFFFFAA00)
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 2});
-                          },
-                        ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalSampleTested,
-                          value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                          icon: Icons.check_circle,
-                          gradientColors: [
-                            Colors.lightGreen,
-                            Colors.green
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 6});
-                          },
-                        ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalRetest,
-                          value: '${dashboardProvider.dashboardData!.totalRetest}',
-                          icon: Icons.refresh,
-                          gradientColors: [
-                            Colors.redAccent,
-                            Colors.red
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 8});
-                          },
-                        ),
-                      ],
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "School/ Anganwadi",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              _buildInfoCard(
+                                icon: Icons.school_rounded,
+                                iconColor: Colors.blueAccent,
+                                title: "Schools",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalSchools,
+                              ),
+                              _buildInfoCard(
+                                icon: Icons.local_activity,
+                                iconColor: Colors.deepOrange,
+                                title: "Demonstrations",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration,
+                              ),
+                              _buildInfoCard(
+                                icon: Icons.child_care,
+                                iconColor: Colors.teal,
+                                title: "Anganwadi",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalAWCs,
+                              ),
+                              _buildInfoCard(
+                                icon: Icons.lightbulb_outline,
+                                iconColor: Colors.purple,
+                                title: "Awareness",
+                                value: dashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+
+                    const SizedBox(height: 10),
+
+
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
@@ -336,7 +416,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
-                                  child: const Locationscreen(flag: 0), // Your widget
+                                  child:  DwsmLocation(), // Your widget
                                 ),
                               );
                             },
@@ -360,7 +440,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              AppConstants.addSample,
+                              AppConstants.addSchool,
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
@@ -411,15 +491,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             const SizedBox(height: 8),
             Text(
               value,
-              style: AppStyles.setTextStyle(24, FontWeight.bold, Colors.white),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-
             const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: AppStyles.setTextStyle(14, FontWeight.w400, Colors.white),
-
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ],
         ),

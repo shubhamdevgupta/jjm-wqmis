@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DashboardResponse.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
 
 import '../models/LoginResponse.dart';
@@ -39,6 +40,7 @@ class AuthenticaitonRepository {
       String endpoint = '/apiMobile/dashbord?role_id=$roleId&userid=$userId&stateid=$stateId';
       final response = await _apiService.get(endpoint);
 
+      print("----->response $response");
       if (response is Map<String, dynamic>) {
         return Dashboardresponse.fromJson(response);
       } else {
@@ -50,5 +52,24 @@ class AuthenticaitonRepository {
       rethrow;
     }
   }
+
+  Future<Dwsmdashboardresponse> fetchDwsmDashboardData(int stateId, int districtId) async {
+    try {
+      String endpoint = '/apiMobile/Dashboarddwsm?stateid=$stateId&districtid=$districtId';
+      final response = await _apiService.get(endpoint);
+
+      if (response is Map<String, dynamic>) {
+        return Dwsmdashboardresponse.fromJson(response);
+      } else {
+        throw ApiException('Invalid response format');
+      }
+    } catch (e) {
+      debugPrint('Error in fetchDataresponse: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+
 
 }
