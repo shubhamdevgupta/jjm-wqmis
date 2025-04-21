@@ -20,6 +20,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ParameterProvider>(context, listen: false).isLab = false;
+      Provider.of<ParameterProvider>(context, listen: false).isParam = true;
     });
   }
   @override

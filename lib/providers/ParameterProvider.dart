@@ -42,6 +42,7 @@ class ParameterProvider with ChangeNotifier {
   String? selectedSchoolName;
 
   bool isLab=true;
+  bool isParam=true;
   double? _currentLatitude;
   double? _currentLongitude;
 
