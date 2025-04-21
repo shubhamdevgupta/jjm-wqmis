@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/ParameterProvider.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
@@ -37,13 +38,9 @@ class _LocationscreenState extends State<Locationscreen> {
               automaticallyImplyLeading: false,
               // Removes the default back button
               centerTitle: true,
-              title: const Text(
+              title: Text(
                 'Choose Location',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: AppStyles.appBarTitle,
               ),
 
               //elevation
@@ -344,12 +341,9 @@ class _LocationscreenState extends State<Locationscreen> {
                     ),
                   ),
 
-                  child: Text(
+                  child: const Text(
                     'Next',
-                    style: TextStyle(fontSize: 16,
-
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                    style: AppStyles.buttonStyle,
                   ),
                 ),
               ),

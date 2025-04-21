@@ -9,6 +9,7 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import '../../utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -62,13 +63,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  const Text(
+            title:  Text(
               AppConstants.appTitle,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppStyles.appBarTitle,
             ),
             leading: Builder(
               builder: (context) {
@@ -120,46 +117,46 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
-                      const Text(
+                      Text(
                         AppConstants.departmentalUser,
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: AppStyles.appBarTitle,
                       ),
                       Text(
                         stateName,  // Provide a fallback value if null
-                        style: const TextStyle(color: Colors.white70, fontSize: 16),
+                        style: AppStyles.setTextStyle(16, FontWeight.normal, Colors.white70),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: const Text(AppConstants.dashboard),
+                  title: Text(AppConstants.dashboard,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.submitSampleInfo),
+                  title: Text(AppConstants.submitSampleInfo,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.listOfSamples),
+                  title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
                   onTap: () {
                     Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: const Text(AppConstants.maintenance),
+                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text(AppConstants.logout),
+                  title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
@@ -192,8 +189,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     Container(
                       padding:
-                          const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 20),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                      margin: const EdgeInsets.only(top: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -212,7 +209,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           CircleAvatar(
                             radius: 32,
                             backgroundImage:
-                                const AssetImage('assets/user.png'),
+                            const AssetImage('assets/user_image.png'),
                             // Replace with dynamic user profile image path
                             backgroundColor: Colors.grey[200], // Fallback color
                           ),
@@ -228,7 +225,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.blue[800],
                                     // Slightly dark blue color for warmth
@@ -248,6 +245,24 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     const SizedBox(width: 6),
                                     Text(
                                       '$mobile',
+                                      // Replace with dynamic phone number
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.account_balance_sharp,
+                                        color: Colors.teal, size: 20),
+                                    // Using an icon for consistency
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Departmental Official',
                                       // Replace with dynamic phone number
                                       style: const TextStyle(
                                         fontSize: 16,
@@ -333,12 +348,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight = MediaQuery.of(context).size.height;
+                              double screenwidth = MediaQuery.of(context).size.width;
+
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
-                                  width: screenHeight * 0.4,
+                                  width: screenwidth * 0.99,
                                   child: const Locationscreen(flag: 0), // Your widget
                                 ),
                               );
@@ -364,7 +381,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             SizedBox(width: 8),
                             Text(
                               AppConstants.addSample,
-                              style: TextStyle(color: Colors.white),
+                              style: AppStyles.buttonStyle,
                             ),
                           ],
                         ),
@@ -377,7 +394,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
-
   Widget _buildDashboardCard({
     required String title,
     required String value,
@@ -414,21 +430,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppStyles.setTextStyle(24, FontWeight.bold, Colors.white),
             ),
+
             const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
+              style: AppStyles.setTextStyle(14, FontWeight.w400, Colors.white),
+
             ),
           ],
         ),

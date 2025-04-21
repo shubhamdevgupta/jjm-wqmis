@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/SampleSubmitProvider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
+import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
@@ -86,9 +87,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       ),
                     ),
                   ),
-                  title: const Text(
+                  title: Text(
                     AppConstants.selectedTest,
-                    style: TextStyle(color: Colors.white),
+                    style: AppStyles.appBarTitle,
                   ),
                 ),
                 body: Column(
@@ -1047,6 +1048,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                         ],
                       ),
                     ),
+
                     Visibility(
                       visible: paramProvider.labResponse?.status ?? false || paramProvider.isLab, // Show only when status is true
                       child: ElevatedButton(
@@ -1071,6 +1073,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                             ),
                           )),
                     ),
+
                   ],
                 ),
               ),
@@ -1114,35 +1117,40 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
-      int.parse(masterProvider.selectedWtp!),
-      paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
+        int.parse(masterProvider.selectedWtp ?? '0'),
+        paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",
     );
     if (provider.sampleresponse!.status == 1) {
 
+
       showDialog(
         context: context,
+        barrierDismissible: false, // Disable tap outside to dismiss
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Success"),
-            content:
-            Text(provider.sampleresponse!.message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close dialog
-                  Navigator.pushNamedAndRemoveUntil(
+          return WillPopScope(
+            onWillPop: () async => false, // Disable back button
+            child: AlertDialog(
+              title: Text("Success"),
+              content: Text(provider.sampleresponse!.message),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
                       '/dashboard',
-                          (route) =>
-                      false); // Go to Dashboard
-                },
-                child: Text("OK"),
-              ),
-            ],
+                          (route) => false, // Clear back stack
+                    );
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            ),
           );
         },
       );
+
       masterProvider.clearData();
       paramProvider.clearData();
     } else {

@@ -46,5 +46,4 @@ class AppStyles {
       offset: Offset(0, 3),
     ),
   ];
-
 }

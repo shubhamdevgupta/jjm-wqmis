@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppConstants.dart';
+import '../../utils/AppStyles.dart';
 import 'AsPerLabView.dart';
 import 'AsPerParameterView.dart';
 
@@ -121,8 +122,8 @@ class _LabParameterScreen extends State<Labparameterscreen>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select Lab/Parameter",
-              style: TextStyle(color: Colors.white)),
+          title: Text("Select Lab/Parameter",
+            style: AppStyles.appBarTitle),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,

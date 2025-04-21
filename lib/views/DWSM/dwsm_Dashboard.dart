@@ -390,7 +390,7 @@ class _dwsm_Dashboard extends State<dwsm_Dashboard> {
                               _buildInfoCard(
                                 icon: Icons.lightbulb_outline,
                                 iconColor: Colors.purple,
-                                title: "Awareness",
+                                title: "Demonstrations",
                                 value: dashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration,
                               ),
                             ],

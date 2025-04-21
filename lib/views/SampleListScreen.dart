@@ -167,8 +167,10 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 }
               },
             ),
+
             title: Text(
               getTitleFromFlag(flag),
+
               style: AppStyles.appBarTitle,
             ),
             actions: [
@@ -330,6 +332,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                       ),
                                       //SizedBox(width: 10),
 
+
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 10,
@@ -355,6 +358,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                           onTap: (){
                                             Navigator.push(context, MaterialPageRoute(
                                               builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
+
                                             ),
                                             );
                                           },
