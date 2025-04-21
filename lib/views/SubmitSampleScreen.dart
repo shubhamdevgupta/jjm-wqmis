@@ -244,6 +244,406 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                       ),
                                     ),
                                   ),
+
+                                  Visibility(
+                                    visible: paramProvider.isLab,
+                                    child: Column(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          child: TextFormField(
+                                            controller: remarkController,
+                                            maxLines: 2,
+                                            // Allows multiline input
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              contentPadding: EdgeInsets.symmetric(
+                                                  vertical: 14, horizontal: 16),
+                                              // Better padding
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                // Smoother rounded edges
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey.shade300,
+                                                    width: 1),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(12),
+                                                borderSide: BorderSide(
+                                                    color: Colors.blueAccent,
+                                                    width: 1.5), // Focus highlight
+                                              ),
+                                              hintText: "Enter your remarks",
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey.shade600),
+                                              suffixIcon:
+                                              remarkController.text.isNotEmpty
+                                                  ? IconButton(
+                                                icon: Icon(Icons.clear,
+                                                    color: Colors.grey),
+                                                onPressed: () {
+                                                  remarkController
+                                                      .clear(); // Clears text on click
+                                                },
+                                              )
+                                                  : null,
+                                            ),
+                                            keyboardType: TextInputType.multiline,
+                                            textInputAction: TextInputAction
+                                                .newline, // Allows new line input
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10,),
+                                      Card(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                            // Rounded corners
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color:
+                                                Colors.grey.withOpacity(0.3),
+                                                // Shadow color
+                                                blurRadius: 10,
+                                                // Shadow blur
+                                                offset: const Offset(
+                                                    0, 5), // Shadow position
+                                              ),
+                                            ],
+                                          ),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              // Section 1: Lab Incharge Details
+                                              Text(
+                                                "Lab Incharge Details",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blueGrey,
+                                                ),
+                                              ),
+                                              Divider(
+                                                  thickness: 1,
+                                                  color: Colors.grey.shade300),
+                                              // Divider for separation
+                                              SizedBox(height: 8),
+                                      
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.person,
+                                                      color: Colors.blueAccent),
+                                                  SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                          FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10),
+                                      
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.business,
+                                                      color: Colors.green),
+                                                  SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                          FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10),
+                                      
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.location_on,
+                                                      color: Colors.redAccent),
+                                                  SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                          FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                              BorderRadius.circular(12),
+                                              // Rounded corners
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color:
+                                                  Colors.grey.withOpacity(0.3),
+                                                  // Shadow color
+                                                  blurRadius: 10,
+                                                  // Shadow blur
+                                                  offset: const Offset(
+                                                      0, 5), // Shadow position
+                                                ),
+                                              ],
+                                            ),
+                                            padding: const EdgeInsets.all(8),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Geo Location of Sample Taken:",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.blueGrey,
+                                                  ),
+                                                ),
+                                                Divider(
+                                                    thickness: 1,
+                                                    color: Colors.grey.shade300),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      'Latitude:',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    Text(
+                                                      "${paramProvider.currentLatitude}",
+                                                      // Display placeholder text if null
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black
+                                                            .withOpacity(0.7),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      'Longitude :',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    Text(
+                                                      "${paramProvider.currentLongitude}",
+                                                      // Display placeholder text if null
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black
+                                                            .withOpacity(0.7),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],),
+                                  ),
+                                  Visibility(
+                                    visible: paramProvider.isParam,
+                                    child: Column(
+                                      children: [
+                                        !paramProvider.isLab && !paramProvider.labResponse!.status ? Text(
+                                          paramProvider.labResponse!.message,
+                                          // Message when dropdown is hidden
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ) : Visibility(
+                                          visible: !paramProvider.isLab &&
+                                              paramProvider.labResponse!.status,
+                                          child: Column(
+                                            children: [
+                                              CustomDropdown(
+                                                title: "Select Lab *",
+                                                value: paramProvider.selectedParamLabId
+                                                    ?.toString(), // Selected value
+                                                items: paramProvider
+                                                    .labResponse?.labs
+                                                    .map((lab) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: lab.labId.toString(),
+                                                    // Use lab ID as value
+                                                    child: Text(
+                                                      lab.labName,
+                                                      // Show lab name in dropdown
+                                                      overflow:
+                                                      TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                    ),
+                                                  );
+                                                }).toList() ??
+                                                    [], // Handle null case
+                                                onChanged: (value) {
+                                                  if (value != null) {
+                                                    final selectedLab =
+                                                    paramProvider.labResponse?.labs
+                                                        .firstWhere(
+                                                          (lab) =>
+                                                      lab.labId.toString() ==
+                                                          value,
+                                                      orElse: () => Lab(
+                                                          labId: 0, labName: ''),
+                                                    );
+                                                    paramProvider.setSelectedParamLabs(selectedLab!.labId, selectedLab.labName);
+                                                    paramProvider.fetchLabIncharge(selectedLab.labId);
+                                                  }
+                                                },
+                                              ),
+                                              Card(
+                                                elevation: 4,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 10, vertical: 8),
+                                                color: Colors.white,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(15),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      // Section 1: Lab Incharge Details
+                                                      Text(
+                                                        "Lab Incharge Details",
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.blueGrey,
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                          thickness: 1,
+                                                          color: Colors.grey.shade300),
+                                                      // Divider for separation
+                                                      SizedBox(height: 8),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.person,
+                                                              color: Colors.blueAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                  FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.business,
+                                                              color: Colors.green),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                  FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.location_on,
+                                                              color: Colors.redAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                  FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+
+
+
+                              /*
                                   SizedBox(
                                     height: 10,
                                   ),
@@ -384,53 +784,56 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                             ],
                                           ),
                                         ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: TextFormField(
-                                        controller: remarkController,
-                                        maxLines: 2,
-                                        // Allows multiline input
-                                        decoration: InputDecoration(
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 14, horizontal: 16),
-                                          // Better padding
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                            // Smoother rounded edges
-                                            borderSide: BorderSide(
-                                                color: Colors.grey.shade300,
-                                                width: 1),
+                                  Visibility(
+                                    visible: paramProvider.isLab,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: TextFormField(
+                                          controller: remarkController,
+                                          maxLines: 2,
+                                          // Allows multiline input
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            contentPadding: EdgeInsets.symmetric(
+                                                vertical: 14, horizontal: 16),
+                                            // Better padding
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                              // Smoother rounded edges
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey.shade300,
+                                                  width: 1),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              borderSide: BorderSide(
+                                                  color: Colors.blueAccent,
+                                                  width: 1.5), // Focus highlight
+                                            ),
+                                            hintText: "Enter your remarks",
+                                            hintStyle: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey.shade600),
+                                            suffixIcon:
+                                                remarkController.text.isNotEmpty
+                                                    ? IconButton(
+                                                        icon: Icon(Icons.clear,
+                                                            color: Colors.grey),
+                                                        onPressed: () {
+                                                          remarkController
+                                                              .clear(); // Clears text on click
+                                                        },
+                                                      )
+                                                    : null,
                                           ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: Colors.blueAccent,
-                                                width: 1.5), // Focus highlight
-                                          ),
-                                          hintText: "Enter your remarks",
-                                          hintStyle: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey.shade600),
-                                          suffixIcon:
-                                              remarkController.text.isNotEmpty
-                                                  ? IconButton(
-                                                      icon: Icon(Icons.clear,
-                                                          color: Colors.grey),
-                                                      onPressed: () {
-                                                        remarkController
-                                                            .clear(); // Clears text on click
-                                                      },
-                                                    )
-                                                  : null,
+                                          keyboardType: TextInputType.multiline,
+                                          textInputAction: TextInputAction
+                                              .newline, // Allows new line input
                                         ),
-                                        keyboardType: TextInputType.multiline,
-                                        textInputAction: TextInputAction
-                                            .newline, // Allows new line input
                                       ),
                                     ),
                                   ),
@@ -498,7 +901,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w600),
+                                                        FontWeight.w600),
                                                   ),
                                                 ),
                                               ],
@@ -516,7 +919,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w600),
+                                                        FontWeight.w600),
                                                   ),
                                                 ),
                                               ],
@@ -526,105 +929,108 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          // Rounded corners
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.3),
-                                              // Shadow color
-                                              blurRadius: 10,
-                                              // Shadow blur
-                                              offset: const Offset(
-                                                  0, 5), // Shadow position
-                                            ),
-                                          ],
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Geo Location of Sample Taken:",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blueGrey,
+                                  Visibility(
+                                    visible: paramProvider.labResponse?.status ?? false || paramProvider.isLab, // Show only when status is true
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                            // Rounded corners
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color:
+                                                Colors.grey.withOpacity(0.3),
+                                                // Shadow color
+                                                blurRadius: 10,
+                                                // Shadow blur
+                                                offset: const Offset(
+                                                    0, 5), // Shadow position
                                               ),
-                                            ),
-                                            Divider(
-                                                thickness: 1,
-                                                color: Colors.grey.shade300),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Text(
-                                                  'Latitude:',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.black87,
+                                            ],
+                                          ),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Geo Location of Sample Taken:",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blueGrey,
+                                                ),
+                                              ),
+                                              Divider(
+                                                  thickness: 1,
+                                                  color: Colors.grey.shade300),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    'Latitude:',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.black87,
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 16,
-                                                ),
-                                                Text(
-                                                  "${paramProvider.currentLatitude}",
-                                                  // Display placeholder text if null
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black
-                                                        .withOpacity(0.7),
+                                                  SizedBox(
+                                                    width: 16,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Text(
-                                                  'Longitude :',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.black87,
+                                                  Text(
+                                                    "${paramProvider.currentLatitude}",
+                                                    // Display placeholder text if null
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black
+                                                          .withOpacity(0.7),
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 16,
-                                                ),
-                                                Text(
-                                                  "${paramProvider.currentLongitude}",
-                                                  // Display placeholder text if null
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black
-                                                        .withOpacity(0.7),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    'Longitude :',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.black87,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  SizedBox(
+                                                    width: 16,
+                                                  ),
+                                                  Text(
+                                                    "${paramProvider.currentLongitude}",
+                                                    // Display placeholder text if null
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -642,24 +1048,32 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          validateAndSubmit(
-                              context, provider, masterProvider, paramProvider);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF096DA8),
-                          // Button color
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 100.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+
+                    Visibility(
+                      visible: paramProvider.labResponse?.status ?? false || paramProvider.isLab, // Show only when status is true
+                      child: ElevatedButton(
+                          onPressed: () {
+                            validateAndSubmit(
+                                context, provider, masterProvider, paramProvider);
+                          },
+                          child: Text(
+                            AppConstants.submitSample,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
-                        ),
-                        child: const Text(
-                          AppConstants.submitSample,
-                          style: AppStyles.buttonStyle,
-                        )),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF096DA8),
+                            // Button color
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 100.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          )),
+                    ),
+
                   ],
                 ),
               ),

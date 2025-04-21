@@ -25,6 +25,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ParameterProvider>(context, listen: false).isLab=true;
+      Provider.of<ParameterProvider>(context, listen: false).isParam=false;
     });
   }
 
