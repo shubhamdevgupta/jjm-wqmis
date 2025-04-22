@@ -30,7 +30,7 @@ class ToastHelper {
 
   /// Shows a toast message at the bottom with optional customization
   static void showToastMessage(String message,
-      {Color backgroundColor = _defaultToastBackgroundColor,
+      {Color backgroundColor = Colors.red,
         Color textColor = _defaultToastTextColor,
         double fontSize = _defaultToastFontSize}) {
     Fluttertoast.showToast(
