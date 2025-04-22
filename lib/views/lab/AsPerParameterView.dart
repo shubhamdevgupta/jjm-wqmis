@@ -164,8 +164,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                                       if (value != null) {
                                                         provider
                                                             .toggleCart(param);
-                                                        print(
-                                                            'parmm -----$param');
+
                                                       }
                                                     },
                                                   ),
