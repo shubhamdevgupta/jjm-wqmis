@@ -158,7 +158,15 @@ class CustomDropdown extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 16),  // Set text color to black
             icon: Icon(Icons.arrow_drop_down, color: Colors.black),  // Set icon color to black
             borderRadius: BorderRadius.circular(5),
-            hint: Text('-select-', style: TextStyle(color: Colors.black54)),  // Placeholder color to be more readable
+            hint: Text(
+              "select",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black54 ,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis, // Apply ellipsis ONLY for selected value
+            ),  // Placeholder color to be more readable
           ),
         )
 
@@ -167,3 +175,14 @@ class CustomDropdown extends StatelessWidget {
     );
   }
 }
+/*
+
+Text(
+"select",
+style: TextStyle(
+fontSize: 16,
+color: selectedValue == null ? Colors.black54 : Colors.black,
+),
+maxLines: 1,
+overflow: TextOverflow.ellipsis, // Apply ellipsis ONLY for selected value
+)*/

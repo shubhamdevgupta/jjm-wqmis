@@ -24,6 +24,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String userName = '';
   String mobile = '';
   String stateId = '';
+  String UserDept = '';
   final encryption = AesEncryption();
 
   @override
@@ -259,11 +260,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   children: [
                                     const Icon(Icons.account_balance_sharp,
                                         color: Colors.teal, size: 20),
-                                    // Using an icon for consistency
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Departmental Official',
-                                      // Replace with dynamic phone number
+                                      UserDept == "4"
+                                          ? 'Departmental Official'
+                                          : UserDept == "8"
+                                          ? 'DWSM'
+                                          : 'Unknown Department', // Fallback text if needed
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -272,6 +275,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     ),
                                   ],
                                 ),
+
                               ],
                             ),
                           ),
@@ -452,6 +456,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
+    UserDept = _localStorage.getString(AppConstants.prefRoleId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }
