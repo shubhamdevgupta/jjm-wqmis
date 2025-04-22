@@ -100,7 +100,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 title: Text(
-                  'Wtp Lab',
+                  'Water Treatment Plant',
                     style: AppStyles.appBarTitle,
                 ),
                 leading: IconButton(
