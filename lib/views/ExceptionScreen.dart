@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ErrorProvider.dart';
+import '../utils/AppConstants.dart';
 import '../utils/AppStyles.dart';
 
 class ExceptionScreen extends StatelessWidget {
@@ -36,7 +37,9 @@ class ExceptionScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     errorProvider.clearError();
-                    Navigator.pushReplacementNamed(context, '/');
+                    //Navigator.pushReplacementNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
+                    // Navigator.pop(context);
                   },
                   child: const Text('Go to Home'),
                 ),

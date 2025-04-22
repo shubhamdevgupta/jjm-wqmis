@@ -122,7 +122,7 @@ class BaseApiService {
       case 401:
         throw ApiException('Unauthorized: ${response.body}');
       case 500:
-        throw ApiException('Internal Server Error: ${response.body}');
+        throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
       case 502:
         throw ApiException('Bad Gateway: ${response.body}');
       default:
@@ -136,6 +136,14 @@ class BaseApiService {
       case ApiType.reverseGeocoding:
         return reverseGeocoding;
     }
+  }
+
+  String handleErrorResp(String responseBody,String defMessage) {
+    final Map<String, dynamic> jsonData = jsonDecode(responseBody);
+ //   final String errType = jsonData['ExceptionType'] ?? '';
+    final String message = jsonData['ExceptionMessage'] ?? defMessage;
+    String res=  " $message";
+    return res;
   }
 
 }
