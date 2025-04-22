@@ -199,7 +199,15 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     color: Colors.red,
                                                                   ),
                                                                   onPressed: () {
-                                                                    paramProvider.removeFromCart(param);
+                                                                    if(paramProvider.cart!.length>1){
+                                                                      paramProvider.removeFromCart(param);
+                                                                      if(paramProvider.isParam){
+                                                                        var paramterId=paramProvider.cart!.sublist(0,paramProvider.cart!.length).join(",");
+                                                                        paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId);
+                                                                      }
+                                                                    }else{
+                                                                    ToastHelper.showSnackBar(context, "Parameter cannot be empty");
+                                                                    }
                                                                   },
                                                                 ),
                                                               ),

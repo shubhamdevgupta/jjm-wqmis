@@ -326,9 +326,9 @@ class ParameterProvider with ChangeNotifier {
       }
     }else{
       cart!.add(parameter);
-      var paramterId=cart!.sublist(0,cart!.length).join(",");
+    /*  var paramterId=cart!.sublist(0,cart!.length).join(",");
       print('card selected param-------- ${cart!.sublist(0,cart!.length).join(",")}');
-      fetchParamLabs("31",paramterId);
+      fetchParamLabs("31",paramterId);*/
     }
     notifyListeners(); // Notify UI of changes
   }

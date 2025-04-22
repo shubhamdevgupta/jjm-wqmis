@@ -71,7 +71,7 @@ class ToastHelper {
 
   /// Shows a default snack bar with a pink accent background
   static void showSnackBar(BuildContext context, String message) {
-    _showSnackBar(context, message, Colors.pinkAccent);
+    _showSnackBar(context, message, Colors.red);
   }
 
   /// Shows an error snack bar
