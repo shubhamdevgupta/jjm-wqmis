@@ -1,15 +1,16 @@
 // Flutter layout for the 'Sample Information' form
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/updateddropdown.dart';
-import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 
+import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/AppStyles.dart';
@@ -64,11 +65,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
+                      Navigator.pushReplacementNamed(
+                          context, AppConstants.navigateToDashboard);
                     }
                   },
                 ),
-                title:  Text(
+                title: Text(
                   'Sample Collection Form',
                   style: AppStyles.appBarTitle,
                 ),
@@ -84,8 +86,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     ),
                   ),
                 ),
-              )
-              ,
+              ),
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
                 return Stack(
@@ -160,59 +161,65 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 value: masterProvider.selectedScheme,
                 decoration: InputDecoration(
                   labelStyle: TextStyle(color: Colors.black),
-                  // Change label color to black
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 1), // Grey border when not focused
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 1), // Grey border when focused
+                    borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(
-                        color: Colors.redAccent,
-                        width: 2), // Red border for error state
+                    borderSide: BorderSide(color: Colors.redAccent, width: 2),
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   fillColor: Colors.white,
-                  // Set background color to white
-                  filled: true, // Ensures background color is applied
+                  filled: true,
                 ),
+                selectedItemBuilder: (BuildContext context) {
+                  return masterProvider.schemes.map((scheme) {
+                    return Text(
+                      scheme.schemeName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    );
+                  }).toList();
+                },
                 items: masterProvider.schemes.map((scheme) {
                   return DropdownMenuItem<String>(
                     value: scheme.schemeId.toString(),
-                    child: Text(
-                      scheme.schemeName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.7, // make wide enough to show long names
+                      child: Text(
+                        scheme.schemeName,
+                        softWrap: true,
+                        maxLines: 5,
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ),
                   );
                 }).toList(),
                 onChanged: (value) {
                   masterProvider.setSelectedScheme(value);
                   if (masterProvider.selectedWtsfilter == "5") {
-                    masterProvider.fetchWTPList(masterProvider.selectedStateId!,
-                        masterProvider.selectedScheme!);
+                    masterProvider.fetchWTPList(
+                        masterProvider.selectedStateId!, masterProvider.selectedScheme!);
                   } else if (masterProvider.selectedWtsfilter == "6") {
                     masterProvider.setSelectedSubSource(0);
                     masterProvider.setSelectedWTP("0");
                     masterProvider.fetchSourceInformation(
-                        masterProvider.selectedVillage!,
-                        "0",
-                        "0",
-                        //habitaion
-                        masterProvider.selectedWtsfilter!,
-                        masterProvider.selectedSubSource.toString(),
-                        masterProvider.selectedWtp!,
-                        masterProvider.selectedStateId!,
-                        masterProvider.selectedScheme!);
+                      masterProvider.selectedVillage!,
+                      "0",
+                      "0",
+                      masterProvider.selectedWtsfilter!,
+                      masterProvider.selectedSubSource.toString(),
+                      masterProvider.selectedWtp!,
+                      masterProvider.selectedStateId!,
+                      masterProvider.selectedScheme!,
+                    );
                   }
                 },
                 dropdownColor: Colors.white,
@@ -311,7 +318,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           SizedBox(height: 10),
           // First Visibility Widget with Border
 
-          buildRawWater(masterProvider),
+          buildSourceofScheme(masterProvider),
           buildWtpWater(masterProvider),
           buildEsrWater(masterProvider),
           buildHouseholdWater(masterProvider),
@@ -321,7 +328,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
-  Widget buildRawWater(Masterprovider masterProvider) {
+  Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
         Visibility(
@@ -410,85 +417,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         SizedBox(
           height: 10,
         ),
-        //pws type
-        /*    Visibility(
-          visible: masterProvider.selectedSubSource == 6 && masterProvider.selectedWtsfilter == "2",
-          child: Card(
-            elevation: 5,
-            // Increased elevation for a more modern shadow effect
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  12), // Slightly increased border radius for a smooth look
-            ),
-            margin: EdgeInsets.all(5),
-            // Margin to ensure spacing around the card
-            color: Colors.white,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: EdgeInsets.all(8),
-              // Inner padding
-              margin: EdgeInsets.only(top: 12),
-              // Spacing from the first container
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'PWS Type:',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 15),
-                  ),
-                  Row(
-                    children: [
-                      Radio(
-                        value: 1,
-                        groupValue: masterProvider.selectedPwsType,
-                        onChanged: (value) {
-                          masterProvider.setSelectedPwsSource(value);
-                          print(
-                              "----calling for Source of scheme raw water-----");
-                          if (value != null) {}
-                        },
-                      ),
-                      Text('PWS with FHTC'),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Radio(
-                        value: 2,
-                        groupValue: masterProvider.selectedPwsType,
-                        onChanged: (value) {
-                          masterProvider.setSelectedPwsSource(value);
-                          print(
-                              "----calling for Source of scheme raw water-----");
-                          if (value != null) {
-                            masterProvider.fetchSourceInformation(
-                                masterProvider.selectedVillage!,
-                                "0",
-                                masterProvider.selectedWtsfilter!,
-                                masterProvider.selectedSubSource.toString(),
-                                masterProvider.selectedPwsType.toString(),
-                                "0",
-                                masterProvider.selectedStateId!,
-                                masterProvider.selectedScheme!);
-                          }
-                        },
-                      ),
-                      Text('PWS without FHTC'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),*/
         Visibility(
           visible: masterProvider.selectedSubSource != null &&
               masterProvider.selectedWtsfilter == "2",
@@ -536,15 +464,19 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: Labparameterscreen(),
-                                  )),
-                        );
+                        if (validateSourceofScheme(masterProvider)) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                      value: masterProvider,
+                                      child: Labparameterscreen(),
+                                    )),
+                          );
+                        } else {
+                          ToastHelper.showToastMessage(masterProvider.errorMsg);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF096DA8),
@@ -641,18 +573,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       Text('Outlet of WTP')
                     ],
                   ),
-                /*  Row(
-                    children: [
-                      Radio(
-                        value: 7,
-                        groupValue: masterProvider.selectedSubSource,
-                        onChanged: (value) {
-                          masterProvider.setSelectedSubSource(value);
-                        },
-                      ),
-                      Text('Disinfection')
-                    ],
-                  ),*/
+
                   Visibility(
                     visible: masterProvider.selectedSubSource != null &&
                         masterProvider.selectedWtsfilter == "5",
@@ -687,23 +608,29 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               ),
 
                             ),
-
                             CustomDateTimePicker(onDateTimeSelected: (value) {
                               masterProvider.setSelectedDateTime(value);
                             }),
-                            SizedBox(height: 20,),
+                            SizedBox(
+                              height: 20,
+                            ),
                             Center(
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                              value: masterProvider,
-                                              child: Wtplabscreen(),
-                                            )),
-                                  );
+                                  if (validateWtpWaterFields(masterProvider)) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeNotifierProvider.value(
+                                                value: masterProvider,
+                                                child: Wtplabscreen(),
+                                              )),
+                                    );
+                                  } else {
+                                    ToastHelper.showToastMessage(
+                                        masterProvider.errorMsg);
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF096DA8),
@@ -770,14 +697,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider.value(
-                            value: masterProvider,
-                            child: Labparameterscreen(),
-                          )),
-                );
+                if (validateEsrWaterFields(masterProvider)) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider.value(
+                              value: masterProvider,
+                              child: Labparameterscreen(),
+                            )),
+                  );
+                } else {
+                  ToastHelper.showToastMessage(masterProvider.errorMsg);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF096DA8),
@@ -884,6 +815,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       hintText: 'Enter Location',
                       prefixIcon: Icons.cabin_rounded,
                       controller: householdController,
+                      isRequired: true,
                     ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
@@ -943,31 +875,41 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           SizedBox(
             height: 10,
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                masterProvider.otherSourceLocation = householdController.text;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider.value(
-                            value: masterProvider,
-                            child: Labparameterscreen(),
-                          )),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF096DA8),
-                // Button color
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 100.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+          Visibility(
+            visible: masterProvider.selectedHousehold == 3 ||
+                masterProvider.selectedHousehold == 4,
+            child: Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (validateHouseholdWaterFields(
+                      masterProvider, householdController)) {
+                    masterProvider.otherSourceLocation =
+                        householdController.text;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeNotifierProvider.value(
+                                value: masterProvider,
+                                child: Labparameterscreen(),
+                              )),
+                    );
+                  } else {
+                    ToastHelper.showToastMessage(masterProvider.errorMsg);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF096DA8),
+                  // Button color
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 100.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
-              child: const Text(
-                'Next',
-                style: AppStyles.buttonStyle,
+                child: const Text(
+                  'Next',
+                  style: AppStyles.buttonStyle,
+                ),
               ),
             ),
           )
@@ -1115,20 +1057,26 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        masterProvider.sampleTypeOther =
-                            handpumpSourceController.text;
-                        masterProvider.otherSourceLocation =
-                            handpumpLocationController.text;
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: Labparameterscreen(),
-                                  )),
-                        );
+                        if (validateHandpumpWaterFields(
+                            masterProvider,
+                            handpumpSourceController,
+                            handpumpLocationController)) {
+                          masterProvider.sampleTypeOther =
+                              handpumpSourceController.text;
+                          masterProvider.otherSourceLocation =
+                              handpumpLocationController.text;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                      value: masterProvider,
+                                      child: Labparameterscreen(),
+                                    )),
+                          );
+                        } else {
+                          ToastHelper.showToastMessage(masterProvider.errorMsg);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF096DA8),
@@ -1169,12 +1117,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     hintText: 'Enter Source type',
                     prefixIcon: Icons.edit_calendar_sharp,
                     controller: handpumpSourceController,
+                    isRequired: true,
                   ),
                   CustomTextField(
                     labelText: 'Enter Location *',
                     hintText: 'Enter Location',
                     prefixIcon: Icons.dehaze,
                     controller: handpumpLocationController,
+                    isRequired: true,
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
@@ -1185,21 +1135,28 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        masterProvider.sampleTypeOther =
-                            handpumpSourceController.text;
-                        masterProvider.otherSourceLocation =
-                            handpumpLocationController.text;
-                        masterProvider.setSelectedWaterSourceInformation("0");
+                        if (validateHandpumpWaterFields(
+                            masterProvider,
+                            handpumpSourceController,
+                            handpumpLocationController)) {
+                          masterProvider.sampleTypeOther =
+                              handpumpSourceController.text;
+                          masterProvider.otherSourceLocation =
+                              handpumpLocationController.text;
+                          masterProvider.setSelectedWaterSourceInformation("0");
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: Labparameterscreen(),
-                                  )),
-                        );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                      value: masterProvider,
+                                      child: Labparameterscreen(),
+                                    )),
+                          );
+                        } else {
+                          ToastHelper.showToastMessage(masterProvider.errorMsg);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF096DA8),
@@ -1222,5 +1179,153 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         ),
       ],
     );
+  }
+
+  bool validateSourceofScheme(Masterprovider masterProvider) {
+    if (masterProvider.selectedScheme == null ||
+        masterProvider.selectedScheme!.isEmpty) {
+      masterProvider.errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedWaterSource == null ||
+        masterProvider.selectedWaterSource!.isEmpty) {
+      masterProvider.errorMsg = "Water Source is empty or invalid";
+      return false;
+    }
+
+    if (masterProvider.selectedDatetime == null) {
+      masterProvider.errorMsg = "Sample Collection Date empty or invalid";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateWtpWaterFields(Masterprovider masterProvider) {
+    if (masterProvider.selectedScheme == null ||
+        masterProvider.selectedScheme!.isEmpty) {
+      masterProvider.errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedWtp == null ||
+        masterProvider.selectedWtp!.isEmpty) {
+      masterProvider.errorMsg =
+          "Water Treatment Plant (WTP) is empty or invalid";
+      return false;
+    }
+
+    // Only validate water source if "Inlet of WTP" is selected
+    if (masterProvider.selectedSubSource == 5 &&
+        (masterProvider.selectedWaterSource == null ||
+            masterProvider.selectedWaterSource!.isEmpty)) {
+      masterProvider.errorMsg = "Water Source for Inlet is empty or invalid";
+      return false;
+    }
+
+    if (masterProvider.selectedDatetime == null) {
+      masterProvider.errorMsg = "Sample Collection Date empty or invalid";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateEsrWaterFields(Masterprovider masterProvider) {
+    if (masterProvider.selectedScheme == null ||
+        masterProvider.selectedScheme!.isEmpty) {
+      masterProvider.errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedWaterSource == null ||
+        masterProvider.selectedWaterSource!.isEmpty) {
+      masterProvider.errorMsg = "ESR/GSR is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedDatetime == null) {
+      masterProvider.errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateHouseholdWaterFields(Masterprovider masterProvider,
+      TextEditingController householdController) {
+    if (masterProvider.selectedScheme == null ||
+        masterProvider.selectedScheme!.isEmpty) {
+      masterProvider.errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedHousehold == null) {
+      masterProvider.errorMsg = "Household selection is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedHousehold == 3) {
+      if (householdController.text.trim().isEmpty) {
+        masterProvider.errorMsg = "Household name is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (masterProvider.selectedHousehold == 4) {
+      if (masterProvider.selectedWaterSource == null ||
+          masterProvider.selectedWaterSource!.isEmpty) {
+        masterProvider.errorMsg = "School / AWC is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (masterProvider.selectedDatetime == null) {
+      masterProvider.errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+
+    return true;
+  }
+
+  bool validateHandpumpWaterFields(
+    Masterprovider masterProvider,
+    TextEditingController handpumpSourceController,
+    TextEditingController handpumpLocationController,
+  ) {
+    if (masterProvider.selectedScheme == null ||
+        masterProvider.selectedScheme!.isEmpty) {
+      masterProvider.errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedHandpumpPrivate == null) {
+      masterProvider.errorMsg = "Handpump type selection is empty or invalid.";
+      return false;
+    }
+
+    if (masterProvider.selectedHandpumpPrivate == 5) {
+      if (masterProvider.selectedWaterSource == null ||
+          masterProvider.selectedWaterSource!.isEmpty) {
+        masterProvider.errorMsg = "Govt. handpump is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (masterProvider.selectedHandpumpPrivate == 6) {
+      if (handpumpSourceController.text.trim().isEmpty) {
+        masterProvider.errorMsg = "Type of source is empty or invalid.";
+        return false;
+      }
+      if (handpumpLocationController.text.trim().isEmpty) {
+        masterProvider.errorMsg = "Location is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (masterProvider.selectedDatetime == null) {
+      masterProvider.errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+
+    return true;
   }
 }

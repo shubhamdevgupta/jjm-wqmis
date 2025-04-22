@@ -39,6 +39,8 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                       await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
+                        var paramterId=provider.cart!.sublist(0,provider.cart!.length).join(",");
+                        provider.fetchParamLabs(masterProvider.selectedStateId!,paramterId);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -162,8 +164,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                                       if (value != null) {
                                                         provider
                                                             .toggleCart(param);
-                                                        print(
-                                                            'parmm -----$param');
+
                                                       }
                                                     },
                                                   ),
@@ -200,7 +201,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                 ),
                                 const SizedBox(height: 20),
                                 Text(
-                                  'Cart: ${provider.cart!.length}',
+                                  'Selected Param: ${provider.cart!.length}',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
