@@ -6,10 +6,6 @@ import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-
-import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/updateddropdown.dart';
-
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -25,9 +21,9 @@ class Sampleinformationscreen extends StatefulWidget {
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   final TextEditingController householdController = TextEditingController();
   final TextEditingController handpumpSourceController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController handpumpLocationController =
-      TextEditingController();
+  TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +34,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/dashboard',
-            (route) => false, // Clears all previous routes
+                (route) => false, // Clears all previous routes
           );
           return false; // Prevents default back action
         },
@@ -89,30 +85,30 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
-                return Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            //card for state district selection
-                            buildSampleTaken(masterProvider),
-                            SizedBox(
-                              height: 12,
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                //card for state district selection
+                                buildSampleTaken(masterProvider),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                // card for location of source from where sample taken
+                              ],
                             ),
-                            // card for location of source from where sample taken
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    if (masterProvider.isLoading)
-                      LoaderUtils.conditionalLoader(
-                          isLoading: masterProvider.isLoading)
-                  ],
-                );
-              })),
+                        if (masterProvider.isLoading)
+                          LoaderUtils.conditionalLoader(
+                              isLoading: masterProvider.isLoading)
+                      ],
+                    );
+                  })),
         ),
       ),
     );
@@ -150,9 +146,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               thickness: 1,
             ),
             SizedBox(height: 4), // Space between title and dropdown
-
             // Custom dropdown
-           /* Card(
+            Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -229,44 +224,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 borderRadius: BorderRadius.circular(5),
                 hint: Text('-select-', style: TextStyle(color: Colors.black54)),
               ),
-            )*/
-
-            UpdateCustomSearchableDropdown(
-              selectedValue: masterProvider.selectedScheme,
-              items: masterProvider.schemes.map((scheme) {
-                return {
-                  'schemeId': scheme.schemeId,
-                  'schemeName': scheme.schemeName,
-                };
-              }).toList(),
-              hint: "",
-              onChanged: (value) {
-                masterProvider.setSelectedScheme(value);
-
-                if (masterProvider.selectedWtsfilter == "5") {
-                  masterProvider.fetchWTPList(
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
-                  );
-                } else if (masterProvider.selectedWtsfilter == "6") {
-                  masterProvider.setSelectedSubSource(0);
-                  masterProvider.setSelectedWTP("0");
-
-                  masterProvider.fetchSourceInformation(
-                    masterProvider.selectedVillage!,
-                    "0",
-                    "0",
-                    masterProvider.selectedWtsfilter!,
-                    masterProvider.selectedSubSource.toString(),
-                    masterProvider.selectedWtp!,
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
-                  );
-                }
-              },
             )
-
-
           ],
         ),
       ),
@@ -291,7 +249,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               padding: const EdgeInsets.all(8.0),
               child: CustomDropdown(
                 title:
-                    "Please select the location of source from where sample is taken:",
+                "Please select the location of source from where sample is taken:",
                 value: masterProvider.selectedWtsfilter,
                 items: masterProvider.wtsFilterList.map((wtsFilter) {
                   return DropdownMenuItem<String>(
@@ -436,25 +394,23 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  UpdateCustomSearchableDropdown(
-                    selectedValue: masterProvider.waterSource.any((item) =>
-                    item.locationId == masterProvider.selectedWaterSource)
-                        ? masterProvider.selectedWaterSource
-                        : null,
+                  CustomDropdown(
+                    title: "Select Water Source *",
+                    value: masterProvider.selectedWaterSource,
                     items: masterProvider.waterSource.map((waterSource) {
-                      return {
-                        'schemeId': waterSource.locationId,
-                        'schemeName': waterSource.locationName,
-                      };
+                      return DropdownMenuItem<String>(
+                        value: waterSource.locationId,
+                        child: Text(
+                          waterSource.locationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
                     }).toList(),
-                    hint: "Select Govt. Handpump *",
                     onChanged: (value) {
-                      print('Selected Water Source: $value');
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-
-
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
@@ -516,23 +472,23 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              UpdateCustomSearchableDropdown(
-                selectedValue: masterProvider.selectedWtp,
+              CustomDropdown(
+                value: masterProvider.selectedWtp,
                 items: masterProvider.wtpList.map((wtpData) {
-                  return {
-                    'schemeId': wtpData.wtpId,
-                    'schemeName': wtpData.wtpName,
-                  };
+                  return DropdownMenuItem<String>(
+                    value: wtpData.wtpId,
+                    child: Text(
+                      wtpData.wtpName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
                 }).toList(),
-                hint: "Select water treatment plant (WTP)",
+                title: "Select water treatment plant (WTP)",
                 onChanged: (value) {
                   masterProvider.setSelectedWTP(value);
                 },
               ),
-
-
-
-
               SizedBox(
                 height: 10,
               ),
@@ -573,7 +529,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       Text('Outlet of WTP')
                     ],
                   ),
-
                   Visibility(
                     visible: masterProvider.selectedSubSource != null &&
                         masterProvider.selectedWtsfilter == "5",
@@ -593,20 +548,25 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           children: [
                             Visibility(
                               visible: masterProvider.selectedSubSource == 5,
-                              child: UpdateCustomSearchableDropdown(
-                                selectedValue: masterProvider.selectedWaterSource,
-                                items: masterProvider.waterSource.map((waterSource) {
-                                  return {
-                                    'schemeId': waterSource.locationId,
-                                    'schemeName': waterSource.locationName,
-                                  };
+                              child: CustomDropdown(
+                                title: "Select Water Source *",
+                                value: masterProvider.selectedWaterSource,
+                                items: masterProvider.waterSource
+                                    .map((waterSource) {
+                                  return DropdownMenuItem<String>(
+                                    value: waterSource.locationId,
+                                    child: Text(
+                                      waterSource.locationName,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  );
                                 }).toList(),
-                                hint: "Select Water Source *",
                                 onChanged: (value) {
-                                  masterProvider.setSelectedWaterSourceInformation(value);
+                                  masterProvider
+                                      .setSelectedWaterSourceInformation(value);
                                 },
                               ),
-
                             ),
                             CustomDateTimePicker(onDateTimeSelected: (value) {
                               masterProvider.setSelectedDateTime(value);
@@ -702,9 +662,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider.value(
-                              value: masterProvider,
-                              child: Labparameterscreen(),
-                            )),
+                          value: masterProvider,
+                          child: Labparameterscreen(),
+                        )),
                   );
                 } else {
                   ToastHelper.showToastMessage(masterProvider.errorMsg);
@@ -846,8 +806,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     CustomDropdown(
                       title: "Select School / AWCs *",
                       value: masterProvider.waterSource.any((item) =>
-                              item.locationId ==
-                              masterProvider.selectedWaterSource)
+                      item.locationId ==
+                          masterProvider.selectedWaterSource)
                           ? masterProvider.selectedWaterSource
                           : null, // Ensure valid value
                       items: masterProvider.waterSource.map((waterSource) {
@@ -889,9 +849,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider.value(
-                                value: masterProvider,
-                                child: Labparameterscreen(),
-                              )),
+                            value: masterProvider,
+                            child: Labparameterscreen(),
+                          )),
                     );
                   } else {
                     ToastHelper.showToastMessage(masterProvider.errorMsg);
@@ -1006,21 +966,20 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-             /*     CustomDropdown(
+                  CustomDropdown(
                     title: "Select Govt. Handpump *",
                     value: masterProvider.waterSource.any((item) =>
-                            item.locationId ==
-                            masterProvider.selectedWaterSource)
+                    item.locationId ==
+                        masterProvider.selectedWaterSource)
                         ? masterProvider.selectedWaterSource
                         : null, // Ensure value exists in items
                     items: masterProvider.waterSource.map((waterSource) {
                       return DropdownMenuItem<String>(
                         value: waterSource.locationId,
                         child: Text(
-                          textAlign: TextAlign.justify,
                           waterSource.locationName,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
+                          maxLines: 1,
                         ),
                       );
                     }).toList(),
@@ -1028,26 +987,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       print('Selected Water Source: $value');
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
-                  ),*/
-
-                  UpdateCustomSearchableDropdown(
-                    selectedValue: masterProvider.waterSource.any((item) =>
-                    item.locationId == masterProvider.selectedWaterSource)
-                        ? masterProvider.selectedWaterSource
-                        : null,
-                    items: masterProvider.waterSource.map((waterSource) {
-                      return {
-                        'schemeId': waterSource.locationId,
-                        'schemeName': waterSource.locationName,
-                      };
-                    }).toList(),
-                    hint: "Select Govt. Handpump *",
-                    onChanged: (value) {
-                      print('Selected Water Source: $value');
-                      masterProvider.setSelectedWaterSourceInformation(value);
-                    },
                   ),
-
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
@@ -1211,7 +1151,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     if (masterProvider.selectedWtp == null ||
         masterProvider.selectedWtp!.isEmpty) {
       masterProvider.errorMsg =
-          "Water Treatment Plant (WTP) is empty or invalid";
+      "Water Treatment Plant (WTP) is empty or invalid";
       return false;
     }
 
@@ -1287,10 +1227,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateHandpumpWaterFields(
-    Masterprovider masterProvider,
-    TextEditingController handpumpSourceController,
-    TextEditingController handpumpLocationController,
-  ) {
+      Masterprovider masterProvider,
+      TextEditingController handpumpSourceController,
+      TextEditingController handpumpLocationController,
+      ) {
     if (masterProvider.selectedScheme == null ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";

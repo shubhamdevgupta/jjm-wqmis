@@ -4,6 +4,7 @@ class UpdateCustomSearchableDropdown extends StatefulWidget {
   final String? selectedValue;
   final List<Map<String, String>> items;
   final String hint;
+  final String appBarTitle;
   final Function(String?) onChanged;
 
   const UpdateCustomSearchableDropdown({
@@ -11,6 +12,7 @@ class UpdateCustomSearchableDropdown extends StatefulWidget {
     this.selectedValue,
     required this.items,
     required this.hint,
+    required this.appBarTitle,
     required this.onChanged,
   }) : super(key: key);
 
@@ -39,10 +41,12 @@ class _UpdateCustomSearchableDropdownState extends State<UpdateCustomSearchableD
             });
             widget.onChanged(value);
           },
+          appBarTitle: widget.appBarTitle ?? "Select Item",
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,16 +118,19 @@ class _UpdateCustomSearchableDropdownState extends State<UpdateCustomSearchableD
 class _SearchDialog extends StatefulWidget {
   final List<Map<String, String>> items;
   final ValueChanged<String> onItemSelected;
+  final String appBarTitle;
 
   const _SearchDialog({
     Key? key,
     required this.items,
     required this.onItemSelected,
+    required this.appBarTitle,
   }) : super(key: key);
 
   @override
   State<_SearchDialog> createState() => _SearchDialogState();
 }
+
 
 class _SearchDialogState extends State<_SearchDialog> {
   List<Map<String, String>> filteredItems = [];
@@ -147,9 +154,10 @@ class _SearchDialogState extends State<_SearchDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select Govt. Handpump", style: TextStyle(color: Colors.white)),
+        title: Text(widget.appBarTitle, style: const TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
       ),
+
       body: Column(
         children: [
           Padding(
