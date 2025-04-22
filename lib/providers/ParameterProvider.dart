@@ -315,21 +315,23 @@ class ParameterProvider with ChangeNotifier {
     if (cart!.any((item) => item.parameterId == parameter.parameterId)) {
       cart!.removeWhere(
           (item) => item.parameterId == parameter.parameterId);
-    } else if(isLab) {
+    } else{
+      cart!.add(parameter);
+    }/* if(isLab) {
       cart!.add(parameter);
       final labId = selectedLab?.isNotEmpty == true
           ? selectedLab
           : selectedWtpLab;
       print("---------- $selectedLab");
       if (labId != null && labId.isNotEmpty) {
-        fetchLabIncharge(int.parse(labId));
+      //  fetchLabIncharge(int.parse(labId));
       }
     }else{
       cart!.add(parameter);
-    /*  var paramterId=cart!.sublist(0,cart!.length).join(",");
+    *//*  var paramterId=cart!.sublist(0,cart!.length).join(",");
       print('card selected param-------- ${cart!.sublist(0,cart!.length).join(",")}');
-      fetchParamLabs("31",paramterId);*/
-    }
+      fetchParamLabs("31",paramterId);*//*
+    }*/
     notifyListeners(); // Notify UI of changes
   }
   void clearData() {
