@@ -45,6 +45,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
+                        provider.fetchLabIncharge(int.parse(provider.selectedLab!));
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -121,7 +122,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     null), // Default to a nullable object
                               );
                               provider.cart!.clear();
-                              provider.setSelectedLab(selectedLab.text);
+                              provider.setSelectedLab(selectedLab.value);
                               if (provider.isLabSelected) {
                                 provider.fetchAllParameter(
                                   selectedLab.value!,
