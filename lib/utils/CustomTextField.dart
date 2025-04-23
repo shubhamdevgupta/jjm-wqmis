@@ -34,7 +34,7 @@ class CustomTextField extends StatelessWidget {
             children: isRequired
                 ? [
               const TextSpan(
-                text: ' *', // Add a red asterisk
+                text: '*', // Add a red asterisk
                 style: TextStyle(
                   color: Colors.red,
                   fontSize: 18,

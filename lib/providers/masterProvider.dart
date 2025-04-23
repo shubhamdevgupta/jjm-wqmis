@@ -204,8 +204,7 @@ class Masterprovider extends ChangeNotifier {
           schemes.where((scheme) => scheme.schemeId.isNotEmpty).toList());
       if (filteredSchemes.length > 1) {
         print('Valid schemes found');
-        selectedScheme =
-            filteredSchemes.first.schemeId; // Select "Select" by default
+        selectedScheme = filteredSchemes.first.schemeId; // Select "Select" by default
       } else {
         print('No valid scheme found, updating list to "Data Not Available"');
         filteredSchemes = [
