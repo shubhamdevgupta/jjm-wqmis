@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/utils/Appcolor.dart';
 
 class AppStyles {
-
   static TextStyle appBarTitle = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
 
-
-  static TextStyle setTextStyle(  double fontSize , FontWeight fontWeight, Color color) {
+  static TextStyle setTextStyle(
+      double fontSize, FontWeight fontWeight, Color color) {
     return TextStyle(
       fontSize: fontSize,
       fontWeight: fontWeight,
@@ -25,14 +25,30 @@ class AppStyles {
     color: Colors.black,
   );
 
-  static const TextStyle buttonStyle = TextStyle(
+  static const TextStyle textStyle = TextStyle(
     fontSize: 16,
     color: Colors.white,
     fontWeight: FontWeight.bold,
   );
 
+  static ButtonStyle buttonStylePrimary({
+    Color backgroundColor = Appcolor.buttonBgColor,
+    double horizontalPadding = 100.0,
+    double verticalPadding = 10.0,
+    double borderRadius = 8,
+    double fontSize = 16,
+  }) {
+    return ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
+      textStyle:  TextStyle(fontSize: fontSize),
+    );
+  }
+
   // Padding & Margin
-  static const EdgeInsets screenPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 12);
+  static const EdgeInsets screenPadding =
+      EdgeInsets.symmetric(horizontal: 16, vertical: 12);
   static const EdgeInsets cardPadding = EdgeInsets.all(16);
 
   // Border Radius

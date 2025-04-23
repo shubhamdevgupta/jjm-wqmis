@@ -16,6 +16,7 @@ class Appcolor{
   static const Color btncolor = Color(0xFF0D3A98);
   static const Color txtColor = Color(0xFF2396D3);
   static const Color bgcolor = Color(0xFF0D3A98);
+  static const Color buttonBgColor = Color(0xFF096DA8);
   static const Color bgcardcolor = Color(0xff7e829930);
   static const Color headingcolor = Color(0xff4b0082);
   static const Color red = Color(0xffcc5d5d);

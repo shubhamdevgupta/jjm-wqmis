@@ -259,14 +259,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                         ),
                         SizedBox(width: 10),
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF0468B1),
-                            textStyle: TextStyle(fontSize: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6), // less = more squared
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14), // optional: adjust size
-                          ),
+                          style: AppStyles.buttonStylePrimary(backgroundColor:const Color(0xFF0468B1) ,fontSize: 16,borderRadius: 6,horizontalPadding: 20,verticalPadding: 14),
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
                               provider.fetchSampleList(int.parse(userId!), 1, "",
