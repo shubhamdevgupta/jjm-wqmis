@@ -32,36 +32,44 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 
   void _openSearchDialog() {
-    if (widget.items.isNotEmpty) {
-      showGeneralDialog(
-        context: context,
-        barrierDismissible: true,
-        barrierLabel: 'Search',
-        pageBuilder: (context, anim1, anim2) {
-          return _SearchDialog(
-            items: widget.items,
-            onItemSelected: (value) {
-              setState(() {
-                selectedValue = value;
-              });
-              widget.onChanged?.call(value);
-            },
-            appBarTitle: widget.appBarTitle,
-            showSearchBar: widget.showSearchBar,
-          );
-        },
-        transitionBuilder: (context, anim1, anim2, child) {
-          return SlideTransition(
-            position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(anim1),
-            child: child,
-          );
-        },
-      );
-    }
+    if (widget.items.isEmpty) return; // Prevent opening when list is empty
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Search',
+      pageBuilder: (context, anim1, anim2) {
+        return _SearchDialog(
+          items: widget.items,
+          onItemSelected: (value) {
+            setState(() {
+              selectedValue = value;
+            });
+            widget.onChanged?.call(value);
+          },
+          appBarTitle: widget.appBarTitle,
+          showSearchBar: widget.showSearchBar,
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(anim1),
+          child: child,
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    String label = "--Select--";
+    if (selectedValue != null && selectedValue!.isNotEmpty) {
+      final matchedItem = widget.items.firstWhere(
+            (item) => item.value == selectedValue,
+        orElse: () => DropdownMenuItem(value: '', child: const Text('')),
+      );
+      label = (matchedItem.child as Text).data ?? "--Select--";
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -111,17 +119,12 @@ class _CustomDropdownState extends State<CustomDropdown> {
               children: [
                 Flexible(
                   child: Text(
-                    selectedValue == null || selectedValue!.isEmpty
-                        ? "--Select--"
-                        : (widget.items.firstWhere(
-                          (item) => item.value == selectedValue,
-                      orElse: () => DropdownMenuItem(value: '', child: const Text('')),
-                    ).child as Text)
-                        .data ??
-                        '',
+                    label,
                     style: TextStyle(
                       fontSize: 16,
-                      color: selectedValue == null || selectedValue!.isEmpty ? Colors.black54 : Colors.black,
+                      color: (selectedValue == null || selectedValue!.isEmpty)
+                          ? Colors.black54
+                          : Colors.black,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -137,7 +140,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 }
 
-// Fullscreen and styled search dialog
+// Fullscreen searchable dropdown
 class _SearchDialog extends StatefulWidget {
   final List<DropdownMenuItem<String>> items;
   final ValueChanged<String> onItemSelected;
@@ -175,7 +178,6 @@ class __SearchDialogState extends State<_SearchDialog> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,7 +203,8 @@ class __SearchDialogState extends State<_SearchDialog> {
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: const Icon(Icons.search),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(color: Colors.grey),
@@ -213,10 +216,14 @@ class __SearchDialogState extends State<_SearchDialog> {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                itemCount: widget.showSearchBar ? filteredItems.length : widget.items.length,
+                itemCount: widget.showSearchBar
+                    ? filteredItems.length
+                    : widget.items.length,
                 separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (context, index) {
-                  final item = widget.showSearchBar ? filteredItems[index] : widget.items[index];
+                  final item = widget.showSearchBar
+                      ? filteredItems[index]
+                      : widget.items[index];
                   return ListTile(
                     title: Text((item.child as Text).data ?? ''),
                     onTap: () {
