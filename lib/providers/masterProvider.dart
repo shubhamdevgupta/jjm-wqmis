@@ -105,91 +105,135 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
-      districts = await _masterRepository.fetchDistricts(stateId);
-      if (districts.isNotEmpty) {
-        selectedDistrictId =
-            districts.first.jJMDistrictId; // Default to first district
-      }
+      final rawDistricts = await _masterRepository.fetchDistricts(stateId);
+
+      // Remove placeholder "--Select--" if it exists
+      districts = rawDistricts
+          .where((d) => d.districtName != '--Select--')
+          .toList();
+
+      // No automatic selection
+      selectedDistrictId = '';
     } catch (e) {
-      debugPrint('Error in fetching districts: master provider  $e');
+      debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
+      errorMsg = "Failed to load districts.";
     } finally {
       isLoading = false;
       notifyListeners(); // Finish loading
     }
   }
 
+
   Future<void> fetchBlocks(String stateId, String districtId) async {
+    if (stateId.isEmpty || districtId.isEmpty) {
+      errorMsg = "Please select both State and District.";
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
+
     try {
-      if(stateId.isNotEmpty||districtId.isNotEmpty){
-      blocks = await _masterRepository.fetchBlocks(stateId, districtId);
-      if (blocks.isNotEmpty) {
-        selectedBlockId = blocks.first.jjmBlockId;
-      }}else{
-        errorMsg="district is not Selected";
-      }
+      final rawBlocks = await _masterRepository.fetchBlocks(stateId, districtId);
+
+      blocks = rawBlocks
+          .where((b) => b.blockName != '--Select--')
+          .toList();
+
+      selectedBlockId = '';
     } catch (e) {
       debugPrint('Error in fetching blocks: $e');
       GlobalExceptionHandler.handleException(e as Exception);
+      errorMsg = "Failed to load blocks.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
   Future<void> fetchGramPanchayat(String stateId, String districtId, String blockId) async {
+    if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty) {
+      errorMsg = "Please select State, District, and Block.";
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
+
     try {
-      gramPanchayat = await _masterRepository.fetchGramPanchayats(
-          stateId, districtId, blockId);
-      if (gramPanchayat.isNotEmpty) {
-        selectedGramPanchayat = gramPanchayat.first.jjmPanchayatId;
-      }
+      final rawGPs = await _masterRepository.fetchGramPanchayats(stateId, districtId, blockId);
+
+      gramPanchayat = rawGPs
+          .where((gp) => gp.panchayatName != '--Select--')
+          .toList();
+
+      selectedGramPanchayat = '';
     } catch (e) {
       debugPrint('Error in fetching grampanchayat: $e');
       GlobalExceptionHandler.handleException(e as Exception);
+      errorMsg = "Failed to load Gram Panchayats.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
   Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
+    if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty || gpID.isEmpty) {
+      errorMsg = "Please select all required fields.";
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
+
     try {
-      village = await _masterRepository.fetchVillages(
-          stateId, districtId, blockId, gpID);
-      if (village.isNotEmpty) {
-        selectedVillage = village.first.jjmVillageId.toString();
-      }
+      final rawVillages = await _masterRepository.fetchVillages(stateId, districtId, blockId, gpID);
+
+      village = rawVillages
+          .where((v) => v.villageName != '--Select--')
+          .toList();
+
+      selectedVillage = '';
     } catch (e) {
       debugPrint('Error in fetching village: $e');
       GlobalExceptionHandler.handleException(e as Exception);
+      errorMsg = "Failed to load villages.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
   Future<void> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
+    if ([stateId, districtId, blockId, gpId, villageId].any((e) => e.isEmpty)) {
+      errorMsg = "Please select all fields to load habitations.";
+      notifyListeners();
+      return;
+    }
+
     isLoading = true;
     notifyListeners();
+
     try {
-      habitationId = await _masterRepository.fetchHabitations(
-          stateId, districtId, blockId, gpId, villageId);
-      if (habitationId.isNotEmpty) {
-        selectedHabitation = habitationId.first.habitationId.toString();
-      }
+      final rawHabitations = await _masterRepository.fetchHabitations(stateId, districtId, blockId, gpId, villageId);
+
+      habitationId = rawHabitations
+          .where((h) => h.habitationName != '--Select--')
+          .toList();
+
+      selectedHabitation = '';
     } catch (e) {
       debugPrint('Error in fetching habitation: $e');
       GlobalExceptionHandler.handleException(e as Exception);
+      errorMsg = "Failed to load habitations.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
