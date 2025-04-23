@@ -286,6 +286,7 @@ class Masterprovider extends ChangeNotifier {
           habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
       if (waterSource.isNotEmpty) {
         selectedWaterSource = waterSource.first.locationId;
+      WaterSourceResponse(locationId: "0", locationName: "Select");
       }
     } catch (e) {
       debugPrint('Error in fetching source information: $e');

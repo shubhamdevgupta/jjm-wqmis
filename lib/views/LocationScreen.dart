@@ -177,7 +177,10 @@ class _LocationscreenState extends State<Locationscreen> {
                           masterProvider.fetchBlocks(
                               masterProvider.selectedStateId!, value);
                         }
-                      })),
+                      },
+                    appBarTitle: "Select District",
+                      ),
+              ),
               SizedBox(height: 12),
               //block data here--------------
               Column(
@@ -205,6 +208,8 @@ class _LocationscreenState extends State<Locationscreen> {
                             value);
                       }
                     },
+                    appBarTitle: "Select block",
+
                   ),
                 ],
               ),
@@ -233,6 +238,8 @@ class _LocationscreenState extends State<Locationscreen> {
                         value);
                   }
                 },
+                appBarTitle: "Select Gram Panchayat",
+
               ),
               SizedBox(height: 12),
               ///// village data heree ----------
@@ -260,6 +267,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     masterProvider.fetchWatersourcefilterList();
                   }
                 },
+                appBarTitle: "Select Village",
               ),
               SizedBox(height: 12),
               ///// habitation  data heree ----------

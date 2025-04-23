@@ -1116,6 +1116,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateSourceofScheme(Masterprovider masterProvider) {
+    print("9999999999   ${masterProvider.selectedWaterSource}");
     if (masterProvider.selectedScheme == null ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";

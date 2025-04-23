@@ -107,8 +107,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                 .firstWhere(
                                   (lab) => lab.value == provider.selectedLab,
                               orElse: () => Alllabresponse(value: null, text: null),
-                            )
-                                .text,
+                            ).text,
                             items: provider.labList.map((lab) => lab.text ?? '').toList(),
                             onChanged: (selectedLabText) {
                               if (selectedLabText == null)
@@ -310,9 +309,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
-
-
-
             ),
           );
         },

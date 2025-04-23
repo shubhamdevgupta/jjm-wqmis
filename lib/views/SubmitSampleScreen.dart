@@ -651,6 +651,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                     paramProvider.setSelectedLab(value);
                                                   }
                                                 },
+                                                appBarTitle: "Select Lab ",
                                               ),
                                               Visibility(
                                                 visible: (paramProvider.selectedLab ?? '').isNotEmpty,
