@@ -123,9 +123,12 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
+      if(stateId.isNotEmpty||districtId.isNotEmpty){
       blocks = await _masterRepository.fetchBlocks(stateId, districtId);
       if (blocks.isNotEmpty) {
         selectedBlockId = blocks.first.jjmBlockId;
+      }}else{
+        errorMsg="district is not Selected";
       }
     } catch (e) {
       debugPrint('Error in fetching blocks: $e');

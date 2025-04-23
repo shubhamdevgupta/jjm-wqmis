@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomDropdown extends StatelessWidget {
+class CustomDropdown extends StatefulWidget {
   final String? value;
   final List<DropdownMenuItem<String>> items;
   final String title;
   final ValueChanged<String?>? onChanged;
+  final String? appBarTitle;
+  final bool showSearchBar;
 
   const CustomDropdown({
     Key? key,
@@ -12,97 +14,222 @@ class CustomDropdown extends StatelessWidget {
     required this.items,
     required this.title,
     required this.onChanged,
+    this.appBarTitle,
+    this.showSearchBar = true,
   }) : super(key: key);
+
+  @override
+  _CustomDropdownState createState() => _CustomDropdownState();
+}
+
+class _CustomDropdownState extends State<CustomDropdown> {
+  String? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.value ?? '';
+  }
+
+  void _openSearchDialog() {
+    if (widget.items.isNotEmpty) {
+      showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: 'Search',
+        pageBuilder: (context, anim1, anim2) {
+          return _SearchDialog(
+            items: widget.items,
+            onItemSelected: (value) {
+              setState(() {
+                selectedValue = value;
+              });
+              widget.onChanged?.call(value);
+            },
+            appBarTitle: widget.appBarTitle,
+            showSearchBar: widget.showSearchBar,
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(anim1),
+            child: child,
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // Aligns the title to the left
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // RichText for the title and asterisk handling
-        RichText(
-          text: TextSpan(
-            text: title.contains('*')
-                ? title.replaceAll('*', '') // Remove '*' from title
-                : title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-            children: title.contains('*')
-                ? [
-              TextSpan(
-                text: ' *', // Add red asterisk to indicate required field
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+        if (widget.title.isNotEmpty)
+          RichText(
+            text: TextSpan(
+              text: widget.title.replaceAll('*', ''),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
-            ]
-                : [],
+              children: widget.title.contains('*')
+                  ? const [
+                TextSpan(
+                  text: ' *',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ]
+                  : [],
+            ),
+          ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: _openSearchDialog,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 1),
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    selectedValue == null || selectedValue!.isEmpty
+                        ? "--Select--"
+                        : (widget.items.firstWhere(
+                          (item) => item.value == selectedValue,
+                      orElse: () => DropdownMenuItem(value: '', child: const Text('')),
+                    ).child as Text)
+                        .data ??
+                        '',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: selectedValue == null || selectedValue!.isEmpty ? Colors.black54 : Colors.black,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 8), // Space between title and dropdown
-        // Updated UI for dropdown button with card and rounded corners
-        Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: DropdownButtonFormField<String>(
-            value: value,
-            decoration: InputDecoration(
-              labelStyle: TextStyle(color: Colors.black),  // Change label color to black
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when not focused
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey, width: 1),  // Grey border when focused
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.redAccent, width: 2),  // Red border for error state
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              fillColor: Colors.white,  // Set background color to white
-              filled: true,  // Ensures background color is applied
-            ),
-            items: items,
-            onChanged: onChanged,
-            dropdownColor: Colors.white,  // Set dropdown color to white
-            isExpanded: true,
-            style: TextStyle(color: Colors.black, fontSize: 16),  // Set text color to black
-            icon: Icon(Icons.arrow_drop_down, color: Colors.black),  // Set icon color to black
-            borderRadius: BorderRadius.circular(5),
-            hint: Text(
-              "select",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54 ,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis, // Apply ellipsis ONLY for selected value
-            ),  // Placeholder color to be more readable
-          ),
-        )
-
-
       ],
     );
   }
 }
-/*
 
-Text(
-"select",
-style: TextStyle(
-fontSize: 16,
-color: selectedValue == null ? Colors.black54 : Colors.black,
-),
-maxLines: 1,
-overflow: TextOverflow.ellipsis, // Apply ellipsis ONLY for selected value
-)*/
+// Fullscreen and styled search dialog
+class _SearchDialog extends StatefulWidget {
+  final List<DropdownMenuItem<String>> items;
+  final ValueChanged<String> onItemSelected;
+  final String? appBarTitle;
+  final bool showSearchBar;
+
+  const _SearchDialog({
+    Key? key,
+    required this.items,
+    required this.onItemSelected,
+    this.appBarTitle,
+    this.showSearchBar = true,
+  }) : super(key: key);
+
+  @override
+  __SearchDialogState createState() => __SearchDialogState();
+}
+
+class __SearchDialogState extends State<_SearchDialog> {
+  late List<DropdownMenuItem<String>> filteredItems;
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = widget.items;
+  }
+
+  void _filterItems(String query) {
+    setState(() {
+      filteredItems = widget.items.where((item) {
+        final label = (item.child as Text).data ?? '';
+        return label.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(widget.appBarTitle ?? "Select Item"),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        elevation: 2,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            if (widget.showSearchBar)
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    prefixIcon: const Icon(Icons.search),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                  ),
+                  onChanged: _filterItems,
+                ),
+              ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                itemCount: widget.showSearchBar ? filteredItems.length : widget.items.length,
+                separatorBuilder: (_, __) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final item = widget.showSearchBar ? filteredItems[index] : widget.items[index];
+                  return ListTile(
+                    title: Text((item.child as Text).data ?? ''),
+                    onTap: () {
+                      widget.onItemSelected(item.value!);
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
