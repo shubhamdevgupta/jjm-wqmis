@@ -385,7 +385,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             SizedBox(width: 8),
                             Text(
                               AppConstants.addSample,
-                              style: AppStyles.buttonStyle,
+                              style: AppStyles.textStyle,
                             ),
                           ],
                         ),

@@ -302,7 +302,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   ),
                   child: const Text(
                     'Next',
-                    style: AppStyles.buttonStyle,
+                    style: AppStyles.textStyle,
                   ),
                 ),
               ),

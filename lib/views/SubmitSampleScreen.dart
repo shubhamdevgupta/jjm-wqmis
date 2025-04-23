@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -907,15 +908,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF096DA8),
-                            // Button color
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 100.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          )),
+                          style: AppStyles.buttonStylePrimary()
+
+                      ),
                     ),
                   ],
                 ),

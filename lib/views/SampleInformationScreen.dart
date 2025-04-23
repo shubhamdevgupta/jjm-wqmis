@@ -434,18 +434,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           ToastHelper.showToastMessage(masterProvider.errorMsg);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF096DA8),
-                        // Button color
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 100.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                      style: AppStyles.buttonStylePrimary(),
                       child: const Text(
                         'Next',
-                        style: AppStyles.buttonStyle,
+                        style: AppStyles.textStyle,
                       ),
                     ),
                   )
@@ -592,18 +584,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                         masterProvider.errorMsg);
                                   }
                                 },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF096DA8),
-                                  // Button color
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 100.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
+                                style: AppStyles.buttonStylePrimary(),
                                 child: const Text(
                                   'Next',
-                                  style: AppStyles.buttonStyle,
+                                  style: AppStyles.textStyle,
                                 ),
                               ),
                             )
@@ -670,18 +654,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ToastHelper.showToastMessage(masterProvider.errorMsg);
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF096DA8),
-                // Button color
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 100.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+              style: AppStyles.buttonStylePrimary(),
               child: const Text(
                 'Next',
-                style: AppStyles.buttonStyle,
+                style: AppStyles.textStyle,
               ),
             ),
           )
@@ -857,18 +833,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     ToastHelper.showToastMessage(masterProvider.errorMsg);
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF096DA8),
-                  // Button color
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 100.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+                style: AppStyles.buttonStylePrimary(),
                 child: const Text(
                   'Next',
-                  style: AppStyles.buttonStyle,
+                  style: AppStyles.textStyle,
                 ),
               ),
             ),
@@ -1018,18 +986,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           ToastHelper.showToastMessage(masterProvider.errorMsg);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF096DA8),
-                        // Button color
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 100.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                      style: AppStyles.buttonStylePrimary(),
                       child: const Text(
                         'Next',
-                        style: AppStyles.buttonStyle,
+                        style: AppStyles.textStyle,
                       ),
                     ),
                   )
@@ -1098,17 +1058,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           ToastHelper.showToastMessage(masterProvider.errorMsg);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF096DA8),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 100.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                      style: AppStyles.buttonStylePrimary(),
                       child: const Text(
                         'Next',
-                        style: AppStyles.buttonStyle,
+                        style: AppStyles.textStyle,
                       ),
                     ),
                   )
