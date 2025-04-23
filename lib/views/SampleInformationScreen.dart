@@ -147,7 +147,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             SizedBox(height: 4), // Space between title and dropdown
             // Custom dropdown
-            Card(
+    /*        Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -224,6 +224,45 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 borderRadius: BorderRadius.circular(5),
                 hint: Text('-select-', style: TextStyle(color: Colors.black54)),
               ),
+            )*/
+            CustomDropdown(
+              value: masterProvider.selectedScheme,
+              items: masterProvider.schemes.map((scheme) {
+                return DropdownMenuItem<String>(
+                  value: scheme.schemeId.toString(),
+                  child: Text(
+                    scheme.schemeName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                );
+              }).toList(),
+              title: "",
+              appBarTitle: "Select Scheme",
+              showSearchBar: true,
+              onChanged: (value) {
+                masterProvider.setSelectedScheme(value);
+                if (masterProvider.selectedWtsfilter == "5") {
+                  masterProvider.fetchWTPList(
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedScheme!,
+                  );
+                } else if (masterProvider.selectedWtsfilter == "6") {
+                  masterProvider.setSelectedSubSource(0);
+                  masterProvider.setSelectedWTP("0");
+                  masterProvider.fetchSourceInformation(
+                    masterProvider.selectedVillage!,
+                    "0",
+                    "0",
+                    masterProvider.selectedWtsfilter!,
+                    masterProvider.selectedSubSource.toString(),
+                    masterProvider.selectedWtp!,
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedScheme!,
+                  );
+                }
+              },
             )
           ],
         ),
@@ -263,11 +302,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 }).toList(),
                 onChanged: (value) {
                   masterProvider.setSelectedWaterSourcefilter(value);
-                  if (value != null) {
+                  if (value != null && value.isNotEmpty) {
                     masterProvider.fetchSchemes(
                         masterProvider.selectedVillage!, "0", "0", value);
                   }
                 },
+                appBarTitle: "Select Location",
+                showSearchBar: false,
               ),
             ),
           ),

@@ -173,7 +173,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       title: 'District *',
                       onChanged: (value) {
                         masterProvider.setSelectedDistrict(value);
-                        if (value != null) {
+                        if (value != null &&value.isNotEmpty) {
                           masterProvider.fetchBlocks(
                               masterProvider.selectedStateId!, value);
                         }
@@ -198,7 +198,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     title: "Block *",
                     onChanged: (value) {
                       masterProvider.setSelectedBlock(value);
-                      if (value != null) {
+                      if (value != null&&value.isNotEmpty) {
                         masterProvider.fetchGramPanchayat(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
@@ -225,7 +225,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 }).toList(),
                 onChanged: (value) {
                   masterProvider.setSelectedGrampanchayat(value);
-                  if (value != null) {
+                  if (value != null && value.isNotEmpty) {
                     masterProvider.fetchVillage(
                         masterProvider.selectedStateId!,
                         masterProvider.selectedDistrictId!,
@@ -250,7 +250,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 }).toList(),
                 onChanged: (value) {
                   masterProvider.setSelectedVillage(value);
-                  if (value != null) {
+                  if (value != null && value.isNotEmpty) {
                     masterProvider.fetchHabitations(
                         masterProvider.selectedStateId!,
                         masterProvider.selectedDistrictId!,
