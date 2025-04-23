@@ -902,8 +902,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     ),
 
                     Visibility(
-                      visible: paramProvider.labResponse?.status ??
-                          false || paramProvider.isLab,
+                      visible: (paramProvider.labResponse?.status ?? false || paramProvider.isLab) ||( paramProvider.labIncharge!.name.isNotEmpty||paramProvider.isParam),
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {
