@@ -240,7 +240,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               }).toList(),
               title: "",
               appBarTitle: "Select Scheme",
-              showSearchBar: true,
+              showSearchBar: false,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
                 if (masterProvider.selectedWtsfilter == "5") {
@@ -301,10 +301,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  masterProvider.setSelectedWaterSourcefilter(value);
-                  if (value != null && value.isNotEmpty) {
-                    masterProvider.fetchSchemes(
-                        masterProvider.selectedVillage!, "0", "0", value);
+                  if (value != null && value != "0") {
+                    masterProvider.setSelectedWaterSourcefilter("");
+                    masterProvider.setSelectedWaterSourcefilter(value);
+
+                    print("6666666666666 $value");
+                    masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
                   }
                 },
                 appBarTitle: "Select Location",
@@ -992,8 +994,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 5 &&
-              masterProvider.selectedWtsfilter == "4",
+          visible: masterProvider.selectedHandpumpPrivate == 5 && masterProvider.selectedWtsfilter == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -1010,10 +1011,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   CustomDropdown(
                     title: "Select Govt. Handpump *",
                     value: masterProvider.waterSource.any((item) =>
-                    item.locationId ==
-                        masterProvider.selectedWaterSource)
-                        ? masterProvider.selectedWaterSource
-                        : null, // Ensure value exists in items
+                    item.locationId == masterProvider.selectedWaterSource) ? masterProvider.selectedWaterSource : null, // Ensure value exists in items
                     items: masterProvider.waterSource.map((waterSource) {
                       return DropdownMenuItem<String>(
                         value: waterSource.locationId,
@@ -1252,8 +1250,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     }
 
     if (masterProvider.selectedHousehold == 4) {
-      if (masterProvider.selectedWaterSource == null ||
-          masterProvider.selectedWaterSource!.isEmpty) {
+      if (masterProvider.selectedWaterSource == null || masterProvider.selectedWaterSource!.isEmpty) {
         masterProvider.errorMsg = "School / AWC is empty or invalid.";
         return false;
       }
@@ -1272,8 +1269,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       TextEditingController handpumpSourceController,
       TextEditingController handpumpLocationController,
       ) {
-    if (masterProvider.selectedScheme == null ||
-        masterProvider.selectedScheme!.isEmpty) {
+    if (masterProvider.selectedScheme == null || masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";
       return false;
     }

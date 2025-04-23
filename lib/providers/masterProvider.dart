@@ -241,7 +241,7 @@ class Masterprovider extends ChangeNotifier {
       waterSource = await _masterRepository.fetchSourceInformation(villageId,
           habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
       if (waterSource.isNotEmpty) {
-        selectedWaterSource = waterSource.first.locationId;
+        selectedWaterSource = null; // Clear selection so user must manually select
       }
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
