@@ -204,6 +204,9 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawVillages.status == 1) {
         village = rawVillages.result;
+        if (village.length == 1) {
+          selectedVillage = village.first.jjmVillageId.toString();
+        }
       } else {
         errorMsg = rawVillages.message;
       }
@@ -234,6 +237,9 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawHabitations.status == 1) {
         habitationId = rawHabitations.result;
+        if (habitationId.length == 1) {
+          selectedHabitation = habitationId.first.habitationId.toString();
+        }
       } else {
         errorMsg = rawHabitations.message;
       }
@@ -257,6 +263,9 @@ class Masterprovider extends ChangeNotifier {
 
       if (mSchemes.status == 1) {
         schemes = mSchemes.result;
+        if (schemes.length == 1) {
+          selectedScheme = schemes.first.schemeId.toString();
+        }
       } else {
         errorMsg = mSchemes.message;
       }
@@ -303,6 +312,9 @@ class Masterprovider extends ChangeNotifier {
 
       if(rawWaterSource.status==1){
         waterSource=rawWaterSource.result;
+        if (waterSource.length == 1) {
+          selectedWaterSource = waterSource.first.locationId.toString();
+        }
       }else{
         errorMsg=rawWaterSource.message;
       }
