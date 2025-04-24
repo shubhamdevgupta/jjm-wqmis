@@ -30,7 +30,15 @@ class _CustomDropdownState extends State<CustomDropdown> {
     super.initState();
     selectedValue = widget.value ?? '';
   }
-
+  @override
+  void didUpdateWidget(covariant CustomDropdown oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      setState(() {
+        selectedValue = widget.value ?? '';
+      });
+    }
+  }
   void _openSearchDialog() {
     if (widget.items.isEmpty) return; // Prevent opening when list is empty
     showGeneralDialog(
