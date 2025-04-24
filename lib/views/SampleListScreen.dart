@@ -285,7 +285,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                     child: ListView.builder(
                       itemCount: provider.samples.length,
                       itemBuilder: (context, index) {
-                       var sample = provider.samples[index]; // where result is List<Sample>
+                       Sample sample = provider.samples[index]; // where result is List<Sample>
                        print("samples of list data ${sample}");
 
                         return Card(
