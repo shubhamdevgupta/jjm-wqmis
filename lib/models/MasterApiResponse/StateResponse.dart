@@ -1,4 +1,24 @@
-// lib/models/state_model.dart
+class StateApiResponse {
+  final int status;
+  final String message;
+  final List<Stateresponse> result;
+
+  StateApiResponse({
+    required this.status,
+    required this.message,
+    required this.result,
+  });
+
+  factory StateApiResponse.fromJson(Map<String, dynamic> json) {
+    return StateApiResponse(
+      status: json['Status'] ?? 0,
+      message: json['Message'] ?? '',
+      result: (json['Result'] as List<dynamic>)
+          .map((item) => Stateresponse.fromJson(item))
+          .toList(),
+    );
+  }
+}
 
 class Stateresponse {
   final String jjmStateId;
@@ -6,7 +26,6 @@ class Stateresponse {
 
   Stateresponse({required this.jjmStateId, required this.stateName});
 
-  // Factory method to create an instance from JSON
   factory Stateresponse.fromJson(Map<String, dynamic> json) {
     return Stateresponse(
       jjmStateId: json['JJM_StateId'] ?? '',
@@ -14,7 +33,6 @@ class Stateresponse {
     );
   }
 
-  // Method to convert an instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'JJM_StateId': jjmStateId,

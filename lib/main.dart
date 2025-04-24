@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/': (context) => SelectedTestNew(),
-       '/': (context) => SplashScreen(),
+       '/': (context) => Labparameterscreen(),
         AppConstants.navigateToSaveSample: (context) => Sampleinformationscreen(),
         AppConstants.navigateToDashboard: (context) => Dashboardscreen(),
         AppConstants.navigateToLogin: (context) => Loginscreen(),

@@ -83,19 +83,19 @@ class Masterprovider extends ChangeNotifier {
   Future<void> fetchStates() async {
     print('Calling the state function...');
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
 
     try {
       states = await _masterRepository.fetchStates();
       if (states.isNotEmpty) {
-        selectedStateId = states.first.jjmStateId; // Default to the first state
+        selectedStateId = states.first.jjmStateId;
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
@@ -103,11 +103,12 @@ class Masterprovider extends ChangeNotifier {
     print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
+
     try {
       final rawDistricts = await _masterRepository.fetchDistricts(stateId);
 
-      // Remove placeholder "--Select--" if it exists
+      // Filter out "--Select--" if present
       districts = rawDistricts
           .where((d) => d.districtName != '--Select--')
           .toList();
@@ -120,7 +121,7 @@ class Masterprovider extends ChangeNotifier {
       errorMsg = "Failed to load districts.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
@@ -222,11 +223,12 @@ class Masterprovider extends ChangeNotifier {
     try {
       final rawHabitations = await _masterRepository.fetchHabitations(stateId, districtId, blockId, gpId, villageId);
 
+      // Ensure you have a `List<HabitationResponse> habitations;` in your provider
       habitationId = rawHabitations
           .where((h) => h.habitationName != '--Select--')
           .toList();
 
-      selectedHabitation = '';
+      selectedHabitation = ''; // Clear selection
     } catch (e) {
       debugPrint('Error in fetching habitation: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -236,6 +238,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 /*  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
     isLoading = true;
     notifyListeners();
@@ -418,8 +421,6 @@ class Masterprovider extends ChangeNotifier {
     try {
       wtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
       if (wtsFilterList.isNotEmpty) {
-        wtsFilterList.insert(
-            0, Watersourcefilterresponse(id: 0, sourceType: "-Select-"));
         selectedWtsfilter =
             wtsFilterList.first.id.toString(); // Default to the first state
       }
