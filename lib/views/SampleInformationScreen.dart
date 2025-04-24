@@ -369,13 +369,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           Future.delayed(Duration.zero, () {
                             masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
-                              "0",
+                              masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
                               "0",
-                              // PWS zero
                               "0",
-                              // WTP zero
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!,
                             );
@@ -423,7 +421,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               masterProvider.selectedWtsfilter == "2",
           child: Card(
             elevation: 5,
-            // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                   12), // Slightly increased border radius for a smooth look
@@ -437,7 +434,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  CustomDropdown(
+                  masterProvider.waterSource.isEmpty
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Text(
+                      "errrrrrrr: ${masterProvider.errorMsg}",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ) : CustomDropdown(
                     title: "Select Water Source *",
                     value: masterProvider.selectedWaterSource,
                     items: masterProvider.waterSource.map((waterSource) {
@@ -493,6 +497,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
+  //TODO do it after the api change
   Widget buildWtpWater(Masterprovider masterProvider) {
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5" &&
@@ -655,7 +660,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomDropdown(
+          masterProvider.waterSource.isEmpty
+              ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text(
+              "errrrrrrr: ${masterProvider.errorMsg}",
+              style: TextStyle(color: Colors.red),
+            ),
+          ) : CustomDropdown(
             title: "Select ESR/GSR *",
             value: masterProvider.selectedWaterSource,
             items: masterProvider.waterSource.map((waterSource) {
@@ -822,6 +834,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    masterProvider.waterSource.isEmpty
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Text(
+                        "errrrrrrr: ${masterProvider.errorMsg}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ) :
                     CustomDropdown(
                       title: "Select School / AWCs *",
                       value: masterProvider.waterSource.any((item) =>

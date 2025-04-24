@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 
@@ -14,7 +15,7 @@ import '../utils/GlobalExceptionHandler.dart';
 class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<List<Alllabresponse>> fetchAllLab(String StateId, String districtId,
+  Future<BaseResponseModel<Alllabresponse>> fetchAllLab(String StateId, String districtId,
       String blockid, String gpid, String villageid, String isall) async {
     try {
       final response = await _apiService.get(
@@ -23,11 +24,8 @@ class Lapparameterrepository {
       log('Fetch All Lab API Response: $response');
       log('API Response Type: ${response.runtimeType}');
 
-      if (response is List<dynamic>) {
-        return response.map((item) => Alllabresponse.fromJson(item)).toList();
-      } else {
-        throw ApiException('Unexpected API response format: $response');
-      }
+      return BaseResponseModel<Alllabresponse>.fromJson(response,(json)=> Alllabresponse.fromJson(json));
+
     } catch (e, stackTrace) {
       log('Error in fetchAllLab: $e');
       log('StackTrace: $stackTrace');
@@ -36,7 +34,7 @@ class Lapparameterrepository {
     }
   }
 
-  Future<List<Parameterresponse>> fetchAllParameter(String labid,
+  Future<BaseResponseModel<Parameterresponse>> fetchAllParameter(String labid,
       String stateid, String sid, String reg_id, String parameteetype) async {
     try {
       final response = await _apiService.get(
@@ -44,13 +42,8 @@ class Lapparameterrepository {
 
       log('fetch all parameter Response: $response');
 
-      if (response is List) {
-        return response
-            .map((item) => Parameterresponse.fromJson(item))
-            .toList();
-      } else {
-        throw ApiException('Api Error :$response');
-      }
+      return BaseResponseModel<Parameterresponse>.fromJson(response,(json)=> Parameterresponse.fromJson(json));
+
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;

@@ -34,6 +34,8 @@ class ParameterProvider with ChangeNotifier {
 
   List<Alllabresponse> labList = [];
   String? selectedLab="";
+  String errorMsg = '';
+
   bool isLabSelected=false;
   Labinchargeresponse? labIncharge;
 
@@ -75,9 +77,13 @@ class ParameterProvider with ChangeNotifier {
     print("lab call in parameter provider");
     isLoading = true;
     try {
-      labList = await _lapparameterrepository.fetchAllLab(
+     final  rawLabList = await _lapparameterrepository.fetchAllLab(
           StateId, districtId, blockid, gpid, villageid, isall);
-      log('Fetched Lab List: $labList');
+      if(rawLabList.status==1){
+        labList=rawLabList.result;
+      }else{
+        errorMsg=rawLabList.message;
+      }
     } catch (e, stackTrace) {
       log('Error in fetching lab list provider: $e');
       log('StackTrace: $stackTrace');
@@ -91,12 +97,12 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
     isLoading = true;
     try {
-      parameterList = await _lapparameterrepository.fetchAllParameter(
+      final rawParameterList = await _lapparameterrepository.fetchAllParameter(
           labid, stateid, sid, reg_id, parameteetype);
-      if (parameterList.isNotEmpty) {
-        selectedParameter = parameterList.first.parameterId;
-        allParameters =
-            parameterList.map((param) => param.parameterName).toList();
+      if(rawParameterList.status==1){
+        parameterList=rawParameterList.result;
+      }else{
+        errorMsg=rawParameterList.message;
       }
     } catch (e) {
       debugPrint('Error in fetching All Parameter list: $e');
