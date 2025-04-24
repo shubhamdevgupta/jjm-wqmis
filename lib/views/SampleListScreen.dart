@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
@@ -6,6 +7,7 @@ import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/webView/webview.dart';
 import 'package:provider/provider.dart';
 
+import '../models/SampleListResponse.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
@@ -280,14 +282,11 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
                   // Expanded to prevent infinite height issue
                   Expanded(
-                    child: provider.isLoading
-                        ? Center(child: CircularProgressIndicator())
-                        : provider.samples.isEmpty
-                        ? Center(child: Text("No data available"))
-                        : ListView.builder(
+                    child: ListView.builder(
                       itemCount: provider.samples.length,
                       itemBuilder: (context, index) {
-                        var sample = provider.samples[index];
+                       var sample = provider.samples[index]; // where result is List<Sample>
+                       print("samples of list data ${sample}");
 
                         return Card(
                           margin: EdgeInsets.symmetric(
