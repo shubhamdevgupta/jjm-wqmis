@@ -98,7 +98,7 @@ class BaseApiService {
       throw NetworkException('No internet connection');
     } catch (e) {
       log('Exception during GET request: $e');
-      throw ApiException('Error during GET request $e');
+      throw ApiException('API Error : $e');
     }
   }
 
@@ -116,17 +116,17 @@ class BaseApiService {
       case 200:
         return jsonDecode(response.body);
       case 400:
-        throw ApiException('Bad Request: ${response.body}');
+        throw ApiException('Bad Request: ${handleErrorResp(response.body,'')}');
       case 404:
-        throw ApiException('Page not found: ${response.body}');
+        throw ApiException('Page not found (404) ,Please contact to admin');
       case 401:
-        throw ApiException('Unauthorized: ${response.body}');
+        throw ApiException('Unauthorized: ${handleErrorResp(response.body,'')}');
       case 500:
         throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
       case 502:
-        throw ApiException('Bad Gateway: ${response.body}');
+        throw ApiException('Bad Gateway: ${handleErrorResp(response.body,'')}');
       default:
-        throw ApiException('Unexpected error: ${response.statusCode} - ${response.body}');
+        throw ApiException('Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body,'')}');
     }
   }
   String getBaseUrl(ApiType apiType) {
