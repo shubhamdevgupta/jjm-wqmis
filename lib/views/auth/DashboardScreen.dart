@@ -47,8 +47,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
     });
-
-
   }
 
   @override

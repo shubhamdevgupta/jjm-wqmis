@@ -46,6 +46,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
                         provider.fetchLabIncharge(int.parse(provider.selectedLab!));
+                        provider.isLab=true;
                         Navigator.push(
                           context,
                           MaterialPageRoute(

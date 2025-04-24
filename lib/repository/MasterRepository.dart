@@ -27,32 +27,31 @@ class MasterRepository {
       final response = await _apiService.get('/apimaster/GetState');
       log('API Response: $response');
 
-      // Parse response and convert to List<StateModel>
-      if (response is List) {
-        print('response success $response');
-        return response.map((item) => Stateresponse.fromJson(item)).toList();
+      // Parse entire response and extract the Result
+      if (response is Map<String, dynamic>) {
+        final stateApiResponse = StateApiResponse.fromJson(response);
+        return stateApiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Invalid API Response Format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
-      rethrow; // Rethrow the original exception so the Provider can handle it if needed
+      rethrow;
     }
   }
 
 
   Future<List<Districtresponse>> fetchDistricts(String stateId) async {
     try {
-      // Call the GET method from BaseApiService
       final response =
-          await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
+      await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
       log('API Response for Districts: $response');
 
-      // Parse response and convert to List<DistrictResponse>
-      if (response is List) {
-        return response.map((item) => Districtresponse.fromJson(item)).toList();
+      if (response is Map<String, dynamic>) {
+        final districtApiResponse = DistrictApiResponse.fromJson(response);
+        return districtApiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Invalid API Response Format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -68,10 +67,11 @@ class MasterRepository {
           .get('/apimaster/getblock?stateid=$stateId&districtid=$districtId');
       log('Block API Response: $response');
 
-      if (response is List) {
-        return response.map((item) => BlockResponse.fromJson(item)).toList();
+      if (response is Map<String, dynamic>) {
+        final blockApiResponse = BlockApiResponse.fromJson(response);
+        return blockApiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Invalid API Response Format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -79,18 +79,20 @@ class MasterRepository {
     }
   }
 
-  Future<List<GramPanchayatresponse>> fetchGramPanchayats(String stateId, String districtId, String blockId) async {
+
+  Future<List<GramPanchayatresponse>> fetchGramPanchayats(
+      String stateId, String districtId, String blockId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId');
+        '/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId',
+      );
       log('Grampanchayat API Response: $response');
 
-      if (response is List) {
-        return response
-            .map((item) => GramPanchayatresponse.fromJson(item))
-            .toList();
+      if (response is Map<String, dynamic>) {
+        final apiResponse = GramPanchayatApiResponse.fromJson(response);
+        return apiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Invalid API Response Format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -98,17 +100,20 @@ class MasterRepository {
     }
   }
 
-  Future<List<Villageresponse>> fetchVillages(String stateId, String districtId, String blockId, String gpId) async {
+  Future<List<Villageresponse>> fetchVillages(
+      String stateId, String districtId, String blockId, String gpId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId');
+        '/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId',
+      );
 
       log('Village API Response: $response');
 
-      if (response is List) {
-        return response.map((item) => Villageresponse.fromJson(item)).toList();
+      if (response is Map<String, dynamic>) {
+        final apiResponse = VillageApiResponse.fromJson(response);
+        return apiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Invalid API Response Format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -116,19 +121,24 @@ class MasterRepository {
     }
   }
 
-  Future<List<HabitationResponse>> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
+
+  Future<List<HabitationResponse>> fetchHabitations(
+      String stateId,
+      String districtId,
+      String blockId,
+      String gpId,
+      String villageId) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId');
+        '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId',
+      );
 
       log('Habitation API Response: $response');
-
-      if (response is List) {
-        return response
-            .map((item) => HabitationResponse.fromJson(item))
-            .toList();
+      if (response is Map<String, dynamic>) {
+        final apiResponse =HabitationApiResponse.fromJson(response);
+        return apiResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Api Error: Unexpected response format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -136,17 +146,25 @@ class MasterRepository {
     }
   }
 
-  Future<List<SchemeResponse>> fetchSchemes(String villageId, String habitationId,String districtId,String filter) async {
+  Future<List<SchemeResponse>> fetchSchemes(
+      String villageId,
+      String habitationId,
+      String districtId,
+      String filter,
+      ) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId&filter=$filter');
+        '/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId&filter=$filter',
+      );
 
       log('Scheme API Response: $response');
 
-      if (response is List) {
-        return response.map((item) => SchemeResponse.fromJson(item)).toList();
+      final fullResponse = SchemeApiResponse.fromJson(response);
+
+      if (fullResponse.status == 1) {
+        return fullResponse.result;
       } else {
-        throw Exception('Unexpected response format');
+        throw Exception('API Error: ${fullResponse.message}');
       }
     } catch (e) {
       log('Error in fetchSchemes: $e');
@@ -155,19 +173,20 @@ class MasterRepository {
     }
   }
 
+
   Future<List<Watersourcefilterresponse>> fetchWaterSourceFilterList() async {
     try {
-      final response =
-          await _apiService.get('/apimaster/Get_water_source_filter');
+      final response = await _apiService.get('/apimaster/Get_water_source_filter');
 
-      log('water source type API Response: $response');
+      log('Water source type API Response: $response');
 
-      if (response is List) {
-        return response
+      if (response is Map<String, dynamic> && response.containsKey('Result')) {
+        final result = response['Result'] as List;
+        return result
             .map((item) => Watersourcefilterresponse.fromJson(item))
             .toList();
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('Api Error: Unexpected response format');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -183,25 +202,29 @@ class MasterRepository {
       String subcat,
       String wtpId,
       String stateId,
-      String schemeId) async {
+      String schemeId,
+      ) async {
     try {
       final response = await _apiService.get(
-          '/apimaster/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
+        '/apimaster/Getsources_information?villageid=$villageId&habitationid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
 
       log('Source Information API Response: $response');
+      log('Response type: ${response.runtimeType}');
 
-      if (response is List) {
-        return response
-            .map((item) => WaterSourceResponse.fromJson(item))
-            .toList();
+      final fullResponse = WaterSourceApiResponse.fromJson(response);
+
+      if (fullResponse.status == 1) {
+        return fullResponse.result;
       } else {
-        throw ApiException('Api Error :$response');
+        throw ApiException('API Error: ${fullResponse.message}');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
+
+
 
   Future<List<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
     try {
