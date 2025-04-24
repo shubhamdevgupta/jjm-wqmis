@@ -267,7 +267,7 @@ class MasterRepository {
       if (response is Map<String, dynamic> && response['Status'] == 1) {
         return ValidateVillageResponse.fromJson(response);
       } else {
-        throw ApiException('API Error: ${response['Message']}');
+        throw ApiException('API Error=--: ${response['Message']}');
       }
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

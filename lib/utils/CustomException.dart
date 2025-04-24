@@ -17,5 +17,5 @@ class NetworkException extends AppException {
 
 class ApiException extends AppException {
   ApiException([String message = "Something went wrong with the API"])
-      : super(message, "API Error: ");
+      : super(message, "");
 }

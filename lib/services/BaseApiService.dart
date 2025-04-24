@@ -50,7 +50,7 @@ class BaseApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw ApiException("API Error: ${response.statusCode}");
+        throw ApiException("API Error-: ${response.statusCode}");
       }
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
@@ -98,7 +98,7 @@ class BaseApiService {
       throw NetworkException('No internet connection');
     } catch (e) {
       log('Exception during GET request: $e');
-      throw ApiException('Error during GET request $e');
+      throw ApiException('API Error : $e');
     }
   }
 
@@ -116,9 +116,9 @@ class BaseApiService {
       case 200:
         return jsonDecode(response.body);
       case 400:
-        throw ApiException('Bad Request: ${response.body}');
+        throw ApiException('Bad Request: ${handleErrorResp(response.body,'')}');
       case 404:
-        throw ApiException('Page not found: ${response.body}');
+        throw ApiException('Page not found (404) ,Please contact to admin');
       case 401:
         throw ApiException('Unauthorized: ${response.body}');
       case 500:

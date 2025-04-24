@@ -12,39 +12,39 @@ class ExceptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorProvider = Provider.of<ErrorProvider>(context);
+    final errorProvider = Provider.of<ErrorProvider>(context, listen: false);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Something Went Wrong', style: AppStyles.appBarTitle,),
-      ),
-      body: SingleChildScrollView( // ✅ Added ScrollView
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center, // Ensure centering
-              children: [
-                const Icon(Icons.error, color: Colors.red, size: 80),
-                const SizedBox(height: 20),
-                Text(
-                  errorMessage,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, color: Colors.black54),
-                ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    errorProvider.clearError();
-                    //Navigator.pushReplacementNamed(context, '/');
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
-                    // Navigator.pop(context);
-                  },
-                  child: const Text('Go to Home'),
-                ),
-              ],
-            ),
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Prevents full height usage
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+             // const Icon(Icons.error, color: Colors.red, size: 80),
+              const SizedBox(height: 45),
+              Image.asset(
+                'assets/ic_error.png',
+                width: 80,
+                height: 80,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                errorMessage,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, color: Colors.black87),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  errorProvider.clearError();
+                  Navigator.of(context).pop(); // ✅ This dismisses the dialog
+                },
+                child:  Text('Dismiss' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red),),
+              ),
+            ],
           ),
         ),
       ),
