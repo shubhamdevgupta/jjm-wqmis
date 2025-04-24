@@ -53,11 +53,11 @@ class GlobalExceptionHandler {
           await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              contentPadding: const EdgeInsets.all(40),
+              contentPadding: const EdgeInsets.all(20),
               content: Container(
                 color: Colors.white10,
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width * 0.4,
                 child: ExceptionScreen(errorMessage: errorMessage),
               ),
             ),

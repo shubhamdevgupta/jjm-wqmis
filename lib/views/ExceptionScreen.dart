@@ -17,18 +17,18 @@ class ExceptionScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min, // Prevents full height usage
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
              // const Icon(Icons.error, color: Colors.red, size: 80),
-              const SizedBox(height: 45),
+              const SizedBox(height: 35),
               Image.asset(
                 'assets/ic_error.png',
-                width: 80,
-                height: 80,
+                width: 60,
+                height: 60,
               ),
               const SizedBox(height: 20),
               Text(

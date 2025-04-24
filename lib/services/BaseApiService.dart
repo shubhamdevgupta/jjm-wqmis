@@ -120,13 +120,13 @@ class BaseApiService {
       case 404:
         throw ApiException('Page not found (404) ,Please contact to admin');
       case 401:
-        throw ApiException('Unauthorized: ${response.body}');
+        throw ApiException('Unauthorized: ${handleErrorResp(response.body,'')}');
       case 500:
         throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
       case 502:
-        throw ApiException('Bad Gateway: ${response.body}');
+        throw ApiException('Bad Gateway: ${handleErrorResp(response.body,'')}');
       default:
-        throw ApiException('Unexpected error: ${response.statusCode} - ${response.body}');
+        throw ApiException('Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body,'')}');
     }
   }
   String getBaseUrl(ApiType apiType) {
