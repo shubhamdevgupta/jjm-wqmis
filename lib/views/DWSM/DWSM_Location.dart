@@ -163,7 +163,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       value: masterProvider.selectedDistrictId,
                       items: masterProvider.districts.map((district) {
                         return DropdownMenuItem<String>(
-                          value: district.jJMDistrictId,
+                          value: district.jjmDistrictId,
                           child: Text(
                             district.districtName,
                             overflow: TextOverflow.ellipsis,

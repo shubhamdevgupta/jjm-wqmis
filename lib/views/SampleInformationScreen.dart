@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
+import '../utils/Showerrormsg.dart';
 import 'lab/LabParameterScreen.dart';
 
 class Sampleinformationscreen extends StatefulWidget {
@@ -369,13 +370,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           Future.delayed(Duration.zero, () {
                             masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
-                              "0",
+                              masterProvider.selectedHabitation!,
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
                               "0",
-                              // PWS zero
                               "0",
-                              // WTP zero
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!,
                             );
@@ -423,7 +422,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               masterProvider.selectedWtsfilter == "2",
           child: Card(
             elevation: 5,
-            // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                   12), // Slightly increased border radius for a smooth look
@@ -437,7 +435,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  CustomDropdown(
+                  masterProvider.waterSource.isEmpty
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: AppTextWidgets.errorText(masterProvider.errorMsg),
+                  ) : CustomDropdown(
                     title: "Select Water Source *",
                     value: masterProvider.selectedWaterSource,
                     items: masterProvider.waterSource.map((waterSource) {
@@ -493,6 +495,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
+  //TODO do it after the api change
   Widget buildWtpWater(Masterprovider masterProvider) {
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5" &&
@@ -652,61 +655,78 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "6" &&
           (masterProvider.selectedScheme?.isNotEmpty ?? false),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomDropdown(
-            title: "Select ESR/GSR *",
-            value: masterProvider.selectedWaterSource,
-            items: masterProvider.waterSource.map((waterSource) {
-              return DropdownMenuItem<String>(
-                value: waterSource.locationId,
-                child: Text(
-                  waterSource.locationName,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              masterProvider.setSelectedWaterSourceInformation(value);
-            },
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          CustomDateTimePicker(onDateTimeSelected: (value) {
-            masterProvider.setSelectedDateTime(value);
-          }),
-          SizedBox(
-            height: 18,
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                if (validateEsrWaterFields(masterProvider)) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider.value(
-                          value: masterProvider,
-                          child: Labparameterscreen(),
-                        )),
-                  );
-                } else {
-                  ToastHelper.showToastMessage(masterProvider.errorMsg);
-                }
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              12), // Slightly increased border radius for a smooth look
+        ),
+        margin: EdgeInsets.all(5),
+        // Margin to ensure spacing around the card
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            masterProvider.waterSource.isEmpty
+                ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: AppTextWidgets.errorText(masterProvider.errorMsg),
+            ) : CustomDropdown(
+              title: "Select ESR/GSR *",
+              value: masterProvider.selectedWaterSource,
+              items: masterProvider.waterSource.map((waterSource) {
+                return DropdownMenuItem<String>(
+                  value: waterSource.locationId,
+                  child: Text(
+                    waterSource.locationName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                masterProvider.setSelectedWaterSourceInformation(value);
               },
-              style: AppStyles.buttonStylePrimary(),
-              child: const Text(
-                'Next',
-                style: AppStyles.textStyle,
-              ),
             ),
-          )
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            CustomDateTimePicker(onDateTimeSelected: (value) {
+              masterProvider.setSelectedDateTime(value);
+            }),
+            SizedBox(
+              height: 18,
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (validateEsrWaterFields(masterProvider)) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChangeNotifierProvider.value(
+                            value: masterProvider,
+                            child: Labparameterscreen(),
+                          )),
+                    );
+                  } else {
+                    ToastHelper.showToastMessage(masterProvider.errorMsg);
+                  }
+                },
+                style: AppStyles.buttonStylePrimary(),
+                child: const Text(
+                  'Next',
+                  style: AppStyles.textStyle,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-    );
+    ));
   }
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
@@ -822,6 +842,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    masterProvider.waterSource.isEmpty
+                        ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child:AppTextWidgets.errorText(masterProvider.errorMsg),
+                    ) :
                     CustomDropdown(
                       title: "Select School / AWCs *",
                       value: masterProvider.waterSource.any((item) =>
@@ -1121,7 +1146,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       return false;
     }
 
-    if (masterProvider.selectedWaterSource == "0" ||
+    if (masterProvider.selectedWaterSource == "" ||
         masterProvider.selectedWaterSource!.isEmpty) {
       masterProvider.errorMsg = "Water Source is empty or invalid";
       return false;
@@ -1185,7 +1210,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   bool validateHouseholdWaterFields(Masterprovider masterProvider,
       TextEditingController householdController) {
-    if (masterProvider.selectedScheme == null ||
+    if (masterProvider.selectedScheme == '' ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";
       return false;

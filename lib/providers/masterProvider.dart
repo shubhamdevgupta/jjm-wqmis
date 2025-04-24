@@ -7,9 +7,9 @@ import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/SchemeResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
-import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
@@ -53,12 +53,14 @@ class Masterprovider extends ChangeNotifier {
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
-  List<Lgdresponse> _villageDetails = []; // Update to a List instead of a single object
+  List<Lgdresponse> _villageDetails =
+      []; // Update to a List instead of a single object
   List<Lgdresponse> get villageDetails => _villageDetails;
 
-
   ValidateVillageResponse? _validateVillageResponse;
-  ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
+
+  ValidateVillageResponse? get validateVillageResponse =>
+      _validateVillageResponse;
 
   int? _selectedSubSource;
 
@@ -72,7 +74,7 @@ class Masterprovider extends ChangeNotifier {
 
   int? get selectedHandpumpPrivate => _selectedHandpumpPrivate;
 
-  String? _selectedDatetime="";
+  String? _selectedDatetime = "";
 
   String? get selectedDatetime => _selectedDatetime;
 
@@ -83,19 +85,20 @@ class Masterprovider extends ChangeNotifier {
   Future<void> fetchStates() async {
     print('Calling the state function...');
     isLoading = true;
-    notifyListeners(); // Start loading
-
+    notifyListeners();
     try {
-      states = await _masterRepository.fetchStates();
-      if (states.isNotEmpty) {
-        selectedStateId = states.first.jjmStateId; // Default to the first state
+      final basestates = await _masterRepository.fetchStates();
+      if (basestates.status == 1) {
+        states = basestates.result;
+      } else {
+        errorMsg = basestates.message;
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
 
@@ -103,27 +106,24 @@ class Masterprovider extends ChangeNotifier {
     print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
     isLoading = true;
-    notifyListeners(); // Start loading
+    notifyListeners();
+
     try {
       final rawDistricts = await _masterRepository.fetchDistricts(stateId);
-
-      // Remove placeholder "--Select--" if it exists
-      districts = rawDistricts
-          .where((d) => d.districtName != '--Select--')
-          .toList();
-
-      // No automatic selection
-      selectedDistrictId = '';
+      if (rawDistricts.status == 1) {
+        districts = rawDistricts.result;
+      } else {
+        errorMsg = rawDistricts.message;
+      }
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load districts.";
     } finally {
       isLoading = false;
-      notifyListeners(); // Finish loading
+      notifyListeners();
     }
   }
-
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
     if (stateId.isEmpty || districtId.isEmpty) {
@@ -136,13 +136,14 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawBlocks = await _masterRepository.fetchBlocks(stateId, districtId);
+      final rawBlocks =
+          await _masterRepository.fetchBlocks(stateId, districtId);
 
-      blocks = rawBlocks
-          .where((b) => b.blockName != '--Select--')
-          .toList();
-
-      selectedBlockId = '';
+      if (rawBlocks.status == 1) {
+        blocks = rawBlocks.result;
+      } else {
+        errorMsg = rawBlocks.message;
+      }
     } catch (e) {
       debugPrint('Error in fetching blocks: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -153,7 +154,8 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchGramPanchayat(String stateId, String districtId, String blockId) async {
+  Future<void> fetchGramPanchayat(
+      String stateId, String districtId, String blockId) async {
     if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty) {
       errorMsg = "Please select State, District, and Block.";
       notifyListeners();
@@ -164,13 +166,14 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawGPs = await _masterRepository.fetchGramPanchayats(stateId, districtId, blockId);
+      final rawGPs = await _masterRepository.fetchGramPanchayats(
+          stateId, districtId, blockId);
 
-      gramPanchayat = rawGPs
-          .where((gp) => gp.panchayatName != '--Select--')
-          .toList();
-
-      selectedGramPanchayat = '';
+      if (rawGPs.status == 1) {
+        gramPanchayat = rawGPs.result;
+      } else {
+        errorMsg = rawGPs.message;
+      }
     } catch (e) {
       debugPrint('Error in fetching grampanchayat: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -181,8 +184,12 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchVillage(String stateId, String districtId, String blockId, String gpID) async {
-    if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty || gpID.isEmpty) {
+  Future<void> fetchVillage(
+      String stateId, String districtId, String blockId, String gpID) async {
+    if (stateId.isEmpty ||
+        districtId.isEmpty ||
+        blockId.isEmpty ||
+        gpID.isEmpty) {
       errorMsg = "Please select all required fields.";
       notifyListeners();
       return;
@@ -192,13 +199,14 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawVillages = await _masterRepository.fetchVillages(stateId, districtId, blockId, gpID);
+      final rawVillages = await _masterRepository.fetchVillages(
+          stateId, districtId, blockId, gpID);
 
-      village = rawVillages
-          .where((v) => v.villageName != '--Select--')
-          .toList();
-
-      selectedVillage = '';
+      if (rawVillages.status == 1) {
+        village = rawVillages.result;
+      } else {
+        errorMsg = rawVillages.message;
+      }
     } catch (e) {
       debugPrint('Error in fetching village: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -209,7 +217,8 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchHabitations(String stateId, String districtId, String blockId, String gpId, String villageId) async {
+  Future<void> fetchHabitations(String stateId, String districtId,
+      String blockId, String gpId, String villageId) async {
     if ([stateId, districtId, blockId, gpId, villageId].any((e) => e.isEmpty)) {
       errorMsg = "Please select all fields to load habitations.";
       notifyListeners();
@@ -220,13 +229,14 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawHabitations = await _masterRepository.fetchHabitations(stateId, districtId, blockId, gpId, villageId);
+      final rawHabitations = await _masterRepository.fetchHabitations(
+          stateId, districtId, blockId, gpId, villageId);
 
-      habitationId = rawHabitations
-          .where((h) => h.habitationName != '--Select--')
-          .toList();
-
-      selectedHabitation = '';
+      if (rawHabitations.status == 1) {
+        habitationId = rawHabitations.result;
+      } else {
+        errorMsg = rawHabitations.message;
+      }
     } catch (e) {
       debugPrint('Error in fetching habitation: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -236,64 +246,20 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-/*  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
+
+  Future<void> fetchSchemes(String villageId, String habitationId,
+      String districtid, String filter) async {
     isLoading = true;
     notifyListeners();
     try {
-      schemes = await _masterRepository.fetchSchemes(
-          villageId, habitationId, districtid,filter);
-
-      List<SchemeResponse> filteredSchemes = [
-        SchemeResponse(schemeId: "", schemeName: "--Select--")
-      ];
-      filteredSchemes.addAll(
-          schemes.where((scheme) => scheme.schemeId.isNotEmpty).toList());
-      if (filteredSchemes.length > 1) {
-        print('Valid schemes found');
-        selectedScheme = filteredSchemes.first.schemeId; // Select "Select" by default
-      } else {
-        print('No valid scheme found, updating list to "Data Not Available"');
-        filteredSchemes = [
-          SchemeResponse(schemeId: "0", schemeName: "Data Not Available")
-        ];
-        selectedScheme = filteredSchemes.first.schemeId;
-      }
-
-      schemes = filteredSchemes; // Update the provider list
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error in fetching scheme: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
-    } finally {
-      isLoading = false;
-      notifyListeners(); // Finish loading
-    }
-  }*/
-  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      schemes = await _masterRepository.fetchSchemes(
+      final mSchemes = await _masterRepository.fetchSchemes(
           villageId, habitationId, districtid, filter);
 
-      List<SchemeResponse> validSchemes = schemes.where((scheme) => scheme.schemeId.isNotEmpty).toList();
-
-      if (validSchemes.isNotEmpty) {
-        // Add "--Select--" at the top
-        List<SchemeResponse> filteredSchemes = [
-          SchemeResponse(schemeId: "", schemeName: "--Select--"),
-          ...validSchemes
-        ];
-
-        schemes = filteredSchemes;
-
-        if (filteredSchemes.length == 2) {
-          // Auto-select if only one valid scheme
-          selectedScheme = filteredSchemes[1].schemeId;
-        } else {
-          selectedScheme = filteredSchemes.first.schemeId;
-        }
-
+      if (mSchemes.status == 1) {
+        schemes = mSchemes.result;
+      } else {
+        errorMsg = mSchemes.message;
+      }
         // 🔁 Trigger the dependent API when auto-selected
         if (selectedWtsfilter == "5") {
           await fetchWTPList(selectedStateId!, selectedScheme!);
@@ -302,24 +268,15 @@ class Masterprovider extends ChangeNotifier {
           setSelectedWTP("0");
           await fetchSourceInformation(
             selectedVillage!,
-            "0",
-            "0",
+            selectedHabitation!,
             selectedWtsfilter!,
+            "0",
             selectedSubSource.toString(),
             selectedWtp!,
             selectedStateId!,
             selectedScheme!,
           );
         }
-
-      } else {
-        // No valid schemes, show "Data Not Available"
-        schemes = [
-          SchemeResponse(schemeId: "0", schemeName: "Data Not Available")
-        ];
-        selectedScheme = "0";
-      }
-
     } catch (e) {
       debugPrint('Error in fetching scheme: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -330,21 +287,28 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchSourceInformation(
-      String villageId,
-      String habitationId,
-      String filter,
-      String cat,
-      String subcat,
-      String wtpId,
-      String stateId,
-      String schemeId,
-      ) async {
+    String villageId,
+    String habitationId,
+    String filter,
+    String cat,
+    String subcat,
+    String wtpId,
+    String stateId,
+    String schemeId,
+  ) async {
     isLoading = true;
     try {
-      waterSource = await _masterRepository.fetchSourceInformation(
-          villageId, habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
+     final rawWaterSource = await _masterRepository.fetchSourceInformation(villageId,
+          habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
 
-      if (waterSource.isNotEmpty) {
+      if(rawWaterSource.status==1){
+        waterSource=rawWaterSource.result;
+      }else{
+        errorMsg=rawWaterSource.message;
+      }
+
+
+ /*     if (waterSource.isNotEmpty) {
         // Case: Only 1 item + --Select-- and it's valid (not '0')
         if (waterSource.length == 2 && waterSource[1].locationId != "0") {
           selectedWaterSource = waterSource[1].locationId;
@@ -356,14 +320,12 @@ class Masterprovider extends ChangeNotifier {
         // Case: Only 1 item in list and it's 'Data Not Available'
         else if (waterSource.length == 1 && waterSource[0].locationId == "0") {
           selectedWaterSource = "0";
-        }
-        else {
+        } else {
           selectedWaterSource = null;
         }
       } else {
         selectedWaterSource = null;
-      }
-
+      }*/
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -377,7 +339,8 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      final fetchedList = await _masterRepository.fetchWTPlist(stateId, schemeId);
+      final fetchedList =
+          await _masterRepository.fetchWTPlist(stateId, schemeId);
 
       if (fetchedList.isNotEmpty) {
         wtpList = fetchedList;
@@ -416,13 +379,13 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
-      wtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
-      if (wtsFilterList.isNotEmpty) {
-        wtsFilterList.insert(
-            0, Watersourcefilterresponse(id: 0, sourceType: "-Select-"));
-        selectedWtsfilter =
-            wtsFilterList.first.id.toString(); // Default to the first state
-      }
+     final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
+    if(rawWtsFilterList.status==1){
+      wtsFilterList=rawWtsFilterList.result;
+    }else{
+      errorMsg=rawWtsFilterList.message;
+    }
+
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -463,7 +426,8 @@ class Masterprovider extends ChangeNotifier {
     errorMsg = "";
     notifyListeners();
     try {
-      _validateVillageResponse = await _masterRepository.validateVillage(villageId, lgdCode);
+      _validateVillageResponse =
+          await _masterRepository.validateVillage(villageId, lgdCode);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -473,8 +437,6 @@ class Masterprovider extends ChangeNotifier {
   }
 
   /// Fetch WTP Labs from API
-
-
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
@@ -487,8 +449,8 @@ class Masterprovider extends ChangeNotifier {
     _selectedHouseHoldType = null;
     _selectedHandpumpPrivate = null;
 
-    selectedWtp=null;
-    selectedScheme=null;
+    selectedWtp = null;
+    selectedScheme = null;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
@@ -514,9 +476,10 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedSubSource(int? value) {
     _selectedSubSource = value;
+    waterSource=[];
+    selectedWaterSource='';
     notifyListeners();
   }
-
 
   void setSelectedScheme(String? schemeId) {
     selectedScheme = schemeId;
@@ -630,5 +593,4 @@ class Masterprovider extends ChangeNotifier {
 
     notifyListeners();
   }
-
 }

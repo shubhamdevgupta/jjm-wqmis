@@ -917,7 +917,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 color: Colors.white),
                           ),
                           style: AppStyles.buttonStylePrimary()
-
                       ),
                     ),
                   ],
