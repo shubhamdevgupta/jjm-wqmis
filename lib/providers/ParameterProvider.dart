@@ -352,7 +352,7 @@ class ParameterProvider with ChangeNotifier {
     labIncharge = null;
 
     isLab = true;
-
+    isParam=false;
     _currentLatitude = null;
     _currentLongitude = null;
 
