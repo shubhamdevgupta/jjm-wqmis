@@ -236,8 +236,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
+/*  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -269,6 +268,65 @@ class Masterprovider extends ChangeNotifier {
       isLoading = false;
       notifyListeners(); // Finish loading
     }
+  }*/
+  Future<void> fetchSchemes(String villageId, String habitationId, String districtid, String filter) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      schemes = await _masterRepository.fetchSchemes(
+          villageId, habitationId, districtid, filter);
+
+      List<SchemeResponse> validSchemes = schemes.where((scheme) => scheme.schemeId.isNotEmpty).toList();
+
+      if (validSchemes.isNotEmpty) {
+        // Add "--Select--" at the top
+        List<SchemeResponse> filteredSchemes = [
+          SchemeResponse(schemeId: "", schemeName: "--Select--"),
+          ...validSchemes
+        ];
+
+        schemes = filteredSchemes;
+
+        if (filteredSchemes.length == 2) {
+          // Auto-select if only one valid scheme
+          selectedScheme = filteredSchemes[1].schemeId;
+        } else {
+          selectedScheme = filteredSchemes.first.schemeId;
+        }
+
+        // 🔁 Trigger the dependent API when auto-selected
+        if (selectedWtsfilter == "5") {
+          await fetchWTPList(selectedStateId!, selectedScheme!);
+        } else if (selectedWtsfilter == "6") {
+          setSelectedSubSource(0);
+          setSelectedWTP("0");
+          await fetchSourceInformation(
+            selectedVillage!,
+            "0",
+            "0",
+            selectedWtsfilter!,
+            selectedSubSource.toString(),
+            selectedWtp!,
+            selectedStateId!,
+            selectedScheme!,
+          );
+        }
+
+      } else {
+        // No valid schemes, show "Data Not Available"
+        schemes = [
+          SchemeResponse(schemeId: "0", schemeName: "Data Not Available")
+        ];
+        selectedScheme = "0";
+      }
+
+    } catch (e) {
+      debugPrint('Error in fetching scheme: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchSourceInformation(
@@ -279,14 +337,33 @@ class Masterprovider extends ChangeNotifier {
       String subcat,
       String wtpId,
       String stateId,
-      String schemeId) async {
+      String schemeId,
+      ) async {
     isLoading = true;
     try {
-      waterSource = await _masterRepository.fetchSourceInformation(villageId,
-          habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
+      waterSource = await _masterRepository.fetchSourceInformation(
+          villageId, habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
+
       if (waterSource.isNotEmpty) {
-        selectedWaterSource = null; // Clear selection so user must manually select
+        // Case: Only 1 item + --Select-- and it's valid (not '0')
+        if (waterSource.length == 2 && waterSource[1].locationId != "0") {
+          selectedWaterSource = waterSource[1].locationId;
+        }
+        // Case: Only 1 item + --Select-- and it's 'Data Not Available'
+        else if (waterSource.length == 2 && waterSource[1].locationId == "0") {
+          selectedWaterSource = "0";
+        }
+        // Case: Only 1 item in list and it's 'Data Not Available'
+        else if (waterSource.length == 1 && waterSource[0].locationId == "0") {
+          selectedWaterSource = "0";
+        }
+        else {
+          selectedWaterSource = null;
+        }
+      } else {
+        selectedWaterSource = null;
       }
+
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -296,7 +373,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList( String stateId, String schemeId) async {
+  Future<void> fetchWTPList(String stateId, String schemeId) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -305,12 +382,26 @@ class Masterprovider extends ChangeNotifier {
       if (fetchedList.isNotEmpty) {
         wtpList = fetchedList;
 
-        // Ensure a valid default value is set
-        if (wtpList.any((wtp) => wtp.wtpId == selectedWtp)) {
-          selectedWtp = selectedWtp; // Keep the existing if valid
+        if (wtpList.length == 1 && wtpList.first.wtpId == "0") {
+          // Case: Only one item and it's "Data Not Available"
+          selectedWtp = "0";
+        } else if (wtpList.length == 2 && wtpList[1].wtpId != 0) {
+          // Case: Only one valid item, auto-select it
+          selectedWtp = wtpList[1].wtpId;
+        } else if (wtpList.length == 2 && wtpList[1].wtpId == "0") {
+          // Case: Two items and second one is "Data Not Available"
+          selectedWtp = "0";
         } else {
-          selectedWtp = wtpList.first.wtpId; // Reset if invalid
+          // General case: Check if current selection is still valid
+          if (wtpList.any((wtp) => wtp.wtpId == selectedWtp)) {
+            selectedWtp = selectedWtp;
+          } else {
+            selectedWtp = null; // Let the user select
+          }
         }
+      } else {
+        selectedWtp = null;
+        wtpList = [];
       }
     } catch (e) {
       debugPrint('Error in fetching WTP list: $e');

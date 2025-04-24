@@ -246,7 +246,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
+                    value!, // <-- use directly here
                   );
                 } else if (masterProvider.selectedWtsfilter == "6") {
                   masterProvider.setSelectedSubSource(0);
@@ -1121,7 +1121,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       return false;
     }
 
-    if (masterProvider.selectedWaterSource == null ||
+    if (masterProvider.selectedWaterSource == "0" ||
         masterProvider.selectedWaterSource!.isEmpty) {
       masterProvider.errorMsg = "Water Source is empty or invalid";
       return false;
