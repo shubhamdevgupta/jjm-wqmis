@@ -9,8 +9,7 @@ class Samplelistprovider extends Resettable {
   final SampleListRepo _repository = SampleListRepo();
 
 
- // List<Sample> samples = []; // Correctly storing List<Sample>
-  List<Samplelistresponse> samples = []; // Correctly storing List<Sample>
+ List<Sample> samples = []; // Correctly storing List<Sample>
   bool isLoading = false;
 
   Future<void> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId, int stateid, int districtid, int blockid, int gpid, int villageid) async {
