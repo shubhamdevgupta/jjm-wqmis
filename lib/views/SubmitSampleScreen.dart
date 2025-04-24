@@ -597,8 +597,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                           ),
                                         ),
                                         Visibility(
-                                          visible: !paramProvider.isLab &&
-                                              (paramProvider.labResponse?.status ?? false),
+                                          visible: !paramProvider.isLab && (paramProvider.labResponse?.status ?? false),
                                           child: Column(
                                             children: [
                                               CustomDropdown(
@@ -900,7 +899,29 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                         ],
                       ),
                     ),
+      /*              if ((paramProvider.isLabSelected &&
+                        paramProvider.isParam) ||
+                        (paramProvider.labResponse?.status ?? false) ||
+                        paramProvider.isLab)*/
+                      Visibility(
+                        visible: (paramProvider.selectedLab ?? '').isNotEmpty,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            validateAndSubmit(context, provider, masterProvider, paramProvider);
+                          },
+                          child: Text(
+                            AppConstants.submitSample,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: AppStyles.buttonStylePrimary(),
+                        ),
+                      ),
 
+/*
                     Visibility(
                       visible: (paramProvider.labResponse?.status ?? false || paramProvider.isLab) ||( paramProvider.labIncharge!.name.isNotEmpty||paramProvider.isParam),
                       // Show only when status is true
@@ -920,6 +941,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
 
                       ),
                     ),
+*/
                   ],
                 ),
               ),
