@@ -477,6 +477,7 @@ class Masterprovider extends ChangeNotifier {
   void setSelectedSubSource(int? value) {
     _selectedSubSource = value;
     waterSource=[];
+    selectedWaterSource='';
     notifyListeners();
   }
 
