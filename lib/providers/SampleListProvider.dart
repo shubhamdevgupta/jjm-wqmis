@@ -8,9 +8,9 @@ import 'BaseResettableProvider.dart';
 class Samplelistprovider extends Resettable {
   final SampleListRepo _repository = SampleListRepo();
 
-  int status = 0;
-  String message = '';
-  List<Sample> samples = []; // Correctly storing List<Sample>
+
+ // List<Sample> samples = []; // Correctly storing List<Sample>
+  List<Samplelistresponse> samples = []; // Correctly storing List<Sample>
   bool isLoading = false;
 
   Future<void> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId, int stateid, int districtid, int blockid, int gpid, int villageid) async {
@@ -19,18 +19,12 @@ class Samplelistprovider extends Resettable {
     notifyListeners();
 
     try {
-      // Get the FULL response
-      Samplelistresponse response = await _repository.fetchSampleList(regId, page, search, cstatus, sampleId, stateid, districtid, blockid, gpid, villageid);
 
-      // Store status and message
-      status = response.status;
-      message = response.message;
+     final response = await _repository.fetchSampleList(regId, page, search, cstatus, sampleId, stateid, districtid, blockid, gpid, villageid);
+     samples = response.result; // `result` is already `List<Sample>`
 
-      // ✅ Extract the `result` list correctly
-      samples = response.result; // `result` is already `List<Sample>`
-
-      print('Status: $status, Message: $message');
-      print('Samples updated in provider: ${samples.length} items');
+      print('Status: ${response.status}, Message: ${response.message}');
+      print('Samples updated in provider: ${response.result.length} items');
     } catch (e) {
       debugPrint('Error in SampleProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
