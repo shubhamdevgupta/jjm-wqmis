@@ -50,7 +50,7 @@ class BaseApiService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw ApiException("API Error-: ${response.statusCode}");
+        throw ApiException("API Error: ${response.statusCode}");
       }
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
