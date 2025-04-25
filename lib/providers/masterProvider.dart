@@ -204,9 +204,6 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawVillages.status == 1) {
         village = rawVillages.result;
-        if (village.length == 1) {
-          selectedVillage = village.first.jjmVillageId.toString();
-        }
       } else {
         errorMsg = rawVillages.message;
       }
@@ -237,9 +234,6 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawHabitations.status == 1) {
         habitationId = rawHabitations.result;
-        if (habitationId.length == 1) {
-          selectedHabitation = habitationId.first.habitationId.toString();
-        }
       } else {
         errorMsg = rawHabitations.message;
       }
