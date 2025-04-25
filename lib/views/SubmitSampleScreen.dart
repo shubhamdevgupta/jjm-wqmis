@@ -577,106 +577,206 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                     visible: paramProvider.isParam,
                                     child: Column(
                                       children: [
-                                        Visibility(
-                                          visible: paramProvider.labResponse !=
-                                                  null &&
-                                              !paramProvider.isLab &&
-                                              !(paramProvider
-                                                      .labResponse?.status ??
-                                                  true),
-                                          // assume true to avoid showing if status is null
-                                          child: Text(
-                                            paramProvider
-                                                    .labResponse?.message ??
-                                                '',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.red,
-                                            ),
+                                       !paramProvider.isLab && paramProvider.baseStatus==0 ? Text(
+                                          paramProvider.errorMsg??'',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red,
                                           ),
-                                        ),
-                                        Visibility(
-                                          visible: !paramProvider.isLab &&
-                                              (paramProvider.labResponse?.status ?? false),
-                                          child: Column(
-                                            children: [
-                                              CustomDropdown(
-                                                title: "Select Lab *",
-                                                value: paramProvider
-                                                    .selectedParamLabId
-                                                    ?.toString(),
-                                                // Selected value
-                                                items: paramProvider
-                                                        .labResponse?.labs
-                                                        .map((lab) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: lab.labId
-                                                            .toString(),
-                                                        // Use lab ID as value
-                                                        child: Text(
-                                                          lab.labName,
-                                                          // Show lab name in dropdown
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
-                                                        ),
-                                                      );
-                                                    }).toList() ??
-                                                    [],
-                                                // Handle null case
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    final selectedLab =
-                                                        paramProvider
-                                                            .labResponse?.labs
-                                                            .firstWhere(
-                                                      (lab) =>
-                                                          lab.labId
-                                                              .toString() ==
-                                                          value,
-                                                      orElse: () => Lab(
-                                                          labId: 0,
-                                                          labName: ''),
+                                        ):
+                                        Column(
+                                          children: [
+                                            CustomDropdown(
+                                              title: "Select Lab *",
+                                              value: paramProvider
+                                                  .selectedParamLabId
+                                                  ?.toString(),
+                                              // Selected value
+                                              items: paramProvider.labResponse?.map((lab) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: lab.labId
+                                                          .toString(),
+                                                      // Use lab ID as value
+                                                      child: Text(
+                                                        lab.labName,
+                                                        // Show lab name in dropdown
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
                                                     );
-                                                    paramProvider
-                                                        .setSelectedParamLabs(
-                                                            selectedLab!.labId,
-                                                            selectedLab
-                                                                .labName);
-                                                    paramProvider
-                                                        .fetchLabIncharge(
-                                                            selectedLab.labId);
-                                                    paramProvider.setSelectedLab(value);
-                                                  }
-                                                },
-                                                appBarTitle: "Select Lab ",
-                                              ),
-                                              Visibility(
-                                                visible: (paramProvider.selectedLab ?? '').isNotEmpty,
-                                                child: Card(
-                                                  elevation: 4,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(12),
+                                                  }).toList() ??
+                                                  [],
+                                              // Handle null case
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  final selectedLab =
+                                                      paramProvider
+                                                          .labResponse!.firstWhere(
+                                                    (lab) =>
+                                                        lab.labId
+                                                            .toString() ==
+                                                        value,
+                                                    orElse: () => Lab(
+                                                        labId: 0,
+                                                        labName: ''),
+                                                  );
+                                                  paramProvider
+                                                      .setSelectedParamLabs(
+                                                          selectedLab.labId,
+                                                          selectedLab
+                                                              .labName);
+                                                  paramProvider
+                                                      .fetchLabIncharge(
+                                                          selectedLab.labId);
+                                                  paramProvider.setSelectedLab(value);
+                                                }
+                                              },
+                                              appBarTitle: "Select Lab ",
+                                            ),
+                                            Visibility(
+                                              visible: (paramProvider.selectedLab ?? '').isNotEmpty,
+                                              child: Card(
+                                                elevation: 4,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 8),
+                                                color: Colors.white,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(15),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // Section 1: Lab Incharge Details
+                                                      Text(
+                                                        "Lab Incharge Details",
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Colors.blueGrey,
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                          thickness: 1,
+                                                          color: Colors
+                                                              .grey.shade300),
+                                                      // Divider for separation
+                                                      SizedBox(height: 8),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.person,
+                                                              color: Colors
+                                                                  .blueAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.business,
+                                                              color:
+                                                                  Colors.green),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color: Colors
+                                                                  .redAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
                                                   ),
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8),
-                                                  color: Colors.white,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(15),
+                                                ),
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: (paramProvider.selectedLab ?? '').isNotEmpty,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Center(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      // Rounded corners
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.3),
+                                                          // Shadow color
+                                                          blurRadius: 10,
+                                                          // Shadow blur
+                                                          offset: const Offset(
+                                                              0,
+                                                              5), // Shadow position
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        // Section 1: Lab Incharge Details
                                                         Text(
-                                                          "Lab Incharge Details",
+                                                          "Geo Location of Sample Taken:",
                                                           style: TextStyle(
-                                                            fontSize: 18,
+                                                            fontSize: 16,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color:
@@ -687,64 +787,69 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             thickness: 1,
                                                             color: Colors
                                                                 .grey.shade300),
-                                                        // Divider for separation
-                                                        SizedBox(height: 8),
-
                                                         Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
                                                           children: [
-                                                            Icon(Icons.person,
+                                                            const Text(
+                                                              'Latitude:',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                                 color: Colors
-                                                                    .blueAccent),
-                                                            SizedBox(width: 8),
-                                                            Expanded(
-                                                              child: Text(
-                                                                'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
-                                                                style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
+                                                                    .black87,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 16,
+                                                            ),
+                                                            Text(
+                                                              "${paramProvider.currentLatitude}",
+                                                              // Display placeholder text if null
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.7),
                                                               ),
                                                             ),
                                                           ],
                                                         ),
-                                                        SizedBox(height: 10),
-
+                                                        SizedBox(
+                                                          height: 10,
+                                                        ),
                                                         Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
                                                           children: [
-                                                            Icon(Icons.business,
-                                                                color:
-                                                                    Colors.green),
-                                                            SizedBox(width: 8),
-                                                            Expanded(
-                                                              child: Text(
-                                                                'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
-                                                                style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
+                                                            const Text(
+                                                              'Longitude :',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .black87,
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 10),
-
-                                                        Row(
-                                                          children: [
-                                                            Icon(
-                                                                Icons.location_on,
+                                                            SizedBox(
+                                                              width: 16,
+                                                            ),
+                                                            Text(
+                                                              "${paramProvider.currentLongitude}",
+                                                              // Display placeholder text if null
+                                                              style: TextStyle(
+                                                                fontSize: 14,
                                                                 color: Colors
-                                                                    .redAccent),
-                                                            SizedBox(width: 8),
-                                                            Expanded(
-                                                              child: Text(
-                                                                'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
-                                                                style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.7),
                                                               ),
                                                             ),
                                                           ],
@@ -754,131 +859,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              Visibility(
-                                                visible: (paramProvider.selectedLab ?? '').isNotEmpty,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Center(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                12),
-                                                        // Rounded corners
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: Colors.grey
-                                                                .withOpacity(0.3),
-                                                            // Shadow color
-                                                            blurRadius: 10,
-                                                            // Shadow blur
-                                                            offset: const Offset(
-                                                                0,
-                                                                5), // Shadow position
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(8),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            "Geo Location of Sample Taken:",
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              color:
-                                                                  Colors.blueGrey,
-                                                            ),
-                                                          ),
-                                                          Divider(
-                                                              thickness: 1,
-                                                              color: Colors
-                                                                  .grey.shade300),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const Text(
-                                                                'Latitude:',
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color: Colors
-                                                                      .black87,
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 16,
-                                                              ),
-                                                              Text(
-                                                                "${paramProvider.currentLatitude}",
-                                                                // Display placeholder text if null
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .black
-                                                                      .withOpacity(
-                                                                          0.7),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const Text(
-                                                                'Longitude :',
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color: Colors
-                                                                      .black87,
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 16,
-                                                              ),
-                                                              Text(
-                                                                "${paramProvider.currentLongitude}",
-                                                                // Display placeholder text if null
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors
-                                                                      .black
-                                                                      .withOpacity(
-                                                                          0.7),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -902,7 +884,25 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     ),
 
                     Visibility(
-                      visible: (paramProvider.labResponse?.status ?? false || paramProvider.isLab) ||( paramProvider.labIncharge!.name.isNotEmpty||paramProvider.isParam),
+                      visible: paramProvider.isLab,
+                      // Show only when status is true
+                      child: ElevatedButton(
+                          onPressed: () {
+                            validateAndSubmit(context, provider, masterProvider,
+                                paramProvider);
+                          },
+                          child: Text(
+                            AppConstants.submitSample,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          style: AppStyles.buttonStylePrimary()
+                      ),
+                    ),
+                    Visibility(
+                      visible: paramProvider.isParam &&paramProvider.baseStatus==1&&paramProvider.selectedLab!.isNotEmpty,
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {

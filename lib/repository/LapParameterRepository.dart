@@ -87,25 +87,25 @@ class Lapparameterrepository {
   }
 
 
-  Future<Paramlabresponse?> fetchParamLabs(String stateId, String parameterIds) async {
+  Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds) async {
     try {
       final response = await _apiService.get(
           "APIMaster/getLaboratoriesby_parameter_ids?StateId=$stateId&parameter_ids=$parameterIds");
 
-      log('fetch param labs Response: $response');
+      return BaseResponseModel<Lab>.fromJson(response,(json)=> Lab.fromJson(json));
+
+ /*     log('fetch param labs Response: $response');
 
       if (response is Map<String, dynamic>) {
         Paramlabresponse labResponse = Paramlabresponse.fromJson(response);
 
         if (response.isNotEmpty) {
           return labResponse; // Return the full response if status is true
-        }
-      } else {
-        throw ApiException('Unexpected API response format: $response');
-      }
+        }*/
+
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
-      return null; // Return null in case of an error
+      rethrow; // Return null in case of an error
     }
   }
   Future<WtpLabResponse?> fetchWtpLabs(String stateId, String wtpId) async {

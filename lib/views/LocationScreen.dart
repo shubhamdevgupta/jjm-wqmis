@@ -320,7 +320,7 @@ class _LocationscreenState extends State<Locationscreen> {
                           context, masterProvider.errorMsg);
                     }
 
-                   /*   print('location---> ${paramProvider.currentPosition!.longitude}');
+            /*          print('location---> ${paramProvider.currentPosition!.longitude}');
                       print('location---> ${paramProvider.currentPosition!.latitude}');
                       masterProvider.fetchVillageDetails(
                           paramProvider.currentPosition!.longitude,
@@ -335,8 +335,8 @@ class _LocationscreenState extends State<Locationscreen> {
                         Navigator.pushReplacementNamed(context, '/savesample');
                       }else{
                         ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }*/
-
+                      }
+*/
 
                   },
                   style: ElevatedButton.styleFrom(
