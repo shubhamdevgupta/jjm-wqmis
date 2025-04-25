@@ -264,7 +264,6 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value);
-                    masterProvider.fetchWatersourcefilterList();
                   }
                 },
                 appBarTitle: "Select Village",
@@ -313,6 +312,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen &&
                         validateStateVillage(masterProvider)) {
+                      masterProvider.fetchWatersourcefilterList();
                       print('Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);

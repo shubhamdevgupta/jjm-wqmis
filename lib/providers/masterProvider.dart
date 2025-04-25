@@ -170,10 +170,17 @@ class Masterprovider extends ChangeNotifier {
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
           stateId, districtId, blockId);
-      baseStatus= rawGPs.status;
+
+      baseStatus = rawGPs.status;
 
       if (rawGPs.status == 1) {
         gramPanchayat = rawGPs.result;
+
+        // ✅ Auto-select if only one Gram Panchayat is available
+        if (gramPanchayat != null && gramPanchayat!.length == 1) {
+          final singleGP = gramPanchayat!.first;
+          setSelectedGrampanchayat(singleGP.jjmPanchayatId);
+        }
       } else {
         errorMsg = rawGPs.message;
       }
@@ -186,6 +193,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   Future<void> fetchVillage(
       String stateId, String districtId, String blockId, String gpID) async {
@@ -204,9 +212,25 @@ class Masterprovider extends ChangeNotifier {
     try {
       final rawVillages = await _masterRepository.fetchVillages(
           stateId, districtId, blockId, gpID);
-      baseStatus= rawVillages.status;
+
+      baseStatus = rawVillages.status;
+
       if (rawVillages.status == 1) {
         village = rawVillages.result;
+
+        if (village != null && village!.length == 1) {
+          final singleVillage = village!.first;
+          setSelectedVillage(singleVillage.jjmVillageId);
+
+          /// ✅ Automatically trigger habitation fetch
+          await fetchHabitations(
+            stateId,
+            districtId,
+            blockId,
+            gpID,
+            singleVillage.jjmVillageId,
+          );
+        }
       } else {
         errorMsg = rawVillages.message;
       }
@@ -235,10 +259,16 @@ class Masterprovider extends ChangeNotifier {
       final rawHabitations = await _masterRepository.fetchHabitations(
           stateId, districtId, blockId, gpId, villageId);
 
-      baseStatus= rawHabitations.status;
+      baseStatus = rawHabitations.status;
 
       if (rawHabitations.status == 1) {
         habitationId = rawHabitations.result;
+
+        // ✅ Auto-select habitation if only one is present
+        if (habitationId != null && habitationId!.length == 1) {
+          final singleHabitation = habitationId!.first;
+          setSelectedHabitation(singleHabitation.habitationId);
+        }
       } else {
         errorMsg = rawHabitations.message;
       }
@@ -251,6 +281,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   Future<void> fetchSchemes(String villageId, String habitationId,
       String districtid, String filter) async {

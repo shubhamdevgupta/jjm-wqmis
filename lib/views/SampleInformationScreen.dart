@@ -302,6 +302,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
+                  print("valeeeeeee $value");
                   if (value != null && value != "0") {
                     masterProvider.setSelectedWaterSourcefilter("");
                     masterProvider.setSelectedWaterSourcefilter(value);

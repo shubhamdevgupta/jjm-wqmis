@@ -210,7 +210,7 @@ class ParameterProvider with ChangeNotifier {
   /// Fetch Labs from API
   Future<void> fetchParamLabs(String stateId, String parameterIds) async {
     isLoading = true;
-    notifyListeners();
+    notifyListeners();  // Notify before starting the fetch
 
     try {
       var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
@@ -228,18 +228,21 @@ class ParameterProvider with ChangeNotifier {
       }*/
       if(response.status==1){
        _labResponse= response.result;
+     _selectedParamLabId = response.result.first.labId;
+     fetchLabIncharge(_selectedParamLabId!);
       }else{
         errorMsg = response.message;
       }
-      baseStatus  = response.status;
 
+      baseStatus = response.status;
     } catch (e) {
       debugPrint("Error fetching Lab Incharge: $e");
     } finally {
       isLoading = false;
-      notifyListeners();
+      notifyListeners();  // Notify at the end of the fetch process
     }
   }
+
 
   Future<void> fetchWTPLab(String stateId, String wtpId) async {
     isLoading = true;
@@ -288,6 +291,7 @@ class ParameterProvider with ChangeNotifier {
 
   /// Set Selected Lab ID and Name
   void setSelectedParamLabs(int labId, String labName) {
+
     _selectedParamLabId = labId;
     _selectedParamLabName = labName;
     notifyListeners();
