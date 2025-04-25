@@ -435,11 +435,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  masterProvider.waterSource.isEmpty
-                      ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: AppTextWidgets.errorText(masterProvider.errorMsg),
-                  ) : CustomDropdown(
+                  masterProvider.baseStatus == 0
+                      ? AppTextWidgets.errorText(masterProvider.errorMsg) : CustomDropdown(
                     title: "Select Water Source *",
                     value: masterProvider.selectedWaterSource,
                     items: masterProvider.waterSource.map((waterSource) {
@@ -456,6 +453,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
+
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
@@ -670,11 +668,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            masterProvider.waterSource.isEmpty
-                ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: AppTextWidgets.errorText(masterProvider.errorMsg),
-            ) : CustomDropdown(
+            masterProvider.baseStatus==0
+                ? AppTextWidgets.errorText(masterProvider.errorMsg) : CustomDropdown(
               title: "Select ESR/GSR *",
               value: masterProvider.selectedWaterSource,
               items: masterProvider.waterSource.map((waterSource) {
@@ -842,11 +837,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    masterProvider.waterSource.isEmpty
-                        ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child:AppTextWidgets.errorText(masterProvider.errorMsg),
-                    ) :
+                    masterProvider.baseStatus==0
+                        ? AppTextWidgets.errorText(masterProvider.errorMsg) :
                     CustomDropdown(
                       title: "Select School / AWCs *",
                       value: masterProvider.waterSource.any((item) =>

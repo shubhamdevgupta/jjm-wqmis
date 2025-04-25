@@ -6,7 +6,7 @@ class AppTextWidgets {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
       child: Container(
-
+        width: double.infinity, // <-- Increased width
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.red.withOpacity(0.05),
@@ -40,6 +40,7 @@ class AppTextWidgets {
       ),
     );
   }
+
 
   /// Info or neutral message (e.g., "No data available")
   static Widget infoText(String message) {
