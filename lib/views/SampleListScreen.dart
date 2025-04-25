@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
@@ -12,6 +11,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
 import '../utils/AppStyles.dart';
+import '../utils/Showerrormsg.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -25,8 +25,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
   bool isLoading = false;
   List<Map<String, dynamic>> filteredList = [];
   TextEditingController searchController = TextEditingController();
-  int flag = 1; // Define flag
   final encryption = AesEncryption();
+  String flag = "";
 
   int? selectedYear;
 
@@ -58,7 +58,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
     );
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -66,24 +65,45 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userId = _localStorage.getString("userId");
-      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
-      Masterprovider masterprovider = Provider.of<Masterprovider>(context, listen: false);
-      Samplelistprovider sampleListProvider = Provider.of<Samplelistprovider>(context, listen: false);
-
+      Masterprovider masterprovider =
+          Provider.of<Masterprovider>(context, listen: false);
+      Samplelistprovider sampleListProvider =
+          Provider.of<Samplelistprovider>(context, listen: false);
+      final args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
       if (args != null) {
-        int flag = args['flag'];
-
-        if (flag == 0) {
+        flag = args['flag'];
+        String district = args['dis'] ?? "0";
+        String block = args['block'] ?? "0";
+        print("district---->$district");
+        print("block---->$block");
+        if (flag == AppConstants.totalSamplesSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           print("Fetching sample list with flag 0...");
-          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
-        } else if (flag == 2) {
+          sampleListProvider.fetchSampleList(
+              int.parse(userId!),
+              1,
+              "0",
+              0,
+              "0",
+              int.parse(masterprovider.selectedStateId ?? "0"),
+              int.parse(district),
+              int.parse(block),
+              int.parse(masterprovider.selectedGramPanchayat ?? "0"),
+              int.parse(masterprovider.selectedVillage ?? "0"));
+        } else if (flag == AppConstants.totalPhysicalSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           print("Fetching sample list with flag 2...");
-          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 2, "0", 0, 0, 0, 0, 0);
-        } else if (flag == 6) {
+          sampleListProvider.fetchSampleList(
+              int.parse(userId!), 1, "0", 2, "0", 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSampleTested ||
+            flag == AppConstants.openSampleListScreen) {
           print("Fetching sample list with flag 6...");
-          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
-        } else if (flag == 1) {
+          sampleListProvider.fetchSampleList(
+              int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalRetest ||
+            flag == AppConstants.openSampleListScreen) {
           print("Fetching sample list with selected location parameters...");
           sampleListProvider.fetchSampleList(
             int.parse(userId!),
@@ -97,34 +117,24 @@ class _SampleListScreenState extends State<SampleListScreen> {
             int.parse(masterprovider.selectedGramPanchayat!),
             int.parse(masterprovider.selectedVillage!),
           );
-        } else {
+        } /* else {
           print("Fetching default sample list...");
-          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
-        }
-      } else {
+          sampleListProvider.fetchSampleList(
+              int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+        }*/
+      } /*else {
         print("Fetching default sample list...");
-        sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
-      }
+        sampleListProvider.fetchSampleList(
+            int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
+      }*/
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map?;
-    final flag = args != null ? args['flag'] as int? ?? 0 : 0;
-
-    String getTitleFromFlag(int flag) {
-      switch (flag) {
-        case 0:
-          return 'Total Sample Submitted';
-        case 2:
-          return 'Total Physical Submitted';
-        case 6:
-          return 'Total Sample Tested';
-        default:
-          return 'JJM-WQMIS';
-      }
-    }
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    flag = args?['flag'];
 
     return WillPopScope(
       onWillPop: () async {
@@ -132,7 +142,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/dashboard',
-              (route) => false, // Clears all previous routes
+          (route) => false, // Clears all previous routes
         );
         return false; // Prevents default back action
       },
@@ -164,20 +174,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => Dashboardscreen()),
-                        (route) => false,
+                    (route) => false,
                   );
                 }
               },
             ),
-
             title: Text(
-              getTitleFromFlag(flag),
-
+              // getTitleFromFlag("flag"),
+              flag,
               style: AppStyles.appBarTitle,
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.calendar_month_outlined, color: Colors.white),
+                icon: const Icon(Icons.calendar_month_outlined,
+                    color: Colors.white),
                 onPressed: () => _selectYear(context),
               ),
             ],
@@ -206,12 +216,13 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       color: Colors.white,
                       height: screenHeight * 0.8,
                       width: screenHeight * 0.4,
-                      child: Locationscreen(flag: flag,),
+                      child: Locationscreen(
+                        flag: AppConstants.openSampleListScreen,
+                      ),
                     ),
                   );
                 },
               );
-
             },
             backgroundColor: Color(0xFF0468B1),
             shape: CircleBorder(),
@@ -237,7 +248,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          child:Container(
+                          child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -261,11 +272,16 @@ class _SampleListScreenState extends State<SampleListScreen> {
                         ),
                         SizedBox(width: 10),
                         ElevatedButton(
-                          style: AppStyles.buttonStylePrimary(backgroundColor:const Color(0xFF0468B1) ,fontSize: 16,borderRadius: 6,horizontalPadding: 20,verticalPadding: 14),
+                          style: AppStyles.buttonStylePrimary(
+                              backgroundColor: const Color(0xFF0468B1),
+                              fontSize: 16,
+                              borderRadius: 6,
+                              horizontalPadding: 20,
+                              verticalPadding: 14),
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
-                              provider.fetchSampleList(int.parse(userId!), 1, "",
-                                  0, searchController.text, 0, 0, 0, 0, 0);
+                              provider.fetchSampleList(int.parse(userId!), 1,
+                                  "", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
                               ToastHelper.showErrorSnackBar(
                                   context, "Please enter sample id");
@@ -281,12 +297,16 @@ class _SampleListScreenState extends State<SampleListScreen> {
                   ),
 
                   // Expanded to prevent infinite height issue
+                  provider.samples.isEmpty?Align(
+                       alignment: Alignment.center,
+                      child: AppTextWidgets.errorText("${provider.errorMsg}") ):
                   Expanded(
                     child: ListView.builder(
                       itemCount: provider.samples.length,
                       itemBuilder: (context, index) {
-                       Sample sample = provider.samples[index]; // where result is List<Sample>
-                       print("samples of list data ${sample}");
+                        Sample sample = provider
+                            .samples[index]; // where result is List<Sample>
+                        print("samples of list data ${sample}");
 
                         return Card(
                           margin: EdgeInsets.symmetric(
@@ -297,20 +317,19 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.blue, width: 2),
+                              border: Border.all(color: Colors.blue, width: 2),
                               borderRadius: BorderRadius.circular(12),
                               color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.all(12),
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // ID Row
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       CircleAvatar(
                                         backgroundColor: Colors.blue,
@@ -324,7 +343,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                       ),
                                       //SizedBox(width: 10),
 
-
                                       Container(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 10,
@@ -333,7 +351,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                         decoration: BoxDecoration(
                                           color: Colors.black87,
                                           borderRadius:
-                                          BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                         ),
                                         child: Text(
                                           "ID: ${sample.sampleId ?? 'N/A'}",
@@ -345,19 +363,25 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                       ),
 
                                       Visibility(
-                                        visible:sample.testResult == "Report Approved",
+                                        visible: sample.testResult ==
+                                            "Report Approved",
                                         child: GestureDetector(
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => MyWebView(url: 'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
-
-                                            ),
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => MyWebView(
+                                                    url:
+                                                        'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
+                                              ),
                                             );
                                           },
                                           child: CircleAvatar(
                                             backgroundColor: Colors.brown,
-                                            child: Icon(Icons.download,color: Colors.white,),
-
+                                            child: Icon(
+                                              Icons.download,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -370,8 +394,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                   // Lab Name
                                   Row(
                                     children: [
-                                      Icon(Icons.business,
-                                          color: Colors.blue),
+                                      Icon(Icons.business, color: Colors.blue),
                                       SizedBox(width: 5),
                                       Expanded(
                                         child: Text(
@@ -395,9 +418,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                       Expanded(
                                         child: Text(
                                           "${sample.villageName ?? 'N/A'}, "
-                                              "${sample.gramPanchayatName ?? 'N/A'}, "
-                                              "${sample.blockName ?? 'N/A'}, "
-                                              "${sample.districtName ?? 'N/A'}",
+                                          "${sample.gramPanchayatName ?? 'N/A'}, "
+                                          "${sample.blockName ?? 'N/A'}, "
+                                          "${sample.districtName ?? 'N/A'}",
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey[700],
@@ -413,8 +436,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                   // Test Result
                                   Row(
                                     children: [
-                                      Icon(Icons.category,
-                                          color: Colors.blue),
+                                      Icon(Icons.category, color: Colors.blue),
                                       SizedBox(width: 5),
                                       Expanded(
                                         child: Row(
@@ -423,8 +445,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               "Test Result: ",
                                               style: TextStyle(
                                                 fontSize: 14,
-                                                fontWeight:
-                                                FontWeight.w500,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
                                             Container(
@@ -433,27 +454,31 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 vertical: 4,
                                               ),
                                               decoration: BoxDecoration(
-                                                color: sample.testResult == "Report Approved"
+                                                color: sample.testResult ==
+                                                        "Report Approved"
                                                     ? Colors.green[100]
-                                                    : sample.testResult == "Under Process"
-                                                    ? Colors.yellow[100]
-                                                    : Colors.blue[100],
-                                                borderRadius: BorderRadius.circular(16),
+                                                    : sample.testResult ==
+                                                            "Under Process"
+                                                        ? Colors.yellow[100]
+                                                        : Colors.blue[100],
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
                                               ),
                                               child: Text(
                                                 sample.testResult ?? 'N/A',
                                                 style: TextStyle(
-                                                  color: sample.testResult == "Report Approved"
+                                                  color: sample.testResult ==
+                                                          "Report Approved"
                                                       ? Colors.green[800]
-                                                      : sample.testResult == "Under Process"
-                                                      ? Colors.orange[800]
-                                                      : Colors.blue[800],
+                                                      : sample.testResult ==
+                                                              "Under Process"
+                                                          ? Colors.orange[800]
+                                                          : Colors.blue[800],
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
                                                 ),
                                               ),
                                             ),
-
                                           ],
                                         ),
                                       ),
@@ -500,4 +525,11 @@ class _SampleListScreenState extends State<SampleListScreen> {
     userId = _localStorage.getString(AppConstants.prefUserId) ?? '';
     return token;
   }
+}
+
+enum SampleType {
+  totalSampleSubmitted,
+  totalPhysicalSubmitted,
+  totalSampleTested,
+  totalRetest
 }

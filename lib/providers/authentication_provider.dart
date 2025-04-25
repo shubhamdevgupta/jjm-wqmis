@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/BaseResettableProvider.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
@@ -12,7 +11,7 @@ import '../models/LoginResponse.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
-class AuthenticationProvider extends Resettable {
+class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 

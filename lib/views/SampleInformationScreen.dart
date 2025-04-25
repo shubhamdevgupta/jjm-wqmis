@@ -370,7 +370,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           Future.delayed(Duration.zero, () {
                             masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
+                              masterProvider.selectedHabitation ??"0",
                               masterProvider.selectedWtsfilter!,
                               value.toString(),
                               "0",
@@ -394,7 +394,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           Future.delayed(Duration.zero, () {
                             masterProvider.fetchSourceInformation(
                                 masterProvider.selectedVillage!,
-                                masterProvider.selectedHabitation!,
+                                masterProvider.selectedHabitation??"0",
                                 masterProvider.selectedWtsfilter!,
                                 value.toString(),
                                 "0",
