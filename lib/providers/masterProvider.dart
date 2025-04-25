@@ -62,6 +62,7 @@ class Masterprovider extends ChangeNotifier {
   ValidateVillageResponse? get validateVillageResponse =>
       _validateVillageResponse;
 
+  int baseStatus=0;
   int? _selectedSubSource;
 
   int? get selectedSubSource => _selectedSubSource;
@@ -110,6 +111,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawDistricts = await _masterRepository.fetchDistricts(stateId);
+      baseStatus= rawDistricts.status;
       if (rawDistricts.status == 1) {
         districts = rawDistricts.result;
       } else {
@@ -136,8 +138,8 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawBlocks =
-          await _masterRepository.fetchBlocks(stateId, districtId);
+      final rawBlocks = await _masterRepository.fetchBlocks(stateId, districtId);
+      baseStatus= rawBlocks.status;
 
       if (rawBlocks.status == 1) {
         blocks = rawBlocks.result;
@@ -168,6 +170,7 @@ class Masterprovider extends ChangeNotifier {
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
           stateId, districtId, blockId);
+      baseStatus= rawGPs.status;
 
       if (rawGPs.status == 1) {
         gramPanchayat = rawGPs.result;
@@ -201,7 +204,7 @@ class Masterprovider extends ChangeNotifier {
     try {
       final rawVillages = await _masterRepository.fetchVillages(
           stateId, districtId, blockId, gpID);
-
+      baseStatus= rawVillages.status;
       if (rawVillages.status == 1) {
         village = rawVillages.result;
         if (village.length == 1) {
@@ -235,6 +238,8 @@ class Masterprovider extends ChangeNotifier {
       final rawHabitations = await _masterRepository.fetchHabitations(
           stateId, districtId, blockId, gpId, villageId);
 
+      baseStatus= rawHabitations.status;
+
       if (rawHabitations.status == 1) {
         habitationId = rawHabitations.result;
         if (habitationId.length == 1) {
@@ -260,6 +265,7 @@ class Masterprovider extends ChangeNotifier {
     try {
       final mSchemes = await _masterRepository.fetchSchemes(
           villageId, habitationId, districtid, filter);
+      baseStatus= mSchemes.status;
 
       if (mSchemes.status == 1) {
         schemes = mSchemes.result;
@@ -309,6 +315,7 @@ class Masterprovider extends ChangeNotifier {
     try {
      final rawWaterSource = await _masterRepository.fetchSourceInformation(villageId,
           habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
+     baseStatus= rawWaterSource.status;
 
       if(rawWaterSource.status==1){
         waterSource=rawWaterSource.result;
@@ -354,6 +361,7 @@ class Masterprovider extends ChangeNotifier {
       final fetchedList =
           await _masterRepository.fetchWTPlist(stateId, schemeId);
 
+
       if (fetchedList.isNotEmpty) {
         wtpList = fetchedList;
 
@@ -392,6 +400,7 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Start loading
     try {
      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
+     baseStatus= rawWtsFilterList.status;
     if(rawWtsFilterList.status==1){
       wtsFilterList=rawWtsFilterList.result;
     }else{
