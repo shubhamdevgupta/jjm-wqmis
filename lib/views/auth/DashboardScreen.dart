@@ -78,18 +78,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 );
               },
             ),
-            actions: [
-              Stack(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_active,
-                        color: Colors.white),
-                    onPressed: () {
-                    },
-                  ),
-                ],
-              ),
-            ],
             //elevation
             flexibleSpace: Container(
               decoration: const BoxDecoration(
@@ -180,13 +168,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
-                      child: Text(
-                        AppConstants.dashboardOverview,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                    ),
                     Container(
                       padding:
                       const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -205,23 +186,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Circular user image
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage:
-                            const AssetImage('assets/user.png'),
-                            // Replace with dynamic user profile image path
-                            backgroundColor: Colors.grey[200], // Fallback color
-                          ),
-                          const SizedBox(width: 16), // Space between image and text
 
-                          // Text column
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 // Welcome message
                                 Text(
+                                  textAlign: TextAlign.center,
                                   '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
@@ -235,17 +207,19 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 ),
 
                                 const SizedBox(height: 8), // Space between lines
-
-                                // Phone Row
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.phone_android,
+                                    const Icon(Icons.account_balance_sharp,
                                         color: Colors.teal, size: 20),
-                                    // Using an icon for consistency
                                     const SizedBox(width: 6),
                                     Text(
-                                      '$mobile',
-                                      // Replace with dynamic phone number
+                                      textAlign: TextAlign.center,
+                                      UserDept == "4"
+                                          ? 'Departmental Official'
+                                          : UserDept == "8"
+                                          ? 'DWSM'
+                                          : 'Unknown Department', // Fallback text if needed
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
@@ -254,18 +228,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     ),
                                   ],
                                 ),
+                                // Phone Row
+
                                 const SizedBox(height: 5),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
+                                    const Icon(Icons.phone_android,
                                         color: Colors.teal, size: 20),
+                                    // Using an icon for consistency
                                     const SizedBox(width: 6),
                                     Text(
-                                      UserDept == "4"
-                                          ? 'Departmental Official'
-                                          : UserDept == "8"
-                                          ? 'DWSM'
-                                          : 'Unknown Department', // Fallback text if needed
+                                      textAlign: TextAlign.center,
+                                      '$mobile',
+                                      // Replace with dynamic phone number
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.black87,
