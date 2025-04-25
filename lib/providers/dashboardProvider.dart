@@ -8,9 +8,8 @@ import '../repository/AuthenticaitonRepository.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/AppConstants.dart';
-import 'BaseResettableProvider.dart';
 
-class DashboardProvider extends Resettable{
+class DashboardProvider extends ChangeNotifier{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 

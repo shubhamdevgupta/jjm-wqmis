@@ -4,9 +4,8 @@ import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
-import 'BaseResettableProvider.dart';
 
-class Samplesubprovider extends Resettable {
+class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
   bool isSubmitData = false;
   Sampleresponse? sampleresponse;

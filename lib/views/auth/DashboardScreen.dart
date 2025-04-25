@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -301,7 +302,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.blue
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 0});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
                           },
                         ),
                         _buildDashboardCard(
@@ -313,7 +314,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             const Color(0xFFFFAA00)
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 2});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
                           },
                         ),
                         _buildDashboardCard(
@@ -325,7 +326,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.green
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 6});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
                           },
                         ),
                         _buildDashboardCard(
@@ -337,7 +338,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             Colors.red
                           ],
                           onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': 8});
+                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
                           },
                         ),
                       ],
@@ -358,7 +359,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child: const Locationscreen(flag: 0), // Your widget
+                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen), // Your widget
                                 ),
                               );
                             },

@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         AppConstants.navigateToSaveSample: (context) => Sampleinformationscreen(),
         AppConstants.navigateToDashboard: (context) => Dashboardscreen(),
         AppConstants.navigateToLogin: (context) => Loginscreen(),
-        AppConstants.navigateToLocation: (context) => Locationscreen(flag: 0,),
+        AppConstants.navigateToLocation: (context) => Locationscreen(flag: "",),
         AppConstants.navigateToLabParam: (context) => Labparameterscreen(),
         AppConstants.navigateToTest: (context) => SubmitSampleScreen(),
         AppConstants.navigateToSampleList: (context) => SampleListScreen(),

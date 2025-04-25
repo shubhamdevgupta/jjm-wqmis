@@ -11,9 +11,9 @@ import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
-  final int flag; // Declare flag parameter
+  final String flag; // Declare flag parameter
 
-  const Locationscreen({super.key, required this.flag});
+  const Locationscreen({super.key, required this.flag });
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
@@ -293,10 +293,11 @@ class _LocationscreenState extends State<Locationscreen> {
                 child: ElevatedButton(
 
                   onPressed: () async {
+                    print("flagggggggggg ${ widget.flag}");
                     print("loading--------->${paramProvider.isLoading}");
                     await paramProvider.fetchLocation();
                     print("loading--------->${paramProvider.isLoading}");
-                    if (widget.flag == 1) {
+                    if (widget.flag == AppConstants.openSampleListScreen) {
 
                       print('Going to Sample List screen');
 
@@ -308,23 +309,22 @@ class _LocationscreenState extends State<Locationscreen> {
                         // This removes all previous routes up to Dashboard
 
 
-                        arguments: {'flag': widget.flag},
+                        arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId},
                       );
-                    } else if (widget.flag == 0 &&
+                    } else if (widget.flag == AppConstants.openSampleInfoScreen &&
                         validateStateVillage(masterProvider)) {
-                      print('Going to Save Sample screen');
+                      print('Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
                     } else {
-                      ToastHelper.showErrorSnackBar(
-                          context, masterProvider.errorMsg);
+                      /*ToastHelper.showErrorSnackBar(context, masterProvider.errorMsg);*/
+                      ToastHelper.showToastMessage(masterProvider.errorMsg);
                     }
 
-            /*          print('location---> ${paramProvider.currentPosition!.longitude}');
-                      print('location---> ${paramProvider.currentPosition!.latitude}');
-                      masterProvider.fetchVillageDetails(
-                          paramProvider.currentPosition!.longitude,
-                          paramProvider.currentPosition!.latitude);
+                    //TODO LGD code
+         /*             masterProvider.fetchVillageDetails(
+                          paramProvider.currentLongitude!,
+                          paramProvider.currentLatitude!);
                       print('Going to Save Sample screen');
                       final hasData = masterProvider.villageDetails.isNotEmpty;
                       final villageLgd = hasData
@@ -335,8 +335,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         Navigator.pushReplacementNamed(context, '/savesample');
                       }else{
                         ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }
-*/
+                      }*/
 
                   },
                   style: ElevatedButton.styleFrom(
