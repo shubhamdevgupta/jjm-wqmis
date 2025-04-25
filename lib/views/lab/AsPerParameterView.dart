@@ -36,6 +36,8 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                 children: [
                   FloatingActionButton(
                     onPressed: () async{
+                      provider.selectedLab='';
+                      provider.labList.clear();
                       await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {

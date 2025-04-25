@@ -52,8 +52,8 @@ class ParameterProvider with ChangeNotifier {
   double? get currentLongitude => _currentLongitude;
 
 
-  Paramlabresponse? _labResponse;
-  Paramlabresponse? get labResponse => _labResponse;
+  List<Lab>? _labResponse;
+  List<Lab>? get labResponse => _labResponse;
 
   int? _selectedParamLabId;
   String? _selectedParamLabName;
@@ -72,6 +72,8 @@ class ParameterProvider with ChangeNotifier {
 
   List<SchoolResult>  schoolResult =[];
   String? selectedSchoolResult;
+
+   int baseStatus = 0;
 
   Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
     print("lab call in parameter provider");
@@ -211,9 +213,9 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
+      var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
 
-      if (response != null) {
+      /*if (response != null) {
         _labResponse = response;
       }
       if (_labResponse!.status == false) {
@@ -223,7 +225,14 @@ class ParameterProvider with ChangeNotifier {
           message: _labResponse!.message,
           labs: [], // Ensure labs list is empty
         );
+      }*/
+      if(response.status==1){
+       _labResponse= response.result;
+      }else{
+        errorMsg = response.message;
       }
+      baseStatus  = response.status;
+
     } catch (e) {
       debugPrint("Error fetching Lab Incharge: $e");
     } finally {
