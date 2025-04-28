@@ -28,6 +28,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
     final paramProvider=  Provider.of<ParameterProvider>(context, listen: false);
     paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+    paramProvider.clearData();
     });
   }
 
