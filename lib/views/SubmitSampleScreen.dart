@@ -474,8 +474,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   ),
                                                 ),
                                               ),
-                                        paramProvider.baseStatus == 0 ? AppTextWidgets.errorText("No Geo Location Found!")
-                                            :
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
@@ -1034,7 +1032,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       ),
                     ),
                     Visibility(
-                      visible: paramProvider.isLab,
+                      visible: paramProvider.isLab && paramProvider.baseStatus!=0,
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {
