@@ -278,7 +278,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                               horizontalPadding: 20,
                               verticalPadding: 14),
                           onPressed: () {
-                            if (searchController.text.isNotEmpty) {
+                            if (searchController.text != null) {
                               provider.fetchSampleList(int.parse(userId!), 1,
                                   "", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {

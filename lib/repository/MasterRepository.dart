@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:jjm_wqmis/models/BaseResponse.dart';
@@ -179,15 +178,17 @@ class MasterRepository {
 
 
 
-  Future<List<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
+  Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
     try {
       final response = await _apiService.get(
         '/apimaster/GetWTP?stateid=$stateId&schemeid=$schemeId',
       );
 
       log('WTP List API Response: $response');
+      return BaseResponseModel<Wtp>.fromJson(response,(json)=> Wtp.fromJson(json));
 
-      if (response is Map<String, dynamic>) {
+
+      /*   if (response is Map<String, dynamic>) {
         if (response['Status'] == 1 && response['Result'] is List && response['Result'].isNotEmpty) {
           return (response['Result'] as List)
               .map((item) => Wtp.fromJson(item))
@@ -196,7 +197,7 @@ class MasterRepository {
         return [
           Wtp(wtpName: 'No record available', wtpId: 'not_available'),
         ];
-      }
+      }*/
       throw ApiException('API Error: Invalid response format');
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

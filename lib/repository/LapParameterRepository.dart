@@ -108,13 +108,14 @@ class Lapparameterrepository {
       rethrow; // Return null in case of an error
     }
   }
-  Future<WtpLabResponse?> fetchWtpLabs(String stateId, String wtpId) async {
+  Future<BaseResponseModel<WtpLab>> fetchWtpLabs(String stateId, String wtpId) async {
     try {
       final response = await _apiService.get('/apimaster/GetwtpLab?stateid=$stateId&wtpid=$wtpId');
 
       log('WTP Lab API Response: $response');
 
-      if (response is Map<String, dynamic>) {
+      return BaseResponseModel<WtpLab>.fromJson(response,(json)=> WtpLab.fromJson(json));
+    /*  if (response is Map<String, dynamic>) {
         WtpLabResponse labResponse = WtpLabResponse.fromJson(response);
 
         if (response.isNotEmpty) {
@@ -122,10 +123,10 @@ class Lapparameterrepository {
         }
       } else {
         throw ApiException('Unexpected API response format: $response');
-      }
+      }*/
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
-      return null; // Return null if any error occurs
+      rethrow; // Return null if any error occurs
     }
   }
  }

@@ -302,7 +302,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  print("valeeeeeee $value");
                   if (value != null && value != "0") {
                     masterProvider.setSelectedWaterSourcefilter("");
                     masterProvider.setSelectedWaterSourcefilter(value);
@@ -615,6 +614,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   if (validateWtpWaterFields(masterProvider)) {
+                                //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

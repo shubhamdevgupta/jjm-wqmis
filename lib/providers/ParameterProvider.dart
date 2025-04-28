@@ -251,6 +251,16 @@ class ParameterProvider with ChangeNotifier {
     try {
       final response = await _lapparameterrepository.fetchWtpLabs(stateId, wtpId);
 
+      if(response.status==1){
+        wtpLab=response.result;
+        if (wtpLab.length == 1) {
+          selectedWtpLab=response.result.first.labId;
+        }
+      }else{
+        errorMsg=response.message;
+      }
+  baseStatus=response.status;
+/*
       if (response != null) {
         _wtpLabModel = response;
 
@@ -273,6 +283,7 @@ class ParameterProvider with ChangeNotifier {
           );
         }
       }
+*/
     } catch (e) {
       debugPrint("Error fetching WTP Labs: $e");
       _wtpLabModel = null;

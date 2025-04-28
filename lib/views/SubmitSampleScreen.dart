@@ -106,7 +106,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0),
                                     child: Card(
                                       elevation: 4,
                                       color: Colors.white, // White background
@@ -120,153 +121,146 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                             children: [
                                               // Dynamic height adjustment
                                               ConstrainedBox(
-                                                constraints: const BoxConstraints(
+                                                constraints:
+                                                    const BoxConstraints(
                                                   maxHeight:
                                                       250, // Maximum height before scrolling starts
                                                 ),
-                                                child: paramProvider.cart!.isEmpty
-                                                    ? Center(
-                                                        child: Text(
-                                                            "No tests selected"), // Show message if no items
-                                                      )
-                                                    : Container(
-                                                        constraints: BoxConstraints(
-                                                          minHeight: 0,
-                                                          // Allow shrinking when few items
-                                                          maxHeight:
-                                                              250, // Max height to enable scrolling
-                                                        ),
-                                                        child: Scrollbar(
-                                                          thumbVisibility: true,
-                                                          // Show scrollbar when scrolling
-                                                          child:
-                                                              SingleChildScrollView(
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            // Enables vertical scrolling
-                                                            child:
-                                                                SingleChildScrollView(
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                              // Enables horizontal scrolling if needed
-                                                              child: DataTable(
-                                                                headingRowColor:
-                                                                    MaterialStateProperty
-                                                                        .all(Colors
-                                                                            .blue),
-                                                                columnSpacing:
-                                                                    MediaQuery.of(
-                                                                                context)
-                                                                            .size
-                                                                            .width *
-                                                                        0.02,
-                                                                columns: [
-                                                                  DataColumn(
-                                                                    label: Text(
-                                                                      'Sr. No.',
-                                                                      style:
-                                                                          _headerTextStyle(),
-                                                                    ),
-                                                                  ),
-                                                                  DataColumn(
-                                                                    label: Text(
-                                                                      'Test Name',
-                                                                      style:
-                                                                          _headerTextStyle(),
-                                                                    ),
-                                                                  ),
-                                                                  DataColumn(
-                                                                    label: Text(
-                                                                      'Price',
-                                                                      style:
-                                                                          _headerTextStyle(),
-                                                                    ),
-                                                                  ),
-                                                                  DataColumn(
-                                                                    label: Text(
-                                                                      'Action',
-                                                                      style:
-                                                                          _headerTextStyle(),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                                rows: paramProvider
-                                                                    .cart!
-                                                                    .asMap()
-                                                                    .entries
-                                                                    .map((entry) {
-                                                                  int index =
-                                                                      entry.key;
-                                                                  var param =
-                                                                      entry.value;
-
-                                                                  return DataRow(
-                                                                    cells: <DataCell>[
-                                                                      DataCell(
-                                                                        Text(
-                                                                          '${index + 1}',
+                                                child:
+                                                    paramProvider.cart!.isEmpty
+                                                        ? Center(
+                                                            child: Text(
+                                                                "No tests selected"), // Show message if no items
+                                                          )
+                                                        : Container(
+                                                            constraints:
+                                                                BoxConstraints(
+                                                              minHeight: 0,
+                                                              // Allow shrinking when few items
+                                                              maxHeight:
+                                                                  250, // Max height to enable scrolling
+                                                            ),
+                                                            child: Scrollbar(
+                                                              thumbVisibility:
+                                                                  true,
+                                                              // Show scrollbar when scrolling
+                                                              child:
+                                                                  SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis.vertical,
+                                                                // Enables vertical scrolling
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  // Enables horizontal scrolling if needed
+                                                                  child:
+                                                                      DataTable(
+                                                                    headingRowColor:
+                                                                        MaterialStateProperty.all(
+                                                                            Colors.blue),
+                                                                    columnSpacing:
+                                                                        MediaQuery.of(context).size.width *
+                                                                            0.02,
+                                                                    columns: [
+                                                                      DataColumn(
+                                                                        label:
+                                                                            Text(
+                                                                          'Sr. No.',
                                                                           style:
-                                                                              _rowTextStyle(),
+                                                                              _headerTextStyle(),
                                                                         ),
                                                                       ),
-                                                                      DataCell(
-                                                                        SizedBox(
-                                                                          width: MediaQuery.of(context).size.width *
-                                                                              0.4,
-                                                                          child:
-                                                                              Text(
-                                                                            param
-                                                                                .parameterName,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                _rowTextStyle(),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      DataCell(
-                                                                        Text(
-                                                                          param
-                                                                              .deptRate
-                                                                              .toString(),
+                                                                      DataColumn(
+                                                                        label:
+                                                                            Text(
+                                                                          'Test Name',
                                                                           style:
-                                                                              _rowTextStyle(),
+                                                                              _headerTextStyle(),
                                                                         ),
                                                                       ),
-                                                                      DataCell(
-                                                                        IconButton(
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons
-                                                                                .delete,
-                                                                            color:
-                                                                                Colors.red,
-                                                                          ),
-                                                                          onPressed:
-                                                                              () {
-                                                                            if (paramProvider.cart!.length >
-                                                                                1) {
-                                                                              paramProvider.removeFromCart(param);
-                                                                              if (paramProvider.isParam) {
-                                                                                var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
-                                                                                paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId);
-                                                                                paramProvider.selectedLab = "";
-                                                                              }
-                                                                            } else {
-                                                                              ToastHelper.showSnackBar(context,
-                                                                                  "Parameter cannot be empty");
-                                                                            }
-                                                                          },
+                                                                      DataColumn(
+                                                                        label:
+                                                                            Text(
+                                                                          'Price',
+                                                                          style:
+                                                                              _headerTextStyle(),
+                                                                        ),
+                                                                      ),
+                                                                      DataColumn(
+                                                                        label:
+                                                                            Text(
+                                                                          'Action',
+                                                                          style:
+                                                                              _headerTextStyle(),
                                                                         ),
                                                                       ),
                                                                     ],
-                                                                  );
-                                                                }).toList(),
+                                                                    rows: paramProvider
+                                                                        .cart!
+                                                                        .asMap()
+                                                                        .entries
+                                                                        .map(
+                                                                            (entry) {
+                                                                      int index =
+                                                                          entry
+                                                                              .key;
+                                                                      var param =
+                                                                          entry
+                                                                              .value;
+
+                                                                      return DataRow(
+                                                                        cells: <DataCell>[
+                                                                          DataCell(
+                                                                            Text(
+                                                                              '${index + 1}',
+                                                                              style: _rowTextStyle(),
+                                                                            ),
+                                                                          ),
+                                                                          DataCell(
+                                                                            SizedBox(
+                                                                              width: MediaQuery.of(context).size.width * 0.4,
+                                                                              child: Text(
+                                                                                param.parameterName,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: _rowTextStyle(),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          DataCell(
+                                                                            Text(
+                                                                              param.deptRate.toString(),
+                                                                              style: _rowTextStyle(),
+                                                                            ),
+                                                                          ),
+                                                                          DataCell(
+                                                                            IconButton(
+                                                                              icon: Icon(
+                                                                                Icons.delete,
+                                                                                color: Colors.red,
+                                                                              ),
+                                                                              onPressed: () {
+                                                                                if (paramProvider.cart!.length > 1) {
+                                                                                  paramProvider.removeFromCart(param);
+                                                                                  if (paramProvider.isParam) {
+                                                                                    var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
+                                                                                    paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId);
+                                                                                    paramProvider.selectedLab = "";
+                                                                                  }
+                                                                                } else {
+                                                                                  ToastHelper.showSnackBar(context, "Parameter cannot be empty");
+                                                                                }
+                                                                              },
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    }).toList(),
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ),
                                               ),
 
                                               Divider(),
@@ -284,14 +278,16 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         style: TextStyle(
                                                             color: Colors.green,
                                                             fontWeight:
-                                                                FontWeight.bold)),
+                                                                FontWeight
+                                                                    .bold)),
                                                     SizedBox(width: 20),
                                                     Text(
                                                         "₹ ${paramProvider.calculateTotal()} /-",
                                                         style: TextStyle(
                                                             color: Colors.green,
                                                             fontWeight:
-                                                                FontWeight.bold)),
+                                                                FontWeight
+                                                                    .bold)),
                                                   ],
                                                 ),
                                               ),
@@ -590,7 +586,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                             : Column(
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            right: 8.0),
                                                     child: CustomDropdown(
                                                       title: "Select Lab *",
                                                       value: paramProvider
@@ -646,7 +645,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                   value);
                                                         }
                                                       },
-                                                      appBarTitle: "Select Lab ",
+                                                      appBarTitle:
+                                                          "Select Lab ",
                                                     ),
                                                   ),
                                                   Visibility(
@@ -1083,10 +1083,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     int parsedSource =
         int.tryParse(masterProvider.selectedWaterSource?.toString() ?? '') ?? 0;
 
-    int  selecteTypeId ;
-    if(paramProvider.isLab){
+    int selecteTypeId;
+    if (paramProvider.isLab) {
       selecteTypeId = int.parse(paramProvider.selectedLab!);
-    }else{
+    } else {
       selecteTypeId = paramProvider.selectedParamLabId!;
     }
 
