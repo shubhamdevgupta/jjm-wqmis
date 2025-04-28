@@ -352,24 +352,6 @@ class Masterprovider extends ChangeNotifier {
       }
 
 
- /*     if (waterSource.isNotEmpty) {
-        // Case: Only 1 item + --Select-- and it's valid (not '0')
-        if (waterSource.length == 2 && waterSource[1].locationId != "0") {
-          selectedWaterSource = waterSource[1].locationId;
-        }
-        // Case: Only 1 item + --Select-- and it's 'Data Not Available'
-        else if (waterSource.length == 2 && waterSource[1].locationId == "0") {
-          selectedWaterSource = "0";
-        }
-        // Case: Only 1 item in list and it's 'Data Not Available'
-        else if (waterSource.length == 1 && waterSource[0].locationId == "0") {
-          selectedWaterSource = "0";
-        } else {
-          selectedWaterSource = null;
-        }
-      } else {
-        selectedWaterSource = null;
-      }*/
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -383,34 +365,19 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      final fetchedList =
-          await _masterRepository.fetchWTPlist(stateId, schemeId);
+      final fetchedList = await _masterRepository.fetchWTPlist(stateId, schemeId);
 
 
-      if (fetchedList.isNotEmpty) {
-        wtpList = fetchedList;
-
-        if (wtpList.length == 1 && wtpList.first.wtpId == "0") {
-          // Case: Only one item and it's "Data Not Available"
-          selectedWtp = "0";
-        } else if (wtpList.length == 2 && wtpList[1].wtpId != 0) {
-          // Case: Only one valid item, auto-select it
-          selectedWtp = wtpList[1].wtpId;
-        } else if (wtpList.length == 2 && wtpList[1].wtpId == "0") {
-          // Case: Two items and second one is "Data Not Available"
-          selectedWtp = "0";
-        } else {
-          // General case: Check if current selection is still valid
-          if (wtpList.any((wtp) => wtp.wtpId == selectedWtp)) {
-            selectedWtp = selectedWtp;
-          } else {
-            selectedWtp = null; // Let the user select
-          }
+      if(fetchedList.status==1){
+        wtpList=fetchedList.result;
+        if(wtpList.length==1){
+          selectedWtp=wtpList.first.wtpId;
         }
-      } else {
-        selectedWtp = null;
-        wtpList = [];
+      }else{
+        errorMsg=fetchedList.message;
       }
+      baseStatus=fetchedList.status;
+
     } catch (e) {
       debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
