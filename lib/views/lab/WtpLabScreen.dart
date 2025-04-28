@@ -27,7 +27,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
     final paramProvider=  Provider.of<ParameterProvider>(context, listen: false);
-    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+    paramProvider.fetchWTPLab(masterProvider);
     paramProvider.clearData();
     });
   }
@@ -52,6 +52,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                       provider.isLab=true;
                       provider.isParam=false;
                       if (provider.cart!.isNotEmpty) {
+                        provider.fetchLabIncharge(int.parse(provider.selectedWtpLab!));
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -205,17 +206,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                               );
                             }).toList(),
                             onChanged: (value) {
-
-                              provider.cart!.clear();
-                              provider.setSelectedWtpLab(value);
-
-                                provider.fetchAllParameter(
-                                 value!,
-                                  masterProvider.selectedStateId ?? "0",
-                                  "0",
-                                  _localStorage.getString(AppConstants.prefRegId).toString(),
-                                  "0",
-                                );
+                            provider.proccessOnChanged(value!,masterProvider);
                             },
                           ),
                           SizedBox(
