@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
@@ -10,6 +12,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
+import '../utils/Showerrormsg.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
   const SubmitSampleScreen({super.key});
@@ -362,107 +365,117 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Card(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              // Rounded corners
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.3),
-                                                  // Shadow color
-                                                  blurRadius: 10,
-                                                  // Shadow blur
-                                                  offset: const Offset(
-                                                      0, 5), // Shadow position
-                                                ),
-                                              ],
-                                            ),
-                                            padding: const EdgeInsets.all(8),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                // Section 1: Lab Incharge Details
-                                                Text(
-                                                  "Lab Incharge Details",
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.blueGrey,
+                                        paramProvider.baseStatus == 0 ? AppTextWidgets.errorText(paramProvider.errorMsg)
+                                            : Card(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    // Rounded corners
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.3),
+                                                        // Shadow color
+                                                        blurRadius: 10,
+                                                        // Shadow blur
+                                                        offset: const Offset(0,
+                                                            5), // Shadow position
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // Section 1: Lab Incharge Details
+                                                      Text(
+                                                        "Lab Incharge Details",
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Colors.blueGrey,
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                          thickness: 1,
+                                                          color: Colors
+                                                              .grey.shade300),
+                                                      // Divider for separation
+                                                      SizedBox(height: 8),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.person,
+                                                              color: Colors
+                                                                  .blueAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.business,
+                                                              color:
+                                                                  Colors.green),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color: Colors
+                                                                  .redAccent),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Divider(
-                                                    thickness: 1,
-                                                    color:
-                                                        Colors.grey.shade300),
-                                                // Divider for separation
-                                                SizedBox(height: 8),
-
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.person,
-                                                        color:
-                                                            Colors.blueAccent),
-                                                    SizedBox(width: 8),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.business,
-                                                        color: Colors.green),
-                                                    SizedBox(width: 8),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.location_on,
-                                                        color:
-                                                            Colors.redAccent),
-                                                    SizedBox(width: 8),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                              ),
+                                        paramProvider.baseStatus == 0 ? AppTextWidgets.errorText("No Geo Location Found!")
+                                            :
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
