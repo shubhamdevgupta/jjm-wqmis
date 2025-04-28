@@ -180,7 +180,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
               },
             ),
             title: Text(
-              // getTitleFromFlag("flag"),
               flag,
               style: AppStyles.appBarTitle,
             ),
