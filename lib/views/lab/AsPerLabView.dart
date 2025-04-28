@@ -37,6 +37,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
         builder: (context, provider, child) {
           return Container(
             child: Scaffold(
+              backgroundColor: Colors.transparent,
               floatingActionButton: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -94,7 +95,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                     ),
                 ],
               ),
-              backgroundColor: Colors.transparent,
+
               body: Stack(
                 children: [
                   SingleChildScrollView(

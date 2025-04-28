@@ -164,168 +164,206 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Circular user image
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundImage:
-                            const AssetImage('assets/user.png'),
-                            // Replace with dynamic user profile image path
-                            backgroundColor: Colors.grey[200], // Fallback color
+                          // Profile Picture
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(2), // Border-like effect
+                            child: CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Colors.grey[100],
+                              backgroundImage: const AssetImage('assets/user.png'),
+                            ),
                           ),
-                          const SizedBox(width: 16), // Space between image and text
+                          const SizedBox(width: 16),
 
-                          // Text column
+                          // User Info
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Welcome message
+                                // Welcome Text
                                 Text(
-                                  '${AppConstants.welcome}, $userName',
-                                  // Replace with dynamic username
+                                  '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blue[800],
-                                    // Slightly dark blue color for warmth
+                                    fontSize: 15,
+                                    color: Colors.grey.shade700,
                                     fontFamily: 'Poppins',
-                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  userName,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
 
-                                const SizedBox(height: 8), // Space between lines
+                                const SizedBox(height: 12),
 
-                                // Phone Row
+                                // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
-                                        color: Colors.teal, size: 20),
+                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
-                                    Text(
-                                      UserDept == "4"
-                                          ? 'Departmental Official'
-                                          : UserDept == "8"
-                                          ? 'DWSM'
-                                          : 'Unknown Department', // Fallback text if needed
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // Phone Row
-
-                                const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.phone_android,
-                                        color: Colors.teal, size: 20),
-                                    // Using an icon for consistency
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      '$mobile',
-                                      // Replace with dynamic phone number
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
+                                    Flexible(
+                                      child: Text(
+                                        UserDept == "4"
+                                            ? 'Departmental Official'
+                                            : UserDept == "8"
+                                            ? 'DWSM'
+                                            : 'Unknown Department',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
 
+                                const SizedBox(height: 6),
+
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: Text(
+                                        mobile,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 25),
 
-                  Center(child: const Text("All figures are based on current year data.",style: TextStyle(fontSize: 15,color: Colors.red),)),
 
                     const SizedBox(height: 15),
-                    GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 20.0,
-                      mainAxisSpacing: 20.0,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        _buildDashboardCard(
-                          title: AppConstants.totalSamplesSubmitted,
-                          value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                          icon: Icons.analytics,
-                          gradientColors: [
-                            Colors.lightBlueAccent,
-                            Colors.blue
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
-                          },
+
+
+
+                    Container(  padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFe0f7fa), Color(0xFFffffff)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalPhysicalSubmitted,
-                          value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                          icon: Icons.hourglass_empty,
-                          gradientColors: [
-                            const Color(0xFFFCE889),
-                            const Color(0xFFFFAA00)
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
-                          },
-                        ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalSampleTested,
-                          value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                          icon: Icons.check_circle,
-                          gradientColors: [
-                            Colors.lightGreen,
-                            Colors.green
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
-                          },
-                        ),
-                        _buildDashboardCard(
-                          title: AppConstants.totalRetest,
-                          value: '${dashboardProvider.dashboardData!.totalRetest}',
-                          icon: Icons.refresh,
-                          gradientColors: [
-                            Colors.redAccent,
-                            Colors.red
-                          ],
-                          onTap: () {
-                            Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                          },
-                        ),
-                      ],
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+
+                      child: Column(
+                        children: [
+
+                          GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20.0,
+                            mainAxisSpacing: 15.0,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              _buildMenuCard(
+                                title: AppConstants.totalSamplesSubmitted,
+                                icon: Icons.analytics,
+                                gradientColors: [Colors.lightBlue, Colors.blueAccent],
+                                value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalPhysicalSubmitted,
+                                icon: Icons.attach_money,
+                                gradientColors: [Colors.amber, Colors.orange],
+                                value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
+                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalSampleTested,
+                                icon: Icons.check_circle,
+                                gradientColors: [Colors.teal, Colors.green],
+                                value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
+                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalRetest,
+                                icon: Icons.refresh,
+                                gradientColors: [Colors.red, Colors.deepOrange],
+                                value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                },
+                              ),
+
+
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Center(
+                            child: const Text(
+                              "All figures are based on current year data.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
@@ -380,57 +418,86 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
-  Widget _buildDashboardCard({
+  Widget _buildMenuCard({
     required String title,
-    required String value,
     required IconData icon,
-    required List<Color> gradientColors, // Gradient colors as List
-    required VoidCallback onTap, // Added onTap callback
+    required String value,
+    required VoidCallback onTap,
+    required List<Color> gradientColors,
   }) {
     return GestureDetector(
-      onTap: onTap, // Trigger onTap when the card is tapped
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(0, 4),
+              blurRadius: 8,
+              offset: Offset(2, 4),
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.2),
-              child: Icon(icon, color: Colors.white, size: 30),
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(
+                icon,
+                color: Colors.white.withOpacity(0.8),
+                size: 28,
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: AppStyles.setTextStyle(24, FontWeight.bold, Colors.white),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
             ),
-
-            const SizedBox(height: 4),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppStyles.setTextStyle(14, FontWeight.w400, Colors.white),
-
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                value,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
 
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
