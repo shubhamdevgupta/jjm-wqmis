@@ -186,18 +186,27 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Circular user image
+                          CircleAvatar(
+                            radius: 32,
+                            backgroundImage:
+                            const AssetImage('assets/user.png'),
+                            // Replace with dynamic user profile image path
+                            backgroundColor: Colors.grey[200], // Fallback color
+                          ),
+                          const SizedBox(width: 16), // Space between image and text
 
+                          // Text column
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Welcome message
                                 Text(
-                                  textAlign: TextAlign.center,
                                   '${AppConstants.welcome}, $userName',
                                   // Replace with dynamic username
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.blue[800],
                                     // Slightly dark blue color for warmth
@@ -207,21 +216,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 ),
 
                                 const SizedBox(height: 8), // Space between lines
+
+                                // Phone Row
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Icon(Icons.account_balance_sharp,
                                         color: Colors.teal, size: 20),
                                     const SizedBox(width: 6),
                                     Text(
-                                      textAlign: TextAlign.center,
                                       UserDept == "4"
                                           ? 'Departmental Official'
                                           : UserDept == "8"
                                           ? 'DWSM'
                                           : 'Unknown Department', // Fallback text if needed
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -232,18 +241,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
                                 const SizedBox(height: 5),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Icon(Icons.phone_android,
                                         color: Colors.teal, size: 20),
                                     // Using an icon for consistency
                                     const SizedBox(width: 6),
                                     Text(
-                                      textAlign: TextAlign.center,
                                       '$mobile',
                                       // Replace with dynamic phone number
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w500,
                                       ),
