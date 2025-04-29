@@ -1128,31 +1128,69 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       "M",
     );
     if (provider.sampleresponse!.status == 1) {
+
       showDialog(
         context: context,
         barrierDismissible: false, // Disable tap outside to dismiss
-        builder: (BuildContext context) {
-          return WillPopScope(
-            onWillPop: () async => false, // Disable back button
-            child: AlertDialog(
-              title: Text("Success"),
-              content: Text(provider.sampleresponse!.message),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close dialog
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/dashboard',
-                      (route) => false, // Clear back stack
-                    );
-                  },
-                  child: Text("OK"),
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          titlePadding: const EdgeInsets.only(top: 20),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
+          title: Column(
+            children: [
+              Image.asset(
+                'assets/check.png', // <-- Your success image (PNG) path here
+                height: 60,
+                width: 80,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Success!",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
                 ),
-              ],
+              ),
+            ],
+          ),
+          content: Text(
+            provider.sampleresponse?.message ?? 'Operation completed successfully!',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
             ),
-          );
-        },
+          ),
+          actions: [
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Close dialog
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/dashboard',
+                        (route) => false, // Clear back stack
+                  );
+                },
+                child: const Text(
+                  "OK",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
 
       masterProvider.clearData();
