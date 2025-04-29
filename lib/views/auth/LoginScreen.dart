@@ -70,19 +70,6 @@ class _LoginpageState extends State<Loginscreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Title
-                                Center(
-                                  child: Text(
-                                    'Departmental Official',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                      color: Appcolor.grey,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-
                                 // Mobile Number Field
                                 Text('Mobile Number / Username',
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),

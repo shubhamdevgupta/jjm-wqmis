@@ -3,15 +3,17 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
 
 import '../models/DWSM/SchoolinfoResponse.dart';
 
 import '../models/Wtp/WtpLabResponse.dart';
 
+import '../utils/AppConstants.dart';
 import '../utils/LocationUtils.dart';
-
 
 import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
@@ -20,6 +22,7 @@ class ParameterProvider with ChangeNotifier {
   final Lapparameterrepository _lapparameterrepository =
       Lapparameterrepository();
 
+  LocalStorageService localStorage = LocalStorageService();
   bool isLoading = false;
 
   List<Parameterresponse> parameterList = [];
@@ -33,78 +36,84 @@ class ParameterProvider with ChangeNotifier {
   List<Parameterresponse>? cart = [];
 
   List<Alllabresponse> labList = [];
-  String? selectedLab="";
+  String? selectedLab = "";
   String errorMsg = '';
 
-  bool isLabSelected=false;
+  bool isLabSelected = false;
   Labinchargeresponse? labIncharge;
 
-  List<SchoolResult> Schoolinfo= [] ;
+  List<SchoolResult> Schoolinfo = [];
+
   int? selectedSchoolId;
   String? selectedSchoolName;
 
-  bool isLab=true;
-  bool isParam=true;
+  bool isLab = true;
+  bool isParam = true;
   double? _currentLatitude;
   double? _currentLongitude;
 
   double? get currentLatitude => _currentLatitude;
+
   double? get currentLongitude => _currentLongitude;
 
-
   List<Lab>? _labResponse;
+
   List<Lab>? get labResponse => _labResponse;
 
   int? _selectedParamLabId;
   String? _selectedParamLabName;
 
   int? get selectedParamLabId => _selectedParamLabId;
+
   String? get selectedParamLabName => _selectedParamLabName;
 
   WtpLabResponse? _wtpLabModel;
+
   WtpLabResponse? get wtpLabModel => _wtpLabModel;
 
-  List<WtpLab>  wtpLab =[];
+  List<WtpLab> wtpLab = [];
   String? selectedWtpLab;
 
   SchoolinfoResponse? _schoolinfoResponse;
+
   SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
 
-  List<SchoolResult>  schoolResult =[];
+  List<SchoolResult> schoolResult = [];
   String? selectedSchoolResult;
 
-   int baseStatus = 0;
+  int baseStatus = 0;
 
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid, String gpid, String villageid, String isall) async {
+  Future<void> fetchAllLabs(String StateId, String districtId, String blockid,
+      String gpid, String villageid, String isall) async {
     print("lab call in parameter provider");
     isLoading = true;
     try {
-     final  rawLabList = await _lapparameterrepository.fetchAllLab(
+      final rawLabList = await _lapparameterrepository.fetchAllLab(
           StateId, districtId, blockid, gpid, villageid, isall);
-      if(rawLabList.status==1){
-        labList=rawLabList.result;
-      }else{
-        errorMsg=rawLabList.message;
+      if (rawLabList.status == 1) {
+        labList = rawLabList.result;
+      } else {
+        errorMsg = rawLabList.message;
       }
     } catch (e, stackTrace) {
       log('Error in fetching lab list provider: $e');
       log('StackTrace: $stackTrace');
-    }
-    finally {
+    } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> fetchAllParameter(String labid, String stateid, String sid, String reg_id, String parameteetype) async {
+  Future<void> fetchAllParameter(String labid, String stateid, String sid,
+      String reg_id, String parameteetype) async {
     isLoading = true;
     try {
       final rawParameterList = await _lapparameterrepository.fetchAllParameter(
           labid, stateid, sid, reg_id, parameteetype);
-      if(rawParameterList.status==1){
-        parameterList=rawParameterList.result;
-      }else{
-        errorMsg=rawParameterList.message;
+      if (rawParameterList.status == 1) {
+        parameterList = rawParameterList.result;
+      } else {
+        errorMsg = rawParameterList.message;
       }
     } catch (e) {
       debugPrint('Error in fetching All Parameter list: $e');
@@ -120,10 +129,13 @@ class ParameterProvider with ChangeNotifier {
 
     try {
       labIncharge = await _lapparameterrepository.fetchLabIncharge(labId);
+    //  baseStatus = labIncharge.
       if (labIncharge == null) {
         throw ApiException("Lab Incharge data is null");
+      }else{
+        baseStatus = labIncharge!.status;
+        errorMsg = labIncharge!.message;
       }
-
     } catch (e) {
       debugPrint(" Error fetching Lab Incharge: $e");
     } finally {
@@ -131,12 +143,15 @@ class ParameterProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
+
+  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
+      int Gpid, int Villageid, int type) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final response = await _lapparameterrepository.fetchSchoolInfo(Stateid, Districtid, Blockid, Gpid, Villageid, type);
+      final response = await _lapparameterrepository.fetchSchoolInfo(
+          Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
       if (response != null) {
         _schoolinfoResponse = response;
@@ -144,10 +159,13 @@ class ParameterProvider with ChangeNotifier {
         if (_schoolinfoResponse!.status == 1) {
           schoolResult = _schoolinfoResponse!.result;
 
-          if (schoolResult.any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
-            selectedSchoolResult = selectedSchoolResult; // Keep current selected if still valid
+          if (schoolResult
+              .any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
+            selectedSchoolResult =
+                selectedSchoolResult; // Keep current selected if still valid
           } else if (schoolResult.isNotEmpty) {
-            selectedSchoolResult = schoolResult.first.name; // Reset if invalid or select first
+            selectedSchoolResult =
+                schoolResult.first.name; // Reset if invalid or select first
           } else {
             selectedSchoolResult = ''; // Handle if list is empty
           }
@@ -169,8 +187,8 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  void setSelectedSchool(String? value){
-    selectedSchoolResult=value;
+  void setSelectedSchool(String? value) {
+    selectedSchoolResult = value;
     notifyListeners();
   }
 
@@ -190,7 +208,8 @@ class ParameterProvider with ChangeNotifier {
           _currentLatitude = locationData['latitude'];
           _currentLongitude = locationData['longitude'];
 
-          debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
+          debugPrint(
+              'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
         } else {
           debugPrint("Location fetch failed (locationData is null)");
         }
@@ -205,15 +224,14 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-
-
   /// Fetch Labs from API
   Future<void> fetchParamLabs(String stateId, String parameterIds) async {
     isLoading = true;
-    notifyListeners();  // Notify before starting the fetch
+    notifyListeners(); // Notify before starting the fetch
 
     try {
-      var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
+      var response =
+          await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
 
       /*if (response != null) {
         _labResponse = response;
@@ -226,11 +244,11 @@ class ParameterProvider with ChangeNotifier {
           labs: [], // Ensure labs list is empty
         );
       }*/
-      if(response.status==1){
-       _labResponse= response.result;
-     _selectedParamLabId = response.result.first.labId;
-     fetchLabIncharge(_selectedParamLabId!);
-      }else{
+      if (response.status == 1) {
+        _labResponse = response.result;
+        _selectedParamLabId = response.result.first.labId;
+        fetchLabIncharge(_selectedParamLabId!);
+      } else {
         errorMsg = response.message;
       }
 
@@ -239,40 +257,29 @@ class ParameterProvider with ChangeNotifier {
       debugPrint("Error fetching Lab Incharge: $e");
     } finally {
       isLoading = false;
-      notifyListeners();  // Notify at the end of the fetch process
+      notifyListeners(); // Notify at the end of the fetch process
     }
   }
 
-
-  Future<void> fetchWTPLab(String stateId, String wtpId) async {
+  Future<void> fetchWTPLab(Masterprovider masterProvider) async {
     isLoading = true;
     notifyListeners();
-
+// masterProvider.selectedStateId!, masterProvider.selectedWtp!
     try {
-      final response = await _lapparameterrepository.fetchWtpLabs(stateId, wtpId);
+      final response = await _lapparameterrepository.fetchWtpLabs(
+          masterProvider.selectedStateId!, masterProvider.selectedWtp!);
 
-      if (response != null) {
-        _wtpLabModel = response;
-
-        if (_wtpLabModel!.status == 1) {
-          wtpLab = _wtpLabModel!.result;
-
-          if (wtpLab.any((wtp) => wtp.labId == selectedWtpLab)) {
-            selectedWtpLab = selectedWtpLab; // Keep current selected if still valid
-          } else if (wtpLab.isNotEmpty) {
-            selectedWtpLab = wtpLab.first.labId; // Reset if invalid or select first
-          } else {
-            selectedWtpLab = ''; // Handle if list is empty
-          }
-        } else {
-          debugPrint("API Message: ${_wtpLabModel!.message}");
-          _wtpLabModel = WtpLabResponse(
-            status: 0,
-            message: _wtpLabModel!.message,
-            result: [], // Ensure empty labs list
-          );
+      if (response.status == 1) {
+        wtpLab = response.result;
+        if (wtpLab.length == 1) {
+          selectedWtpLab = response.result.first.labId;
+          isLabSelected = true;
+          proccessOnChanged(selectedWtpLab!, masterProvider);
         }
+      } else {
+        errorMsg = response.message;
       }
+      baseStatus = response.status;
     } catch (e) {
       debugPrint("Error fetching WTP Labs: $e");
       _wtpLabModel = null;
@@ -282,16 +289,15 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  void setSelectedWtpLab(String? value){
-    selectedLab=value;
-    selectedWtpLab=value;
+  void setSelectedWtpLab(String? value) {
+    selectedLab = value;
+    selectedWtpLab = value;
     isLabSelected = value != null && value.isNotEmpty;
     notifyListeners();
   }
 
   /// Set Selected Lab ID and Name
   void setSelectedParamLabs(int labId, String labName) {
-
     _selectedParamLabId = labId;
     _selectedParamLabName = labName;
     notifyListeners();
@@ -317,6 +323,7 @@ class ParameterProvider with ChangeNotifier {
     parameterType = value;
     notifyListeners();
   }
+
   void removeFromCart(Parameterresponse param) {
     print("delted value---$param");
     cart!.remove(param);
@@ -327,16 +334,15 @@ class ParameterProvider with ChangeNotifier {
     return cart!.fold(0.0, (sum, item) => sum + item.deptRate);
   }
 
-  void toggleCart(Parameterresponse? parameter ) {
-    if (parameter == null)
-      return; // Null safety check
+  void toggleCart(Parameterresponse? parameter) {
+    if (parameter == null) return; // Null safety check
 
     if (cart!.any((item) => item.parameterId == parameter.parameterId)) {
-      cart!.removeWhere(
-          (item) => item.parameterId == parameter.parameterId);
-    } else{
+      cart!.removeWhere((item) => item.parameterId == parameter.parameterId);
+    } else {
       cart!.add(parameter);
-    }/* if(isLab) {
+    }
+    /* if(isLab) {
       cart!.add(parameter);
       final labId = selectedLab?.isNotEmpty == true
           ? selectedLab
@@ -347,12 +353,13 @@ class ParameterProvider with ChangeNotifier {
       }
     }else{
       cart!.add(parameter);
-    *//*  var paramterId=cart!.sublist(0,cart!.length).join(",");
+    */ /*  var paramterId=cart!.sublist(0,cart!.length).join(",");
       print('card selected param-------- ${cart!.sublist(0,cart!.length).join(",")}');
-      fetchParamLabs("31",paramterId);*//*
+      fetchParamLabs("31",paramterId);*/ /*
     }*/
     notifyListeners(); // Notify UI of changes
   }
+
   void clearData() {
     isLoading = false;
 
@@ -371,7 +378,7 @@ class ParameterProvider with ChangeNotifier {
     labIncharge = null;
 
     isLab = true;
-    isParam=false;
+    isParam = false;
     _currentLatitude = null;
     _currentLongitude = null;
 
@@ -386,4 +393,13 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void proccessOnChanged(String value, Masterprovider masterPr) {
+    cart!.clear();
+    setSelectedWtpLab(value);
+
+    fetchAllParameter(
+      value!, masterPr.selectedStateId ?? "0", "0", localStorage.getString(AppConstants.prefRegId).toString(), "0",
+    );
+
+  }
 }

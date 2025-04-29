@@ -27,8 +27,8 @@ class _WtpLabScreen extends State<Wtplabscreen> {
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
     final paramProvider=  Provider.of<ParameterProvider>(context, listen: false);
-    paramProvider.isLab=true;
-    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+    paramProvider.fetchWTPLab(masterProvider);
+    paramProvider.clearData();
     });
   }
 
@@ -49,7 +49,10 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                     onPressed: () async{
                       await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
+                      provider.isLab=true;
+                      provider.isParam=false;
                       if (provider.cart!.isNotEmpty) {
+                        provider.fetchLabIncharge(int.parse(provider.selectedWtpLab!));
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -67,7 +70,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a test."),
+                            content: Text("Please Select  test."),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -202,26 +205,8 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                 ),
                               );
                             }).toList(),
-                            onChanged: (selectedLabId) {
-                              if (selectedLabId == null) return;
-
-                              final selectedLab = provider.wtpLab.firstWhere(
-                                    (lab) => lab.labId == selectedLabId,
-                                orElse: () => WtpLab(labId: "0", labName: ''),
-                              );
-
-                              provider.cart!.clear();
-                              provider.setSelectedWtpLab(selectedLab.labId);
-
-                              if (provider.selectedWtpLab != null) {
-                                provider.fetchAllParameter(
-                                  selectedLab.labId!,
-                                  masterProvider.selectedStateId ?? "0",
-                                  "0",
-                                  _localStorage.getString(AppConstants.prefRegId).toString(),
-                                  "0",
-                                );
-                              }
+                            onChanged: (value) {
+                            provider.proccessOnChanged(value!,masterProvider);
                             },
                           ),
                           SizedBox(

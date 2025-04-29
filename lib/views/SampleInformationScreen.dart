@@ -148,84 +148,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             SizedBox(height: 4), // Space between title and dropdown
             // Custom dropdown
-    /*        Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DropdownButtonFormField<String>(
-                value: masterProvider.selectedScheme,
-                decoration: InputDecoration(
-                  labelStyle: TextStyle(color: Colors.black),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: Colors.redAccent, width: 2),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                selectedItemBuilder: (BuildContext context) {
-                  return masterProvider.schemes.map((scheme) {
-                    return Text(
-                      scheme.schemeName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    );
-                  }).toList();
-                },
-                items: masterProvider.schemes.map((scheme) {
-                  return DropdownMenuItem<String>(
-                    value: scheme.schemeId.toString(),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.7, // make wide enough to show long names
-                      child: Text(
-                        scheme.schemeName,
-                        softWrap: true,
-                        maxLines: 5,
-                        overflow: TextOverflow.visible,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedScheme(value);
-                  if (masterProvider.selectedWtsfilter == "5") {
-                    masterProvider.fetchWTPList(
-                        masterProvider.selectedStateId!, masterProvider.selectedScheme!);
-                  } else if (masterProvider.selectedWtsfilter == "6") {
-                    masterProvider.setSelectedSubSource(0);
-                    masterProvider.setSelectedWTP("0");
-                    masterProvider.fetchSourceInformation(
-                      masterProvider.selectedVillage!,
-                      "0",
-                      "0",
-                      masterProvider.selectedWtsfilter!,
-                      masterProvider.selectedSubSource.toString(),
-                      masterProvider.selectedWtp!,
-                      masterProvider.selectedStateId!,
-                      masterProvider.selectedScheme!,
-                    );
-                  }
-                },
-                dropdownColor: Colors.white,
-                isExpanded: true,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-                icon: Icon(Icons.arrow_drop_down, color: Colors.black),
-                borderRadius: BorderRadius.circular(5),
-                hint: Text('-select-', style: TextStyle(color: Colors.black54)),
-              ),
-            )*/
             CustomDropdown(
               value: masterProvider.selectedScheme,
               items: masterProvider.schemes.map((scheme) {
@@ -302,7 +224,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  print("valeeeeeee $value");
                   if (value != null && value != "0") {
                     masterProvider.setSelectedWaterSourcefilter("");
                     masterProvider.setSelectedWaterSourcefilter(value);
@@ -615,6 +536,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               child: ElevatedButton(
                                 onPressed: () async {
                                   if (validateWtpWaterFields(masterProvider)) {
+                                //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
