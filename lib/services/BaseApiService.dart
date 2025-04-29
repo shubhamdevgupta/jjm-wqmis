@@ -3,17 +3,29 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/UpdateProvider.dart';
 import '../repository/MasterRepository.dart';
 import '../utils/CustomException.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/UpdateDialog.dart';
 
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
   static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
 
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
+
+  Future<void> checkAndPromptUpdate(BuildContext context) async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+    if (isAvailable) {
+      final info = await _updateViewModel.getUpdateInfo();
+      DialogUtils.showUpdateDialog(context, info!);
+    }
+  }
 
   // POST Request Function
   Future<dynamic> post(
