@@ -19,10 +19,7 @@ class DialogUtils {
             ],
           ),
           actions: [
-            TextButton(
-              child: Text('Later'),
-              onPressed: () => Navigator.pop(context),
-            ),
+
             ElevatedButton(
               child: Text('Update Now'),
               onPressed: () async {
