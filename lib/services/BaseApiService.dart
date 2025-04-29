@@ -23,28 +23,20 @@ class BaseApiService {
   }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
-    // Ensure headers are not null and set default Content-Type
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
-    // Log the request
     log('POST Request: URL: $url');
     log('Headers: ${headers.toString()}');
     try {
       await _checkConnectivity();
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body, // Sending raw JSON body
-      );
+      final response = await http.post(url, headers: headers, body: body,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
       }
 
-      // Logging the full response for better debugging
-      log('Response Status Code: ${response.statusCode}');
-      log('Response Headers: ${response.headers}');
+      log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
       log('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
@@ -56,41 +48,28 @@ class BaseApiService {
       log('SocketException: ${e.message}');
       throw NetworkException('No internet connection');
     } catch (e) {
-      log('Exception during POST request: $e');
-      throw Exception('Error during POST request');
+      throw Exception('Api Error :: ');
     }
   }
 
-  Future<dynamic> get(
-      String endpoint, {
-        ApiType apiType = ApiType.ejalShakti, // Default to ejalShakti
-        Map<String, String>? headers,
-      }) async {
+  Future<dynamic> get(String endpoint, {ApiType apiType = ApiType.ejalShakti, Map<String, String>? headers}) async {
     final String baseUrl = getBaseUrl(apiType);
     final Uri url = Uri.parse('$baseUrl$endpoint');
 
-    // Ensure headers are not null and set default Content-Type
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
-    // Log the request
-    log('GET Request: URL: $url');
-    log('Headers: ${headers.toString()}');
+    log('GET Request: URL: $url \n Headers: ${headers.toString()}');
 
     try {
       await _checkConnectivity();
 
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http.get(url, headers: headers,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
       }
-      // Log the response
-      log('Response: ${response.statusCode}');
-      log('Response Body: ${response.body}');
+      log('Response: ${response.statusCode} : Body: ${response.body}');
 
       return _processResponse(response);
     } on SocketException catch (e) {

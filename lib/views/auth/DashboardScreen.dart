@@ -134,12 +134,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   leading: const Icon(Icons.list),
                   title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
                   onTap: () {
-                 //   Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
-
                     Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
-
-
-
                   },
                 ),
                 ListTile(

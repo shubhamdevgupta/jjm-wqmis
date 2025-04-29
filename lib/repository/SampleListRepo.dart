@@ -19,8 +19,6 @@ class SampleListRepo{
 
       final response = await _apiService.get(endpoint);
 
-      log('API Response: $response');
-
       return BaseResponseModel<Sample>.fromJson(response,(json)=>Sample.fromJson(json) );
 
     } catch (e) {
