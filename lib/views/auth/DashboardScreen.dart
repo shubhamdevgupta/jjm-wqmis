@@ -1,12 +1,16 @@
+// views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/dashboardProvider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/Aesen.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/authentication_provider.dart';
-import '../../providers/dashboardProvider.dart';
-import '../../providers/masterProvider.dart';
 import '../../services/LocalStorageService.dart';
-import '../../utils/AppConstants.dart';
-import '../LocationScreen.dart';
+import '../../utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -21,11 +25,18 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String userName = '';
   String mobile = '';
   String stateId = '';
-  String userDept = '';
+  String UserDept = '';
+  final encryption = AesEncryption();
 
   @override
   void initState() {
     super.initState();
+
+    var enc = encryption.encryptText("Beneficiaryname");
+    print("Aesen-----> $enc");
+    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
+    print("Aesen-----> $dep");
+
     getToken();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -33,6 +44,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
       dashboardProvider.loadDashboardData();
+
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
     });
@@ -40,296 +52,466 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
-      decoration: const BoxDecoration(
+      decoration:  const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/header_bg.png'),
-          fit: BoxFit.cover,
-        ),
+            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            AppConstants.appTitle,
-            style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            // Removes the default back button
+            centerTitle: true,
+            title:  Text(
+              AppConstants.appTitle,
+              style: AppStyles.appBarTitle,
+            ),
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: const Icon(Icons.menu, color: Colors.white),
+                  // Drawer icon
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer(); // Open the Navigation Drawer
+                  },
+                );
+              },
+            ),
+            //elevation
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF096DA8), // Dark blue color
+                    Color(0xFF3C8DBC), // Green color
+                  ],
+                  begin: Alignment.topCenter, // Start at the top center
+                  end: Alignment.bottomCenter, // End at the bottom center
+                ),
+              ),
+            ),
+            elevation: 5,
           ),
-          leading: Builder(
-            builder: (context) {
-              return IconButton(
-                icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
+
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration:  const BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:  [
+                      Text(
+                        AppConstants.departmentalUser,
+                        style: AppStyles.appBarTitle,
+                      ),
+                      Text(
+                        stateName,  // Provide a fallback value if null
+                        style: AppStyles.setTextStyle(16, FontWeight.normal, Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.dashboard),
+                  title: Text(AppConstants.dashboard,style: AppStyles.style16NormalBlack,),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.list),
+                  title: Text(AppConstants.submitSampleInfo,style: AppStyles.style16NormalBlack,),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.list),
+                  title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
+                  onTap: () {
+                 //   Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
+
+                    Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
+
+
+
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
+                  onTap: () async {
+                    final authProvider = Provider.of<AuthenticationProvider>(
+                        context,
+                        listen: false);
+                    await authProvider.logoutUser();
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                  },
+                ),
+              ],
+            ),
+          ),
+          body: Consumer<DashboardProvider>(
+            builder: (context, dashboardProvider, child) {
+              final dashboardData = dashboardProvider.dashboardData;
+
+              if (dashboardData == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Profile Picture
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(2), // Border-like effect
+                            child: CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Colors.grey[100],
+                              backgroundImage: const AssetImage('assets/user.png'),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+
+                          // User Info
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Welcome Text
+                                Text(
+                                  '${AppConstants.welcome},',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey.shade700,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  userName,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+
+                                const SizedBox(height: 12),
+
+                                // Department and Phone
+                                Row(
+                                  children: [
+                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: Text(
+                                        UserDept == "4"
+                                            ? 'Departmental Official'
+                                            : UserDept == "8"
+                                            ? 'DWSM'
+                                            : 'Unknown Department',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 6),
+
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                    const SizedBox(width: 6),
+                                    Flexible(
+                                      child: Text(
+                                        mobile,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+
+                    const SizedBox(height: 15),
+
+
+
+                    Container(  padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFe0f7fa), Color(0xFFffffff)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+
+                      child: Column(
+                        children: [
+
+                          GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20.0,
+                            mainAxisSpacing: 15.0,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              _buildMenuCard(
+                                title: AppConstants.totalSamplesSubmitted,
+                                icon: Icons.analytics,
+                                gradientColors: [Colors.lightBlue, Colors.blueAccent],
+                                value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalPhysicalSubmitted,
+                                icon: Icons.attach_money,
+                                gradientColors: [Colors.amber, Colors.orange],
+                                value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
+                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalSampleTested,
+                                icon: Icons.check_circle,
+                                gradientColors: [Colors.teal, Colors.green],
+                                value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
+                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalRetest,
+                                icon: Icons.refresh,
+                                gradientColors: [Colors.red, Colors.deepOrange],
+                                value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                },
+                              ),
+
+
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Center(
+                            child: const Text(
+                              "All figures are based on current year data.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final result = await showDialog<bool>( // <- await and expecting result now
+                            context: context,
+                            builder: (BuildContext context) {
+                              double screenHeight = MediaQuery.of(context).size.height;
+                              double screenwidth = MediaQuery.of(context).size.width;
+
+                              return AlertDialog(
+                                contentPadding: const EdgeInsets.all(10),
+                                content: Container(
+                                  color: Colors.white,
+                                  height: screenHeight * 0.8,
+                                  width: screenwidth * 0.99,
+                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen), // Your widget
+                                ),
+                              );
+                            },
+                          );
+                          if (result == false) {
+                            Provider.of<Masterprovider>(context, listen: false).clearData();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF0468B1),
+                          textStyle: const TextStyle(fontSize: 16),
+                          minimumSize: const Size(300, 50),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              AppConstants.addSample,
+                              style: AppStyles.textStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               );
             },
-          ),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF096DA8), Color(0xFF3C8DBC)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-          elevation: 5,
-        ),
-        drawer: NavigationDrawer(
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppConstants.departmentalUser, style: theme.textTheme.titleLarge?.copyWith(color: Colors.white)),
-                  const SizedBox(height: 8),
-                  Text(stateName, style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white70)),
-                ],
-              ),
-            ),
-            _buildDrawerItem(Icons.dashboard, AppConstants.dashboard, () {
-              Navigator.pop(context);
-            }),
-            _buildDrawerItem(Icons.list, AppConstants.submitSampleInfo, () {
-              Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
-            }),
-            _buildDrawerItem(Icons.list, AppConstants.listOfSamples, () {
-          //    Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
-              Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted});
-            }),
-            _buildDrawerItem(Icons.settings, AppConstants.maintenance, () {}),
-            _buildDrawerItem(Icons.logout, AppConstants.logout, () async {
-              final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
-              await authProvider.logoutUser();
-              Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
-            }),
-          ],
-        ),
-        body: Consumer<DashboardProvider>(
-          builder: (context, dashboardProvider, _) {
-            final dashboardData = dashboardProvider.dashboardData;
-
-            if (dashboardData == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProfileCard(theme),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: Text(
-                      "All figures are based on current year data.",
-                      style: theme.textTheme.bodyMedium?.copyWith(color: Colors.red),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.0,
-                    children: [
-                      _buildDashboardCard(
-                        title: AppConstants.totalSamplesSubmitted,
-                        value: '${dashboardData.totalSamplesSubmitted}',
-                        icon: Icons.analytics,
-                        gradientColors: [Colors.blue.shade300, Colors.blue.shade700],
-                        onTap: () {
-                          Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted});
-                        },
-                      ),
-                      _buildDashboardCard(
-                        title: AppConstants.totalPhysicalSubmitted,
-                        value: '${dashboardData.samplesPhysicallySubmitted}',
-                        icon: Icons.hourglass_empty,
-                        gradientColors: [Colors.amber.shade200, Colors.orange.shade600],
-                        onTap: () {
-                          Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
-                        },
-                      ),
-                      _buildDashboardCard(
-                        title: AppConstants.totalSampleTested,
-                        value: '${dashboardData.totalSamplesTested}',
-                        icon: Icons.check_circle,
-                        gradientColors: [Colors.green.shade300, Colors.green.shade700],
-                        onTap: () {
-                          Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
-                        },
-                      ),
-                      _buildDashboardCard(
-                        title: AppConstants.totalRetest,
-                        value: '${dashboardData.totalRetest}',
-                        icon: Icons.refresh,
-                        gradientColors: [Colors.redAccent, Colors.red],
-                        onTap: () {
-                          Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  Center(
-                    child: FilledButton.icon(
-                      onPressed: () async {
-                        final result = await showDialog<bool>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            double screenHeight = MediaQuery.of(context).size.height;
-                            double screenWidth = MediaQuery.of(context).size.width;
-                            return AlertDialog(
-                              contentPadding: const EdgeInsets.all(8),
-                              content: Container(
-                                height: screenHeight * 0.8,
-                                width: screenWidth * 0.95,
-                                color: Colors.white,
-                                child: const Locationscreen(flag: AppConstants.openSampleInfoScreen),
-                              ),
-                            );
-                          },
-                        );
-                        if (result == false) {
-                          Provider.of<Masterprovider>(context, listen: false).clearData();
-                        }
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF0468B1),
-                        minimumSize: const Size(300, 50),
-                        textStyle: theme.textTheme.titleMedium,
-                      ),
-                      icon: const Icon(Icons.add),
-                      label: const Text(AppConstants.addSample),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+          )),
     );
   }
-
-  Widget _buildProfileCard(ThemeData theme) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundImage: const AssetImage('assets/user.png'),
-              backgroundColor: Colors.grey.shade200,
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${AppConstants.welcome}, $userName',
-                    style: theme.textTheme.titleMedium?.copyWith(color: Colors.blue.shade900),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
-                      const SizedBox(width: 6),
-                      Text(
-                        userDept == "4" ? 'Departmental Official' : userDept == "8" ? 'DWSM' : 'Unknown Department',
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Icon(Icons.phone_android, size: 18, color: Colors.teal),
-                      const SizedBox(width: 6),
-                      Text(mobile, style: theme.textTheme.bodyMedium),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDashboardCard({
+  Widget _buildMenuCard({
     required String title,
-    required String value,
     required IconData icon,
-    required List<Color> gradientColors,
+    required String value,
     required VoidCallback onTap,
+    required List<Color> gradientColors,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
             colors: gradientColors,
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black26,
+              color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: Offset(2, 4),
             ),
           ],
         ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.white24,
-              child: Icon(icon, color: Colors.white, size: 30),
+            Align(
+              alignment: Alignment.topRight,
+              child: Icon(
+                icon,
+                color: Colors.white.withOpacity(0.8),
+                size: 28,
+              ),
             ),
-            const SizedBox(height: 12),
-            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
-            const SizedBox(height: 6),
-            Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.white)),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                value,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.black54),
-      title: Text(title),
-      onTap: onTap,
-    );
-  }
 
-  void getToken() {
+  String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    userDept = _localStorage.getString(AppConstants.prefRoleId) ?? '';
-    debugPrint("Token: $token, State: $stateName");
+    UserDept = _localStorage.getString(AppConstants.prefRoleId) ?? '';
+    print("token-------------- $token ----state naem$stateName");
+    return token;
   }
 }
