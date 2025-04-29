@@ -83,13 +83,10 @@ class ParameterProvider with ChangeNotifier {
 
   int baseStatus = 0;
 
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid,
-      String gpid, String villageid, String isall) async {
-    print("lab call in parameter provider");
+  Future<void> fetchAllLabs(String stateId, String districtId, String blockId, String gpId, String villageId, String isAll) async {
     isLoading = true;
     try {
-      final rawLabList = await _lapparameterrepository.fetchAllLab(
-          StateId, districtId, blockid, gpid, villageid, isall);
+      final rawLabList = await _lapparameterrepository.fetchAllLab(stateId, districtId, blockId, gpId, villageId, isAll);
       if (rawLabList.status == 1) {
         labList = rawLabList.result;
       } else {

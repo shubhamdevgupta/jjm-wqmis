@@ -18,8 +18,7 @@ class Lapparameterrepository {
   Future<BaseResponseModel<Alllabresponse>> fetchAllLab(String StateId, String districtId,
       String blockid, String gpid, String villageid, String isall) async {
     try {
-      final response = await _apiService.get(
-          '/apimaster/Getalllab?StateId=$StateId&districtId=$districtId&blockid=$blockid&gpid=$gpid&villageid=$villageid&isall=$isall');
+      final response = await _apiService.get('/apimaster/Getalllab?StateId=$StateId&districtId=$districtId&blockid=$blockid&gpid=$gpid&villageid=$villageid&isall=$isall');
 
       log('Fetch All Lab API Response: $response');
       log('API Response Type: ${response.runtimeType}');
