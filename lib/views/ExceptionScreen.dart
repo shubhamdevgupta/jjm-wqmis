@@ -32,7 +32,7 @@ class ExceptionScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                "Service is not working",
+                "Service is not working \n $errorMessage",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 18, color: Colors.black87),
               ),
