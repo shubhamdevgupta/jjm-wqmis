@@ -76,11 +76,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
         flag = args['flag'];
         String district = args['dis'] ?? "0";
         String block = args['block'] ?? "0";
-        print("district---->$district");
-        print("block---->$block");
+
         if (flag == AppConstants.totalSamplesSubmitted ||
             flag == AppConstants.openSampleListScreen) {
-          print("Fetching sample list with flag 0...");
           sampleListProvider.fetchSampleList(
               int.parse(userId!),
               1,
@@ -94,17 +92,17 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(masterprovider.selectedVillage ?? "0"));
         } else if (flag == AppConstants.totalPhysicalSubmitted ||
             flag == AppConstants.openSampleListScreen) {
-          print("Fetching sample list with flag 2...");
+
           sampleListProvider.fetchSampleList(
               int.parse(userId!), 1, "0", 2, "0", 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSampleTested ||
             flag == AppConstants.openSampleListScreen) {
-          print("Fetching sample list with flag 6...");
+
           sampleListProvider.fetchSampleList(
               int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalRetest ||
             flag == AppConstants.openSampleListScreen) {
-          print("Fetching sample list with selected location parameters...");
+
           sampleListProvider.fetchSampleList(
             int.parse(userId!),
             1,
@@ -117,16 +115,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
             int.parse(masterprovider.selectedGramPanchayat!),
             int.parse(masterprovider.selectedVillage!),
           );
-        } /* else {
-          print("Fetching default sample list...");
-          sampleListProvider.fetchSampleList(
-              int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
-        }*/
-      } /*else {
-        print("Fetching default sample list...");
-        sampleListProvider.fetchSampleList(
-            int.parse(userId!), 1, "0", 0, "0", 0, 0, 0, 0, 0);
-      }*/
+        }
+      }
     });
   }
 
