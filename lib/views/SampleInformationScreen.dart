@@ -484,7 +484,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           masterProvider.setSelectedSubSource(value);
                         },
                       ),
-                      Text('Outlet of WTP')
+                      const Text('Outlet of WTP')
                     ],
                   ),
                   Visibility(
