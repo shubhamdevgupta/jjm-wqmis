@@ -147,8 +147,7 @@ class _LoginpageState extends State<Loginscreen> {
                                       if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
-                                          passwordController.text,
-                                          "4",
+                                          passwordController.text, "4",
                                               () {
                                             Navigator.pushReplacementNamed(
                                                 context, AppConstants.navigateToDashboard);
@@ -212,12 +211,8 @@ class _LoginpageState extends State<Loginscreen> {
 
     int? enteredCaptcha = int.tryParse(captcha);
     // Using a single if-else statement
-    provider.errorMsg = (phone.isNotEmpty &&
-            phone.length == 10 &&
-            RegExp(r'^[0-9]{10}$').hasMatch(phone))
-        ? (password.isNotEmpty
-            ? (captcha.isNotEmpty &&
-                    enteredCaptcha == provider.captchResult // Compare as int
+    provider.errorMsg = (phone.isNotEmpty && phone.length == 10 && RegExp(r'^[0-9]{10}$').hasMatch(phone))
+        ? (password.isNotEmpty ? (captcha.isNotEmpty && enteredCaptcha == provider.captchResult // Compare as int
                 ? ""
                 : "Please Enter Correct Captcha")
             : "Please Enter Password")

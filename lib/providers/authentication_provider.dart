@@ -53,7 +53,7 @@ class AuthenticationProvider extends ChangeNotifier {
   // Method to login user
   Future<void> loginUser(phoneNumber, password, roldId, Function onSuccess,
       Function onFailure) async {
-    generateCaptcha();
+
     _isLoading = true;
     notifyListeners();
     String txtSalt = generateSalt();
@@ -75,6 +75,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
         notifyListeners();
         onSuccess();
+        generateCaptcha();
       } else {
         errorMsg = _loginResponse!.msg!;
         onFailure(errorMsg);
