@@ -378,9 +378,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 iconColor: Colors.deepOrange,
                                 title: "Demonstrations",
                                 value: 5,
-                                onTap: ()async{
-                                 await dwsmDashboardProvider.loadDwsmDashboardData(int.parse(stateId), 0, "2025-2026");
-                                  print('dataaaaaaaaaa  ${dwsmDashboardProvider.villages.first.villageName}');
+                                onTap: (){
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

@@ -14,19 +14,14 @@ class DwsmDashboardProvider extends ChangeNotifier {
   bool isLoading = false;
 
   List<Village> villages = [];
-  String? selectedVillage;
   String errorMsg = '';
   int baseStatus=101;
 
   final FTKRepository _repository = FTKRepository();
 
-  SchoolinfoResponse? _schoolinfoResponse;
-
-  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
-
   List<SchoolResult> schoolResultList = [];
   int? selectedSchoolResult;
-
+  String? selectedSchoolName;
 /*  List<Alllabresponse> labList = [];
   String? selectedLab = "";*/
 
@@ -117,12 +112,12 @@ class DwsmDashboardProvider extends ChangeNotifier {
       if (rawSchoolInfo.status == 1) {
         schoolResultList = rawSchoolInfo.result;
       } else {
-        debugPrint("API Message: ${_schoolinfoResponse!.message}");
         errorMsg = rawSchoolInfo.message;
       }
       baseStatus=rawSchoolInfo.status;
     } catch (e) {
-      _schoolinfoResponse = null;
+      debugPrint('Error in fetching source information: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
       notifyListeners();
@@ -168,8 +163,17 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  void setSelectedSchool(value) {
-    selectedSchoolResult=value;
+  void setSelectedSchool(int id) {
+    selectedSchoolResult = id;
+    selectedSchoolName = schoolResultList
+        .firstWhere((s) => s.id == id, orElse: () => SchoolResult(name: '', id: 0, demonstrated: 0))
+        .name;
+    notifyListeners();
+  }
+
+  void clearSelectedSchool() {
+    selectedSchoolResult = 0;
+    selectedSchoolName = null;
     notifyListeners();
   }
 

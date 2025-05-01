@@ -17,7 +17,7 @@ class Tabschoolaganwadi extends StatefulWidget {
 class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
-  late DwsmDashboardProvider paramProvider;
+  late DwsmDashboardProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -27,14 +27,31 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
     // Get providers
-    paramProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
     });
     mTabController.addListener(() {
-      if (mTabController.indexIsChanging) return; // Prevent duplicate calls
+      if (mTabController.indexIsChanging) return;
+
+      dwsmDashboardProvider.clearSelectedSchool();
+      dwsmDashboardProvider.schoolResultList.clear();
+
+      if (mTabController.index == 0) {
+        dwsmDashboardProvider.fetchSchoolInfo(
+          int.parse(masterProvider.selectedStateId!),
+          int.parse(masterProvider.selectedDistrictId!),
+          0, 0, 0, 0,
+        );
+      } else if (mTabController.index == 1) {
+        dwsmDashboardProvider.fetchSchoolInfo(
+          int.parse(masterProvider.selectedStateId!),
+          int.parse(masterProvider.selectedDistrictId!),
+          0, 0, 0, 1,
+        );
+      }
     });
+    dwsmDashboardProvider.fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
   }
 
   @override

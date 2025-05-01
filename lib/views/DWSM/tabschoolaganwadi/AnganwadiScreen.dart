@@ -62,12 +62,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "",
-                            value: provider.schoolResultList
-                                .firstWhere(
-                                  (lab) => lab.id == provider.selectedSchoolResult,
-                              orElse: () => SchoolResult(id: 0,demonstrated: 0,name: ''),
-                            ).name,
+                            title: 'Select Anganwadi',
+                            value: provider.schoolResultList.isNotEmpty
+                                ? provider.schoolResultList.first.name
+                                : null,
                             items: provider.schoolResultList.map((lab) => lab.name ?? '').toList(),
                             onChanged: (selectedLabText) {
                               if (selectedLabText == null)
@@ -83,7 +81,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-
 
                           Container(
                             width: double.infinity,
@@ -105,7 +102,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                               children: [
                                 // Section 1: School Details
                                 Text(
-                                  "School Details",
+                                  "Anganwadi Details",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

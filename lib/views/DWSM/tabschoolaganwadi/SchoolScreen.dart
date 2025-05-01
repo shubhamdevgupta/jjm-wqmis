@@ -65,12 +65,10 @@ class _SchoolScreen extends State<SchoolScreen> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "",
-                            value: provider.schoolResultList
-                                .firstWhere(
-                                  (lab) => lab.id == provider.selectedSchoolResult,
-                              orElse: () => SchoolResult(id: 0,demonstrated: 0,name: ''),
-                            ).name,
+                            title: 'Select School',
+                            value: provider.schoolResultList.isNotEmpty
+                                ? provider.schoolResultList.first.name
+                                : null,
                             items: provider.schoolResultList.map((lab) => lab.name ?? '').toList(),
                             onChanged: (selectedLabText) {
                               if (selectedLabText == null)
