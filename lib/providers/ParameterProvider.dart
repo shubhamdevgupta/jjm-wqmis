@@ -19,8 +19,7 @@ import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
 
 class ParameterProvider with ChangeNotifier {
-  final Lapparameterrepository _lapparameterrepository =
-      Lapparameterrepository();
+  final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
 
   LocalStorageService localStorage = LocalStorageService();
   bool isLoading = false;
@@ -139,47 +138,7 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
-      int Gpid, int Villageid, int type) async {
-    isLoading = true;
-    notifyListeners();
 
-    try {
-      final response = await _lapparameterrepository.fetchSchoolInfo(
-          Stateid, Districtid, Blockid, Gpid, Villageid, type);
-
-      if (response != null) {
-        _schoolinfoResponse = response;
-
-        if (_schoolinfoResponse!.status == 1) {
-          schoolResult = _schoolinfoResponse!.result;
-
-          if (schoolResult
-              .any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
-            selectedSchoolResult =
-                selectedSchoolResult; // Keep current selected if still valid
-          } else if (schoolResult.isNotEmpty) {
-            selectedSchoolResult =
-                schoolResult.first.name; // Reset if invalid or select first
-          } else {
-            selectedSchoolResult = ''; // Handle if list is empty
-          }
-        } else {
-          debugPrint("API Message: ${_schoolinfoResponse!.message}");
-          _schoolinfoResponse = SchoolinfoResponse(
-            status: 0,
-            message: _schoolinfoResponse!.message,
-            result: [], // Ensure empty labs list
-          );
-        }
-      }
-    } catch (e) {
-      _schoolinfoResponse = null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
 
   void setSelectedSchool(String? value) {
     selectedSchoolResult = value;

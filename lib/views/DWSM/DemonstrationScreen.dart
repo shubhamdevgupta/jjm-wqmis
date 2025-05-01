@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/DWSM/DwsmDashboard.dart';
@@ -14,15 +15,23 @@ class Demonstrationscreen extends StatefulWidget {
 
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 0, "2025-2026");
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Demonstrations List")),
 
-
       body: Consumer<DwsmDashboardProvider>(builder : (context,provider , child){
-        return ListView.builder(
+        return
+          provider.isLoading?LoaderUtils.conditionalLoader(isLoading: provider.isLoading):
+          ListView.builder(
           itemCount: provider.villages.length,
           itemBuilder: (context, index) {
             final village = provider.villages[index];
