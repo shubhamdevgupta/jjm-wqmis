@@ -655,6 +655,30 @@ class Masterprovider extends ChangeNotifier {
           selectedScheme!);
     } else if (value == 6) {
       setSelectedSubSource(value);
+    } else if (value == 7) {
+      setSelectedHandpump(value);
+      setSelectedSubSource(1);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          selectedSubSource.toString(),
+          "0",
+          "0",
+          selectedStateId!,
+          selectedScheme!);
+    } else if (value == 8) {
+      setSelectedHandpump(6);
+      setSelectedSubSource(2);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          selectedSubSource.toString(),
+          "0",
+          "0",
+          selectedStateId!,
+          selectedScheme!);
     }
     notifyListeners();
   }

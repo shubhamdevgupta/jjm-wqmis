@@ -294,7 +294,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(1);
-                        }, child: const Text('Ground water sources (GW)'),
+                        },
+                        child: const Text('Ground water sources (GW)'),
                       ),
                     ],
                   ),
@@ -310,7 +311,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       InkWell(
                           onTap: () {
                             masterProvider.selectRadioOption(2);
-                          }, child: const Text('Surface water sources (SW)')),
+                          },
+                          child: const Text('Surface water sources (SW)')),
                     ],
                   ),
                 ],
@@ -442,13 +444,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 5,
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
-                        masterProvider.selectRadioOption(value!);
+                          masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
                           onTap: () {
                             masterProvider.selectRadioOption(5);
-                          }, child: const Text('Inlet of WTP'))
+                          },
+                          child: const Text('Inlet of WTP'))
                     ],
                   ),
                   Row(
@@ -463,7 +466,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       InkWell(
                           onTap: () {
                             masterProvider.selectRadioOption(6);
-                          }, child: const Text('Outlet of WTP'))
+                          },
+                          child: const Text('Outlet of WTP'))
                     ],
                   ),
                   Visibility(
@@ -662,7 +666,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(3);
-                        }, child: const Text('At household'),
+                        },
+                        child: const Text('At household'),
                       ),
                     ],
                   ),
@@ -678,7 +683,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(4);
-                        }, child: const Text('At school/AWCs'),
+                        },
+                        child: const Text('At school/AWCs'),
                       ),
                     ],
                   ),
@@ -832,52 +838,33 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Row(
                     children: [
                       Radio(
-                        value: 5,
+                        value: 7,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
-                          masterProvider.setSelectedHandpump(value);
-                          masterProvider.setSelectedSubSource(1);
-                          masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!,
-                              masterProvider.selectedSubSource.toString(),
-                              "0",
-                              "0",
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                          masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
                           onTap: () {
-
-                          },child: const Text('Govt. Handpump')),
+                            masterProvider.selectRadioOption(7);
+                          },
+                          child: const Text('Govt. Handpump')),
                     ],
                   ),
                   Row(
                     children: [
                       Radio(
-                        value: 6,
+                        value: 8,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
-                          masterProvider.setSelectedHandpump(value);
-                          masterProvider.setSelectedSubSource(2);
-                          masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!,
-                              masterProvider.selectedHabitation!,
-                              masterProvider.selectedWtsfilter!,
-                              masterProvider.selectedSubSource.toString(),
-                              "0",
-                              "0",
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                          masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
                           onTap: () {
-
-                          },child: const Text('Private source location')
-                      ),
+                            masterProvider.selectRadioOption(8);
+                          },
+                          child: const Text('Private source location')),
                     ],
                   ),
                 ],
@@ -889,7 +876,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 5 &&
+          visible: masterProvider.selectedHandpumpPrivate == 7 &&
               masterProvider.selectedWtsfilter == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
@@ -969,7 +956,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 6,
+          visible: masterProvider.selectedHandpumpPrivate == 8,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -1165,7 +1152,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       return false;
     }
 
-    if (masterProvider.selectedHandpumpPrivate == 5) {
+    if (masterProvider.selectedHandpumpPrivate == 7) {
       if (masterProvider.selectedWaterSource == null ||
           masterProvider.selectedWaterSource!.isEmpty) {
         masterProvider.errorMsg = "Govt. handpump is empty or invalid.";
@@ -1173,7 +1160,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       }
     }
 
-    if (masterProvider.selectedHandpumpPrivate == 6) {
+    if (masterProvider.selectedHandpumpPrivate == 8) {
       if (handpumpSourceController.text.trim().isEmpty) {
         masterProvider.errorMsg = "Type of source is empty or invalid.";
         return false;
