@@ -3,9 +3,11 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/ParameterProvider.dart';
+import '../../providers/dwsmDashboardProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
 import '../../utils/CustomDropdown.dart';
@@ -25,7 +27,7 @@ class _DwsmLocation extends State<DwsmLocation> {
 
   @override
   Widget build(BuildContext) {
-    final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
+    final dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -67,22 +69,22 @@ class _DwsmLocation extends State<DwsmLocation> {
                   SingleChildScrollView(
                       child: Column(
                     children: [
-                      buildStateVillage(masterProvider, paramProvider)
+                      buildStateVillage(masterProvider,dwsmDashboardProvider)
                     ],
                   )),
                   if (masterProvider.isLoading)
                     LoaderUtils.conditionalLoader(
                         isLoading: masterProvider.isLoading)
-                  else if (paramProvider.isLoading)
+                  else if (dwsmDashboardProvider.isLoading)
                     LoaderUtils.conditionalLoader(
-                        isLoading: paramProvider.isLoading)
+                        isLoading: dwsmDashboardProvider.isLoading)
                 ],
               );
             })));
   }
 
   Widget buildStateVillage(
-      Masterprovider masterProvider, ParameterProvider paramProvider) {
+      Masterprovider masterProvider, DwsmDashboardProvider dwsmprovider) {
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(
@@ -285,9 +287,7 @@ class _DwsmLocation extends State<DwsmLocation> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    print("loading--------->${paramProvider.isLoading}");
-                    await paramProvider.fetchLocation();
-                    print("loading--------->${paramProvider.isLoading}");
+                    await dwsmprovider.fetchLocation();
 
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToSubmit_info);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jjm_wqmis/models/BaseResponse.dart';
 
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../services/BaseApiService.dart';
@@ -47,14 +48,13 @@ class FTKRepository {
   }
 
 
-  Future<SchoolinfoResponse> fetchSchoolInfo(int Stateid, int Districtid,
+  Future<BaseResponseModel<SchoolResult>> fetchSchoolInfo(int Stateid, int Districtid,
       int Blockid, int Gpid, int Villageid, int type) async {
     try {
       final response = await _apiService.get(
           'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
       print("RRRRR_----${response}");
-      return SchoolinfoResponse.fromJson(response); // Directly pass response
-
+      return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;

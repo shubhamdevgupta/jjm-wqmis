@@ -16,6 +16,24 @@ class DwsmDashboardProvider extends ChangeNotifier {
   List<Village> villages = [];
   String? selectedVillage;
   String errorMsg = '';
+  int baseStatus=101;
+
+  final FTKRepository _repository = FTKRepository();
+
+  SchoolinfoResponse? _schoolinfoResponse;
+
+  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
+
+  List<SchoolResult> schoolResultList = [];
+  int? selectedSchoolResult;
+
+/*  List<Alllabresponse> labList = [];
+  String? selectedLab = "";*/
+
+  bool _isLoading = false;
+  String? _responseMessage;
+
+  String? get responseMessage => _responseMessage;
 
   Future<void> loadDwsmDashboardData(
       int stateId, int DistrictId, String fineYear) async {
@@ -46,20 +64,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////////////////////////////////
-
-  final FTKRepository _repository = FTKRepository();
-
-  SchoolinfoResponse? _schoolinfoResponse;
-
-  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
-
-  List<SchoolResult> schoolResult = [];
-  String? selectedSchoolResult;
-
-  bool _isLoading = false;
-  String? _responseMessage;
-
-  String? get responseMessage => _responseMessage;
 
   Future<void> submitFTK({
     required int userId,
@@ -101,42 +105,22 @@ class DwsmDashboardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final response = await _repository.fetchSchoolInfo(
+      final rawSchoolInfo = await _repository.fetchSchoolInfo(
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
-      if (response != null) {
-        _schoolinfoResponse = response;
-
-        if (_schoolinfoResponse!.status == 1) {
-          schoolResult = _schoolinfoResponse!.result;
-
-          if (schoolResult
-              .any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
-            selectedSchoolResult =
-                selectedSchoolResult; // Keep current selected if still valid
-          } else if (schoolResult.isNotEmpty) {
-            selectedSchoolResult =
-                schoolResult.first.name; // Reset if invalid or select first
-          } else {
-            selectedSchoolResult = ''; // Handle if list is empty
-          }
-        } else {
-          debugPrint("API Message: ${_schoolinfoResponse!.message}");
-          _schoolinfoResponse = SchoolinfoResponse(
-            status: 0,
-            message: _schoolinfoResponse!.message,
-            result: [], // Ensure empty labs list
-          );
-        }
+      if (rawSchoolInfo.status == 1) {
+        schoolResultList = rawSchoolInfo.result;
+      } else {
+        debugPrint("API Message: ${_schoolinfoResponse!.message}");
+        errorMsg = rawSchoolInfo.message;
       }
+      baseStatus=rawSchoolInfo.status;
     } catch (e) {
       _schoolinfoResponse = null;
     } finally {
@@ -144,6 +128,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   double? get currentLatitude => _currentLatitude;
 
   double? get currentLongitude => _currentLongitude;
@@ -182,6 +167,12 @@ class DwsmDashboardProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void setSelectedSchool(value) {
+    selectedSchoolResult=value;
+    notifyListeners();
+  }
+
 
 /////////////////////////////////////////////////////////////////////////////
 }
