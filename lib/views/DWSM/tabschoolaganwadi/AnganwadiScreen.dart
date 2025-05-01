@@ -299,6 +299,22 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                               ),
                             ),
                           ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                            ),
+                            onPressed: () {
+
+                            },
+                            child: const Text(
+                              "Submit",
+                              style: TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          )
                         ],
                       ),
                     ),

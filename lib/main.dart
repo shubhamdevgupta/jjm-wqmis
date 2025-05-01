@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
+import 'package:jjm_wqmis/providers/dwsmDashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
@@ -36,6 +37,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Samplesubprovider()),
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => Samplelistprovider()),
+        ChangeNotifierProvider(create: (context) => DwsmDashboardProvider()),
       ],
       child: MyApp(),
     ),
