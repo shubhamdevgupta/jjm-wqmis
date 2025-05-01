@@ -172,7 +172,7 @@ class _LoginpageState extends State<Loginscreen> {
                                     child: Text(
                                       'LOGIN',
                                       style: TextStyle(
-                                        color:Colors.White100,
+                                        color:Colors.white,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
                                       ),
