@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
@@ -7,7 +8,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
-import 'package:jjm_wqmis/views/DWSM/dwsm_Dashboard.dart';
+import 'package:jjm_wqmis/views/DWSM/DwsDashboardScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/submit_info.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
@@ -64,7 +65,9 @@ class MyApp extends StatelessWidget {
         AppConstants.navigateToLabParam: (context) => Labparameterscreen(),
         AppConstants.navigateToTest: (context) => SubmitSampleScreen(),
         AppConstants.navigateToSampleList: (context) => SampleListScreen(),
-        AppConstants.navigateToSubmit_info: (context) => SubmitInfo()
+        AppConstants.navigateToSubmit_info: (context) => SubmitInfo(),
+        AppConstants.navigateToDwsmDashboard: (context) => Dwsdashboardscreen(),
+
       },
     );
   }

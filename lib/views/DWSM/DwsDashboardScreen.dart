@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 import '../../services/LocalStorageService.dart';
 import 'DWSM_Location.dart';
 
-class dwsm_Dashboard extends StatefulWidget {
-  const dwsm_Dashboard({super.key});
+class Dwsdashboardscreen extends StatefulWidget {
+  const Dwsdashboardscreen({super.key});
 
   @override
-  State<dwsm_Dashboard> createState() => _dwsm_Dashboard();
+  State<Dwsdashboardscreen> createState() => dwsmDashboardScreen();
 }
 
-class _dwsm_Dashboard extends State<dwsm_Dashboard> {
+class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
   String stateName = '';
   String userName = '';

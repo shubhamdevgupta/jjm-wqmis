@@ -17,6 +17,7 @@ class AppConstants {
   /////////////////////   Routes literals  //////////////////////////////////
   static const String navigateToSaveSample = '/savesample';
   static const String navigateToDashboard = '/dashboard';
+  static const String navigateToDwsmDashboard = '/dwsm_dashboard';
   static const String navigateToLogin = '/login';
   static const String navigateToLocation = '/location';
   static const String navigateToLabParam = '/labParam';

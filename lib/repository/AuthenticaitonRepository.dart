@@ -14,15 +14,15 @@ class AuthenticaitonRepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<LoginResponse> loginUser(
-      String phoneNumber, String password, String roleId, String txtSalt) async {
+      String phoneNumber, String password, String txtSalt, int appId) async {
     try {
       // Call the POST method from BaseApiService
       final response = await _apiService.post('APIMobile/Login',
         body: jsonEncode({
           'loginid': phoneNumber,
           'password': password,
-          'role_id': roleId,
           'txtSaltedHash': txtSalt,
+           'App_id':appId
         }),
       );
 
