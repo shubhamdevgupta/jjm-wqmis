@@ -8,8 +8,8 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
-import 'package:jjm_wqmis/views/DWSM/DwsDashboardScreen.dart';
-import 'package:jjm_wqmis/views/DWSM/submit_info.dart';
+import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
         AppConstants.navigateToLabParam: (context) => Labparameterscreen(),
         AppConstants.navigateToTest: (context) => SubmitSampleScreen(),
         AppConstants.navigateToSampleList: (context) => SampleListScreen(),
-        AppConstants.navigateToSubmit_info: (context) => SubmitInfo(),
+        AppConstants.navigateToSubmit_info: (context) => Tabschoolaganwadi(),
         AppConstants.navigateToDwsmDashboard: (context) => Dwsdashboardscreen(),
 
       },

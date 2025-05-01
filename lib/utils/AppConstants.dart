@@ -23,7 +23,7 @@ class AppConstants {
   static const String navigateToLabParam = '/labParam';
   static const String navigateToSampleList = '/sampleList';
   static const String navigateToTest = 'test';
-  static const String navigateToSubmit_info = 'submit_info';
+  static const String navigateToSubmit_info = '/tabSchoolAganwadi';
 
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';

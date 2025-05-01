@@ -3,17 +3,17 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppConstants.dart';
-import 'AnganwadiPage.dart';
-import 'Schoolpage.dart';
+import '../../../services/LocalStorageService.dart';
+import '../../../utils/AppConstants.dart';
+import 'AnganwadiScreen.dart';
+import 'SchoolScreen.dart';
 
-class SubmitInfo extends StatefulWidget {
+class Tabschoolaganwadi extends StatefulWidget {
   @override
-  _SubmitInfo createState() => _SubmitInfo();
+  _TabSchoolAganwadi createState() => _TabSchoolAganwadi();
 }
 
-class _SubmitInfo extends State<SubmitInfo>
+class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
   late ParameterProvider paramProvider;
@@ -140,8 +140,8 @@ class _SubmitInfo extends State<SubmitInfo>
               child: TabBarView(
                 controller: mTabController,
                 children: [
-                  Schoolpage(),
-                  Anganwadipage(),
+                  SchoolScreen(),
+                  AnganwadiScreen(),
                 ],
               ),
             );
