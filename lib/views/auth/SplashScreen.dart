@@ -7,8 +7,6 @@ import 'dart:async';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-
 // Splash Screen
 class SplashScreen extends StatefulWidget {
   @override
@@ -16,8 +14,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final LocalStorageService localStorage = LocalStorageService();
-
   @override
   void initState() {
     super.initState();
@@ -29,17 +25,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Check Login Status using ViewModel
     var authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
-    var roleId=localStorage.getString(AppConstants.prefRoleId);
     await authProvider.checkLoginStatus();
 
     if (authProvider.isLoggedIn) {
-      if(roleId=="4") {
-        Navigator.pushReplacementNamed(
-            context, AppConstants.navigateToDashboard);
-      }else if(roleId=="8"){
-        Navigator.pushReplacementNamed(
-            context, AppConstants.navigateToDashboard);
-      }
+      Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
     } else {
       Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
     }

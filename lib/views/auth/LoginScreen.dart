@@ -147,10 +147,15 @@ class _LoginpageState extends State<Loginscreen> {
                                       if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
-                                          passwordController.text, "4",
+                                          passwordController.text, 1,
                                               () {
-                                            Navigator.pushReplacementNamed(
-                                                context, AppConstants.navigateToDashboard);
+                                            if(provider.loginResponse?.roleId==4){
+                                              Navigator.pushReplacementNamed(
+                                                  context, AppConstants.navigateToDashboard);
+                                            }else if(provider.loginResponse?.roleId==8){
+                                              Navigator.pushReplacementNamed(
+                                                  context, AppConstants.navigateToDwsmDashboard);
+                                            }
                                           },
                                               (errorMessage) {
                                             ScaffoldMessenger.of(context).showSnackBar(
