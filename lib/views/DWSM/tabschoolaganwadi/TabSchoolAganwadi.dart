@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/dwsmDashboardProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppConstants.dart';
 import 'AnganwadiScreen.dart';
@@ -16,7 +17,7 @@ class Tabschoolaganwadi extends StatefulWidget {
 class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
-  late ParameterProvider paramProvider;
+  late DwsmDashboardProvider paramProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -26,10 +27,10 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
     // Get providers
-    paramProvider = Provider.of<ParameterProvider>(context, listen: false);
+    paramProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
     });
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return; // Prevent duplicate calls

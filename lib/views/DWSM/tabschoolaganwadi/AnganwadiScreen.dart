@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/DWSM/SchoolinfoResponse.dart';
 import '../../../models/LabInchargeResponse/AllLabResponse.dart';
+import '../../../providers/dwsmDashboardProvider.dart';
 import '../../../providers/masterProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/Camera.dart';
@@ -19,13 +20,14 @@ class AnganwadiScreen extends StatefulWidget {
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
   late Masterprovider masterProvider;
+  late DwsmDashboardProvider dwsmDashboardProvider ;
   final CameraHelper _cameraHelper = CameraHelper();
   @override
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,1);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,1);
     });
   }
 

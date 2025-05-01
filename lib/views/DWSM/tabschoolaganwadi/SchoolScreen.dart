@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/LabInchargeResponse/AllLabResponse.dart';
+import '../../../providers/dwsmDashboardProvider.dart';
 import '../../../providers/masterProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
@@ -18,7 +19,7 @@ class SchoolScreen extends StatefulWidget {
 }
 
 class _SchoolScreen extends State<SchoolScreen> {
-  late Masterprovider masterProvider;
+  late DwsmDashboardProvider dwsmprovider;
   final LocalStorageService _localStorage = LocalStorageService();
 
   final CameraHelper _cameraHelper = CameraHelper();
@@ -38,19 +39,19 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   void initState() {
     super.initState();
-    masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    dwsmprovider = Provider.of<DwsmDashboardProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
+      Provider.of<DwsmDashboardProvider>(context, listen: false);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
+    final paramProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
     return ChangeNotifierProvider.value(
-      value: Provider.of<ParameterProvider>(context, listen: false),
-      child: Consumer<ParameterProvider>(
+      value: Provider.of<DwsmDashboardProvider>(context, listen: false),
+      child: Consumer<DwsmDashboardProvider>(
         builder: (context, provider, child) {
           return Container(
             child: Scaffold(
@@ -77,7 +78,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                     (school) => school.name == selectedSchoolResult,
                                 orElse: () => SchoolResult(name: "",demonstrated: 0,id: 0), // Default to a nullable object
                               );
-                              provider.setSelectedLab(selectedSchool.name);
+
                             },
                           ),
                           const SizedBox(
@@ -484,7 +485,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                       children: [
                                         Text("Latitude:", style: _labelStyle),
                                         const SizedBox(width: 2),
-                                        Text("${paramProvider.currentLatitude ?? 'N/A'}", style: _valueStyle),
+                                        Text("${dwsmprovider.currentLatitude ?? 'N/A'}", style: _valueStyle),
                                       ],
                                     ),
 
@@ -504,7 +505,19 @@ class _SchoolScreen extends State<SchoolScreen> {
                           ),
 
                           ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
+                                final provider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+                                await provider.submitFTK(
+                                  userId: 1147404,
+                                  schoolId: 216439,
+                                  stateId: 31,
+                                  photoBase64: _cameraHelper.base64Image!,
+                                  fineYear: "2025-2026",
+                                  remark: "test",
+                                  latitude: "8778",
+                                  longitude: "8070",
+                                  ipAddress: "4135",
+                                );
 
                               },
                               child: Text(

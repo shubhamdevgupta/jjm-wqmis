@@ -54,18 +54,6 @@ class Lapparameterrepository {
     }
   }
 
-  Future<SchoolinfoResponse> fetchSchoolInfo(int Stateid, int Districtid, int Blockid, int Gpid, int Villageid, int type) async {
-    try {
-      final response =
-          await _apiService.get('ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
-
-        return SchoolinfoResponse.fromJson(response); // Directly pass response
-
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
-  }
 
 
   Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds) async {
