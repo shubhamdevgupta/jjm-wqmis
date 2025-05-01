@@ -9,7 +9,7 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-import 'DWSM_Location.dart';
+import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
   const Dwsdashboardscreen({super.key});
@@ -96,8 +96,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
       final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
-
-
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
       dashboardProvider.loadDwsmDashboardData(31,471);
@@ -178,7 +176,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:  [
                       const Text(
-                        AppConstants.departmentalUser,
+                        "DWSM Official",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
@@ -315,7 +313,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                     // Using an icon for consistency
                                     const SizedBox(width: 6),
                                     Text(
-                                      'DWSM',
+                                      'DWSM Official',
                                       // Replace with dynamic phone number
                                       style: const TextStyle(
                                         fontSize: 16,

@@ -25,7 +25,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String userName = '';
   String mobile = '';
   String stateId = '';
-  String UserDept = '';
   final encryption = AesEncryption();
 
   @override
@@ -235,18 +234,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   children: [
                                     const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
-                                    Flexible(
-                                      child: Text(
-                                        UserDept == "4"
-                                            ? 'Departmental Official'
-                                            : UserDept == "8"
-                                            ? 'DWSM'
-                                            : 'Unknown Department',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                    Text(
+                                      'Departmental User',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
@@ -505,7 +498,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    UserDept = _localStorage.getString(AppConstants.prefRoleId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

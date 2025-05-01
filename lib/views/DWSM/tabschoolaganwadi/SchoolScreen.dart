@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/DWSM/SchoolinfoResponse.dart';
-import '../../models/LabInchargeResponse/AllLabResponse.dart';
-import '../../providers/masterProvider.dart';
-import '../../services/LocalStorageService.dart';
-import '../../utils/Camera.dart';
-import '../../utils/CustomSearchableDropdown.dart';
-import '../../utils/LoaderUtils.dart';
+import '../../../models/LabInchargeResponse/AllLabResponse.dart';
+import '../../../providers/masterProvider.dart';
+import '../../../services/LocalStorageService.dart';
+import '../../../utils/Camera.dart';
+import '../../../utils/CustomSearchableDropdown.dart';
+import '../../../utils/LoaderUtils.dart';
 
-class Anganwadipage extends StatefulWidget {
+class SchoolScreen extends StatefulWidget {
   @override
-  _Anganwadipage createState() => _Anganwadipage();
+  _SchoolScreen createState() => _SchoolScreen();
 }
 
-class _Anganwadipage extends State<Anganwadipage> {
+class _SchoolScreen extends State<SchoolScreen> {
   late Masterprovider masterProvider;
+  final LocalStorageService _localStorage = LocalStorageService();
+
   final CameraHelper _cameraHelper = CameraHelper();
-  @override
+
+
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,1);
+      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
     });
   }
 
@@ -68,7 +71,7 @@ class _Anganwadipage extends State<Anganwadipage> {
                             height: 10,
                           ),
 
-
+                
                           Card(
                             elevation: 4,
                             shape: RoundedRectangleBorder(
@@ -85,7 +88,7 @@ class _Anganwadipage extends State<Anganwadipage> {
                                 children: [
                                   // Section 1: Lab Incharge Details
                                   Text(
-                                    "Anganwadi Details",
+                                    "School Details",
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -101,12 +104,12 @@ class _Anganwadipage extends State<Anganwadipage> {
 
                                   Row(
                                     children: [
-                                      Icon(Icons.bungalow_sharp,
+                                      Icon(Icons.school_rounded,
                                           color: Colors.green),
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'Anganwadi Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                          'School Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight:
@@ -299,6 +302,10 @@ class _Anganwadipage extends State<Anganwadipage> {
                               ),
                             ),
                           ),
+
+
+
+
                         ],
                       ),
                     ),
