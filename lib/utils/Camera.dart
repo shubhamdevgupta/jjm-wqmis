@@ -5,6 +5,11 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 
 
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
+
 class CameraHelper {
   final ImagePicker _picker = ImagePicker();
   File? imageFile;
@@ -22,6 +27,7 @@ class CameraHelper {
         File compressed = await _compressImage(File(pickedFile.path));
         imageFile = compressed;
         base64Image = await _convertToBase64(compressed);
+        print("base64Image $base64Image");
 
         print("Compressed Image Size: ${compressed.lengthSync() / 1024} KB");
       }
@@ -54,3 +60,4 @@ class CameraHelper {
     return base64Encode(bytes);
   }
 }
+
