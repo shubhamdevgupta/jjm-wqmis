@@ -154,13 +154,10 @@ class ParameterProvider with ChangeNotifier {
         if (_schoolinfoResponse!.status == 1) {
           schoolResult = _schoolinfoResponse!.result;
 
-          if (schoolResult
-              .any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
-            selectedSchoolResult =
-                selectedSchoolResult; // Keep current selected if still valid
+          if (schoolResult.any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
+            selectedSchoolResult = selectedSchoolResult; // Keep current selected if still valid
           } else if (schoolResult.isNotEmpty) {
-            selectedSchoolResult =
-                schoolResult.first.name; // Reset if invalid or select first
+            selectedSchoolResult = schoolResult.first.name; // Reset if invalid or select first
           } else {
             selectedSchoolResult = ''; // Handle if list is empty
           }

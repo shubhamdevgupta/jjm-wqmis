@@ -47,7 +47,7 @@ class _Anganwadipage extends State<Anganwadipage> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "",
+                            title: "-Select Anganwadi-",
                             value: provider.selectedSchoolResult,
                             items: provider.schoolResult
                                 .map((school) =>
@@ -106,7 +106,7 @@ class _Anganwadipage extends State<Anganwadipage> {
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'Anganwadi Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                          'Anganwadi Name: ${paramProvider.selectedSchoolResult ?? "N/A"}',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight:

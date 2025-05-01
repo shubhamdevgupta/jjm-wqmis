@@ -50,7 +50,7 @@ class _Schoolpage extends State<Schoolpage> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "",
+                            title: "-Select School-",
                             value: provider.selectedSchoolResult,
                             items: provider.schoolResult
                                 .map((school) =>
@@ -109,7 +109,7 @@ class _Schoolpage extends State<Schoolpage> {
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'School Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
+                                          '${paramProvider.selectedSchoolResult ?? "N/A"}',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight:
@@ -120,7 +120,7 @@ class _Schoolpage extends State<Schoolpage> {
                                   ),
                                   SizedBox(height: 10),
 
-                                  Row(
+                             /*     Row(
                                     children: [
                                       Icon(Icons.location_on,
                                           color: Colors.redAccent),
@@ -135,7 +135,7 @@ class _Schoolpage extends State<Schoolpage> {
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
