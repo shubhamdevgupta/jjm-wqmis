@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../views/lab/LabParameterScreen.dart';
 
 class CustomSearchableDropdown extends StatefulWidget {
@@ -17,8 +16,7 @@ class CustomSearchableDropdown extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomSearchableDropdownState createState() =>
-      _CustomSearchableDropdownState();
+  _CustomSearchableDropdownState createState() => _CustomSearchableDropdownState();
 }
 
 class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
@@ -42,6 +40,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
             });
             widget.onChanged?.call(value);
           },
+          title: widget.title, // ✅ Pass title dynamically
         );
       },
     );
@@ -54,7 +53,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
       children: [
         // Title
         Visibility(
-          visible: widget.title.isNotEmpty,
+          visible: false,
           child: RichText(
             text: TextSpan(
               text: widget.title.contains('*')
@@ -80,7 +79,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
             ),
           ),
         ),
-
+        const SizedBox(height: 8),
 
         // Custom Dropdown Button with Search
         GestureDetector(
@@ -103,16 +102,15 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Selected Value - Show ellipsis if too long
                 Flexible(
                   child: Text(
-                    selectedValue ?? "--Select Laboratory--",
+                    selectedValue ?? "--${widget.title}--",
                     style: TextStyle(
                       fontSize: 16,
                       color: selectedValue == null ? Colors.black54 : Colors.black,
                     ),
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis, // Apply ellipsis ONLY for selected value
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const Icon(Icons.arrow_drop_down, color: Colors.black),
@@ -125,15 +123,20 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
   }
 }
 
-// Custom Full-Screen Search Dialog with Dividers
+// ------------------------
+// ✅ SearchDialog Widget
+// ------------------------
+
 class SearchDialog extends StatefulWidget {
   final List<String> items;
   final ValueChanged<String> onItemSelected;
+  final String title;
 
   const SearchDialog({
     Key? key,
     required this.items,
     required this.onItemSelected,
+    this.title = "Select",
   }) : super(key: key);
 
   @override
@@ -176,7 +179,10 @@ class _SearchDialogState extends State<SearchDialog> {
             }
           },
         ),
-        title: const Text("Select Laboratory",style: TextStyle(color: Colors.white),),
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: Column(
@@ -201,12 +207,12 @@ class _SearchDialogState extends State<SearchDialog> {
           Expanded(
             child: ListView.separated(
               itemCount: filteredItems.length,
-              separatorBuilder: (context, index) => const Divider(), // Adds a divider
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
                     filteredItems[index],
-                    maxLines: null, // Show full text in list
+                    maxLines: null,
                   ),
                   onTap: () {
                     widget.onItemSelected(filteredItems[index]);
