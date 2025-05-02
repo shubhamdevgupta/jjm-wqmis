@@ -93,7 +93,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-
                           Container(
                             width: double.infinity,
                             margin: const EdgeInsets.symmetric(
@@ -133,19 +132,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       child: Text(
                                         '${dwsmprovider.selectedAnganwadiName ?? "N/A"}',
                                         style: const TextStyle(
-
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.blueGrey,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ),
-                          ),
-
 
                                 const SizedBox(height: 20),
 
@@ -176,25 +169,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                     decoration: const InputDecoration.collapsed(
                                       hintText: "Enter your remarks here...",
                                     ),
-
                                   ),
-                                  hintText: "Enter your remarks",
-                                  hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                                  suffixIcon: remarkController.text.isNotEmpty
-                                      ? IconButton(
-                                    icon: Icon(Icons.clear, color: Colors.grey),
-                                    onPressed: () {
-                                      remarkController.clear();
-                                    },
-                                  )
-                                      : null,
                                 ),
-                                keyboardType: TextInputType.multiline,
-                                textInputAction: TextInputAction.newline,
-                              ),
-                            ),
-                          ),
-
 
                                 const SizedBox(height: 20),
                                 Text(
@@ -278,23 +254,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
                                 const SizedBox(height: 20),
 
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                            child: Card(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.1),
-                                      blurRadius: 6,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
+                                Text(
+                                  "Geo Location of Sample Taken",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey.shade700,
+                                  ),
                                 ),
-
                                 Divider(
                                     thickness: 1, color: Colors.grey.shade300),
                                 const SizedBox(height: 8),
@@ -318,12 +285,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         Text(
                                             "${dwsmprovider.currentLongitude ?? 'N/A'}",
                                             style: _valueStyle),
-
                                       ],
                                     ),
                                   ],
                                 ),
-                              ),
+
+                                const SizedBox(height: 20),
+                              ],
                             ),
                           ),
                           ElevatedButton(

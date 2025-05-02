@@ -123,7 +123,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
-    notifyListeners();
+    //notifyListeners();
 
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
