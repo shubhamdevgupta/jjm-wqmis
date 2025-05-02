@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
+import '../models/BaseResponse.dart';
+import '../models/DWSM/Ftk_response.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../repository/FTKREpository.dart';
 import '../utils/GlobalExceptionHandler.dart';
@@ -72,10 +76,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
     required String ipAddress,
   }) async {
     _isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
     try {
-      Response response = await _repository.submitFTKData(
+      ftkResponse = await _repository.submitFTKData(
         userId: userId,
         schoolId: schoolId,
         stateId: stateId,
@@ -87,18 +92,27 @@ class DwsmDashboardProvider extends ChangeNotifier {
         ipAddress: ipAddress,
       );
 
-      if (response.statusCode == 200) {
-        _responseMessage = "FTK data submitted successfully!";
-      } else {
-        _responseMessage = "Failed to submit: ${response.body}";
+      if (ftkResponse?.status == 1) {
+        _responseMessage = ftkResponse?.message;
       }
-    } catch (e) {
-      _responseMessage = "Error: $e";
-    }
+      else{
+        errorMessage = ftkResponse?.message ?? "FTK submission failed.";
+      }
 
-    _isLoading = false;
-    notifyListeners();
+    } catch (e) {
+      errorMessage = "Something went wrong.";
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
+
+  String? errorMessage;
+  BaseResponseModel<FTKResponse>? ftkResponse;
+
+
+
 
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {

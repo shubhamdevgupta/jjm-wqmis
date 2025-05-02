@@ -82,191 +82,215 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             height: 10,
                           ),
 
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Section 1: School Details
-                                Text(
-                                  "Anganwadi Details",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey.shade700,
+
+                          Card(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    blurRadius: 6,
+                                    offset: Offset(0, 2),
                                   ),
-                                ),
-                                Divider(thickness: 1, color: Colors.grey.shade300),
-                                const SizedBox(height: 8),
-                                Row(
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
                                   children: [
                                     Icon(Icons.school_rounded, color: Colors.green),
-                                    const SizedBox(width: 8),
+                                    SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         '${paramProvider.selectedSchoolResult ?? "N/A"}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.blueGrey,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
+                              ),
+                            ),
+                          ),
 
-                                const SizedBox(height: 20),
-
-                                // Section 2: Geo Location
-
-
-                                // Section 3: Remark
-                                Text(
-                                  "Remarks",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey.shade700,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: TextFormField(
+                                controller: remarkController,
+                                maxLines: 2,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
                                   ),
-                                ),
-                                Divider(thickness: 1, color: Colors.grey.shade300),
-                                const SizedBox(height: 8),
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: Colors.grey.shade300),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
                                   ),
-                                  child: TextFormField(
-                                    controller: remarkController,
-                                    maxLines: 3,
-                                    decoration: const InputDecoration.collapsed(
-                                      hintText: "Enter your remarks here...",
-                                    ),
-                                  ),
-                                ),
-
-                                const SizedBox(height: 20),
-
-                                // Section 4: Camera Capture
-                                Text(
-                                  "Capture Sample Image",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey.shade700,
-                                  ),
-                                ),
-                                Divider(thickness: 1, color: Colors.grey.shade300),
-                                const SizedBox(height: 12),
-                                Center(
-                                  child: _cameraHelper.imageFile == null
-                                      ? Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () async {
-                                          await _cameraHelper.pickFromCamera();
-                                          setState(() {});
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.blueGrey.withOpacity(0.2),
-                                                blurRadius: 8,
-                                                offset: Offset(0, 4),
-                                              ),
-                                            ],
-                                          ),
-                                          padding: const EdgeInsets.all(24),
-                                          child: const Icon(Icons.camera_alt,
-                                              size: 40, color: Colors.blue),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const Text("Tap to capture",
-                                          style: TextStyle(color: Colors.black54)),
-                                    ],
+                                  hintText: "Enter your remarks",
+                                  hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                                  suffixIcon: remarkController.text.isNotEmpty
+                                      ? IconButton(
+                                    icon: Icon(Icons.clear, color: Colors.grey),
+                                    onPressed: () {
+                                      remarkController.clear();
+                                    },
                                   )
-                                      : Stack(
-                                    children: [
-                                      Container(
-                                        height: 160,
-                                        width: 120,
+                                      : null,
+                                ),
+                                keyboardType: TextInputType.multiline,
+                                textInputAction: TextInputAction.newline,
+                              ),
+                            ),
+                          ),
+
+                          Card(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    blurRadius: 6,
+                                    offset: Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      "Capture Sample Image",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey.shade700,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(thickness: 1, color: Colors.grey.shade300),
+                                  SizedBox(height: 2),
+                                  Center(
+                                    child: _cameraHelper.imageFile == null
+                                        ? GestureDetector(
+                                      onTap: () async {
+                                        await _cameraHelper.pickFromCamera();
+                                        setState(() {});
+                                      },
+                                      child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
-                                          image: DecorationImage(
-                                            image: FileImage(_cameraHelper.imageFile!),
-                                            fit: BoxFit.cover,
+                                          shape: BoxShape.circle,
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.blueGrey.withOpacity(0.2),
+                                              blurRadius: 8,
+                                              offset: Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        padding: const EdgeInsets.all(24),
+                                        child: Icon(Icons.camera_alt, size: 40, color: Colors.blue),
+                                      ),
+                                    )
+                                        : Stack(
+                                      children: [
+                                        Container(
+                                          height: 160,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(12),
+                                            image: DecorationImage(
+                                              image: FileImage(_cameraHelper.imageFile!),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: IconButton(
-                                          icon: const Icon(Icons.close, color: Colors.white),
-                                          onPressed: () {
-                                            _cameraHelper.removeImage();
-                                            setState(() {});
-                                          },
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: IconButton(
+                                            icon: Icon(Icons.close, color: Colors.white),
+                                            onPressed: () {
+                                              _cameraHelper.removeImage();
+                                              setState(() {});
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                const SizedBox(height: 20),
-
-                                Text(
-                                  "Geo Location of Sample Taken",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey.shade700,
-                                  ),
-                                ),
-                                Divider(thickness: 1, color: Colors.grey.shade300),
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("Latitude:", style: _labelStyle),
-                                        const SizedBox(width: 2),
-                                        Text("${dwsmprovider.currentLatitude ?? 'N/A'}", style: _valueStyle),
                                       ],
                                     ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                            child: Card(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      blurRadius: 6,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Heading
+                                    Text(
+                                      'Geo Location of Sample Taken',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.blueGrey.shade700,
+                                      ),
+                                    ),
+                                    Divider(thickness: 1, color: Colors.grey.shade300),
+                                    SizedBox(height: 8),
+                                    // Row for Latitude and Longitude
                                     Row(
                                       children: [
-                                        Text("Longitude:", style: _labelStyle),
-                                        const SizedBox(width: 2),
-                                        Text("${paramProvider.currentLongitude ?? 'N/A'}", style: _valueStyle),
+                                        Icon(Icons.location_on, color: Colors.blue, size: 18),
+                                        SizedBox(width: 6),
+                                        Expanded(
+                                          child: Text(
+                                            'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}', // Reduces to 3 decimal places
+                                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.black.withOpacity(0.7)),
+                                          ),
+                                        ),
+                                        Icon(Icons.location_on, color: Colors.blue, size: 18),
+                                        SizedBox(width: 6),
+                                        Expanded(
+                                          child: Text(
+                                            'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}', // Reduces to 3 decimal places
+                                            style: TextStyle(fontSize: 13, color: Colors.black.withOpacity(0.7)),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
-
-                                const SizedBox(height: 20),
-                              ],
+                              ),
                             ),
                           ),
 
