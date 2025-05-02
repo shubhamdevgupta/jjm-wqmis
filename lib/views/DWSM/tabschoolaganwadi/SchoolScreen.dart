@@ -19,9 +19,8 @@ class SchoolScreen extends StatefulWidget {
 }
 
 class _SchoolScreen extends State<SchoolScreen> {
-  late DwsmDashboardProvider dwsmprovider;
   final LocalStorageService _localStorage = LocalStorageService();
-  String userId='';
+  String userId = '';
   final CameraHelper _cameraHelper = CameraHelper();
 
 // Style constants
@@ -39,19 +38,19 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   void initState() {
     super.initState();
-    dwsmprovider = Provider.of<DwsmDashboardProvider>(context, listen: false);
-    userId=_localStorage.getString(AppConstants.prefUserId)!;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false);
-    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider =
-        Provider.of<DwsmDashboardProvider>(context, listen: true);
+
+
+    if (userId.isEmpty) {
+      userId = _localStorage.getString(AppConstants.prefUserId)!;
+    }
+
     return ChangeNotifierProvider.value(
-      value: Provider.of<DwsmDashboardProvider>(context, listen: false),
+      value: Provider.of<DwsmDashboardProvider>(context, listen: true),
       child: Consumer<DwsmDashboardProvider>(
         builder: (context, provider, child) {
           return Container(
@@ -66,35 +65,28 @@ class _SchoolScreen extends State<SchoolScreen> {
                         children: [
                           CustomSearchableDropdown(
                             title: 'Select School',
-                            value: provider.schoolResultList.isNotEmpty
-                                ? provider.schoolResultList.first.name
-                                : null,
+                            value: provider.schoolResultList.isNotEmpty ? provider.schoolResultList.first.name : null,
                             items: provider.schoolResultList.map((lab) => lab.name ?? '').toList(),
                             onChanged: (selectedLabText) {
                               if (selectedLabText == null)
                                 return; // Handle null case
 
-                              final selectedLab = provider.schoolResultList.firstWhere(
-                                    (lab) => lab.name == selectedLabText,
+                              final selectedLab = provider.schoolResultList.firstWhere((lab) => lab.name == selectedLabText,
                                 orElse: () => SchoolResult(name: 'name', id: 0, demonstrated: 0), // Default to a nullable object
                               );
                               provider.setSelectedSchool(selectedLab.id);
                             },
+
                           ),
-                      /*    CustomSearchableDropdown(
+                          /*    CustomSearchableDropdown(
                             title: "",
                             value: provider.selectedSchoolResult,
-                            items: provider.schoolResult
-                                .map((school) =>
-                                    school.name ??
-                                    '') // Display text, not value
-                                .toList(),
+                            items: provider.schoolResult.map((school) => school.name ??'')toList(), // Display text, not value.
                             onChanged: (value) {
                               if (value == null)
                                 return; // Handle null case
 
-                              final selectedSchool = provider.schoolResult.firstWhere(
-                                    (school) => school.name == value,
+                              final selectedSchool = provider.schoolResult.firstWhere((school) => school.name == value,
                                 orElse: () => SchoolResult(
                                     name: "",
                                     id:0, demonstrated: 0
@@ -144,7 +136,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        '${paramProvider.selectedSchoolResult ?? "N/A"}',
+                                        '${provider.selectedSchoolName ?? "N/A"} (${provider.selectedSchoolResult ?? ""})',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -293,7 +285,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                         Text("Latitude:", style: _labelStyle),
                                         const SizedBox(width: 2),
                                         Text(
-                                            "${dwsmprovider.currentLatitude ?? 'N/A'}",
+                                            "${provider.currentLatitude ?? 'N/A'}",
                                             style: _valueStyle),
                                       ],
                                     ),
@@ -302,7 +294,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                         Text("Longitude:", style: _labelStyle),
                                         const SizedBox(width: 2),
                                         Text(
-                                            "${dwsmprovider.currentLongitude ?? 'N/A'}",
+                                            "${provider.currentLongitude ?? 'N/A'}",
                                             style: _valueStyle),
                                       ],
                                     ),
@@ -315,17 +307,17 @@ class _SchoolScreen extends State<SchoolScreen> {
                           ),
                           ElevatedButton(
                               onPressed: () async {
-                                await dwsmprovider.submitFTK(
+                                await provider.submitFTK(
                                   userId: int.parse(userId),
-                                  schoolId: dwsmprovider.selectedSchoolResult!,
+                                  schoolId: provider.selectedSchoolResult!,
                                   stateId: 31,
                                   photoBase64: _cameraHelper.base64Image!,
                                   fineYear: "2025-2026",
                                   remark: remarkController.text,
                                   latitude:
-                                      dwsmprovider.currentLatitude.toString(),
+                                      provider.currentLatitude.toString(),
                                   longitude:
-                                      dwsmprovider.currentLatitude.toString(),
+                                      provider.currentLatitude.toString(),
                                   ipAddress: "4135",
                                 );
                               },

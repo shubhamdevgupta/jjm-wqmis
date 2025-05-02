@@ -26,11 +26,21 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
-    // Get providers
-    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+ /*   // Get providers
+    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
+    // Run this logic only once after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    });
+      if (mTabController.index == 0) {
+        dwsmDashboardProvider.fetchSchoolInfo(
+          int.parse(masterProvider.selectedStateId!),
+          int.parse(masterProvider.selectedDistrictId!),
+          0, 0, 0, 0,
+        );
+      }
+    });*/
+
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return;
 
@@ -51,8 +61,29 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         );
       }
     });
-    dwsmDashboardProvider.fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
+
+
+   }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Only assign once to avoid repeated calls when dependencies change
+    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
+    // Fetch data if needed when widget is first built
+    if (mTabController.index == 0) {
+      dwsmDashboardProvider.fetchSchoolInfo(
+        int.parse(masterProvider.selectedStateId!),
+        int.parse(masterProvider.selectedDistrictId!),
+        0, 0, 0, 0,
+      );
+    }
   }
+
 
   @override
   void dispose() {

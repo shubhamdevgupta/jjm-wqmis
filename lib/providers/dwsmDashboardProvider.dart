@@ -103,7 +103,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
-    notifyListeners();
+    //notifyListeners();
 
     try {
       final rawSchoolInfo = await _repository.fetchSchoolInfo(
@@ -130,6 +130,8 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   double? _currentLatitude;
   double? _currentLongitude;
+
+
 
   Future<void> fetchLocation() async {
     isLoading = true;
@@ -165,11 +167,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   void setSelectedSchool(int id) {
     selectedSchoolResult = id;
-    selectedSchoolName = schoolResultList
-        .firstWhere((s) => s.id == id, orElse: () => SchoolResult(name: '', id: 0, demonstrated: 0))
-        .name;
+    selectedSchoolName = schoolResultList.firstWhere((s) => s.id == id, orElse: () => SchoolResult(name: '', id: 0, demonstrated: 0)).name;
     notifyListeners();
   }
+
 
   void clearSelectedSchool() {
     selectedSchoolResult = 0;
@@ -177,6 +178,4 @@ class DwsmDashboardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-/////////////////////////////////////////////////////////////////////////////
 }

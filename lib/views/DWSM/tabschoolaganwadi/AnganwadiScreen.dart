@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../models/DWSM/SchoolinfoResponse.dart';
 import '../../../models/LabInchargeResponse/AllLabResponse.dart';
 import '../../../providers/dwsmDashboardProvider.dart';
-import '../../../providers/masterProvider.dart';
-import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
 import '../../../utils/CustomSearchableDropdown.dart';
@@ -20,8 +18,6 @@ class AnganwadiScreen extends StatefulWidget {
 }
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
-  late Masterprovider masterProvider;
-  late DwsmDashboardProvider dwsmprovider;
   final CameraHelper _cameraHelper = CameraHelper();
   // Style constants
   final _labelStyle = TextStyle(
@@ -38,17 +34,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   @override
   void initState() {
     super.initState();
-    dwsmprovider = Provider.of<DwsmDashboardProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,1);
-    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
+
     return ChangeNotifierProvider.value(
-      value: Provider.of<DwsmDashboardProvider>(context, listen: false),
+      value: Provider.of<DwsmDashboardProvider>(context, listen: true),
       child: Consumer<DwsmDashboardProvider>(
         builder: (context, provider, child) {
           return Container(
@@ -117,7 +110,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        '${paramProvider.selectedSchoolResult ?? "N/A"}',
+                                        '${provider.selectedSchoolName ?? "N/A"} (${provider.selectedSchoolResult ?? "N/A"})',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -251,7 +244,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       children: [
                                         Text("Latitude:", style: _labelStyle),
                                         const SizedBox(width: 2),
-                                        Text("${dwsmprovider.currentLatitude ?? 'N/A'}", style: _valueStyle),
+                                        Text("${provider.currentLatitude ?? 'N/A'}", style: _valueStyle),
                                       ],
                                     ),
 
@@ -259,7 +252,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       children: [
                                         Text("Longitude:", style: _labelStyle),
                                         const SizedBox(width: 2),
-                                        Text("${paramProvider.currentLongitude ?? 'N/A'}", style: _valueStyle),
+                                        Text("${provider.currentLongitude ?? 'N/A'}", style: _valueStyle),
                                       ],
                                     ),
                                   ],
