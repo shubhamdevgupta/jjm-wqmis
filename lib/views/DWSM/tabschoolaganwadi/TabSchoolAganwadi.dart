@@ -44,22 +44,28 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return;
 
-      dwsmDashboardProvider.clearSelectedSchool();
-      dwsmDashboardProvider.schoolResultList.clear();
-
       if (mTabController.index == 0) {
         dwsmDashboardProvider.fetchSchoolInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           0, 0, 0, 0,
         );
-      } else if (mTabController.index == 1) {
+        dwsmDashboardProvider.clearSelectedAnganwadi();
+        dwsmDashboardProvider.anganwadiList.clear();
+
+      }else if (mTabController.index == 1) {
+        dwsmDashboardProvider.anganwadiList.clear();
+        dwsmDashboardProvider.clearSelectedAnganwadi();
+
         dwsmDashboardProvider.fetchSchoolInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           0, 0, 0, 1,
         );
+        dwsmDashboardProvider.schoolResultList.clear();
+        dwsmDashboardProvider.clearSelectedSchool();
       }
+
     });
 
 

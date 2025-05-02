@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../repository/FTKREpository.dart';
+import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
@@ -17,18 +18,25 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String errorMsg = '';
   int baseStatus=101;
 
-  final FTKRepository _repository = FTKRepository();
-
   List<SchoolResult> schoolResultList = [];
-  int? selectedSchoolResult;
+  String? selectedSchoolResult;
   String? selectedSchoolName;
-/*  List<Alllabresponse> labList = [];
-  String? selectedLab = "";*/
 
-  bool _isLoading = false;
-  String? _responseMessage;
+  List<SchoolResult> anganwadiList = [];
+  String? selectedAnganwadi;
+  String? selectedAnganwadiName;
 
-  String? get responseMessage => _responseMessage;
+  double? get currentLatitude => _currentLatitude;
+
+  double? get currentLongitude => _currentLongitude;
+
+  double? _currentLatitude;
+  double? _currentLongitude;
+
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+
+  String? ftkSubmitResponse;
 
   Future<void> loadDwsmDashboardData(
       int stateId, int DistrictId, String fineYear) async {
@@ -53,13 +61,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  @override
-  void reset() {
-    // TODO: implement reset
-  }
-
-
-  Future<void> submitFTK({
+ /* Future<void> submitFTK({
     required int userId,
     required int schoolId,
     required int stateId,
@@ -97,19 +99,23 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
-  }
+  }*/
 
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
-    //notifyListeners();
+    notifyListeners();
 
     try {
-      final rawSchoolInfo = await _repository.fetchSchoolInfo(
+      final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
       if (rawSchoolInfo.status == 1) {
-        schoolResultList = rawSchoolInfo.result;
+        if(type==0){
+          schoolResultList = rawSchoolInfo.result;
+        }else if(type==1){
+          anganwadiList = rawSchoolInfo.result;
+        }
       } else {
         errorMsg = rawSchoolInfo.message;
       }
@@ -123,15 +129,42 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  double? get currentLatitude => _currentLatitude;
+  Future<void> submitFtkData(int userId,
+      int schoolId,
+      int stateId,
+      String photoBase64,
+      String fineYear,
+      String remark,
+      String latitude,
+      String longitude,
+      String ipAddress,)async {
+    isLoading = true;
+    notifyListeners();
 
-  double? get currentLongitude => _currentLongitude;
+    try {
+      final rawSchoolInfo = await _dwsmRepository.submitFtk(userId,schoolId,stateId,photoBase64,fineYear,remark,latitude,longitude,ipAddress);
+      baseStatus=rawSchoolInfo.status;
+      if (rawSchoolInfo.status == 1) {
+        ftkSubmitResponse=rawSchoolInfo.message;
+      } else {
+        errorMsg = rawSchoolInfo.message;
+      }
+    } catch (e) {
+      debugPrint('Error in fetching source information: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
-  double? _currentLatitude;
-  double? _currentLongitude;
 
 
-
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
+  }
   Future<void> fetchLocation() async {
     isLoading = true;
     notifyListeners();
@@ -164,17 +197,28 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  void setSelectedSchool(int id) {
+  void setSelectedSchool(String id, String name) {
     selectedSchoolResult = id;
-    selectedSchoolName = schoolResultList.firstWhere((s) => s.id == id, orElse: () => SchoolResult(name: '', id: 0, demonstrated: 0)).name;
+    selectedSchoolName = name;
     notifyListeners();
   }
-
+  void setSelectedAnganwadi(String id, String name) {
+    selectedAnganwadi = id;
+    selectedAnganwadiName = name;
+    notifyListeners();
+  }
 
   void clearSelectedSchool() {
-    selectedSchoolResult = 0;
-    selectedSchoolName = null;
+    selectedSchoolResult = '';
+    selectedSchoolName='N/A';
+    notifyListeners();
+  }
+  void clearSelectedAnganwadi() {
+    selectedAnganwadi = '';
+    selectedAnganwadiName='N/A';
     notifyListeners();
   }
 
+
+/////////////////////////////////////////////////////////////////////////////
 }
