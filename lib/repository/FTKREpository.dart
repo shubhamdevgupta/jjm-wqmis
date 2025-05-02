@@ -46,16 +46,5 @@ class FTKRepository {
   }
 
 
-  Future<BaseResponseModel<SchoolResult>> fetchSchoolInfo(int Stateid, int Districtid,
-      int Blockid, int Gpid, int Villageid, int type) async {
-    try {
-      final response = await _apiService.get(
-          'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
-      print("RRRRR_----${response}");
-      return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
-  }
+
 }

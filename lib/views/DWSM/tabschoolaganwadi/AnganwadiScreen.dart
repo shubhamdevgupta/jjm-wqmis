@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/DWSM/SchoolinfoResponse.dart';
-import '../../../models/LabInchargeResponse/AllLabResponse.dart';
 import '../../../providers/dwsmDashboardProvider.dart';
 import '../../../providers/masterProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
-import '../../../utils/CustomSearchableDropdown.dart';
+import '../../../utils/CustomDropdown.dart';
 import '../../../utils/LoaderUtils.dart';
 
 class AnganwadiScreen extends StatefulWidget {
@@ -22,7 +18,12 @@ class AnganwadiScreen extends StatefulWidget {
 class _AnganwadiScreen extends State<AnganwadiScreen> {
   late Masterprovider masterProvider;
   late DwsmDashboardProvider dwsmprovider;
+  final LocalStorageService _localStorage = LocalStorageService();
+  String userId = '';
+  String stateId = '';
+
   final CameraHelper _cameraHelper = CameraHelper();
+
   // Style constants
   final _labelStyle = TextStyle(
     fontSize: 16,
@@ -35,18 +36,20 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     color: Colors.black.withOpacity(0.7),
   );
   TextEditingController remarkController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     dwsmprovider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    userId = _localStorage.getString(AppConstants.prefUserId)!;
+    stateId = _localStorage.getString(AppConstants.prefStateId)!;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,1);
+      Provider.of<DwsmDashboardProvider>(context, listen: false);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
     return ChangeNotifierProvider.value(
       value: Provider.of<DwsmDashboardProvider>(context, listen: false),
       child: Consumer<DwsmDashboardProvider>(
@@ -61,51 +64,76 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          CustomSearchableDropdown(
-                            title: 'Select Anganwadi',
-                            value: provider.schoolResultList.isNotEmpty
-                                ? provider.schoolResultList.first.name
-                                : null,
-                            items: provider.schoolResultList.map((lab) => lab.name ?? '').toList(),
-                            onChanged: (selectedLabText) {
-                              if (selectedLabText == null)
-                                return; // Handle null case
-
-                              final selectedLab = provider.schoolResultList.firstWhere(
-                                    (lab) => lab.name == selectedLabText,
-                                orElse: () => SchoolResult(name: 'name', id: 0, demonstrated: 0), // Default to a nullable object
+                          CustomDropdown(
+                            title: "Select Anganwadi",
+                            value: dwsmprovider.selectedAnganwadi,
+                            // this should be the selected ID
+                            items: dwsmprovider.anganwadiList.map((anganwadi) {
+                              return DropdownMenuItem<String>(
+                                value: anganwadi.id.toString(),
+                                // use ID as value
+                                child: Text(
+                                  anganwadi.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               );
-                              provider.setSelectedSchool(selectedLab.id);
+                            }).toList(),
+                            onChanged: (selectedId) {
+                              final selectedSchool =
+                                  dwsmprovider.anganwadiList.firstWhere(
+                                (item) => item.id.toString() == selectedId,
+                              );
+                              dwsmprovider.setSelectedAnganwadi(
+                                selectedId!,
+                                selectedSchool.name,
+                              );
                             },
                           ),
                           const SizedBox(
                             height: 10,
                           ),
 
-
-                          Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2),
+                          Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 10),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Anganwadi Details",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey.shade700,
                                   ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
+                                ),
+                                Divider(
+                                    thickness: 1, color: Colors.grey.shade300),
+                                const SizedBox(height: 8),
+                                Row(
                                   children: [
-                                    Icon(Icons.school_rounded, color: Colors.green),
-                                    SizedBox(width: 8),
+                                    Icon(Icons.school_rounded,
+                                        color: Colors.green),
+                                    const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        '${paramProvider.selectedSchoolResult ?? "N/A"}',
-                                        style: TextStyle(
+                                        '${dwsmprovider.selectedAnganwadiName ?? "N/A"}',
+                                        style: const TextStyle(
+
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.blueGrey,
@@ -118,24 +146,37 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             ),
                           ),
 
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: TextFormField(
-                                controller: remarkController,
-                                maxLines: 2,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+
+                                const SizedBox(height: 20),
+
+                                Text(
+                                  "Remarks",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey.shade700,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
+                                ),
+                                Divider(
+                                    thickness: 1, color: Colors.grey.shade300),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                  ),
+                                  child: TextFormField(
+                                    controller: remarkController,
+                                    maxLines: 2,
+                                    decoration: const InputDecoration.collapsed(
+                                      hintText: "Enter your remarks here...",
+                                    ),
+
                                   ),
                                   hintText: "Enter your remarks",
                                   hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
@@ -154,88 +195,89 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             ),
                           ),
 
-                          Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2),
+
+                                const SizedBox(height: 20),
+                                Text(
+                                  "Capture Sample Image",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey.shade700,
                                   ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text(
-                                      "Capture Sample Image",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueGrey.shade700,
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(thickness: 1, color: Colors.grey.shade300),
-                                  SizedBox(height: 2),
-                                  Center(
-                                    child: _cameraHelper.imageFile == null
-                                        ? GestureDetector(
-                                      onTap: () async {
-                                        await _cameraHelper.pickFromCamera();
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.blueGrey.withOpacity(0.2),
-                                              blurRadius: 8,
-                                              offset: Offset(0, 4),
+                                ),
+                                Divider(
+                                    thickness: 1, color: Colors.grey.shade300),
+                                const SizedBox(height: 12),
+                                Center(
+                                  child: _cameraHelper.imageFile == null
+                                      ? Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await _cameraHelper
+                                                    .pickFromCamera();
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.blueGrey
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 8,
+                                                      offset: Offset(0, 4),
+                                                    ),
+                                                  ],
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(24),
+                                                child: const Icon(
+                                                    Icons.camera_alt,
+                                                    size: 40,
+                                                    color: Colors.blue),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text("Tap to capture",
+                                                style: TextStyle(
+                                                    color: Colors.black54)),
+                                          ],
+                                        )
+                                      : Stack(
+                                          children: [
+                                            Container(
+                                              height: 160,
+                                              width: 120,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                image: DecorationImage(
+                                                  image: FileImage(
+                                                      _cameraHelper.imageFile!),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.close,
+                                                    color: Colors.white),
+                                                onPressed: () {
+                                                  _cameraHelper.removeImage();
+                                                  setState(() {});
+                                                },
+                                              ),
                                             ),
                                           ],
                                         ),
-                                        padding: const EdgeInsets.all(24),
-                                        child: Icon(Icons.camera_alt, size: 40, color: Colors.blue),
-                                      ),
-                                    )
-                                        : Stack(
-                                      children: [
-                                        Container(
-                                          height: 160,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
-                                            image: DecorationImage(
-                                              image: FileImage(_cameraHelper.imageFile!),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: IconButton(
-                                            icon: Icon(Icons.close, color: Colors.white),
-                                            onPressed: () {
-                                              _cameraHelper.removeImage();
-                                              setState(() {});
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
+
+                                const SizedBox(height: 20),
+
 
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
@@ -252,40 +294,31 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                     ),
                                   ],
                                 ),
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                                Divider(
+                                    thickness: 1, color: Colors.grey.shade300),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    // Heading
-                                    Text(
-                                      'Geo Location of Sample Taken',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.blueGrey.shade700,
-                                      ),
-                                    ),
-                                    Divider(thickness: 1, color: Colors.grey.shade300),
-                                    SizedBox(height: 8),
-                                    // Row for Latitude and Longitude
                                     Row(
                                       children: [
-                                        Icon(Icons.location_on, color: Colors.blue, size: 18),
-                                        SizedBox(width: 6),
-                                        Expanded(
-                                          child: Text(
-                                            'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}', // Reduces to 3 decimal places
-                                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: Colors.black.withOpacity(0.7)),
-                                          ),
-                                        ),
-                                        Icon(Icons.location_on, color: Colors.blue, size: 18),
-                                        SizedBox(width: 6),
-                                        Expanded(
-                                          child: Text(
-                                            'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}', // Reduces to 3 decimal places
-                                            style: TextStyle(fontSize: 13, color: Colors.black.withOpacity(0.7)),
-                                          ),
-                                        ),
+                                        Text("Latitude:", style: _labelStyle),
+                                        const SizedBox(width: 2),
+                                        Text(
+                                            "${dwsmprovider.currentLatitude ?? 'N/A'}",
+                                            style: _valueStyle),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Longitude:", style: _labelStyle),
+                                        const SizedBox(width: 2),
+                                        Text(
+                                            "${dwsmprovider.currentLongitude ?? 'N/A'}",
+                                            style: _valueStyle),
+
                                       ],
                                     ),
                                   ],
@@ -293,22 +326,20 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                               ),
                             ),
                           ),
-
                           ElevatedButton(
                               onPressed: () async {
-                                final provider = Provider.of<DwsmDashboardProvider>(context, listen: false);
-                                await provider.submitFTK(
-                                  userId: 1147404,
-                                  schoolId: 216439,
-                                  stateId: 31,
-                                  photoBase64: _cameraHelper.base64Image!,
-                                  fineYear: "2025-2026",
-                                  remark: "test",
-                                  latitude: "8778",
-                                  longitude: "8070",
-                                  ipAddress: "4135",
-                                );
 
+                                await dwsmprovider.submitFtkData(
+                                  int.parse(userId),
+                                  int.parse(dwsmprovider.selectedAnganwadi!),
+                                  int.parse(stateId),
+                                  _cameraHelper.base64Image!,
+                                  "2025-2026",
+                                  remarkController.text,
+                                  dwsmprovider.currentLatitude.toString(),
+                                  dwsmprovider.currentLatitude.toString(),
+                                  dwsmprovider.deviceId!,
+                                );
                               },
                               child: Text(
                                 AppConstants.submitSample,
@@ -322,20 +353,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       ),
                     ),
                   ),
-
                   if (provider.isLoading)
                     LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
-
-
-
             ),
           );
         },
       ),
     );
   }
-
-
 }

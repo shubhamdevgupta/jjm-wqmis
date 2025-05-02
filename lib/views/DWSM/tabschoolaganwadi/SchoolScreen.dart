@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
-import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/LabInchargeResponse/AllLabResponse.dart';
 import '../../../providers/dwsmDashboardProvider.dart';
-import '../../../providers/masterProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
-import '../../../utils/CustomSearchableDropdown.dart';
+import '../../../utils/CustomDropdown.dart';
 import '../../../utils/LoaderUtils.dart';
 import '../../../utils/toast_helper.dart';
 
@@ -22,7 +18,8 @@ class SchoolScreen extends StatefulWidget {
 class _SchoolScreen extends State<SchoolScreen> {
   late DwsmDashboardProvider dwsmprovider;
   final LocalStorageService _localStorage = LocalStorageService();
-  String userId='';
+  String userId = '';
+  String stateId = '';
   final CameraHelper _cameraHelper = CameraHelper();
 
 // Style constants
@@ -131,7 +128,8 @@ class _SchoolScreen extends State<SchoolScreen> {
   void initState() {
     super.initState();
     dwsmprovider = Provider.of<DwsmDashboardProvider>(context, listen: false);
-    userId=_localStorage.getString(AppConstants.prefUserId)!;
+    userId = _localStorage.getString(AppConstants.prefUserId)!;
+    stateId = _localStorage.getString(AppConstants.prefStateId)!;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<DwsmDashboardProvider>(context, listen: false);
     });
@@ -139,8 +137,7 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final paramProvider =
-        Provider.of<DwsmDashboardProvider>(context, listen: true);
+    dwsmprovider.fetchDeviceId();
     return ChangeNotifierProvider.value(
       value: Provider.of<DwsmDashboardProvider>(context, listen: false),
       child: Consumer<DwsmDashboardProvider>(
@@ -155,45 +152,30 @@ class _SchoolScreen extends State<SchoolScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          CustomSearchableDropdown(
-                            title: 'Select School',
-                            value: provider.schoolResultList.isNotEmpty
-                                ? provider.schoolResultList.first.name
-                                : null,
-                            items: provider.schoolResultList.map((lab) => lab.name ?? '').toList(),
-                            onChanged: (selectedLabText) {
-                              if (selectedLabText == null)
-                                return; // Handle null case
-
-                              final selectedLab = provider.schoolResultList.firstWhere(
-                                    (lab) => lab.name == selectedLabText,
-                                orElse: () => SchoolResult(name: 'name', id: 0, demonstrated: 0), // Default to a nullable object
+                          CustomDropdown(
+                            title: "Select School",
+                            value: dwsmprovider.selectedSchoolResult,
+                            items: dwsmprovider.schoolResultList.map((school) {
+                              return DropdownMenuItem<String>(
+                                value: school.id.toString(), // use ID as value
+                                child: Text(
+                                  school.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               );
-                              provider.setSelectedSchool(selectedLab.id);
+                            }).toList(),
+                            onChanged: (selectedId) {
+                              final selectedSchool =
+                                  dwsmprovider.schoolResultList.firstWhere(
+                                (item) => item.id.toString() == selectedId,
+                              );
+                              dwsmprovider.setSelectedSchool(
+                                selectedId!,
+                                selectedSchool.name,
+                              );
                             },
                           ),
-                      /*    CustomSearchableDropdown(
-                            title: "",
-                            value: provider.selectedSchoolResult,
-                            items: provider.schoolResult
-                                .map((school) =>
-                                    school.name ??
-                                    '') // Display text, not value
-                                .toList(),
-                            onChanged: (value) {
-                              if (value == null)
-                                return; // Handle null case
-
-                              final selectedSchool = provider.schoolResult.firstWhere(
-                                    (school) => school.name == value,
-                                orElse: () => SchoolResult(
-                                    name: "",
-                                    id:0, demonstrated: 0
-                                    ), // Default to a nullable object
-                              );
-                              provider.setSelectedSchool(selectedSchool.id);
-                            },
-                          ),*/
                           const SizedBox(
                             height: 10,
                           ),
@@ -221,8 +203,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                                     SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
-                                        '${paramProvider.selectedSchoolResult ?? "N/A"}',
-                                        style: TextStyle(
+                                        '${dwsmprovider.selectedSchoolName ?? "N/A"}',
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.blueGrey,
@@ -250,9 +232,26 @@ class _SchoolScreen extends State<SchoolScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
+                                ),
+                                Divider(
+                                    thickness: 1, color: Colors.grey.shade300),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                  ),
+                                  child: TextFormField(
+                                    controller: remarkController,
+                                    maxLines: 2,
+                                    decoration: const InputDecoration.collapsed(
+                                      hintText: "Enter your remarks here...",
+                                    ),
                                   ),
                                   hintText: "Enter your remarks",
                                   hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
@@ -416,7 +415,19 @@ class _SchoolScreen extends State<SchoolScreen> {
 
                           ElevatedButton(
                               onPressed: () async {
-                                validateAndSubmit(context, dwsmprovider);
+
+                                LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading);
+                                await dwsmprovider.submitFtkData(
+                                  int.parse(userId),
+                                  int.parse(dwsmprovider.selectedSchoolResult!),
+                                  int.parse(stateId),
+                                  _cameraHelper.base64Image!,
+                                  "2025-2026",
+                                  remarkController.text,
+                                  dwsmprovider.currentLatitude.toString(),
+                                  dwsmprovider.currentLatitude.toString(),
+                                  dwsmprovider.deviceId!,
+                                );
                               },
                               child: Text(
                                 AppConstants.submitSample,
