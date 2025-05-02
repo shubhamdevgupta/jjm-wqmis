@@ -43,12 +43,8 @@ class FTKRepository {
       rethrow;
     }
 
-
-
   }
 
-
-//rsv
 
   Future<BaseResponseModel<SchoolResult>> fetchSchoolInfo(int Stateid, int Districtid,
       int Blockid, int Gpid, int Villageid, int type) async {
