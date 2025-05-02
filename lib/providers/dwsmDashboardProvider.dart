@@ -58,7 +58,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
     // TODO: implement reset
   }
 
-  /////////////////////////////////////////////////////////////////////////////
 
   Future<void> submitFTK({
     required int userId,
