@@ -18,11 +18,17 @@ class Demonstrationscreen extends StatefulWidget {
 }
 
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
-
+  LocalStorageService _localStorageService = LocalStorageService();
+  String? stateId;
+  String? districtId="471";
   @override
   void initState() {
+
+     stateId = _localStorageService.getString(AppConstants.prefStateId);
+   //  districtId = _localStorageService.getString(AppConstants.prefDistrictId);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 471, "2025-2026",0);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026",0);
     });
     super.initState();
   }
@@ -75,11 +81,9 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           ),
 
           body: Consumer<DwsmDashboardProvider>(builder : (context,provider , child){
-
             if (provider.isLoading) {
               return LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
             }
-
             if (provider.villages.isEmpty) {
               return Center(
                 child: Container(
@@ -137,20 +141,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
                         onPressed: () {
-                          var _localStorage = LocalStorageService();
-                          final stateId = _localStorage.getString(AppConstants.prefStateId);
-                          final districtId = _localStorage.getString(AppConstants.prefDistrictId);
-
-                          Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(
-                            stateId == null ? 0 : int.parse(stateId),
-                            districtId == null ? 0 : int.parse(districtId),
-                            "2025-2026",0
-                          );
-
-
-                      //    Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 471, "2025-2026",0);
-
-                        },
+                          provider.fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026", 0);
+                          },
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text("Refresh"),
                         style: ElevatedButton.styleFrom(
@@ -297,63 +289,58 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                // showImage(imageBytes);
                               },*/
 
+                                onPressed: () async {
+                                  try {
+                                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
+                                    await provider.fetchDemonstrationList(
+                                      int.parse(stateId!),
+                                      int.parse(districtId!),
+                                      "2025-2026",
+                                      village.schoolId,
+                                    );
 
-////////
-                              onPressed: () async {
-                                provider.loadDwsmDashboardData(int.parse("31"), 471, "2025-2026", village.schoolId);
+                                    final updatedVillage = provider.villages.firstWhere(
+                                          (v) => v.schoolId == village.schoolId,
+                                      orElse: () => village,
+                                    );
 
-                                try {
-                                  // Wait until photo is populated or timeout after X seconds
-                                  int retryCount = 0;
-                                  const maxRetries = 10;
-                                  const retryDelay = Duration(milliseconds: 1000);
-
-
-                                  while (village.photo.isEmpty && retryCount < maxRetries) {
-                                    await Future.delayed(retryDelay);
-                                    retryCount++;
-                                  }
-
-
-                                  if (village.photo.isEmpty) {
-                                    print("Image is still empty after waiting.");
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image not available at the moment.")),);
-                                    return;
-                                  }
-
-
-                                  final base64String = village.photo.contains(',') ? village.photo.split(',').last : village.photo;
-                                  final imageBytes = base64Decode(base64String);
-
-
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text("School Photo"),
-                                        content: ClipRRect(
-                                          borderRadius: BorderRadius.circular(12),
-                                          child: Image.memory(imageBytes, fit: BoxFit.contain),
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.of(context).pop(),
-                                            child: const Text("Close"),
-                                          ),
-                                        ],
+                                    if (updatedVillage.photo.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text("Image not available at the moment.")),
                                       );
-                                    },
-                                  );
-                                } catch (e) {
-                                  print("Image decoding failed: $e");
-                                }
-                              },
+                                      return;
+                                    }
 
-////////
+                                    final base64String = updatedVillage.photo.contains(',')
+                                        ? updatedVillage.photo.split(',').last
+                                        : updatedVillage.photo;
+                                    final imageBytes = base64Decode(base64String);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text("School Photo"),
+                                          content: ClipRRect(
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Image.memory(imageBytes, fit: BoxFit.contain),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.of(context).pop(),
+                                              child: const Text("Close"),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } catch (e) {
+                                    print("Error: $e");
+                                  }
+                                },
                               icon: const Icon(Icons.remove_red_eye, size: 18),
                               label: const Text("View"),
                               style: ElevatedButton.styleFrom(

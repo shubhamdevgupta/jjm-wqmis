@@ -12,7 +12,7 @@ import '../utils/GlobalExceptionHandler.dart';
 class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();
 
-  Future<BaseResponseModel<Village>> fetchDemonstartionList(
+  Future<BaseResponseModel<Village>> fetchDemonstrationList(
       int StateId, int DistrictId, String FineYear, int schoolId) async {
     try {
       // Call the POST method from BaseApiService

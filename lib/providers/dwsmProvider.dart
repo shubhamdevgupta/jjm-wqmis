@@ -48,19 +48,29 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? errorMessage;
   BaseResponseModel<FTKResponse>? ftkResponse;
 
-  Future<void> loadDwsmDashboardData(int stateId, int DistrictId, String fineYear, int schoolId) async {
+  Future<void> fetchDemonstrationList(int stateId, int DistrictId, String fineYear, int schoolId) async {
     isLoading = true;
   ///  notifyListeners();
     try {
-      final rawLIst = await _dwsmRepository.fetchDemonstartionList(
+      final rawLIst = await _dwsmRepository.fetchDemonstrationList(
           stateId, DistrictId, fineYear, schoolId);
+        if (rawLIst.status==1) {
+          final List<Village> newData = rawLIst.result;
 
-
-      if(rawLIst.status==1){
-        villages=rawLIst.result;
-      }else{
-        errorMsg=rawLIst.message;
-      }
+          if (schoolId != 0) {
+            final index = villages.indexWhere((v) => v.schoolId == schoolId);
+            if (index != -1) {
+              villages[index] = newData.first;
+            } else {
+              villages.add(newData.first);
+            }
+          } else {
+            villages = newData;
+          }
+          notifyListeners();
+        } else {
+          errorMessage=rawLIst.message;
+        }
 
 /*      if (rawLIst.status == 1) {
         if (schoolId == 0) {
