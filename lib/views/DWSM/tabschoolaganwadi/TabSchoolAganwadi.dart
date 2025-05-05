@@ -3,7 +3,7 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmDashboardProvider.dart';
+import '../../../providers/dwsmProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppConstants.dart';
 import 'AnganwadiScreen.dart';

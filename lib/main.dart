@@ -6,7 +6,7 @@ import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
-import 'package:jjm_wqmis/providers/dwsmDashboardProvider.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
