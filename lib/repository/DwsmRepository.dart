@@ -21,7 +21,7 @@ class DwsmRepository{
           'StateId': StateId,
           'DistrictId': DistrictId,
           'FineYear': FineYear,
-          'SchoolId': FineYear,
+          'SchoolId': schoolId,
         }),
       );
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));

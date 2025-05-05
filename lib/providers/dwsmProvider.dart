@@ -57,7 +57,14 @@ class DwsmDashboardProvider extends ChangeNotifier {
       final rawLIst = await _dwsmRepository.fetchDemonstartionList(
           stateId, DistrictId, fineYear, schoolId);
 
-      if (rawLIst.status == 1) {
+
+      if(rawLIst.status==1){
+        villages=rawLIst.result;
+      }else{
+        errorMsg=rawLIst.message;
+      }
+
+/*      if (rawLIst.status == 1) {
         if (schoolId == 0) {
           villages = rawLIst.result;
         } else if (schoolId != 0) {
@@ -83,7 +90,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
         }
       } else {
         errorMsg = rawLIst.message;
-      }
+      }*/
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);

@@ -80,8 +80,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                 itemBuilder: (context, index) {
                   final village = provider.villages[index];
 
-                  final base64String = village.photo.split(',').last;
-                  final imageBytes = base64Decode(base64String);
 
                   return Container(
                     margin: const EdgeInsets.all(12),
@@ -188,7 +186,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                               onPressed: () {
                                 provider.loadDwsmDashboardData(int.parse("31"), 471, "2025-2026", village.schoolId);
                                 try {
-                                  final photo = provider.villagePhoto!;
+                                  final photo = village.photo;
                                   if (photo.isEmpty) {
                                     print("Image string is empty.");
                                     return;
@@ -200,7 +198,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                 } catch (e) {
                                   print("Image decoding failed: $e");
                                 }
-                                showImage(imageBytes);
+                               // showImage(imageBytes);
                               },
                               icon: const Icon(Icons.remove_red_eye, size: 18),
                               label: const Text("View"),
