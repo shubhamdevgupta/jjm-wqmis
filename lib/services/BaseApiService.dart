@@ -15,7 +15,6 @@ class BaseApiService {
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
 
 
-  // POST Request Function
   Future<dynamic> post(
     String endpoint, {
     Map<String, String>? headers,
@@ -28,7 +27,6 @@ class BaseApiService {
 
     log('POST Request: URL: $url');
     log('Headers: ${headers.toString()}');
-    try {
       await _checkConnectivity();
       final response = await http.post(url, headers: headers, body: body,);
 
@@ -39,17 +37,7 @@ class BaseApiService {
       log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
       log('Response Body: ${response.body}');
 
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        throw ApiException("API Error: ${response.statusCode}");
-      }
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } catch (e) {
-      throw Exception('Api Error :: ');
-    }
+      return _processResponse(response);
   }
 
   Future<dynamic> get(String endpoint, {ApiType apiType = ApiType.ejalShakti, Map<String, String>? headers}) async {
@@ -61,7 +49,6 @@ class BaseApiService {
 
     log('GET Request: URL: $url \n Headers: ${headers.toString()}');
 
-    try {
       await _checkConnectivity();
 
       final response = await http.get(url, headers: headers,);
@@ -72,19 +59,11 @@ class BaseApiService {
       log('Response: ${response.statusCode} : Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('API Error : $e');
-    }
   }
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      // No internet connection
       throw NetworkException(
           'No internet connection. Please check your connection and try again.');
     }
@@ -104,6 +83,8 @@ class BaseApiService {
         throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
       case 502:
         throw ApiException('Bad Gateway: ${handleErrorResp(response.body,'')}');
+        case 408:
+        throw ApiException('Request Timeout : Please Try after some time');
       default:
         throw ApiException('Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body,'')}');
     }
