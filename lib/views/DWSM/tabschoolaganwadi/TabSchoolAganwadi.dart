@@ -85,7 +85,10 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
       dwsmDashboardProvider.fetchSchoolInfo(
         int.parse(masterProvider.selectedStateId!),
         int.parse(masterProvider.selectedDistrictId!),
-        0, 0, 0, 0,
+        int.parse(masterProvider.selectedBlockId!),
+        int.parse(masterProvider.selectedGramPanchayat!),
+        int.parse(masterProvider.selectedVillage!),
+        0,
       );
     }
   }

@@ -26,7 +26,6 @@ class DwsmRepository{
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
 
     } catch (e) {
-      debugPrint('Error in fetchDemonstartionList: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }

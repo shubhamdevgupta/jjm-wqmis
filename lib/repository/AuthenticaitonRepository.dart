@@ -28,7 +28,6 @@ class AuthenticaitonRepository {
 
       return LoginResponse.fromJson(response);
     } catch (e) {
-      debugPrint('Error in loginUser: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
@@ -41,7 +40,6 @@ class AuthenticaitonRepository {
 
         return Dashboardresponse.fromJson(response);
     } catch ( e) {
-      debugPrint('Error in fetchDataresponse: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
@@ -55,7 +53,6 @@ class AuthenticaitonRepository {
         return Dwsmdashboardresponse.fromJson(response);
 
     } catch (e) {
-      debugPrint('Error in fetchDataresponse: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }

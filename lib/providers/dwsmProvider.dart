@@ -47,11 +47,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? errorMessage;
   BaseResponseModel<FTKResponse>? ftkResponse;
 
-  Future<void> loadDwsmDashboardData(
-      int stateId, int DistrictId, String fineYear) async {
-    print('Calling the state function...');
+  Future<void> loadDwsmDashboardData(int stateId, int DistrictId, String fineYear) async {
     isLoading = true;
-    notifyListeners();
+  ///  notifyListeners();
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstartionList(
           stateId, DistrictId, fineYear);
