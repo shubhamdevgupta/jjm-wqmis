@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../../models/DWSM/DwsmDashboard.dart';
 import '../../providers/dwsmProvider.dart';
+import '../../utils/AppConstants.dart';
 
 
 class Demonstrationscreen extends StatefulWidget {
@@ -73,13 +75,105 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           ),
 
           body: Consumer<DwsmDashboardProvider>(builder : (context,provider , child){
-            return
-              provider.isLoading?LoaderUtils.conditionalLoader(isLoading: provider.isLoading):
-              ListView.builder(
+
+            if (provider.isLoading) {
+              return LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
+            }
+
+            if (provider.villages.isEmpty) {
+              return Center(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade50, Colors.white],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blueAccent.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.cloud_off,
+                          size: 48,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "No Data Found",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Looks like there’s nothing to show here.\nTry refreshing the data.",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade700,
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          var _localStorage = LocalStorageService();
+                          final stateId = _localStorage.getString(AppConstants.prefStateId);
+                          final districtId = _localStorage.getString(AppConstants.prefDistrictId);
+
+                          Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(
+                            stateId == null ? 0 : int.parse(stateId),
+                            districtId == null ? 0 : int.parse(districtId),
+                            "2025-2026",0
+                          );
+
+
+                      //    Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 471, "2025-2026",0);
+
+                        },
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text("Refresh"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            return  ListView.builder(
                 itemCount: provider.villages.length,
                 itemBuilder: (context, index) {
                   final village = provider.villages[index];
-
 
                   return Container(
                     margin: const EdgeInsets.all(12),
@@ -183,14 +277,16 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: ElevatedButton.icon(
-                              onPressed: () {
+                             /* onPressed: () {
                                 provider.loadDwsmDashboardData(int.parse("31"), 471, "2025-2026", village.schoolId);
                                 try {
-                                  final photo = village.photo;
+                                 final photo = village.photo;
+                                  // const photo = AppConstants.photo;
                                   if (photo.isEmpty) {
                                     print("Image string is empty.");
                                     return;
                                   }
+                                  Future.delayed(7);
 
                                   final base64String = photo.contains(',') ? photo.split(',').last : photo;
                                   final imageBytes = base64Decode(base64String);
@@ -199,7 +295,65 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   print("Image decoding failed: $e");
                                 }
                                // showImage(imageBytes);
+                              },*/
+
+
+////////
+                              onPressed: () async {
+                                provider.loadDwsmDashboardData(int.parse("31"), 471, "2025-2026", village.schoolId);
+
+                                try {
+                                  // Wait until photo is populated or timeout after X seconds
+                                  int retryCount = 0;
+                                  const maxRetries = 10;
+                                  const retryDelay = Duration(milliseconds: 1000);
+
+
+                                  while (village.photo.isEmpty && retryCount < maxRetries) {
+                                    await Future.delayed(retryDelay);
+                                    retryCount++;
+                                  }
+
+
+                                  if (village.photo.isEmpty) {
+                                    print("Image is still empty after waiting.");
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image not available at the moment.")),);
+                                    return;
+                                  }
+
+
+                                  final base64String = village.photo.contains(',') ? village.photo.split(',').last : village.photo;
+                                  final imageBytes = base64Decode(base64String);
+
+
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text("School Photo"),
+                                        content: ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.memory(imageBytes, fit: BoxFit.contain),
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: const Text("Close"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } catch (e) {
+                                  print("Image decoding failed: $e");
+                                }
                               },
+
+////////
                               icon: const Icon(Icons.remove_red_eye, size: 18),
                               label: const Text("View"),
                               style: ElevatedButton.styleFrom(
