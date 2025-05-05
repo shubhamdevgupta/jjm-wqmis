@@ -12,6 +12,7 @@ class AppConstants {
   static const String prefMobile = 'mobile';
   static const String prefStateId = 'stateId';
   static const String prefStateName = 'stateName';
+  static const String prefDistrictId = 'districtID';
   static const String prefRegId = 'reg_id';
 
   /////////////////////   Routes literals  //////////////////////////////////

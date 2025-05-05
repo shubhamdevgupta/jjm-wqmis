@@ -7,7 +7,7 @@ import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/ParameterProvider.dart';
-import '../../providers/dwsmDashboardProvider.dart';
+import '../../providers/dwsmProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
 import '../../utils/CustomDropdown.dart';
