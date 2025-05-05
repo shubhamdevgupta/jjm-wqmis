@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
+import '../models/BaseResponse.dart';
+import '../models/DWSM/Ftk_response.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../repository/FTKREpository.dart';
 import '../utils/DeviceUtils.dart';
@@ -73,10 +77,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
     required String ipAddress,
   }) async {
     _isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
     try {
-      Response response = await _repository.submitFTKData(
+      ftkResponse = await _repository.submitFTKData(
         userId: userId,
         schoolId: schoolId,
         stateId: stateId,
@@ -88,23 +93,37 @@ class DwsmDashboardProvider extends ChangeNotifier {
         ipAddress: ipAddress,
       );
 
-      if (response.statusCode == 200) {
-        _responseMessage = "FTK data submitted successfully!";
-      } else {
-        _responseMessage = "Failed to submit: ${response.body}";
+      if (ftkResponse?.status == 1) {
+        _responseMessage = ftkResponse?.message;
       }
+      else{
+        errorMessage = ftkResponse?.message ?? "FTK submission failed.";
+      }
+
     } catch (e) {
-      _responseMessage = "Error: $e";
+      errorMessage = "Something went wrong.";
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
+
 
     _isLoading = false;
     notifyListeners();
   }*/
 
+
+  String? errorMessage;
+  BaseResponseModel<FTKResponse>? ftkResponse;
+
+
+
+
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
-    notifyListeners();
+    //notifyListeners();
 
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
@@ -137,7 +156,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
       String remark,
       String latitude,
       String longitude,
-      String ipAddress,)async {
+      String ipAddress,
+      Function onSuccess,
+
+      )async {
     isLoading = true;
     notifyListeners();
 
@@ -146,9 +168,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
       baseStatus=rawSchoolInfo.status;
       if (rawSchoolInfo.status == 1) {
         ftkSubmitResponse=rawSchoolInfo.message;
+
       } else {
         errorMsg = rawSchoolInfo.message;
       }
+      onSuccess();
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);

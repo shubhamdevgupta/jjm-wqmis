@@ -1036,8 +1036,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {
-                            validateAndSubmit(context, provider, masterProvider,
-                                paramProvider);
+                            validateAndSubmit(context, provider, masterProvider, paramProvider);
                           },
                           child: Text(
                             AppConstants.submitSample,
@@ -1055,8 +1054,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {
-                            validateAndSubmit(context, provider, masterProvider,
-                                paramProvider);
+                            validateAndSubmit(context, provider, masterProvider, paramProvider);
                           },
                           child: Text(
                             AppConstants.submitSample,
