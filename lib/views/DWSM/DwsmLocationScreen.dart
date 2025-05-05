@@ -287,7 +287,7 @@ class _DwsmLocation extends State<DwsmLocation> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    await dwsmprovider.fetchLocation();
+                    await dwsmprovider.fetchLocation(context);
 
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToSubmit_info);
