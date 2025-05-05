@@ -18,7 +18,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 0, "2025-2026");
+      Provider.of<DwsmDashboardProvider>(context, listen: false).loadDwsmDashboardData(int.parse("31"), 471, "2025-2026");
     });
     super.initState();
   }

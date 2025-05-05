@@ -309,7 +309,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                     const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Departmental User',
+                                      'DWSM ',
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,
@@ -514,6 +514,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
+    roleId = _localStorage.getString(AppConstants.prefRoleId) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     print("token-------------- $token ----state naem$stateName");

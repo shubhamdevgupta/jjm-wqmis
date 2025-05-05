@@ -20,7 +20,7 @@ class CameraHelper {
     try {
       final pickedFile = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: 50,
+        imageQuality: 5,
       );
 
       if (pickedFile != null) {
