@@ -156,7 +156,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
       String remark,
       String latitude,
       String longitude,
-      String ipAddress,)async {
+      String ipAddress,
+      Function onSuccess,
+
+      )async {
     isLoading = true;
     notifyListeners();
 
@@ -165,9 +168,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
       baseStatus=rawSchoolInfo.status;
       if (rawSchoolInfo.status == 1) {
         ftkSubmitResponse=rawSchoolInfo.message;
+
       } else {
         errorMsg = rawSchoolInfo.message;
       }
+      onSuccess();
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);

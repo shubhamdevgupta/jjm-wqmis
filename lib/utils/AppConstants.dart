@@ -28,7 +28,7 @@ class AppConstants {
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';
   static const String dashboard = 'Dashboard';
-  static const String submitSample = 'Submit Sample';
+  static const String submitSample = 'Submit';
   static const String submitSampleInfo = 'Submit Sample Info ';
   static const String listOfSamples = 'List of Samples';
   static const String maintenance = 'Maintenance';
