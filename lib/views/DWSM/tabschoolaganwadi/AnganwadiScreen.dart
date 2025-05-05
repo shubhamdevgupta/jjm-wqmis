@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmDashboardProvider.dart';
+import '../../../providers/dwsmProvider.dart';
 import '../../../providers/masterProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
