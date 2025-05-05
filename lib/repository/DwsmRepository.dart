@@ -13,7 +13,7 @@ class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<Village>> fetchDemonstartionList(
-      int StateId, int DistrictId, String FineYear) async {
+      int StateId, int DistrictId, String FineYear, int schoolId) async {
     try {
       // Call the POST method from BaseApiService
       final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
@@ -21,6 +21,7 @@ class DwsmRepository{
           'StateId': StateId,
           'DistrictId': DistrictId,
           'FineYear': FineYear,
+          'SchoolId': schoolId,
         }),
       );
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));

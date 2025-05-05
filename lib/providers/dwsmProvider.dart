@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   List<Village> villages = [];
   String errorMsg = '';
-  int baseStatus=101;
+  int baseStatus = 101;
 
   List<SchoolResult> schoolResultList = [];
   String? selectedSchoolResult;
@@ -40,25 +39,56 @@ class DwsmDashboardProvider extends ChangeNotifier {
   double? _currentLongitude;
 
   String? _deviceId;
+
   String? get deviceId => _deviceId;
 
   String? ftkSubmitResponse;
+  String? villagePhoto;
 
   String? errorMessage;
   BaseResponseModel<FTKResponse>? ftkResponse;
 
-  Future<void> loadDwsmDashboardData(int stateId, int DistrictId, String fineYear) async {
+  Future<void> loadDwsmDashboardData(int stateId, int DistrictId, String fineYear, int schoolId) async {
     isLoading = true;
   ///  notifyListeners();
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstartionList(
-          stateId, DistrictId, fineYear);
-      if (rawLIst.status == 1) {
-        villages = rawLIst.result;
-        print('villagesvillages ${villages}');
+          stateId, DistrictId, fineYear, schoolId);
+
+
+      if(rawLIst.status==1){
+        villages=rawLIst.result;
+      }else{
+        errorMsg=rawLIst.message;
+      }
+
+/*      if (rawLIst.status == 1) {
+        if (schoolId == 0) {
+          villages = rawLIst.result;
+        } else if (schoolId != 0) {
+          final matchedVillage = villages.firstWhere(
+                  (v) => v.schoolId == schoolId,
+              orElse: () => Village(
+                  stateName: '',
+                  districtName: '',
+                  blockName: 'blockName',
+                  panchayatName: 'panchayatName',
+                  villageName: 'villageName',
+                  userId: 0,
+                  stateId: 0,
+                  districtId: 0,
+                  blockId: 0,
+                  panchayatId: 0,
+                  villageId: 0,
+                  schoolId: 0,
+                  photo: ""));
+
+          villagePhoto = matchedVillage.photo;
+          print('Saved photo string: $villagePhoto');
+        }
       } else {
         errorMsg = rawLIst.message;
-      }
+      }*/
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -77,15 +107,15 @@ class DwsmDashboardProvider extends ChangeNotifier {
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
       if (rawSchoolInfo.status == 1) {
-        if(type==0){
+        if (type == 0) {
           schoolResultList = rawSchoolInfo.result;
-        }else if(type==1){
+        } else if (type == 1) {
           anganwadiList = rawSchoolInfo.result;
         }
       } else {
         errorMsg = rawSchoolInfo.message;
       }
-      baseStatus=rawSchoolInfo.status;
+      baseStatus = rawSchoolInfo.status;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -95,7 +125,8 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> submitFtkData(int userId,
+  Future<void> submitFtkData(
+      int userId,
       int schoolId,
       int stateId,
       String photoBase64,
@@ -105,17 +136,24 @@ class DwsmDashboardProvider extends ChangeNotifier {
       String longitude,
       String ipAddress,
       Function onSuccess,
-
-      )async {
+      ) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final rawSchoolInfo = await _dwsmRepository.submitFtk(userId,schoolId,stateId,photoBase64,fineYear,remark,latitude,longitude,ipAddress);
-      baseStatus=rawSchoolInfo.status;
+      final rawSchoolInfo = await _dwsmRepository.submitFtk(
+          userId,
+          schoolId,
+          stateId,
+          photoBase64,
+          fineYear,
+          remark,
+          latitude,
+          longitude,
+          ipAddress);
+      baseStatus = rawSchoolInfo.status;
       if (rawSchoolInfo.status == 1) {
-        ftkSubmitResponse=rawSchoolInfo.message;
-
+        ftkSubmitResponse = rawSchoolInfo.message;
       } else {
         errorMsg = rawSchoolInfo.message;
       }
@@ -129,7 +167,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-
   Future<bool> checkLocationPermission() async {
     PermissionStatus permission = await Permission.location.status;
     if (permission != PermissionStatus.granted) {
@@ -138,8 +175,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
     return true;
   }
 
-
-
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
@@ -147,7 +182,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchLocation(BuildContext context) async {
-
     isLoading = true;
     notifyListeners();
 
@@ -167,7 +201,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
       );
       return;
     }
-
 
     try {
       debugPrint('Requesting location permission...');
@@ -202,6 +235,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     selectedSchoolName = name;
     notifyListeners();
   }
+
   void setSelectedAnganwadi(String id, String name) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
@@ -210,15 +244,14 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   void clearSelectedSchool() {
     selectedSchoolResult = null;
-    selectedSchoolName='N/A';
+    selectedSchoolName = 'N/A';
     notifyListeners();
   }
+
   void clearSelectedAnganwadi() {
     selectedAnganwadi = null;
-    selectedAnganwadiName='N/A';
+    selectedAnganwadiName = 'N/A';
     notifyListeners();
   }
 
-
-/////////////////////////////////////////////////////////////////////////////
 }
