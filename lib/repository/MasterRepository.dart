@@ -22,13 +22,8 @@ class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<Stateresponse>> fetchStates() async {
-    try {
       final response = await _apiService.get('/apimaster/GetState');
       return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
   }
 
 
