@@ -1,14 +1,11 @@
-import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
 import '../models/BaseResponse.dart';
 import '../models/DWSM/Ftk_response.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
-import '../repository/FTKREpository.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
@@ -42,6 +39,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   String? ftkSubmitResponse;
 
+  String? errorMessage;
+  BaseResponseModel<FTKResponse>? ftkResponse;
+
   Future<void> loadDwsmDashboardData(
       int stateId, int DistrictId, String fineYear) async {
     print('Calling the state function...');
@@ -65,65 +65,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
- /* Future<void> submitFTK({
-    required int userId,
-    required int schoolId,
-    required int stateId,
-    required String photoBase64,
-    required String fineYear,
-    required String remark,
-    required String latitude,
-    required String longitude,
-    required String ipAddress,
-  }) async {
-    _isLoading = true;
-    errorMessage = null;
-    notifyListeners();
-
-    try {
-      ftkResponse = await _repository.submitFTKData(
-        userId: userId,
-        schoolId: schoolId,
-        stateId: stateId,
-        photoBase64: photoBase64,
-        fineYear: fineYear,
-        remark: remark,
-        latitude: latitude,
-        longitude: longitude,
-        ipAddress: ipAddress,
-      );
-
-      if (ftkResponse?.status == 1) {
-        _responseMessage = ftkResponse?.message;
-      }
-      else{
-        errorMessage = ftkResponse?.message ?? "FTK submission failed.";
-      }
-
-    } catch (e) {
-      errorMessage = "Something went wrong.";
-      GlobalExceptionHandler.handleException(e as Exception);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-
-
-    _isLoading = false;
-    notifyListeners();
-  }*/
-
-
-  String? errorMessage;
-  BaseResponseModel<FTKResponse>? ftkResponse;
-
-
-
-
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     isLoading = true;
-    //notifyListeners();
 
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
@@ -189,6 +133,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     debugPrint('Device ID: $_deviceId');
     notifyListeners();
   }
+
   Future<void> fetchLocation() async {
     isLoading = true;
     notifyListeners();
@@ -233,12 +178,12 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   void clearSelectedSchool() {
-    selectedSchoolResult = '';
+    selectedSchoolResult = null;
     selectedSchoolName='N/A';
     notifyListeners();
   }
   void clearSelectedAnganwadi() {
-    selectedAnganwadi = '';
+    selectedAnganwadi = null;
     selectedAnganwadiName='N/A';
     notifyListeners();
   }
