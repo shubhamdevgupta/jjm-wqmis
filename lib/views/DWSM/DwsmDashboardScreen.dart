@@ -242,83 +242,97 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   children: [
 
                     Container(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                      margin: const EdgeInsets.only(top: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 6,
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Circular user image
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundColor: Colors.grey[100],
-                            backgroundImage: const AssetImage('assets/user.png'),
+                          // Profile Picture
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(2), // Border-like effect
+                            child: CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Colors.grey[100],
+                              backgroundImage: const AssetImage('assets/user.png'),
+                            ),
                           ),
-                          const SizedBox(width: 16), // Space between image and text
+                          const SizedBox(width: 16),
 
-                          // Text column
+                          // User Info
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Welcome message
+                                // Welcome Text
                                 Text(
-                                  '${AppConstants.welcome}, $userName',
-                                  // Replace with dynamic username
+                                  '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blue[800],
-                                    // Slightly dark blue color for warmth
+                                    fontSize: 15,
+                                    color: Colors.grey.shade700,
                                     fontFamily: 'Poppins',
-                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  userName,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                    fontFamily: 'Poppins',
                                   ),
                                 ),
 
-                                const SizedBox(height: 8), // Space between lines
+                                const SizedBox(height: 12),
 
-                                // Phone Row
+                                // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.phone_android,
-                                        color: Colors.teal, size: 20),
-                                    // Using an icon for consistency
+                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      '$mobile',
-                                      // Replace with dynamic phone number
+                                      'Departmental User',
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
                                 ),
+
+                                const SizedBox(height: 6),
+
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
-                                        color: Colors.teal, size: 20),
-                                    // Using an icon for consistency
+                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
-                                    Text(
-                                      'DWSM Official',
-                                      // Replace with dynamic phone number
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
+                                    Flexible(
+                                      child: Text(
+                                        mobile,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -333,83 +347,111 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                     Container(
                       width: 500,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFe0f7fa), Color(0xFFffffff)],
+                          colors: [Color(0xFFe0f7fa), Color(0xFFFFFFFF)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 8),
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
                           ),
                         ],
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "School/ Anganwadi",
+                            "School",
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: 12,
-                            runSpacing: 12,
+
+                          // Row for School section
+                          Row(
                             children: [
-                              _buildInfoCard(
-                                icon: Icons.school_rounded,
-                                iconColor: Colors.blueAccent,
-                                title: "Schools",
-                                value: 4,
-                                onTap: (){}
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.school_rounded,
+                                  iconColor: Colors.blue,
+                                  title: "Schools",
+                                  value: 4,
+                                  onTap: () {},
+                                ),
                               ),
-                              _buildInfoCard(
-                                icon: Icons.local_activity,
-                                iconColor: Colors.deepOrange,
-                                title: "Demonstrations",
-                                value: 5,
-                                onTap: (){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child: Demonstrationscreen(),
-                                            )),
-                                  );
-                                }
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.local_activity,
+                                  iconColor: Colors.deepOrange,
+                                  title: "Demonstrations",
+                                  value: 5,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChangeNotifierProvider.value(
+                                          value: dwsmDashboardProvider,
+                                          child: Demonstrationscreen(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              _buildInfoCard(
-                                icon: Icons.child_care,
-                                iconColor: Colors.teal,
-                                title: "Anganwadi",
-                                value:5,
-                                onTap: (){}
+                            ],
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          const Text(
+                            "Anganwadi",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Row for Anganwadi section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.child_care,
+                                  iconColor: Colors.teal,
+                                  title: "Anganwadi",
+                                  value: 5,
+                                  onTap: () {},
+                                ),
                               ),
-                              _buildInfoCard(
-                                icon: Icons.lightbulb_outline,
-                                iconColor: Colors.purple,
-                                title: "Demonstrations",
-                                value: 6,
-                              onTap: (){
-                              }
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.lightbulb_outline,
+                                  iconColor: Colors.purple,
+                                  title: "Demonstrations",
+                                  value: 6,
+                                  onTap: () {},
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
+
+
 
                     const SizedBox(height: 10),
 
