@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/BaseResponse.dart';
 import '../models/DWSM/Ftk_response.dart';
@@ -183,15 +185,42 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
 
+  Future<bool> checkLocationPermission() async {
+    PermissionStatus permission = await Permission.location.status;
+    if (permission != PermissionStatus.granted) {
+      return false;
+    }
+    return true;
+  }
+
+
 
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
     notifyListeners();
   }
-  Future<void> fetchLocation() async {
+  Future<void> fetchLocation(BuildContext context) async {
     isLoading = true;
     notifyListeners();
+
+    bool hasPermission = await checkLocationPermission();
+
+    if (!hasPermission) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Please enable location permission in settings"),
+          action: SnackBarAction(
+            label: 'SETTINGS',
+            onPressed: () {
+              openAppSettings();
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
 
     try {
       debugPrint('Requesting location permission...');
