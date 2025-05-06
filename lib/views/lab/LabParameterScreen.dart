@@ -27,7 +27,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
      regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
-  print('registerUserId is $regId');
+
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
