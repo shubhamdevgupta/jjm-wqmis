@@ -29,6 +29,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? selectedAnganwadiName;
 
   Dwsmdashboardresponse? _dwsmdashboardresponse;
+
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
 
   double? get currentLatitude => _currentLatitude;
@@ -48,12 +49,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? errorMessage;
   BaseResponseModel<FTKResponse>? ftkResponse;
 
-  Future<void> fetchDemonstrationList(int stateId, int DistrictId, String fineYear, int schoolId,{ Function(String result)? onSuccess}) async {
   Future<void> fetchDwsmDashboard(int userId) async {
     isLoading = true;
     try {
       final response = await _dwsmRepository.fetchDwsmDashboard(userId);
-      _dwsmdashboardresponse=response;
+      _dwsmdashboardresponse = response;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -64,49 +64,26 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDemonstrationList(
-      int stateId, int DistrictId, String fineYear, int schoolId) async {
+      int stateId, int DistrictId, String fineYear, int schoolId,
+      {Function(String result)? onSuccess}) async {
     isLoading = true;
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(
           stateId, DistrictId, fineYear, schoolId);
       if (rawLIst.status == 1) {
-        final List<Village> newData = rawLIst.result;
-
-          if (schoolId != 0) {
-
-            if (onSuccess != null) {
-              onSuccess(rawLIst.result[0].photo);
-            }
-
-            final index = villages.indexWhere((v) => v.schoolId == schoolId);
-            if (index != -1) {
-              villages[index] = newData.first;
-            } else {
-              villages.add(newData.first);
-            }
-          } else {
-            villages = newData;
-          }
-          notifyListeners();
-        } else {
-          errorMessage=rawLIst.message;
-        }
         if (schoolId != 0) {
-          final index = villages.indexWhere((v) => v.schoolId == schoolId);
-          if (index != -1) {
-            villages[index] = newData.first;
-          } else {
-            villages.add(newData.first);
+          if (onSuccess != null) {
+            onSuccess(rawLIst.result[0].photo);
           }
         } else {
-          villages = newData;
+          villages = rawLIst.result;
         }
-        notifyListeners();
       } else {
         errorMessage = rawLIst.message;
       }
+      notifyListeners();
     } catch (e) {
-      debugPrint('Error in StateProvider: $e');
+      debugPrint('Error in fetchDemonstrationList: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
