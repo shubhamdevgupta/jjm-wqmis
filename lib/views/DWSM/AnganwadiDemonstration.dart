@@ -11,24 +11,24 @@ import '../../providers/dwsmProvider.dart';
 import '../../utils/AppConstants.dart';
 
 
-class DashboardSchool extends StatefulWidget {
+class DashboardAnganwadi extends StatefulWidget {
 
   @override
-  State<DashboardSchool> createState() => _DashboardSchoolState();
+  State<DashboardAnganwadi> createState() => _DashboardAnganwadi();
 }
 
-class _DashboardSchoolState extends State<DashboardSchool> {
-  static const int DEMONSTRATION_TYPE_SCHOOL = 10;
+class _DashboardAnganwadi extends State<DashboardAnganwadi> {
+  static const int DEMONSTRATION_TYPE_Anganwadi = 11;
   final LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
   String? districtId="471";
   @override
   void initState() {
 
-     stateId = _localStorageService.getString(AppConstants.prefStateId);
+    stateId = _localStorageService.getString(AppConstants.prefStateId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDashboardSchoolList(int.parse(stateId!), int.parse(districtId!), DEMONSTRATION_TYPE_SCHOOL);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDashboardSchoolList(int.parse(stateId!), int.parse(districtId!), DEMONSTRATION_TYPE_Anganwadi);
     });
 
     super.initState();
@@ -143,7 +143,7 @@ class _DashboardSchoolState extends State<DashboardSchool> {
                       ElevatedButton.icon(
                         onPressed: () {
                           provider.fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026", 0);
-                          },
+                        },
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text("Refresh"),
                         style: ElevatedButton.styleFrom(
@@ -164,83 +164,83 @@ class _DashboardSchoolState extends State<DashboardSchool> {
             }
 
             return  ListView.builder(
-                itemCount: provider.dashboardSchoolListModel.length,
-                itemBuilder: (context, index) {
-                  final dashboardSchool = provider.dashboardSchoolListModel[index];
+              itemCount: provider.dashboardSchoolListModel.length,
+              itemBuilder: (context, index) {
+                final dashboardSchool = provider.dashboardSchoolListModel[index];
 
-                  return Container(
-                    margin: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.shade100.withOpacity(0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
+                return Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.shade100.withOpacity(0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        // Heading
+                        Row(
+                          children: [
+                            _iconCircle(Icons.location_city, Colors.blue),
+                            const SizedBox(width: 10),
+                            const Text(
+                              "Anganwadi Details",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        const Divider(height: 30),
+                        const SizedBox(height: 12),
 
-                          // Heading
-                          Row(
-                            children: [
-                              _iconCircle(Icons.location_city, Colors.blue),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "School Details",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                        // Location Info
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _iconCircle(Icons.location_on, Colors.red),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _buildLocationPath([
+                                  dashboardSchool.stateName,
+                                  dashboardSchool.districtName,
+                                  dashboardSchool.blockName,
+                                  dashboardSchool.panchayatName,
+                                  dashboardSchool.villageName,
+                                ]),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black87,
                                 ),
                               ),
-                            ],
-                          ),
-                          const Divider(height: 30),
-                          const SizedBox(height: 12),
-
-                          // Location Info
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _iconCircle(Icons.location_on, Colors.red),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  _buildLocationPath([
-                                    dashboardSchool.stateName,
-                                    dashboardSchool.districtName,
-                                    dashboardSchool.blockName,
-                                    dashboardSchool.panchayatName,
-                                    dashboardSchool.villageName,
-                                  ]),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
 
 
-                          // School Name
-                          _infoRow("School Name", "schoolName", Icons.school, Colors.deepPurple),
+                        // School Name
+                        _infoRow("Anganwadi Name", "schoolName", Icons.school, Colors.deepPurple),
 
-                          // Category
-                          _infoRow("Category", dashboardSchool.institutionCategory, Icons.category, Colors.orange),
+                        // Category
+                        _infoRow("Category", dashboardSchool.institutionCategory, Icons.category, Colors.orange),
 
-                          // Classification
-                          _infoRow("Classification", dashboardSchool.institutionSubCategory, Icons.label, Colors.green),
+                        // Classification
+                        _infoRow("Classification", dashboardSchool.institutionSubCategory, Icons.label, Colors.green),
 
-                          // Remark
+                        // Remark
 
 
 
@@ -302,7 +302,7 @@ class _DashboardSchoolState extends State<DashboardSchool> {
         return;
       }
       String base64String =
-          result.contains(',') ? result.split(',').last : result;
+      result.contains(',') ? result.split(',').last : result;
       final imageBytes = base64Decode(base64String);
 
       showDialog(

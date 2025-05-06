@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/DWSM/AnganwadiDemonstration.dart';
 import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -460,7 +461,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   title: "Anganwadi",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
-                                  onTap: () {},
+                                  onTap: () {
+
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child: DashboardAnganwadi(),
+                                            ),
+                                      ),
+                                    );
+
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 16),
