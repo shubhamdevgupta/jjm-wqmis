@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import 'SchoolAWC.dart';
 import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
@@ -394,9 +395,22 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.school_rounded,
                                   iconColor: Colors.blue,
                                   title: "Schools",
-                                  value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
-                                  onTap: () {},
+                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                  onTap: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child:const SchoolAWC( type: 10,),
+                                            ),
+                                      ),
+                                    );
+
+
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -414,7 +428,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(),
+                                          child: Demonstrationscreen(type: 10,),
                                         ),
                                       ),
                                     );
@@ -446,7 +460,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   title: "Anganwadi",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
-                                  onTap: () {},
+                                  onTap: () {
+
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child:const SchoolAWC( type: 11),
+                                            ),
+                                      ),
+                                    );
+
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -457,7 +485,19 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   title: "Demonstrations",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child: Demonstrationscreen(
+                                                type: 11,),
+                                            ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],

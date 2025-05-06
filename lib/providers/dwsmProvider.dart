@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,6 +20,8 @@ class DwsmDashboardProvider extends ChangeNotifier {
   List<Village> villages = [];
   String errorMsg = '';
   int baseStatus = 101;
+
+  List<DashboardSchoolModel> dashboardSchoolListModel = [];
 
   List<SchoolResult> schoolResultList = [];
   String? selectedSchoolResult;
@@ -64,13 +67,15 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDemonstrationList(
-      int stateId, int DistrictId, String fineYear, int schoolId,
+  Future<void> fetchDemonstrationList(int stateId, int districtId, String fineYear, int schoolId,int demonstrationType,
       {Function(String result)? onSuccess}) async {
     isLoading = true;
     try {
-      final rawLIst = await _dwsmRepository.fetchDemonstrationList(
-          stateId, DistrictId, fineYear, schoolId);
+      final rawLIst = await _dwsmRepository.fetchDemonstrationList(stateId: stateId,
+        districtId: districtId,
+        fineYear: fineYear,
+        schoolId: schoolId,
+        demonstrationType: demonstrationType,);
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {
@@ -106,6 +111,29 @@ class DwsmDashboardProvider extends ChangeNotifier {
         } else if (type == 1) {
           anganwadiList = rawSchoolInfo.result;
         }
+      } else {
+        errorMsg = rawSchoolInfo.message;
+      }
+      baseStatus = rawSchoolInfo.status;
+    } catch (e) {
+      debugPrint('Error in fetching source information: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<void> fetchDashboardSchoolList(int stateId, int districtId, int demonstrationType) async {
+    isLoading = true;
+
+    try {
+      final rawSchoolInfo = await _dwsmRepository.fetchDashboardSchoolList(
+          stateId, districtId, demonstrationType);
+
+      if (rawSchoolInfo.status == 1) {
+        dashboardSchoolListModel = rawSchoolInfo.result;
       } else {
         errorMsg = rawSchoolInfo.message;
       }
