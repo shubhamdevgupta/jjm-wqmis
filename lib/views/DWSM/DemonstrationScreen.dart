@@ -234,10 +234,10 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                           _infoRow("School Name", "schoolName", Icons.school, Colors.deepPurple),
 
                           // Category
-                          _infoRow("Category", "Government", Icons.category, Colors.orange),
+                          _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
 
                           // Classification
-                          _infoRow("Classification", "Primary", Icons.label, Colors.green),
+                          _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),
 
                           // Remark
                           Padding(
