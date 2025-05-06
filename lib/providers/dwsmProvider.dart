@@ -27,6 +27,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   List<SchoolResult> anganwadiList = [];
   String? selectedAnganwadi;
   String? selectedAnganwadiName;
+  int? mDemonstrationId;
 
   Dwsmdashboardresponse? _dwsmdashboardresponse;
 
@@ -229,9 +230,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedAnganwadi(String id, String name) {
+  void setSelectedAnganwadi(String id, String name,int demonstrationId) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
+    mDemonstrationId = demonstrationId;
+
     notifyListeners();
   }
 
@@ -244,6 +247,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   void clearSelectedAnganwadi() {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
+    mDemonstrationId=101;
     notifyListeners();
   }
 }

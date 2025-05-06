@@ -168,6 +168,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                               dwsmprovider.setSelectedAnganwadi(
                                 selectedId!,
                                 selectedSchool.name,
+                                selectedSchool.demonstrated
                               );
                             },
                           ),
@@ -175,164 +176,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             height: 10,
                           ),
 
-
-                          Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.school_rounded, color: Colors.green),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        '${dwsmprovider.selectedAnganwadiName ?? "N/A"}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.blueGrey,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: TextFormField(
-                                controller: remarkController,
-                                maxLines: 2,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
-                                  ),
-                                  hintText: "Enter your remarks",
-                                  hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                                  suffixIcon: remarkController.text.isNotEmpty
-                                      ? IconButton(
-                                    icon: Icon(Icons.clear, color: Colors.grey),
-                                    onPressed: () {
-                                      remarkController.clear();
-                                    },
-                                  )
-                                      : null,
-                                ),
-                                keyboardType: TextInputType.multiline,
-                                textInputAction: TextInputAction.newline,
-                              ),
-                            ),
-                          ),
-
-                          Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text(
-                                      "Capture Sample Image",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueGrey.shade700,
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(thickness: 1, color: Colors.grey.shade300),
-                                  SizedBox(height: 2),
-                                  Center(
-                                    child: _cameraHelper.imageFile == null
-                                        ? GestureDetector(
-                                      onTap: () async {
-                                        await _cameraHelper.pickFromCamera();
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.blueGrey.withOpacity(0.2),
-                                              blurRadius: 8,
-                                              offset: Offset(0, 4),
-                                            ),
-                                          ],
-                                        ),
-                                        padding: const EdgeInsets.all(24),
-                                        child: Icon(Icons.camera_alt, size: 40, color: Colors.blue),
-                                      ),
-                                    )
-                                        : Stack(
-                                      children: [
-                                        Container(
-                                          height: 160,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12),
-                                            image: DecorationImage(
-                                              image: FileImage(_cameraHelper.imageFile!),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: IconButton(
-                                            icon: Icon(Icons.close, color: Colors.white),
-                                            onPressed: () {
-                                              _cameraHelper.removeImage();
-                                              setState(() {});
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 12.0),
+                          Visibility(
+                            visible: dwsmprovider.selectedAnganwadi!=null,
                             child: Card(
                               child: Container(
                                 decoration: BoxDecoration(
@@ -346,93 +191,281 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                     ),
                                   ],
                                 ),
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Heading
-                                    Text(
-                                      'Geo Location of Sample Taken',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.blueGrey.shade700,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: const [
+                                          Icon(Icons.school_rounded, color: Colors.green),
+                                        ],
                                       ),
-                                    ),
-                                    Divider(
-                                        thickness: 1,
-                                        color: Colors.grey.shade300),
-                                    SizedBox(height: 8),
-                                    // Row for Latitude and Longitude
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(Icons.location_on,
-                                                color: Colors.blue, size: 18),
-                                            Text(
-                                              'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
-                                              // Reduces to 3 decimal places
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black
-                                                      .withOpacity(0.7)),
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 32),
+                                        child: Text(
+                                          '${dwsmprovider.selectedAnganwadiName ?? "N/A"}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.blueGrey,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Visibility(
+                                        visible: dwsmprovider.mDemonstrationId==1,
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.info_outline, size: 18, color: Colors.orange),
+                                            SizedBox(width: 6),
+                                            Expanded(
+                                              child: Text(
+                                                'This school is already demonstrated',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.redAccent,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
-
-                                        SizedBox(width: 12),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.location_on,
-                                                color: Colors.blue, size: 18),
-                                            Text(
-                                              'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
-                                              // Reduces to 3 decimal places
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  color: Colors.black
-                                                      .withOpacity(0.7)),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
+                          Visibility(
+                              visible: dwsmprovider.mDemonstrationId==0,
+                              child: Column(children: [
 
-                          ElevatedButton(
-                              onPressed: () async {
-                               if(validate(dwsmprovider)){
-                                await dwsmprovider.submitFtkData(
-                                  int.parse(userId),
-                                  int.parse(dwsmprovider.selectedAnganwadi!),
-                                  int.parse(stateId),
-                                  _cameraHelper.base64Image!,
-                                  "2025-2026",
-                                  remarkController.text,
-                                  dwsmprovider.currentLatitude.toString(),
-                                  dwsmprovider.currentLatitude.toString(),
-                                  dwsmprovider.deviceId!, (){
-                                    showResponse(dwsmprovider);
-                                    }
-                                );
-                               }else{
-                                 ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
-                               }
-                              },
-                              child: Text(
-                                AppConstants.submitSample,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                              style: AppStyles.buttonStylePrimary()),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: TextFormField(
+                                      controller: remarkController,
+                                      maxLines: 2,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
+                                        ),
+                                        hintText: "Enter your remarks",
+                                        hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                                        suffixIcon: remarkController.text.isNotEmpty
+                                            ? IconButton(
+                                          icon: Icon(Icons.clear, color: Colors.grey),
+                                          onPressed: () {
+                                            remarkController.clear();
+                                          },
+                                        )
+                                            : null,
+                                      ),
+                                      keyboardType: TextInputType.multiline,
+                                      textInputAction: TextInputAction.newline,
+                                    ),
+                                  ),
+                                ),
+
+                                Card(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.1),
+                                          blurRadius: 6,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Text(
+                                            "Capture Sample Image",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.blueGrey.shade700,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(thickness: 1, color: Colors.grey.shade300),
+                                        SizedBox(height: 2),
+                                        Center(
+                                          child: _cameraHelper.imageFile == null
+                                              ? GestureDetector(
+                                            onTap: () async {
+                                              await _cameraHelper.pickFromCamera();
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.blueGrey.withOpacity(0.2),
+                                                    blurRadius: 8,
+                                                    offset: Offset(0, 4),
+                                                  ),
+                                                ],
+                                              ),
+                                              padding: const EdgeInsets.all(24),
+                                              child: Icon(Icons.camera_alt, size: 40, color: Colors.blue),
+                                            ),
+                                          )
+                                              : Stack(
+                                            children: [
+                                              Container(
+                                                height: 160,
+                                                width: 120,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  image: DecorationImage(
+                                                    image: FileImage(_cameraHelper.imageFile!),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: IconButton(
+                                                  icon: Icon(Icons.close, color: Colors.white),
+                                                  onPressed: () {
+                                                    _cameraHelper.removeImage();
+                                                    setState(() {});
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 12.0),
+                                  child: Card(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.1),
+                                            blurRadius: 6,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // Heading
+                                          Text(
+                                            'Geo Location of Sample Taken',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.blueGrey.shade700,
+                                            ),
+                                          ),
+                                          Divider(
+                                              thickness: 1,
+                                              color: Colors.grey.shade300),
+                                          SizedBox(height: 8),
+                                          // Row for Latitude and Longitude
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.location_on,
+                                                      color: Colors.blue, size: 18),
+                                                  Text(
+                                                    'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
+                                                    // Reduces to 3 decimal places
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: Colors.black
+                                                            .withOpacity(0.7)),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(width: 12),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.location_on,
+                                                      color: Colors.blue, size: 18),
+                                                  Text(
+                                                    'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
+                                                    // Reduces to 3 decimal places
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.black
+                                                            .withOpacity(0.7)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      if(validate(dwsmprovider)){
+                                        await dwsmprovider.submitFtkData(
+                                            int.parse(userId),
+                                            int.parse(dwsmprovider.selectedAnganwadi!),
+                                            int.parse(stateId),
+                                            _cameraHelper.base64Image!,
+                                            "2025-2026",
+                                            remarkController.text,
+                                            dwsmprovider.currentLatitude.toString(),
+                                            dwsmprovider.currentLatitude.toString(),
+                                            dwsmprovider.deviceId!, (){
+                                          showResponse(dwsmprovider);
+                                        }
+                                        );
+                                      }else{
+                                        ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
+                                      }
+                                    },
+                                    child: Text(
+                                      AppConstants.submitSample,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    style: AppStyles.buttonStylePrimary()),
+                          ],))
                         ],
                       ),
                     ),

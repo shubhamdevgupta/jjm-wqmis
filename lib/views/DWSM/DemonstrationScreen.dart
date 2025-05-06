@@ -356,7 +356,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("School Photo"),
+            title: const Text("School Image"),
             content: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.memory(imageBytes, fit: BoxFit.contain),
