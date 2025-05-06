@@ -265,111 +265,41 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                           ),
 
 
-                          const Divider(height: 30),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: ElevatedButton.icon(
-                             /* onPressed: () {
-                                provider.loadDwsmDashboardData(int.parse("31"), 471, "2025-2026", village.schoolId);
-                                try {
-                                 final photo = village.photo;
-                                  // const photo = AppConstants.photo;
-                                  if (photo.isEmpty) {
-                                    print("Image string is empty.");
-                                    return;
-                                  }
-                                  Future.delayed(7);
+                        const Divider(height: 30),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ElevatedButton.icon(
 
-                                  final base64String = photo.contains(',') ? photo.split(',').last : photo;
-                                  final imageBytes = base64Decode(base64String);
-                                  showImage(imageBytes);
-                                } catch (e) {
-                                  print("Image decoding failed: $e");
-                                }
-                               // showImage(imageBytes);
-                              },*/
-
-                                onPressed: () async {
-                                  try {
-                                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
-                                    await provider.fetchDemonstrationList(
-                                      int.parse(stateId!),
-                                      int.parse(districtId!),
-                                      "2025-2026",
-                                      village.schoolId,
-                                    );
-
-                                    final updatedVillage = provider.villages.firstWhere(
-                                          (v) => v.schoolId == village.schoolId,
-                                      orElse: () => village,
-                                    );
-
-                                    if (updatedVillage.photo.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text("Image not available at the moment.")),
-                                      );
-                                      return;
-                                    }
-
-                                    final base64String = updatedVillage.photo.contains(',')
-                                        ? updatedVillage.photo.split(',').last
-                                        : updatedVillage.photo;
-                                    final imageBytes = base64Decode(base64String);
-
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text("School Photo"),
-                                          content: ClipRRect(
-                                            borderRadius: BorderRadius.circular(12),
-                                            child: Image.memory(imageBytes, fit: BoxFit.contain),
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(16),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.of(context).pop(),
-                                              child: const Text("Close"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } catch (e) {
-                                    print("Error: $e");
-                                  }
-                                },
-                              icon: const Icon(Icons.remove_red_eye, size: 18),
-                              label: const Text("View"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blueAccent,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                            onPressed: () async {
+                              LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
+                              await provider.fetchDemonstrationList(
+                                  int.parse(stateId!),
+                                  int.parse(districtId!),
+                                  "2025-2026",
+                                  village.schoolId, onSuccess: (result) {
+                                showImage(result);
+                              });
+                            },
+                            icon: const Icon(Icons.remove_red_eye, size: 18),
+                            label: const Text("View"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-
-
-
-
-
-
-
-                },
-              );
-          }
-          )
-
-      ),
+                  ),
+                );
+              },
+            );
+          })),
     );
   }
 
@@ -410,45 +340,41 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
 
-  void showImage(Uint8List imageBytes) {
-    showDialog(
-      context: navigatorKey.currentContext!,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.zero,
-          child: Stack(
-            children: [
-              InteractiveViewer(
-                panEnabled: true,
-                scaleEnabled: true,
-                minScale: 1,
-                maxScale: 4,
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.memory(
-                      imageBytes,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 30,
-                right: 20,
-                child: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+  void showImage(String result) {
+    try {
+      if (result.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Image not available at the moment.")),
+        );
+        return;
+      }
+      String base64String =
+          result.contains(',') ? result.split(',').last : result;
+      final imageBytes = base64Decode(base64String);
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("School Photo"),
+            content: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.memory(imageBytes, fit: BoxFit.contain),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Close"),
               ),
             ],
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } catch (e) {
+      print("Error: $e");
+    }
   }
-
 }
