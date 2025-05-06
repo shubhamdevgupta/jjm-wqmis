@@ -43,6 +43,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
       dashboardProvider.loadDashboardData();
+      print("dashboard data${dashboardProvider.dashboardData}");
 
       masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
@@ -158,7 +159,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
               final dashboardData = dashboardProvider.dashboardData;
-
+              print("dashboard data ${dashboardData}");
               if (dashboardData == null) {
                 return const Center(child: CircularProgressIndicator());
               }

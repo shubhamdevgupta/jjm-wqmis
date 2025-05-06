@@ -26,29 +26,18 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
- /*   // Get providers
-    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
-    masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
-    // Run this logic only once after the first frame is rendered
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mTabController.index == 0) {
-        dwsmDashboardProvider.fetchSchoolInfo(
-          int.parse(masterProvider.selectedStateId!),
-          int.parse(masterProvider.selectedDistrictId!),
-          0, 0, 0, 0,
-        );
-      }
-    });*/
-
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return;
 
       if (mTabController.index == 0) {
+
         dwsmDashboardProvider.fetchSchoolInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
-          0, 0, 0, 0,
+          int.parse(masterProvider.selectedBlockId!),
+          int.parse(masterProvider.selectedGramPanchayat!),
+          int.parse(masterProvider.selectedVillage!),
+          0,
         );
         dwsmDashboardProvider.clearSelectedAnganwadi();
         dwsmDashboardProvider.anganwadiList.clear();
@@ -60,7 +49,10 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         dwsmDashboardProvider.fetchSchoolInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
-          0, 0, 0, 1,
+          int.parse(masterProvider.selectedBlockId!),
+          int.parse(masterProvider.selectedGramPanchayat!),
+          int.parse(masterProvider.selectedVillage!),
+          1,
         );
         dwsmDashboardProvider.schoolResultList.clear();
         dwsmDashboardProvider.clearSelectedSchool();
