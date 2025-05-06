@@ -40,6 +40,8 @@ class Village {
   final int villageId;
   final int schoolId;
   final String photo;
+  final String InstitutionCategory;
+  final String InstitutionSubCategory;
 
   Village({
     required this.stateName,
@@ -55,6 +57,8 @@ class Village {
     required this.villageId,
     required this.schoolId,
     required this.photo,
+    required this.InstitutionCategory,
+    required this.InstitutionSubCategory
   });
 
   factory Village.fromJson(Map<String, dynamic> json) {
@@ -72,6 +76,9 @@ class Village {
       villageId: json['VillageId'],
       schoolId: json['SchoolId'],
       photo: json['Photo'],
+      InstitutionCategory: json['InstitutionCategory'],
+      InstitutionSubCategory: json['InstitutionSubCategory'],
+
     );
   }
 
@@ -90,6 +97,8 @@ class Village {
       'VillageId': villageId,
       'SchoolId': schoolId,
       'Photo': photo,
+      'InstitutionCategory': InstitutionCategory,
+      'InstitutionSubCategory': InstitutionSubCategory,
     };
   }
 }
