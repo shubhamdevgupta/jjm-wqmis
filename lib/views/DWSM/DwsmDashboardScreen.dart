@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import 'SchoolDemonstration.dart';
 import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
@@ -394,9 +395,22 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.school_rounded,
                                   iconColor: Colors.blue,
                                   title: "Schools",
-                                  value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
-                                  onTap: () {},
+                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                  onTap: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child: DashboardSchool(),
+                                            ),
+                                      ),
+                                    );
+
+
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 16),

@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/models/DWSM/FtkResponse.dart';
 
+import '../models/DWSM/DashBoardSchoolModel.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../models/DashboardResponse/DwsmDashboardResponse.dart';
 import '../services/BaseApiService.dart';
@@ -44,6 +45,27 @@ class DwsmRepository{
       rethrow;
     }
   }
+
+  Future<BaseResponseModel<DashboardSchoolModel>> fetchDashboardSchoolList(int stateId, int districtId,
+      int demonstrationType) async {
+    try {
+      final response = await _apiService.post('ApiMaster/GetSchoolAWCsListDetails',
+        body: jsonEncode({
+          "StateId": stateId,
+          "DistrictId": districtId,
+          "DemonstrationType": demonstrationType,
+        }));
+
+      print("DEMO----${response}");
+      return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+
+  //https://ejalshakti.gov.in/WQMIS/API/APIMobile/GetSchoolAWCsListDetails
 
 
   Future<FtkUpdateResponse> submitFtk( int userId,
