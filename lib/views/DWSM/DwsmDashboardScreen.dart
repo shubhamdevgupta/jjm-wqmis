@@ -419,8 +419,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.local_activity,
                                   iconColor: Colors.deepOrange,
                                   title: "Demonstrations",
-                                  value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
+                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -432,6 +431,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         ),
                                       ),
                                     );
+
+
                                   },
                                 ),
                               ),

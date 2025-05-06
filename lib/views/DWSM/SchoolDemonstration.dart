@@ -11,26 +11,25 @@ import '../../providers/dwsmProvider.dart';
 import '../../utils/AppConstants.dart';
 
 
-class DashboardSchool extends StatefulWidget {
+class Demonstrationscreen extends StatefulWidget {
 
   @override
-  State<DashboardSchool> createState() => _DashboardSchoolState();
+  State<Demonstrationscreen> createState() => _DemonstrationscreenState();
 }
 
-class _DashboardSchoolState extends State<DashboardSchool> {
-  static const int DEMONSTRATION_TYPE_SCHOOL = 10;
-  final LocalStorageService _localStorageService = LocalStorageService();
+class _DemonstrationscreenState extends State<Demonstrationscreen> {
+  LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
   String? districtId="471";
   @override
   void initState() {
 
-     stateId = _localStorageService.getString(AppConstants.prefStateId);
+    stateId = _localStorageService.getString(AppConstants.prefStateId);
+    //  districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDashboardSchoolList(int.parse(stateId!), int.parse(districtId!), DEMONSTRATION_TYPE_SCHOOL);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDashboardSchoolList(int.parse(stateId!), int.parse(districtId!), 10);
     });
-
     super.initState();
   }
 
@@ -143,7 +142,7 @@ class _DashboardSchoolState extends State<DashboardSchool> {
                       ElevatedButton.icon(
                         onPressed: () {
                           provider.fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026", 0);
-                          },
+                        },
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text("Refresh"),
                         style: ElevatedButton.styleFrom(
@@ -164,106 +163,106 @@ class _DashboardSchoolState extends State<DashboardSchool> {
             }
 
             return  ListView.builder(
-                itemCount: provider.villages.length,
-                itemBuilder: (context, index) {
-                  final village = provider.villages[index];
+              itemCount: provider.villages.length,
+              itemBuilder: (context, index) {
+                final village = provider.villages[index];
 
-                  return Container(
-                    margin: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.shade100.withOpacity(0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
+                return Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.shade100.withOpacity(0.4),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        // Heading
+                        Row(
+                          children: [
+                            _iconCircle(Icons.location_city, Colors.blue),
+                            const SizedBox(width: 10),
+                            const Text(
+                              "School Details",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        const Divider(height: 30),
+                        const SizedBox(height: 12),
 
-                          // Heading
-                          Row(
-                            children: [
-                              _iconCircle(Icons.location_city, Colors.blue),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "School Details",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                        // Location Info
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _iconCircle(Icons.location_on, Colors.red),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _buildLocationPath([
+                                  village.stateName,
+                                  village.districtName,
+                                  village.blockName,
+                                  village.panchayatName,
+                                  village.villageName,
+                                ]),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black87,
                                 ),
                               ),
-                            ],
-                          ),
-                          const Divider(height: 30),
-                          const SizedBox(height: 12),
+                            ),
+                          ],
+                        ),
 
-                          // Location Info
-                          Row(
+
+                        // School Name
+                        _infoRow("School Name", "schoolName", Icons.school, Colors.deepPurple),
+
+                        // Category
+                        _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
+
+                        // Classification
+                        _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),
+
+                        // Remark
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _iconCircle(Icons.location_on, Colors.red),
+                              _iconCircle(Icons.comment, Colors.teal),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(
-                                  _buildLocationPath([
-                                    village.stateName,
-                                    village.districtName,
-                                    village.blockName,
-                                    village.panchayatName,
-                                    village.villageName,
-                                  ]),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black87,
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal.shade50,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    "No remark provided", // Replace dynamically
+                                    style: TextStyle(fontSize: 13, color: Colors.teal),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-
-
-                          // School Name
-                          _infoRow("School Name", "schoolName", Icons.school, Colors.deepPurple),
-
-                          // Category
-                          _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
-
-                          // Classification
-                          _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),
-
-                          // Remark
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _iconCircle(Icons.comment, Colors.teal),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.teal.shade50,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: const Text(
-                                      "No remark provided", // Replace dynamically
-                                      style: TextStyle(fontSize: 13, color: Colors.teal),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        ),
 
 
                         const Divider(height: 30),
@@ -350,7 +349,7 @@ class _DashboardSchoolState extends State<DashboardSchool> {
         return;
       }
       String base64String =
-          result.contains(',') ? result.split(',').last : result;
+      result.contains(',') ? result.split(',').last : result;
       final imageBytes = base64Decode(base64String);
 
       showDialog(
