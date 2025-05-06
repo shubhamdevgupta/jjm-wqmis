@@ -49,7 +49,7 @@ class DwsmRepository{
   Future<BaseResponseModel<DashboardSchoolModel>> fetchDashboardSchoolList(int stateId, int districtId,
       int demonstrationType) async {
     try {
-      final response = await _apiService.post('ApiMaster/GetSchoolAWCsListDetails',
+      final response = await _apiService.post('APIMobile/GetSchoolAWCsListDetails',
         body: jsonEncode({
           "StateId": stateId,
           "DistrictId": districtId,
