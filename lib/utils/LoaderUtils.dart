@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoaderUtils {
-  /// Shows or hides a full-screen circular loader dialog based on `isLoading`
+  /// Shows or hides a default loader dialog with optional message
   static void toggleLoadingDialog(BuildContext context, bool isLoading, {String? message}) {
     if (isLoading) {
       showDialog(
@@ -35,18 +35,41 @@ class LoaderUtils {
     }
   }
 
-  /// Returns a loader widget based on `isLoading`
+  /// Returns a conditional overlay loader
   static Widget conditionalLoader({required bool isLoading, Widget? child}) {
     return isLoading
         ? Container(
-          color: Colors.black.withOpacity(0.2), // Background opacity
-          child: const Center(
-                child: CircularProgressIndicator(
-          color: Colors.white,
-                ),
-              ),
-        )
+      color: Colors.black.withOpacity(0.2),
+      child: const Center(child: CircularProgressIndicator(color: Colors.white)),
+    )
         : (child ?? const SizedBox.shrink());
   }
 
+  /// Returns a reusable styled progress loader widget (for embedding in dialogs)
+  static Widget showProgress() {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  static void showCustomLoaderDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => showProgress(),
+    );
+  }
+
+  static void hideLoaderDialog(BuildContext context) {
+    if (Navigator.of(context, rootNavigator: true).canPop()) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
 }
