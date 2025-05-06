@@ -4,11 +4,11 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-import 'SchoolAWC.dart';
+import 'DwmsLIst/SchoolAwcScreen.dart';
 import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
@@ -25,70 +25,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   String userID = '';
   String mobile = '';
   String stateId = '';
-
-  Widget _buildInfoCard({
-    required IconData icon,
-    required Color iconColor,
-    required String title,
-    required VoidCallback onTap,
-    required String value,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 135,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.07),
-              blurRadius: 8,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: iconColor, size: 30),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                value.toString(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -559,6 +495,69 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               );
             },
           )),
+    );
+  }
+  Widget _buildInfoCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+    required String value,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 135,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.07),
+              blurRadius: 8,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 30),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                value.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

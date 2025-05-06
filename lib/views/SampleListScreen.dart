@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/webView/webview.dart';
@@ -11,7 +12,6 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
 import '../utils/AppStyles.dart';
-import '../utils/Showerrormsg.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -95,10 +95,11 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(block),
               int.parse(masterprovider.selectedGramPanchayat ?? "0"),
               int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) {
+        } else if (flag == AppConstants.totalPhysicalSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSampleTested ||
             flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(
@@ -288,11 +289,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                   ),
 
                   // Expanded to prevent infinite height issue
-                  provider.samples.isEmpty
-                      ? Align(
-                          alignment: Alignment.center,
-                          child:
-                              AppTextWidgets.errorText("${provider.errorMsg}"))
+                  provider.isLoading
+                      ? LoaderUtils.conditionalLoader(
+                          isLoading: provider.isLoading)
                       : Expanded(
                           child: ListView.builder(
                             itemCount: provider.samples.length,

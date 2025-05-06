@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
@@ -335,7 +336,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 gradientColors: [Colors.red, Colors.deepOrange],
                                 value: '${dashboardProvider.dashboardData!.totalRetest}',
                                 onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                 // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                  ToastHelper.showSnackBar(context, "Admin can access this option only");
                                 },
                               ),
 
