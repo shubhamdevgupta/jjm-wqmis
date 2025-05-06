@@ -45,18 +45,7 @@ class AuthenticaitonRepository {
     }
   }
 
-  Future<Dwsmdashboardresponse> fetchDwsmDashboardData(int stateId, int districtId) async {
-    try {
-      String endpoint = '/apiMobile/Dashboarddwsm?stateid=$stateId&districtid=$districtId';
-      final response = await _apiService.get(endpoint);
 
-        return Dwsmdashboardresponse.fromJson(response);
-
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
-  }
 
 
 

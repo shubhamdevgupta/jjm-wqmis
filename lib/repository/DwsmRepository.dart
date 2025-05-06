@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/models/DWSM/FtkResponse.dart';
 
 import '../models/DWSM/SchoolinfoResponse.dart';
+import '../models/DashboardResponse/DwsmDashboardResponse.dart';
 import '../services/BaseApiService.dart';
 import '../utils/GlobalExceptionHandler.dart';
 
@@ -15,7 +16,6 @@ class DwsmRepository{
   Future<BaseResponseModel<Village>> fetchDemonstrationList(
       int StateId, int DistrictId, String FineYear, int schoolId) async {
     try {
-      // Call the POST method from BaseApiService
       final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
         body: jsonEncode({
           'StateId': StateId,
@@ -78,5 +78,17 @@ class DwsmRepository{
     }
   }
 
+  Future<Dwsmdashboardresponse> fetchDwsmDashboard(int userId) async {
+    try {
+      String endpoint = '/apiMobile/dashDistrictUser?userid=$userId';
+      final response = await _apiService.get(endpoint);
+
+      return Dwsmdashboardresponse.fromJson(response);
+
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
 
 }

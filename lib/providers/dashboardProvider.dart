@@ -1,12 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
-
 import '../models/DashboardResponse/DashboardResponse.dart';
-import '../models/LgdResponse.dart';
 import '../repository/AuthenticaitonRepository.dart';
 import '../services/LocalStorageService.dart';
-import '../utils/DeviceUtils.dart';
 import '../utils/AppConstants.dart';
 
 class DashboardProvider extends ChangeNotifier{
@@ -17,7 +13,6 @@ class DashboardProvider extends ChangeNotifier{
   bool get isLoading => _isLoading;
 
   Dashboardresponse? dashboardData;
-  Dwsmdashboardresponse? dwsmdashboardresponse;
 
   Future<void> loadDashboardData() async {
     _isLoading = true;
@@ -27,20 +22,6 @@ class DashboardProvider extends ChangeNotifier{
     String stateId=_localStorage.getString(AppConstants.prefStateId) ?? '';
     try {
       dashboardData = await _authRepository.fetchDashboardData(int.parse(roleId), int.parse(userId), int.parse(stateId));
-    } catch (e) {
-      debugPrint("Dashboard Error: $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-  Future<void> loadDwsmDashboardData(int stateId, int DistrictId) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      //make them dynamic
-      dwsmdashboardresponse = await _authRepository.fetchDwsmDashboardData(stateId,DistrictId);
     } catch (e) {
       debugPrint("Dashboard Error: $e");
     } finally {

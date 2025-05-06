@@ -1,13 +1,10 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -24,16 +21,16 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
   String stateName = '';
   String userName = '';
+  String userID = '';
   String mobile = '';
   String stateId = '';
-  final encryption = AesEncryption();
-  /// Custom Widget for the info blocks
+
   Widget _buildInfoCard({
     required IconData icon,
     required Color iconColor,
     required String title,
     required VoidCallback onTap,
-    required int value,
+    required String value,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -77,7 +74,12 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 color: iconColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(value.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: iconColor,
+              child: Text(
+                value.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
                 ),
               ),
             ),
@@ -91,29 +93,25 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   void initState() {
     super.initState();
 
-    var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
-
     getToken();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final dashboardProvider =
+          Provider.of<DwsmDashboardProvider>(context, listen: false);
+      final masterProvider =
+          Provider.of<Masterprovider>(context, listen: false);
+      await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
       masterProvider.clearData();
-      masterProvider.fetchDistricts(stateId);
-      dashboardProvider.loadDwsmDashboardData(31,471);
+      await masterProvider.fetchDistricts(stateId);
+      print(
+          "dashboard data ${dashboardProvider.dwsmdashboardresponse!.totalAWCs}");
     });
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:  const BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
       ),
@@ -123,7 +121,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  const Text(
+            title: const Text(
               AppConstants.appTitle,
               style: TextStyle(
                 fontSize: 20,
@@ -137,7 +135,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   icon: const Icon(Icons.menu, color: Colors.white),
                   // Drawer icon
                   onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Open the Navigation Drawer
+                    Scaffold.of(context)
+                        .openDrawer(); // Open the Navigation Drawer
                   },
                 );
               },
@@ -148,8 +147,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   IconButton(
                     icon: const Icon(Icons.notifications_active,
                         color: Colors.white),
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -169,25 +167,25 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             ),
             elevation: 5,
           ),
-
           drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration:  const BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.blue,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children:  [
+                    children: [
                       const Text(
                         "DWSM Official",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
-                        stateName,  // Provide a fallback value if null
-                        style: const TextStyle(color: Colors.white70, fontSize: 16),
+                        stateName, // Provide a fallback value if null
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),
@@ -203,14 +201,16 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   leading: const Icon(Icons.list),
                   title: const Text(AppConstants.submitSampleInfo),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
                   title: const Text(AppConstants.listOfSamples),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleList);
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
@@ -226,7 +226,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToLogin);
                   },
                 ),
               ],
@@ -234,15 +235,18 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           ),
           body: Consumer<DwsmDashboardProvider>(
             builder: (context, dwsmDashboardProvider, child) {
-
+              final data = dwsmDashboardProvider.dwsmdashboardresponse;
+              if (data == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -262,16 +266,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
-                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                colors: [
+                                  Colors.blue.shade300,
+                                  Colors.blue.shade800
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                             ),
-                            padding: const EdgeInsets.all(2), // Border-like effect
+                            padding: const EdgeInsets.all(2),
+                            // Border-like effect
                             child: CircleAvatar(
                               radius: 32,
                               backgroundColor: Colors.grey[100],
-                              backgroundImage: const AssetImage('assets/user.png'),
+                              backgroundImage:
+                                  const AssetImage('assets/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -306,10 +315,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
+                                    Icon(Icons.account_balance_sharp,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Departmental User',
+                                      'DWSM Official',
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,
@@ -323,7 +333,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                                 Row(
                                   children: [
-                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                    const Icon(Icons.phone_android,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
@@ -344,7 +355,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                       ),
                     ),
                     const SizedBox(height: 25),
-
                     Container(
                       width: 500,
                       padding: const EdgeInsets.all(20),
@@ -384,7 +394,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.school_rounded,
                                   iconColor: Colors.blue,
                                   title: "Schools",
-                                  value: 4,
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
                                   onTap: () {},
                                 ),
                               ),
@@ -394,12 +405,14 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.local_activity,
                                   iconColor: Colors.deepOrange,
                                   title: "Demonstrations",
-                                  value: 5,
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ChangeNotifierProvider.value(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
                                           child: Demonstrationscreen(),
                                         ),
@@ -431,7 +444,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.child_care,
                                   iconColor: Colors.teal,
                                   title: "Anganwadi",
-                                  value: 5,
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
                                   onTap: () {},
                                 ),
                               ),
@@ -441,7 +455,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.lightbulb_outline,
                                   iconColor: Colors.purple,
                                   title: "Demonstrations",
-                                  value: 6,
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
                                   onTap: () {},
                                 ),
                               ),
@@ -450,33 +465,31 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ],
                       ),
                     ),
-
-
-
                     const SizedBox(height: 10),
-
-
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>( // <- await and expecting result now
+                          final result = await showDialog<bool>(
+                            // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
-                              double screenHeight = MediaQuery.of(context).size.height;
+                              double screenHeight =
+                                  MediaQuery.of(context).size.height;
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
-                                  child:  DwsmLocation(), // Your widget
+                                  child: DwsmLocation(), // Your widget
                                 ),
                               );
                             },
                           );
                           if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false).clearData();
+                            Provider.of<Masterprovider>(context, listen: false)
+                                .clearData();
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -509,13 +522,13 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     );
   }
 
-
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
+    userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }
