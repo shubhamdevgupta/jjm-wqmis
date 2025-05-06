@@ -48,7 +48,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? errorMessage;
   BaseResponseModel<FTKResponse>? ftkResponse;
 
-  Future<void> fetchDemonstrationList(int stateId, int DistrictId, String fineYear, int schoolId) async {
+  Future<void> fetchDemonstrationList(int stateId, int DistrictId, String fineYear, int schoolId,{ Function(String result)? onSuccess}) async {
     isLoading = true;
   ///  notifyListeners();
     try {
@@ -58,6 +58,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
           final List<Village> newData = rawLIst.result;
 
           if (schoolId != 0) {
+
+            if (onSuccess != null) {
+              onSuccess(rawLIst.result[0].photo);
+            }
+
             final index = villages.indexWhere((v) => v.schoolId == schoolId);
             if (index != -1) {
               villages[index] = newData.first;
@@ -71,34 +76,6 @@ class DwsmDashboardProvider extends ChangeNotifier {
         } else {
           errorMessage=rawLIst.message;
         }
-
-/*      if (rawLIst.status == 1) {
-        if (schoolId == 0) {
-          villages = rawLIst.result;
-        } else if (schoolId != 0) {
-          final matchedVillage = villages.firstWhere(
-                  (v) => v.schoolId == schoolId,
-              orElse: () => Village(
-                  stateName: '',
-                  districtName: '',
-                  blockName: 'blockName',
-                  panchayatName: 'panchayatName',
-                  villageName: 'villageName',
-                  userId: 0,
-                  stateId: 0,
-                  districtId: 0,
-                  blockId: 0,
-                  panchayatId: 0,
-                  villageId: 0,
-                  schoolId: 0,
-                  photo: ""));
-
-          villagePhoto = matchedVillage.photo;
-          print('Saved photo string: $villagePhoto');
-        }
-      } else {
-        errorMsg = rawLIst.message;
-      }*/
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
