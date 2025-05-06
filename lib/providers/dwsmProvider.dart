@@ -27,8 +27,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
   List<SchoolResult> anganwadiList = [];
   String? selectedAnganwadi;
   String? selectedAnganwadiName;
+  int? mDemonstrationId;
 
   Dwsmdashboardresponse? _dwsmdashboardresponse;
+
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
 
   double? get currentLatitude => _currentLatitude;
@@ -52,7 +54,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     isLoading = true;
     try {
       final response = await _dwsmRepository.fetchDwsmDashboard(userId);
-      _dwsmdashboardresponse=response;
+      _dwsmdashboardresponse = response;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -63,30 +65,26 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDemonstrationList(
-      int stateId, int DistrictId, String fineYear, int schoolId) async {
+      int stateId, int DistrictId, String fineYear, int schoolId,
+      {Function(String result)? onSuccess}) async {
     isLoading = true;
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(
           stateId, DistrictId, fineYear, schoolId);
       if (rawLIst.status == 1) {
-        final List<Village> newData = rawLIst.result;
-
         if (schoolId != 0) {
-          final index = villages.indexWhere((v) => v.schoolId == schoolId);
-          if (index != -1) {
-            villages[index] = newData.first;
-          } else {
-            villages.add(newData.first);
+          if (onSuccess != null) {
+            onSuccess(rawLIst.result[0].photo);
           }
         } else {
-          villages = newData;
+          villages = rawLIst.result;
         }
-        notifyListeners();
       } else {
         errorMessage = rawLIst.message;
       }
+      notifyListeners();
     } catch (e) {
-      debugPrint('Error in StateProvider: $e');
+      debugPrint('Error in fetchDemonstrationList: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       isLoading = false;
@@ -232,9 +230,11 @@ class DwsmDashboardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedAnganwadi(String id, String name) {
+  void setSelectedAnganwadi(String id, String name,int demonstrationId) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
+    mDemonstrationId = demonstrationId;
+
     notifyListeners();
   }
 
@@ -247,6 +247,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   void clearSelectedAnganwadi() {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
+    mDemonstrationId=101;
     notifyListeners();
   }
 }
