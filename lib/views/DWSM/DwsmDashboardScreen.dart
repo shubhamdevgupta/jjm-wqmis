@@ -11,6 +11,7 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import '../NativeLocationService.dart';
 import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
@@ -148,7 +149,14 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   IconButton(
                     icon: const Icon(Icons.notifications_active,
                         color: Colors.white),
-                    onPressed: () {
+                    onPressed: () async {
+
+                      final location = await NativeLocationService.getLocation();
+                      if (location != null) {
+                        print("Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
+                      }
+
+
                     },
                   ),
                 ],
