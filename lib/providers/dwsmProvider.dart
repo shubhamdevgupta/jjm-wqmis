@@ -67,13 +67,15 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDemonstrationList(
-      int stateId, int DistrictId, String fineYear, int schoolId,
+  Future<void> fetchDemonstrationList(int stateId, int districtId, String fineYear, int schoolId,int demonstrationType,
       {Function(String result)? onSuccess}) async {
     isLoading = true;
     try {
-      final rawLIst = await _dwsmRepository.fetchDemonstrationList(
-          stateId, DistrictId, fineYear, schoolId);
+      final rawLIst = await _dwsmRepository.fetchDemonstrationList(stateId: stateId,
+        districtId: districtId,
+        fineYear: fineYear,
+        schoolId: schoolId,
+        demonstrationType: demonstrationType,);
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {

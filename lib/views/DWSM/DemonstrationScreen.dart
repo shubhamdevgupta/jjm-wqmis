@@ -11,6 +11,9 @@ import '../../providers/dwsmProvider.dart';
 import '../../utils/AppConstants.dart';
 
 class Demonstrationscreen extends StatefulWidget {
+  final int? type;
+  const Demonstrationscreen({super.key, required this.type});
+
   @override
   State<Demonstrationscreen> createState() => _DemonstrationscreenState();
 }
@@ -19,21 +22,25 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
   LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
   String? districtId = "471";
+  String? titleType = "";
 
   @override
   void initState() {
     stateId = _localStorageService.getString(AppConstants.prefStateId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false)
-          .fetchDemonstrationList(
-              int.parse(stateId!), int.parse(districtId!), "2025-2026", 0);
+      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026", 0,widget.type!);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if(widget.type==10){
+      titleType = "School";
+    }else{
+      titleType  ="Anganwadi";
+    }
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -112,9 +119,9 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                           children: [
                             _iconCircle(Icons.location_city, Colors.blue),
                             const SizedBox(width: 10),
-                            const Text(
-                              "School Details",
-                              style: TextStyle(
+                             Text(
+                              "$titleType Details",
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
@@ -150,7 +157,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                         ),
 
                         // School Name
-                        _infoRow("School Name", "schoolName", Icons.school,
+                        _infoRow("$titleType Name", "$titleType", Icons.school,
                             Colors.deepPurple),
 
                         // Category
@@ -200,7 +207,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   int.parse(stateId!),
                                   int.parse(districtId!),
                                   "2025-2026",
-                                  village.schoolId,
+                                  village.schoolId,widget.type!,
                                   onSuccess: (result)  {
                                     String base64String = result.contains(',')
                                         ? result.split(',').last
@@ -276,7 +283,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("School Image"),
+          title:  Text("$titleType Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.memory(imageBytes, fit: BoxFit.contain),

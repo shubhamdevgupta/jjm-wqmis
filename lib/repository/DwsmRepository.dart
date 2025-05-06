@@ -14,15 +14,22 @@ import '../utils/GlobalExceptionHandler.dart';
 class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();
 
-  Future<BaseResponseModel<Village>> fetchDemonstrationList(
-      int StateId, int DistrictId, String FineYear, int schoolId) async {
+  Future<BaseResponseModel<Village>> fetchDemonstrationList({
+    required int stateId,
+    required int districtId,
+    required String fineYear,
+    required int schoolId,
+    required int demonstrationType,
+  }
+      ) async {
     try {
       final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
         body: jsonEncode({
-          'StateId': StateId,
-          'DistrictId': DistrictId,
-          'FineYear': FineYear,
+          'StateId': stateId,
+          'DistrictId': districtId,
+          'FineYear': fineYear,
           'SchoolId': schoolId,
+          'DemonstrationType': demonstrationType,
         }),
       );
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));

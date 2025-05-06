@@ -4,12 +4,11 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/DWSM/AnganwadiDemonstration.dart';
 import 'package:jjm_wqmis/views/DWSM/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-import 'SchoolDemonstration.dart';
+import 'SchoolAWC.dart';
 import 'DwsmLocationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
@@ -405,7 +404,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                               value: dwsmDashboardProvider,
-                                              child: DashboardSchool(),
+                                              child:const SchoolAWC( type: 10,),
                                             ),
                                       ),
                                     );
@@ -429,7 +428,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(),
+                                          child: Demonstrationscreen(type: 10,),
                                         ),
                                       ),
                                     );
@@ -470,7 +469,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                               value: dwsmDashboardProvider,
-                                              child: DashboardAnganwadi(),
+                                              child:const SchoolAWC( type: 11),
                                             ),
                                       ),
                                     );
@@ -486,7 +485,19 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   title: "Demonstrations",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child: Demonstrationscreen(
+                                                type: 11,),
+                                            ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ],

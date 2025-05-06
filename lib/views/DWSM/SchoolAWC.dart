@@ -10,25 +10,29 @@ import '../../models/DWSM/DwsmDashboard.dart';
 import '../../providers/dwsmProvider.dart';
 import '../../utils/AppConstants.dart';
 
+class SchoolAWC extends StatefulWidget {
+  final int? type;
 
-class DashboardAnganwadi extends StatefulWidget {
+  const SchoolAWC({super.key, required this.type});
 
   @override
-  State<DashboardAnganwadi> createState() => _DashboardAnganwadi();
+  State<SchoolAWC> createState() => _SchoolAWCState();
 }
 
-class _DashboardAnganwadi extends State<DashboardAnganwadi> {
-  static const int DEMONSTRATION_TYPE_Anganwadi = 11;
+class _SchoolAWCState extends State<SchoolAWC> {
   final LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
-  String? districtId="471";
+  String? districtId = "471";
+  String? titleName = "";
+
   @override
   void initState() {
-
     stateId = _localStorageService.getString(AppConstants.prefStateId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false).fetchDashboardSchoolList(int.parse(stateId!), int.parse(districtId!), DEMONSTRATION_TYPE_Anganwadi);
+      Provider.of<DwsmDashboardProvider>(context, listen: false)
+          .fetchDashboardSchoolList(
+              int.parse(stateId!), int.parse(districtId!), widget.type!);
     });
 
     super.initState();
@@ -36,25 +40,31 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(decoration:  const BoxDecoration(
-      image: DecorationImage(
-          image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
-    ),
+    if (widget.type == 10) {
+      titleName = "School";
+    } else {
+      titleName = "Anganwadi";
+    }
+
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+      ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  const Text(
-              "School Demonstrations List",
+            title: Text(
+              "$titleName Demonstrations List",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-
 
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -80,10 +90,11 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
             ),
             elevation: 5,
           ),
-
-          body: Consumer<DwsmDashboardProvider>(builder : (context,provider , child){
+          body: Consumer<DwsmDashboardProvider>(
+              builder: (context, provider, child) {
             if (provider.isLoading) {
-              return LoaderUtils.conditionalLoader(isLoading: provider.isLoading);
+              return LoaderUtils.conditionalLoader(
+                  isLoading: provider.isLoading);
             }
             if (provider.dashboardSchoolListModel.isEmpty) {
               return Center(
@@ -142,7 +153,7 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
                         onPressed: () {
-                          provider.fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!), "2025-2026", 0);
+// call api here for refresh
                         },
                         icon: const Icon(Icons.refresh_rounded),
                         label: const Text("Refresh"),
@@ -153,8 +164,10 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                          textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 14),
+                          textStyle: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w500),
                         ),
                       ),
                     ],
@@ -163,10 +176,11 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
               );
             }
 
-            return  ListView.builder(
+            return ListView.builder(
               itemCount: provider.dashboardSchoolListModel.length,
               itemBuilder: (context, index) {
-                final dashboardSchool = provider.dashboardSchoolListModel[index];
+                final dashboardSchool =
+                    provider.dashboardSchoolListModel[index];
 
                 return Container(
                   margin: const EdgeInsets.all(12),
@@ -186,15 +200,14 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         // Heading
                         Row(
                           children: [
                             _iconCircle(Icons.location_city, Colors.blue),
                             const SizedBox(width: 10),
-                            const Text(
-                              "Anganwadi Details",
-                              style: TextStyle(
+                            Text(
+                              "$titleName Details",
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
@@ -230,22 +243,25 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
                           ],
                         ),
 
-
-                        // School Name
-                        _infoRow("Anganwadi Name", "schoolName", Icons.school, Colors.deepPurple),
+                        // $titleName Name
+                        _infoRow("$titleName Name", "schoolName", Icons.school,
+                            Colors.deepPurple),
 
                         // Category
-                        _infoRow("Category", dashboardSchool.institutionCategory, Icons.category, Colors.orange),
+                        _infoRow(
+                            "Category",
+                            dashboardSchool.institutionCategory,
+                            Icons.category,
+                            Colors.orange),
 
                         // Classification
-                        _infoRow("Classification", dashboardSchool.institutionSubCategory, Icons.label, Colors.green),
+                        _infoRow(
+                            "Classification",
+                            dashboardSchool.institutionSubCategory,
+                            Icons.label,
+                            Colors.green),
 
                         // Remark
-
-
-
-
-
                       ],
                     ),
                   ),
@@ -302,14 +318,14 @@ class _DashboardAnganwadi extends State<DashboardAnganwadi> {
         return;
       }
       String base64String =
-      result.contains(',') ? result.split(',').last : result;
+          result.contains(',') ? result.split(',').last : result;
       final imageBytes = base64Decode(base64String);
 
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("School Image"),
+            title: Text("$titleName Image"),
             content: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.memory(imageBytes, fit: BoxFit.contain),
