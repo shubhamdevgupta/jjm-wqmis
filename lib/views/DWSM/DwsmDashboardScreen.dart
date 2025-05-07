@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
+import '../webView/NativeLocationService.dart';
 import 'DwmsLIst/SchoolAwcScreen.dart';
 import 'DwsmLocationScreen.dart';
 
@@ -82,7 +83,12 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   IconButton(
                     icon: const Icon(Icons.notifications_active,
                         color: Colors.white),
-                    onPressed: () {},
+                      onPressed: () async {
+                        final location = await NativeLocationService.getLocation();
+                        if (location != null) {
+                          print("SHAKTI>>Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
+                        }
+                      },
                   ),
                 ],
               ),
@@ -396,8 +402,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
                                   onTap: () {
-
-
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -440,9 +444,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 20),
-                    Center(
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
                           final result = await showDialog<bool>(

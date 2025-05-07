@@ -214,9 +214,9 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                       widget.type!,
                                       onSuccess: (result) {
                                         String base64String =
-                                            result.contains(',')
-                                                ? result.split(',').last
-                                                : result;
+                                            result.photo.contains(',')
+                                                ?  result.photo.split(',').last
+                                                :  result.photo;
                                         final imageBytes =
                                             base64Decode(base64String);
                                         LoaderUtils.hideLoaderDialog(context);
