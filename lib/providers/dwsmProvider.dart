@@ -68,7 +68,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDemonstrationList(int stateId, int districtId, String fineYear, int schoolId,int demonstrationType,
-      {Function(String result)? onSuccess}) async {
+      {Function(Village result)? onSuccess}) async {
     isLoading = true;
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(stateId: stateId,
@@ -79,7 +79,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {
-            onSuccess(rawLIst.result[0].photo);
+            onSuccess(rawLIst.result[0]/*.photo*/);
           }
         } else {
           villages = rawLIst.result;

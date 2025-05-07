@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   String userId = '';
   String stateId = '';
   String districtId = '471';
+  Village? village;
 
   final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();
@@ -78,6 +80,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         selectedId!,
                                         selectedAnnganwadi.name,
                                         selectedAnnganwadi.demonstrated);
+
                                     if (dwsmprovider.mDemonstrationId == 1) {
                                       dwsmprovider.fetchDemonstrationList(
                                           int.parse(stateId),
@@ -85,14 +88,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           "2025-2026",
                                           int.parse(selectedId),
                                           11, onSuccess: (result) {
-                                        String base64String =
-                                            result.contains(',')
-                                                ? result.split(',').last
-                                                : result;
-                                        final imageBytes =
-                                            base64Decode(base64String);
-                                        LoaderUtils.hideLoaderDialog(context);
-                                        showImage(imageBytes);
+                                        village = result;
+                                        print("SSS_SS>>> ${village?.districtId} ${village?.districtName}");
+
+
                                       });
                                     }
                                   },
@@ -217,17 +216,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                             const SizedBox(width: 10),
                                             Expanded(
                                               child: Text(
+
                                                 _buildLocationPath([
-                                                  dwsmprovider
-                                                      .villages.first.stateName,
-                                                  dwsmprovider.villages.first
-                                                      .districtName,
-                                                  dwsmprovider
-                                                      .villages.first.blockName,
-                                                  dwsmprovider.villages.first
-                                                      .panchayatName,
-                                                  dwsmprovider.villages.first
-                                                      .villageName,
+                                                  village?.stateName,
+                                                  village?.districtName,
+                                                  village?.blockName,
+                                                  village?.panchayatName,
+                                                  village?.villageName,
                                                 ]),
                                                 style: const TextStyle(
                                                   fontSize: 14,
@@ -246,16 +241,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         // Category
                                         _infoRow(
                                             "Category",
-                                            dwsmprovider.villages.first
-                                                .InstitutionCategory,
+                                            "dwsmprovider.villages.first.InstitutionCategory",
                                             Icons.category,
                                             Colors.orange),
 
                                         // Classification
                                         _infoRow(
                                             "Classification",
-                                            dwsmprovider.villages.first
-                                                .InstitutionSubCategory,
+                                            " dwsmprovider.villages.first.InstitutionSubCategory",
                                             Icons.label,
                                             Colors.green),
 
@@ -295,23 +288,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         Align(
                                           alignment: Alignment.bottomRight,
                                           child: ElevatedButton.icon(
-                                            onPressed: () async {
-                                              LoaderUtils
-                                                  .showCustomLoaderDialog(
-                                                      context);
-                                              String base64String = dwsmprovider
-                                                      .villages.first.photo
-                                                      .contains(',')
-                                                  ? dwsmprovider
-                                                      .villages.first.photo
-                                                      .split(',')
-                                                      .last
-                                                  : dwsmprovider
-                                                      .villages.first.photo;
-                                              final imageBytes =
-                                                  base64Decode(base64String);
-                                              LoaderUtils.hideLoaderDialog(
-                                                  context);
+                                            onPressed: () {
+
+                                              String? base64String = village!.photo.contains(',')
+                                                  ? village?.photo.split(',').last
+                                                  : village?.photo;
+
+                                              final imageBytes = base64Decode(base64String!);
+
                                               showImage(imageBytes);
                                             },
                                             icon: const Icon(
