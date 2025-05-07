@@ -40,8 +40,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
       masterProvider.clearData();
       await masterProvider.fetchDistricts(stateId);
-      print(
-          "dashboard data ${dashboardProvider.dwsmdashboardresponse!.totalAWCs}");
     });
   }
 
@@ -231,9 +229,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 Text(
                                   '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 18,
                                     color: Colors.grey.shade700,
                                     fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 const SizedBox(height: 4),

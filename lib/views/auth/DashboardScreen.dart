@@ -213,9 +213,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 Text(
                                   '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 18,
                                     color: Colors.grey.shade700,
                                     fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
