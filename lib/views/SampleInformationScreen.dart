@@ -116,81 +116,79 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    return Visibility(
-            visible: masterProvider.selectedScheme != null,
-            child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                    12),
-              ),
-              margin: EdgeInsets.all(5),
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Select Scheme",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Colors.black87, // Dark text for better readability
-                      ),
-                    ),
-
-                    const Divider(
-                      height: 10,
-                      color: Colors.grey,
-                      thickness: 1,
-                    ),
-                    SizedBox(height: 4), // Space between title and dropdown
-                    CustomDropdown(
-                      value: masterProvider.selectedScheme,
-                      items: masterProvider.schemes.map((scheme) {
-                        return DropdownMenuItem<String>(
-                          value: scheme.schemeId.toString(),
-                          child: Text(
-                            scheme.schemeName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        );
-                      }).toList(),
-                      title: "",
-                      appBarTitle: "Select Scheme",
-                      showSearchBar: false,
-                      onChanged: (value) {
-                        masterProvider.setSelectedScheme(value);
-                        if (masterProvider.selectedWtsfilter == "5") {
-                          masterProvider.fetchWTPList(
-                            masterProvider.selectedStateId!,
-                            value!, // <-- use directly here
-                          );
-                        } else if (masterProvider.selectedWtsfilter == "6") {
-                          masterProvider.setSelectedSubSource(0);
-                          masterProvider.setSelectedWTP("0");
-                          masterProvider.fetchSourceInformation(
-                            masterProvider.selectedVillage!,
-                            "0",
-                            "0",
-                            masterProvider.selectedWtsfilter!,
-                            masterProvider.selectedSubSource.toString(),
-                            masterProvider.selectedWtp!,
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedScheme!,
-                          );
-                        }
-                      },
-                    )
-                  ],
-                ),
+    print("tttttttttttttttttttttt ${masterProvider.schemes}");
+    return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+            12),
+      ),
+      margin: EdgeInsets.all(5),
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select Scheme",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color:
+                Colors.black87, // Dark text for better readability
               ),
             ),
-          );
+
+            const Divider(
+              height: 10,
+              color: Colors.grey,
+              thickness: 1,
+            ),
+            SizedBox(height: 4), // Space between title and dropdown
+            CustomDropdown(
+              value: masterProvider.selectedScheme,
+              items: masterProvider.schemes.map((scheme) {
+                return DropdownMenuItem<String>(
+                  value: scheme.schemeId.toString(),
+                  child: Text(
+                    scheme.schemeName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                );
+              }).toList(),
+              title: "",
+              appBarTitle: "Select Scheme",
+              showSearchBar: false,
+              onChanged: (value) {
+                masterProvider.setSelectedScheme(value);
+                if (masterProvider.selectedWtsfilter == "5") {
+                  masterProvider.fetchWTPList(
+                    masterProvider.selectedStateId!,
+                    value!, // <-- use directly here
+                  );
+                } else if (masterProvider.selectedWtsfilter == "6") {
+                  masterProvider.setSelectedSubSource(0);
+                  masterProvider.setSelectedWTP("0");
+                  masterProvider.fetchSourceInformation(
+                    masterProvider.selectedVillage!,
+                    "0",
+                    "0",
+                    masterProvider.selectedWtsfilter!,
+                    masterProvider.selectedSubSource.toString(),
+                    masterProvider.selectedWtp!,
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedScheme!,
+                  );
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {

@@ -48,6 +48,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
    //   masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
+      dashboardProvider.fetchLocation();
     });
   }
 
@@ -393,7 +394,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-                          await showDialog<bool>(
+
+                          final result  = await showDialog<bool>(
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight =
@@ -414,10 +416,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               );
                             },
                           );
-                        /*  if (result == false) {
+                          if (result == false) {
                             Provider.of<Masterprovider>(context, listen: false)
                                 .clearData();
-                          }*/
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),

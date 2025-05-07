@@ -89,9 +89,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           int.parse(selectedId),
                                           11, onSuccess: (result) {
                                         village = result;
-                                        print("SSS_SS>>> ${village?.districtId} ${village?.districtName}");
-
-
+                                        print(
+                                            "SSS_SS>>> ${village?.districtId} ${village?.districtName}");
                                       });
                                     }
                                   },
@@ -121,7 +120,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        children: const [
+                                        children: [
                                           Icon(Icons.school_rounded,
                                               color: Colors.green),
                                         ],
@@ -216,13 +215,17 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                             const SizedBox(width: 10),
                                             Expanded(
                                               child: Text(
-
                                                 _buildLocationPath([
-                                                  village?.stateName,
-                                                  village?.districtName,
-                                                  village?.blockName,
-                                                  village?.panchayatName,
-                                                  village?.villageName,
+                                                 village != null
+                                                ?village?.stateName:"",
+                                                 village != null
+                                                ?village?.districtName:"",
+                                                 village != null
+                                                ?village?.blockName:"",
+                                                 village != null
+                                                ?village?.panchayatName:"",
+                                                 village != null
+                                                ?village?.villageName:"",
                                                 ]),
                                                 style: const TextStyle(
                                                   fontSize: 14,
@@ -241,14 +244,19 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                         // Category
                                         _infoRow(
                                             "Category",
-                                            "dwsmprovider.villages.first.InstitutionCategory",
+                                            village != null
+                                                ? village!.InstitutionCategory
+                                                : "",
                                             Icons.category,
                                             Colors.orange),
 
                                         // Classification
                                         _infoRow(
                                             "Classification",
-                                            " dwsmprovider.villages.first.InstitutionSubCategory",
+                                            village != null
+                                                ? village!
+                                                    .InstitutionSubCategory
+                                                : "",
                                             Icons.label,
                                             Colors.green),
 
@@ -289,12 +297,15 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           alignment: Alignment.bottomRight,
                                           child: ElevatedButton.icon(
                                             onPressed: () {
+                                              String? base64String =
+                                                  village!.photo.contains(',')
+                                                      ? village?.photo
+                                                          .split(',')
+                                                          .last
+                                                      : village?.photo;
 
-                                              String? base64String = village!.photo.contains(',')
-                                                  ? village?.photo.split(',').last
-                                                  : village?.photo;
-
-                                              final imageBytes = base64Decode(base64String!);
+                                              final imageBytes =
+                                                  base64Decode(base64String!);
 
                                               showImage(imageBytes);
                                             },

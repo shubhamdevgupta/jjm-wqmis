@@ -18,6 +18,7 @@ import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -291,7 +292,7 @@ class Masterprovider extends ChangeNotifier {
           villageId, habitationId, districtid, filter);
       baseStatus = mSchemes.status;
 
-      if (mSchemes.status == 1) {
+      if (baseStatus == 1) {
         schemes = mSchemes.result;
         if (schemes.length == 1) {
           selectedScheme = schemes.first.schemeId.toString();
@@ -299,7 +300,6 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = mSchemes.message;
       }
-      // 🔁 Trigger the dependent API when auto-selected
       if (selectedWtsfilter == "5") {
         await fetchWTPList(selectedStateId!, selectedScheme!);
       } else if (selectedWtsfilter == "6") {
@@ -452,7 +452,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  /// Fetch WTP Labs from API
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;

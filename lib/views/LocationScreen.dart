@@ -296,6 +296,8 @@ class _LocationscreenState extends State<Locationscreen> {
                     print("flagggggggggg ${ widget.flag}");
                     print("loading--------->${paramProvider.isLoading}");
                     await paramProvider.fetchLocation();
+                    print("currentLatitude--------->${paramProvider.currentLatitude}");
+                    print("currentLongitude--------->${paramProvider.currentLongitude}");
                     print("loading--------->${paramProvider.isLoading}");
                     if (widget.flag == AppConstants.openSampleListScreen) {
 
