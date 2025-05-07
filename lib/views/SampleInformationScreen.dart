@@ -956,7 +956,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 8,
+          visible: masterProvider.selectedHandpumpPrivate == 8 &&  masterProvider.selectedWtsfilter == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(

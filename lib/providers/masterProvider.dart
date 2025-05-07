@@ -668,7 +668,7 @@ class Masterprovider extends ChangeNotifier {
           selectedStateId!,
           selectedScheme!);
     } else if (value == 8) {
-      setSelectedHandpump(6);
+      setSelectedHandpump(value);
       setSelectedSubSource(2);
       fetchSourceInformation(
           selectedVillage!,
