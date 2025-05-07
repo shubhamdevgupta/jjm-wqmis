@@ -330,7 +330,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
                                 },
                               ),
-                              _buildMenuCard(
+                       /*       _buildMenuCard(
                                 title: AppConstants.totalRetest,
                                 icon: Icons.refresh,
                                 gradientColors: [Colors.red, Colors.deepOrange],
@@ -339,7 +339,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                  // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
                                   ToastHelper.showSnackBar(context, "Admin can access this option only");
                                 },
-                              ),
+                              ),*/
 
 
                             ],
@@ -361,10 +361,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
 
                     const SizedBox(height: 20),
-                    Center(
+                    SizedBox(
+                      width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>( // <- await and expecting result now
+                          final result = await showDialog<bool>(
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight = MediaQuery.of(context).size.height;
