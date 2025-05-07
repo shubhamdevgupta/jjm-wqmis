@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'AppStyles.dart';
+
 class CustomDropdown extends StatefulWidget {
   final String? value;
   final List<DropdownMenuItem<String>> items;
@@ -85,11 +87,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           RichText(
             text: TextSpan(
               text: widget.title.replaceAll('*', ''),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
+                style: AppStyles.textStyleBoldBlack16,
               children: widget.title.contains('*')
                   ? const [
                 TextSpan(

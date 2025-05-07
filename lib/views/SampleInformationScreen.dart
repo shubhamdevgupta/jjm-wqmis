@@ -134,11 +134,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             // Title for the dropdown
             Text(
               "Select Scheme",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87, // Dark text for better readability
-              ),
+              style: AppStyles.textStyleBoldBlack16,
             ),
 
             const Divider(
@@ -228,9 +224,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.setSelectedWaterSourcefilter("");
                     masterProvider.setSelectedWaterSourcefilter(value);
 
-                    print("6666666666666 $value");
-                    masterProvider.fetchSchemes(
-                        masterProvider.selectedVillage!, "0", "0", value);
+                    masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
                   }
                 },
                 appBarTitle: "Select Location",
@@ -278,10 +272,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  const Text(
+                   Text(
                     'Select Sub-Source Category:',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                      style: AppStyles.textStyleBoldBlack16,
                   ),
+
+
+                  /*fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,*/
                   Row(
                     children: [
                       Radio(
@@ -1032,7 +1031,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateSourceofScheme(Masterprovider masterProvider) {
-    print("9999999999   ${masterProvider.selectedWaterSource}");
     if (masterProvider.selectedScheme == null ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";
