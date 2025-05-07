@@ -21,6 +21,7 @@ class MainActivity : FlutterActivity() {
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             if (call.method == "getLocation") {
+                // Pass the result directly to the getLocation method
                 getLocation(result)
             } else {
                 result.notImplemented()
@@ -31,12 +32,17 @@ class MainActivity : FlutterActivity() {
     private fun getLocation(result: MethodChannel.Result) {
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Check for location permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            // Request permission if not granted
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
             result.error("PERMISSION_DENIED", "Location permission not granted", null)
             return
         }
 
+        // Permission granted, fetch the last known location
         val location: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
         if (location != null) {
@@ -47,13 +53,20 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
+        // Handle permission request results
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, you can now get location
-             //   getLocation(MethodChannel.Result { /* handle success*/ })
+                // Permission granted, call getLocation
+                // Use the result that was passed from MethodCallHandler
+                // Note: You can't recreate MethodChannel.Result here, you need to handle the logic from the initial request
+                // We won't call `getLocation(result)` directly here. It was already called in the handler.
             } else {
                 // Permission denied
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
