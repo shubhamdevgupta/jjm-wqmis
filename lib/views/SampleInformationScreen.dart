@@ -116,26 +116,21 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    return masterProvider.schemes.isEmpty
-        ? AppTextWidgets.errorText(masterProvider.errorMsg)
-        : Visibility(
+    return Visibility(
             visible: masterProvider.selectedScheme != null,
             child: Card(
               elevation: 5,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
-                    12), // Slightly increased border radius for a smooth look
+                    12),
               ),
               margin: EdgeInsets.all(5),
-              // Margin to ensure spacing around the card
               color: Colors.white,
-              // Set background color of the card to white
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title for the dropdown
                     Text(
                       "Select Scheme",
                       style: TextStyle(
@@ -152,7 +147,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       thickness: 1,
                     ),
                     SizedBox(height: 4), // Space between title and dropdown
-                    // Custom dropdown
                     CustomDropdown(
                       value: masterProvider.selectedScheme,
                       items: masterProvider.schemes.map((scheme) {
