@@ -288,7 +288,8 @@ class _LocationscreenState extends State<Locationscreen> {
                 },
               ),
               SizedBox(height: 12),
-              Center(
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
 
                   onPressed: () async {
@@ -322,7 +323,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     }
 
                     //TODO LGD code
-         /*             masterProvider.fetchVillageDetails(
+                         /*             masterProvider.fetchVillageDetails(
                           paramProvider.currentLongitude!,
                           paramProvider.currentLatitude!);
                       print('Going to Save Sample screen');

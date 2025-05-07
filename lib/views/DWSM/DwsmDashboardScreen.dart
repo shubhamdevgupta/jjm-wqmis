@@ -402,8 +402,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
                                   onTap: () {
-
-
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -446,9 +444,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 20),
-                    Center(
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
                           final result = await showDialog<bool>(

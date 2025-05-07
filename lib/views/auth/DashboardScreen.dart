@@ -5,9 +5,7 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -40,13 +38,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     getToken();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      final dashboardProvider =
+          Provider.of<DashboardProvider>(context, listen: false);
+      final masterProvider =
+          Provider.of<Masterprovider>(context, listen: false);
 
       dashboardProvider.loadDashboardData();
       print("dashboard data${dashboardProvider.dashboardData}");
 
-      masterProvider.clearData();
+   //   masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
     });
   }
@@ -54,7 +54,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:  const BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
       ),
@@ -64,7 +64,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title:  Text(
+            title: Text(
               AppConstants.appTitle,
               style: AppStyles.appBarTitle,
             ),
@@ -74,7 +74,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   icon: const Icon(Icons.menu, color: Colors.white),
                   // Drawer icon
                   onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Open the Navigation Drawer
+                    Scaffold.of(context)
+                        .openDrawer(); // Open the Navigation Drawer
                   },
                 );
               },
@@ -94,64 +95,85 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             ),
             elevation: 5,
           ),
-
           drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration:  const BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.blue,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children:  [
+                    children: [
                       Text(
                         AppConstants.departmentalUser,
                         style: AppStyles.appBarTitle,
                       ),
                       Text(
-                        stateName,  // Provide a fallback value if null
-                        style: AppStyles.setTextStyle(16, FontWeight.normal, Colors.white70),
+                        stateName, // Provide a fallback value if null
+                        style: AppStyles.setTextStyle(
+                            16, FontWeight.normal, Colors.white70),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: Text(AppConstants.dashboard,style: AppStyles.style16NormalBlack,),
+                  title: Text(
+                    AppConstants.dashboard,
+                    style: AppStyles.style16NormalBlack,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(AppConstants.submitSampleInfo,style: AppStyles.style16NormalBlack,),
+                  title: Text(
+                    AppConstants.submitSampleInfo,
+                    style: AppStyles.style16NormalBlack,
+                  ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToSaveSample);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(AppConstants.listOfSamples,style: AppStyles.style16NormalBlack,),
+                  title: Text(
+                    AppConstants.listOfSamples,
+                    style: AppStyles.style16NormalBlack,
+                  ),
                   onTap: () {
-                    Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
+                    Navigator.pushNamed(
+                        context, AppConstants.navigateToSampleList,
+                        arguments: {
+                          'flag': AppConstants.totalSamplesSubmitted,
+                        });
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
+                  title: Text(
+                    AppConstants.maintenance,
+                    style: AppStyles.style16NormalBlack,
+                  ),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
+                  title: Text(
+                    AppConstants.logout,
+                    style: AppStyles.style16NormalBlack,
+                  ),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToLogin);
                   },
                 ),
               ],
@@ -170,7 +192,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -190,16 +213,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
-                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                colors: [
+                                  Colors.blue.shade300,
+                                  Colors.blue.shade800
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                             ),
-                            padding: const EdgeInsets.all(2), // Border-like effect
+                            padding: const EdgeInsets.all(2),
+                            // Border-like effect
                             child: CircleAvatar(
                               radius: 32,
                               backgroundColor: Colors.grey[100],
-                              backgroundImage: const AssetImage('assets/user.png'),
+                              backgroundImage:
+                                  const AssetImage('assets/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -211,7 +239,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome Text
                                 Text(
-                                  '${AppConstants.welcome},',
+                                  '${AppConstants.welcome}',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey.shade700,
@@ -230,12 +258,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 4),
 
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
+                                    const Icon(Icons.account_balance_sharp,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
                                       'Departmental User',
@@ -248,11 +277,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ],
                                 ),
 
-                                const SizedBox(height: 6),
+                                const SizedBox(height: 4),
 
                                 Row(
                                   children: [
-                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                    const Icon(Icons.phone_android,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
@@ -272,66 +302,65 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-
-
-                    const SizedBox(height: 15),
-
-
-
-                    Container(  padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFe0f7fa), Color(0xFFffffff)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 12,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-
-                      child: Column(
-                        children: [
-
-                          GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 15.0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _buildMenuCard(
-                                title: AppConstants.totalSamplesSubmitted,
-                                icon: Icons.analytics,
-                                gradientColors: [Colors.lightBlue, Colors.blueAccent],
-                                value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalPhysicalSubmitted,
-                                icon: Icons.attach_money,
-                                gradientColors: [Colors.amber, Colors.orange],
-                                value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalSampleTested,
-                                icon: Icons.check_circle,
-                                gradientColors: [Colors.teal, Colors.green],
-                                value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
-                                },
-                              ),
-                       /*       _buildMenuCard(
+                    const SizedBox(height: 12),
+                    Column(
+                      children: [
+                        GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20.0,
+                          mainAxisSpacing: 15.0,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          childAspectRatio: 1.4, // Adjust this to control card height
+                          children: [
+                            _buildMenuCard(
+                              title: AppConstants.totalSamplesSubmitted,
+                              icon: Icons.analytics,
+                              gradientColors: [
+                                Colors.lightBlue,
+                                Colors.blueAccent
+                              ],
+                              value:
+                                  '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppConstants.navigateToSampleList,
+                                    arguments: {
+                                      'flag':
+                                          AppConstants.totalSamplesSubmitted,
+                                    });
+                              },
+                            ),
+                            _buildMenuCard(
+                              title: AppConstants.totalPhysicalSubmitted,
+                              icon: Icons.attach_money,
+                              gradientColors: [Colors.amber, Colors.orange],
+                              value:
+                                  '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppConstants.navigateToSampleList,
+                                    arguments: {
+                                      'flag':
+                                          AppConstants.totalPhysicalSubmitted
+                                    });
+                              },
+                            ),
+                            _buildMenuCard(
+                              title: AppConstants.totalSampleTested,
+                              icon: Icons.check_circle,
+                              gradientColors: [Colors.teal, Colors.green],
+                              value:
+                                  '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppConstants.navigateToSampleList,
+                                    arguments: {
+                                      'flag': AppConstants.totalSampleTested
+                                    });
+                              },
+                            ),
+                            /*       _buildMenuCard(
                                 title: AppConstants.totalRetest,
                                 icon: Icons.refresh,
                                 gradientColors: [Colors.red, Colors.deepOrange],
@@ -341,36 +370,36 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ToastHelper.showSnackBar(context, "Admin can access this option only");
                                 },
                               ),*/
-
-
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Center(
-                            child: const Text(
-                              "All figures are based on current year data.",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: const Text(
+                            "All figures are based on current year data.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
-                          final result = await showDialog<bool>(
+                          await showDialog<bool>(
                             context: context,
                             builder: (BuildContext context) {
-                              double screenHeight = MediaQuery.of(context).size.height;
-                              double screenwidth = MediaQuery.of(context).size.width;
+                              double screenHeight =
+                                  MediaQuery.of(context).size.height;
+                              double screenwidth =
+                                  MediaQuery.of(context).size.width;
 
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
@@ -378,14 +407,17 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen), // Your widget
+                                  child: const Locationscreen(
+                                      flag: AppConstants
+                                          .openSampleInfoScreen), // Your widget
                                 ),
                               );
                             },
                           );
-                          if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false).clearData();
-                          }
+                        /*  if (result == false) {
+                            Provider.of<Masterprovider>(context, listen: false)
+                                .clearData();
+                          }*/
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),
@@ -416,6 +448,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
+
   Widget _buildMenuCard({
     required String title,
     required IconData icon,
@@ -438,56 +471,43 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
-              offset: Offset(2, 4),
+              offset: const Offset(2, 4),
             ),
           ],
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(
-                icon,
-                color: Colors.white.withOpacity(0.8),
-                size: 28,
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.5),
-                      offset: Offset(2, 2),
-                      blurRadius: 6,
-                    ),
-                  ],
+            Row(
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.white.withOpacity(0.8),
+                  size: 24,
                 ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.5),
-                      offset: Offset(2, 2),
-                      blurRadius: 6,
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
               ),
             ),
           ],
