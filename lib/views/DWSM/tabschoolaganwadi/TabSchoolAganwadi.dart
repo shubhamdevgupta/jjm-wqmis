@@ -129,7 +129,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select School/ Angawadi",
+          title: const Text("Select School/ Anganwadi",
               style: TextStyle(color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
