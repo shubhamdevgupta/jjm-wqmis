@@ -1,54 +1,46 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/providers/dashboardProvider.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
+import '../webView/NativeLocationService.dart';
+import 'DwmsLIst/SchoolAwcScreen.dart';
+import 'DwsmLocationScreen.dart';
 
-class Dashboardscreen extends StatefulWidget {
-  const Dashboardscreen({super.key});
+class Dwsdashboardscreen extends StatefulWidget {
+  const Dwsdashboardscreen({super.key});
 
   @override
-  State<Dashboardscreen> createState() => _DashboardscreenState();
+  State<Dwsdashboardscreen> createState() => dwsmDashboardScreen();
 }
 
-class _DashboardscreenState extends State<Dashboardscreen> {
+class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
   String stateName = '';
   String userName = '';
+  String userID = '';
   String mobile = '';
   String stateId = '';
-  final encryption = AesEncryption();
 
   @override
   void initState() {
     super.initState();
 
-    var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
-
     getToken();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-          Provider.of<DashboardProvider>(context, listen: false);
+          Provider.of<DwsmDashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-
-      dashboardProvider.loadDashboardData();
-      print("dashboard data${dashboardProvider.dashboardData}");
-
+      await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
    //   masterProvider.clearData();
-      masterProvider.fetchDistricts(stateId);
-      dashboardProvider.fetchLocation();
+      await masterProvider.fetchDistricts(stateId);
     });
   }
 
@@ -65,9 +57,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             automaticallyImplyLeading: false,
             // Removes the default back button
             centerTitle: true,
-            title: Text(
+            title: const Text(
               AppConstants.appTitle,
-              style: AppStyles.appBarTitle,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             leading: Builder(
               builder: (context) {
@@ -81,6 +77,22 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 );
               },
             ),
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_active,
+                        color: Colors.white),
+                      onPressed: () async {
+                        final location = await NativeLocationService.getLocation();
+                        if (location != null) {
+                          print("SHAKTI>>Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
+                        }
+                      },
+                  ),
+                ],
+              ),
+            ],
             //elevation
             flexibleSpace: Container(
               decoration: const BoxDecoration(
@@ -107,34 +119,28 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        AppConstants.departmentalUser,
-                        style: AppStyles.appBarTitle,
+                      const Text(
+                        "DWSM Official",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       Text(
                         stateName, // Provide a fallback value if null
-                        style: AppStyles.setTextStyle(
-                            16, FontWeight.normal, Colors.white70),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 16),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.dashboard),
-                  title: Text(
-                    AppConstants.dashboard,
-                    style: AppStyles.style16NormalBlack,
-                  ),
+                  title: const Text(AppConstants.dashboard),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.submitSampleInfo,
-                    style: AppStyles.style16NormalBlack,
-                  ),
+                  title: const Text(AppConstants.submitSampleInfo),
                   onTap: () {
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToSaveSample);
@@ -142,32 +148,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.listOfSamples,
-                    style: AppStyles.style16NormalBlack,
-                  ),
+                  title: const Text(AppConstants.listOfSamples),
                   onTap: () {
-                    Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleList,
-                        arguments: {
-                          'flag': AppConstants.totalSamplesSubmitted,
-                        });
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToSampleList);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.settings),
-                  title: Text(
-                    AppConstants.maintenance,
-                    style: AppStyles.style16NormalBlack,
-                  ),
+                  title: const Text(AppConstants.maintenance),
                   onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: Text(
-                    AppConstants.logout,
-                    style: AppStyles.style16NormalBlack,
-                  ),
+                  title: const Text(AppConstants.logout),
                   onTap: () async {
                     final authProvider = Provider.of<AuthenticationProvider>(
                         context,
@@ -180,11 +174,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               ],
             ),
           ),
-          body: Consumer<DashboardProvider>(
-            builder: (context, dashboardProvider, child) {
-              final dashboardData = dashboardProvider.dashboardData;
-              print("dashboard data ${dashboardData}");
-              if (dashboardData == null) {
+          body: Consumer<DwsmDashboardProvider>(
+            builder: (context, dwsmDashboardProvider, child) {
+              final data = dwsmDashboardProvider.dwsmdashboardresponse;
+              if (data == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
@@ -240,7 +233,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome Text
                                 Text(
-                                  '${AppConstants.welcome}',
+                                  '${AppConstants.welcome},',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey.shade700,
@@ -259,16 +252,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 12),
 
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
+                                    Icon(Icons.account_balance_sharp,
                                         size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'Departmental User',
+                                      'DWSM Official',
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,
@@ -278,7 +271,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ],
                                 ),
 
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 6),
 
                                 Row(
                                   children: [
@@ -303,115 +296,172 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Column(
-                      children: [
-                        GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 20.0,
-                          mainAxisSpacing: 15.0,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 1.4, // Adjust this to control card height
-                          children: [
-                            _buildMenuCard(
-                              title: AppConstants.totalSamplesSubmitted,
-                              icon: Icons.analytics,
-                              gradientColors: [
-                                Colors.lightBlue,
-                                Colors.blueAccent
-                              ],
-                              value:
-                                  '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                    });
-                              },
-                            ),
-                            _buildMenuCard(
-                              title: AppConstants.totalPhysicalSubmitted,
-                              icon: Icons.attach_money,
-                              gradientColors: [Colors.amber, Colors.orange],
-                              value:
-                                  '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalPhysicalSubmitted
-                                    });
-                              },
-                            ),
-                            _buildMenuCard(
-                              title: AppConstants.totalSampleTested,
-                              icon: Icons.check_circle,
-                              gradientColors: [Colors.teal, Colors.green],
-                              value:
-                                  '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag': AppConstants.totalSampleTested
-                                    });
-                              },
-                            ),
-                            /*       _buildMenuCard(
-                                title: AppConstants.totalRetest,
-                                icon: Icons.refresh,
-                                gradientColors: [Colors.red, Colors.deepOrange],
-                                value: '${dashboardProvider.dashboardData!.totalRetest}',
-                                onTap: () {
-                                 // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                                  ToastHelper.showSnackBar(context, "Admin can access this option only");
-                                },
-                              ),*/
-                          ],
+                    const SizedBox(height: 25),
+                    Container(
+                      width: 500,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFe0f7fa), Color(0xFFFFFFFF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                          child: const Text(
-                            "All figures are based on current year data.",
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "School",
                             style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 12),
+
+                          // Row for School section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.school_rounded,
+                                  iconColor: Colors.blue,
+                                  title: "Schools",
+                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                  onTap: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child:const SchoolAWC( type: 10,),
+                                            ),
+                                      ),
+                                    );
+
+
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.local_activity,
+                                  iconColor: Colors.deepOrange,
+                                  title: "Demonstrations",
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                          value: dwsmDashboardProvider,
+                                          child: Demonstrationscreen(type: 10,),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 15),
+
+                          const Text(
+                            "Anganwadi",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Row for Anganwadi section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.child_care,
+                                  iconColor: Colors.teal,
+                                  title: "Anganwadi",
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child:const SchoolAWC( type: 11),
+                                            ),
+                                      ),
+                                    );
+
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  icon: Icons.lightbulb_outline,
+                                  iconColor: Colors.purple,
+                                  title: "Demonstrations",
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: dwsmDashboardProvider,
+                                              child: Demonstrationscreen(
+                                                type: 11,),
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 30),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: ()  {
-
-                          showDialog(
+                           showDialog<bool>(
+                            // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight =
                                   MediaQuery.of(context).size.height;
-                              double screenwidth =
-                                  MediaQuery.of(context).size.width;
-
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
-                                  width: screenwidth * 0.99,
-                                  child: const Locationscreen(
-                                      flag: AppConstants
-                                          .openSampleInfoScreen), // Your widget
+                                  width: screenHeight * 0.4,
+                                  child: DwsmLocation(), // Your widget
                                 ),
                               );
                             },
@@ -436,8 +486,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              AppConstants.addSample,
-                              style: AppStyles.textStyle,
+                              AppConstants.addSchool,
+                              style: TextStyle(color: Colors.white),
                             ),
                           ],
                         ),
@@ -450,66 +500,62 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
-
-  Widget _buildMenuCard({
-    required String title,
+  Widget _buildInfoCard({
     required IconData icon,
-    required String value,
+    required Color iconColor,
+    required String title,
     required VoidCallback onTap,
-    required List<Color> gradientColors,
+    required String value,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        width: 135,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.07),
               blurRadius: 8,
-              offset: const Offset(2, 4),
+              offset: const Offset(0, 5),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  icon,
-                  color: Colors.white.withOpacity(0.8),
-                  size: 24,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 30),
             ),
             const SizedBox(height: 8),
             Text(
-              value,
+              title,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
-                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                value.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
+                ),
               ),
             ),
           ],
@@ -518,13 +564,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     );
   }
 
-
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
+    userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

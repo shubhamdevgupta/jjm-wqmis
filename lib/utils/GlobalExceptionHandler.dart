@@ -32,32 +32,14 @@ class GlobalExceptionHandler {
       }
       navigatorKey.currentState?.pushReplacement(
 
-         /* MaterialPageRoute(
-            builder: (context) => Scaffold(
-              backgroundColor: Colors.white,
-              body: Center(
-                child: AlertDialog(
-                  contentPadding: const EdgeInsets.all(10),
-                  content: Container(
-                    color: Colors.white,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: ExceptionScreen(errorMessage: errorMessage),
-                  ),
-                ),
-              ),
-            ),
-          )
-
-*/
           await showDialog(
             context: context,
             builder: (context) => AlertDialog(
               contentPadding: const EdgeInsets.all(10),
               content: Container(
                 color: Colors.white10,
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width * 0.6,
                 child: ExceptionScreen(errorMessage: errorMessage),
               ),
             ),

@@ -68,11 +68,9 @@ class Samplesubrepo {
     try {
       final response = await _apiService.post('APIMobile/add_sample', body: requestData);
 
-      debugPrint("Sample Submit Response: ${response.toString()}");
 
       return Sampleresponse.fromJson(response);
     } catch (e) {
-      debugPrint('Error in sample submit API: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }

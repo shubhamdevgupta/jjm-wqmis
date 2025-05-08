@@ -51,16 +51,16 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   // Method to login user
-  Future<void> loginUser(phoneNumber, password, roldId, Function onSuccess,
+  Future<void> loginUser(phoneNumber, password, appId, Function onSuccess,
       Function onFailure) async {
-    generateCaptcha();
+
     _isLoading = true;
     notifyListeners();
     String txtSalt = generateSalt();
     String encryPass = encryptPassword(password, txtSalt);
 
     try {
-      _loginResponse = await _authRepository.loginUser(phoneNumber, encryPass, roldId, txtSalt);
+      _loginResponse = await _authRepository.loginUser(phoneNumber, encryPass, txtSalt, appId);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
@@ -71,10 +71,12 @@ class AuthenticationProvider extends ChangeNotifier {
         _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
         _localStorage.saveString(AppConstants.prefStateId, _loginResponse!.stateId.toString());
         _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
+        _localStorage.saveString(AppConstants.prefDistrictId, _loginResponse!.districtId.toString());
         _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
 
         notifyListeners();
         onSuccess();
+        generateCaptcha();
       } else {
         errorMsg = _loginResponse!.msg!;
         onFailure(errorMsg);

@@ -3,20 +3,21 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppConstants.dart';
-import 'AnganwadiPage.dart';
-import 'Schoolpage.dart';
+import '../../../providers/dwsmProvider.dart';
+import '../../../services/LocalStorageService.dart';
+import '../../../utils/AppConstants.dart';
+import 'AnganwadiScreen.dart';
+import 'SchoolScreen.dart';
 
-class SubmitInfo extends StatefulWidget {
+class Tabschoolaganwadi extends StatefulWidget {
   @override
-  _SubmitInfo createState() => _SubmitInfo();
+  _TabSchoolAganwadi createState() => _TabSchoolAganwadi();
 }
 
-class _SubmitInfo extends State<SubmitInfo>
+class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
-  late ParameterProvider paramProvider;
+  late DwsmDashboardProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -25,16 +26,65 @@ class _SubmitInfo extends State<SubmitInfo>
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
-    // Get providers
-    paramProvider = Provider.of<ParameterProvider>(context, listen: false);
-    masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).fetchSchoolInfo(int.parse(masterProvider.selectedStateId!),int.parse(masterProvider.selectedDistrictId!),0,0,0,0);
-    });
     mTabController.addListener(() {
-      if (mTabController.indexIsChanging) return; // Prevent duplicate calls
+      if (mTabController.indexIsChanging) return;
+
+      if (mTabController.index == 0) {
+
+        dwsmDashboardProvider.fetchSchoolInfo(
+          int.parse(masterProvider.selectedStateId!),
+          int.parse(masterProvider.selectedDistrictId!),
+          int.parse(masterProvider.selectedBlockId!),
+          int.parse(masterProvider.selectedGramPanchayat!),
+          int.parse(masterProvider.selectedVillage!),
+          0,
+        );
+        dwsmDashboardProvider.clearSelectedAnganwadi();
+        dwsmDashboardProvider.anganwadiList.clear();
+
+      }else if (mTabController.index == 1) {
+        dwsmDashboardProvider.anganwadiList.clear();
+        dwsmDashboardProvider.clearSelectedAnganwadi();
+
+        dwsmDashboardProvider.fetchSchoolInfo(
+          int.parse(masterProvider.selectedStateId!),
+          int.parse(masterProvider.selectedDistrictId!),
+          int.parse(masterProvider.selectedBlockId!),
+          int.parse(masterProvider.selectedGramPanchayat!),
+          int.parse(masterProvider.selectedVillage!),
+          1,
+        );
+        dwsmDashboardProvider.schoolResultList.clear();
+        dwsmDashboardProvider.clearSelectedSchool();
+      }
+
     });
+
+
+   }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Only assign once to avoid repeated calls when dependencies change
+    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
+    // Fetch data if needed when widget is first built
+    if (mTabController.index == 0) {
+      dwsmDashboardProvider.fetchSchoolInfo(
+        int.parse(masterProvider.selectedStateId!),
+        int.parse(masterProvider.selectedDistrictId!),
+        int.parse(masterProvider.selectedBlockId!),
+        int.parse(masterProvider.selectedGramPanchayat!),
+        int.parse(masterProvider.selectedVillage!),
+        0,
+      );
+    }
   }
+
 
   @override
   void dispose() {
@@ -79,7 +129,7 @@ class _SubmitInfo extends State<SubmitInfo>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Select School/ Angawadi",
+          title: const Text("Select School/ Anganwadi",
               style: TextStyle(color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
@@ -140,8 +190,8 @@ class _SubmitInfo extends State<SubmitInfo>
               child: TabBarView(
                 controller: mTabController,
                 children: [
-                  Schoolpage(),
-                  Anganwadipage(),
+                  SchoolScreen(),
+                  AnganwadiScreen(),
                 ],
               ),
             );

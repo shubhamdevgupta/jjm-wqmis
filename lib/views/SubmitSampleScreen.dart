@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
@@ -365,7 +363,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        paramProvider.baseStatus == 0 ? AppTextWidgets.errorText(paramProvider.errorMsg)
+                                        paramProvider.baseStatus == 0
+                                            ? AppTextWidgets.errorText(
+                                                paramProvider.errorMsg)
                                             : Card(
                                                 child: Container(
                                                   decoration: BoxDecoration(
@@ -1032,7 +1032,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       ),
                     ),
                     Visibility(
-                      visible: paramProvider.isLab && paramProvider.baseStatus!=0,
+                      visible:
+                          paramProvider.isLab && paramProvider.baseStatus != 0,
                       // Show only when status is true
                       child: ElevatedButton(
                           onPressed: () {
@@ -1128,7 +1129,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       "M",
     );
     if (provider.sampleresponse!.status == 1) {
-
       showDialog(
         context: context,
         barrierDismissible: false, // Disable tap outside to dismiss
@@ -1137,12 +1137,14 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
             borderRadius: BorderRadius.circular(20),
           ),
           titlePadding: const EdgeInsets.only(top: 20),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
           title: Column(
             children: [
               Image.asset(
-                'assets/check.png', // <-- Your success image (PNG) path here
+                'assets/check.png',
+                // <-- Your success image (PNG) path here
                 height: 60,
                 width: 80,
               ),
@@ -1158,7 +1160,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
             ],
           ),
           content: Text(
-            provider.sampleresponse?.message ?? 'Operation completed successfully!',
+            provider.sampleresponse?.message ??
+                'Operation completed successfully!',
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,
@@ -1173,15 +1176,19 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 ),
                 onPressed: () {
                   Navigator.pop(context); // Close dialog
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/dashboard',
-                        (route) => false, // Clear back stack
+                    (route) => false, // Clear back stack
+
                   );
+              //    masterProvider.clearData();
+                  paramProvider.clearData();
                 },
                 child: const Text(
                   "OK",
@@ -1193,8 +1200,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
         ),
       );
 
-      masterProvider.clearData();
-      paramProvider.clearData();
     } else {
       print('submitdata failed------ ${provider.isSubmitData}');
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);

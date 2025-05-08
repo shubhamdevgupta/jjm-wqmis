@@ -18,6 +18,7 @@ import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -62,7 +63,7 @@ class Masterprovider extends ChangeNotifier {
   ValidateVillageResponse? get validateVillageResponse =>
       _validateVillageResponse;
 
-  int baseStatus=0;
+  int baseStatus = 0;
   int? _selectedSubSource;
 
   int? get selectedSubSource => _selectedSubSource;
@@ -111,7 +112,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawDistricts = await _masterRepository.fetchDistricts(stateId);
-      baseStatus= rawDistricts.status;
+      baseStatus = rawDistricts.status;
       if (rawDistricts.status == 1) {
         districts = rawDistricts.result;
       } else {
@@ -138,8 +139,9 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawBlocks = await _masterRepository.fetchBlocks(stateId, districtId);
-      baseStatus= rawBlocks.status;
+      final rawBlocks =
+          await _masterRepository.fetchBlocks(stateId, districtId);
+      baseStatus = rawBlocks.status;
 
       if (rawBlocks.status == 1) {
         blocks = rawBlocks.result;
@@ -193,7 +195,6 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> fetchVillage(
       String stateId, String districtId, String blockId, String gpID) async {
@@ -282,7 +283,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-
   Future<void> fetchSchemes(String villageId, String habitationId,
       String districtid, String filter) async {
     isLoading = true;
@@ -290,9 +290,9 @@ class Masterprovider extends ChangeNotifier {
     try {
       final mSchemes = await _masterRepository.fetchSchemes(
           villageId, habitationId, districtid, filter);
-      baseStatus= mSchemes.status;
+      baseStatus = mSchemes.status;
 
-      if (mSchemes.status == 1) {
+      if (baseStatus == 1) {
         schemes = mSchemes.result;
         if (schemes.length == 1) {
           selectedScheme = schemes.first.schemeId.toString();
@@ -300,23 +300,22 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = mSchemes.message;
       }
-        // 🔁 Trigger the dependent API when auto-selected
-        if (selectedWtsfilter == "5") {
-          await fetchWTPList(selectedStateId!, selectedScheme!);
-        } else if (selectedWtsfilter == "6") {
-          setSelectedSubSource(0);
-          setSelectedWTP("0");
-          await fetchSourceInformation(
-            selectedVillage!,
-            selectedHabitation!,
-            selectedWtsfilter!,
-            "0",
-            selectedSubSource.toString(),
-            selectedWtp!,
-            selectedStateId!,
-            selectedScheme!,
-          );
-        }
+      if (selectedWtsfilter == "5") {
+        await fetchWTPList(selectedStateId!, selectedScheme!);
+      } else if (selectedWtsfilter == "6") {
+        setSelectedSubSource(0);
+        setSelectedWTP("0");
+        await fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          "0",
+          selectedSubSource.toString(),
+          selectedWtp!,
+          selectedStateId!,
+          selectedScheme!,
+        );
+      }
     } catch (e) {
       debugPrint('Error in fetching scheme: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -338,20 +337,25 @@ class Masterprovider extends ChangeNotifier {
   ) async {
     isLoading = true;
     try {
-     final rawWaterSource = await _masterRepository.fetchSourceInformation(villageId,
-          habitationId, filter, cat, subcat, wtpId, stateId, schemeId);
-     baseStatus= rawWaterSource.status;
+      final rawWaterSource = await _masterRepository.fetchSourceInformation(
+          villageId,
+          habitationId,
+          filter,
+          cat,
+          subcat,
+          wtpId,
+          stateId,
+          schemeId);
+      baseStatus = rawWaterSource.status;
 
-      if(rawWaterSource.status==1){
-        waterSource=rawWaterSource.result;
+      if (rawWaterSource.status == 1) {
+        waterSource = rawWaterSource.result;
         if (waterSource.length == 1) {
           selectedWaterSource = waterSource.first.locationId.toString();
         }
-      }else{
-        errorMsg=rawWaterSource.message;
+      } else {
+        errorMsg = rawWaterSource.message;
       }
-
-
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -365,19 +369,18 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      final fetchedList = await _masterRepository.fetchWTPlist(stateId, schemeId);
+      final fetchedList =
+          await _masterRepository.fetchWTPlist(stateId, schemeId);
 
-
-      if(fetchedList.status==1){
-        wtpList=fetchedList.result;
-        if(wtpList.length==1){
-          selectedWtp=wtpList.first.wtpId;
+      if (fetchedList.status == 1) {
+        wtpList = fetchedList.result;
+        if (wtpList.length == 1) {
+          selectedWtp = wtpList.first.wtpId;
         }
-      }else{
-        errorMsg=fetchedList.message;
+      } else {
+        errorMsg = fetchedList.message;
       }
-      baseStatus=fetchedList.status;
-
+      baseStatus = fetchedList.status;
     } catch (e) {
       debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -391,14 +394,14 @@ class Masterprovider extends ChangeNotifier {
     isLoading = true;
     notifyListeners(); // Start loading
     try {
-     final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
-     baseStatus= rawWtsFilterList.status;
-    if(rawWtsFilterList.status==1){
-      wtsFilterList=rawWtsFilterList.result;
-    }else{
-      errorMsg=rawWtsFilterList.message;
-    }
-
+      final rawWtsFilterList =
+          await _masterRepository.fetchWaterSourceFilterList();
+      baseStatus = rawWtsFilterList.status;
+      if (rawWtsFilterList.status == 1) {
+        wtsFilterList = rawWtsFilterList.result;
+      } else {
+        errorMsg = rawWtsFilterList.message;
+      }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -449,7 +452,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  /// Fetch WTP Labs from API
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
@@ -489,8 +491,8 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedSubSource(int? value) {
     _selectedSubSource = value;
-    waterSource=[];
-    selectedWaterSource='';
+    waterSource = [];
+    selectedWaterSource = '';
     notifyListeners();
   }
 
@@ -561,14 +563,14 @@ class Masterprovider extends ChangeNotifier {
     selectedScheme = null;
     schemes.clear();
     districts.clear(); // Clear districts when state changes
-    blocks.clear(); // Clear blocks when state changes
+    blocks.clear(); // C
     gramPanchayat.clear();
     village.clear();
     habitationId.clear();
     notifyListeners();
   }
 
-  void clearData() {
+/*  void clearData() {
     states.clear();
     isLoading = false;
     selectedStateId = null;
@@ -604,6 +606,78 @@ class Masterprovider extends ChangeNotifier {
 
     _validateVillageResponse = null;
 
+    notifyListeners();
+  }*/
+
+
+  void selectRadioOption(int value) {
+    if (value == 2 || value == 1) {
+      setSelectedSubSource(value);
+      Future.delayed(Duration.zero, () {
+        fetchSourceInformation(
+            selectedVillage!,
+            selectedHabitation ?? "0",
+            selectedWtsfilter!,
+            value.toString(),
+            "0",
+            "0",
+            selectedStateId!,
+            selectedScheme!);
+      });
+    } else if (value == 3) {
+      setSelectedWaterSourceInformation("0");
+      setSelectedHouseHold(value);
+      setSelectedSubSource(1);
+    } else if (value == 4) {
+      setSelectedHouseHold(value);
+      setSelectedSubSource(2);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          selectedSubSource.toString(),
+          "0",
+          "0",
+          selectedStateId!,
+          selectedScheme!);
+    } else if (value == 5) {
+      setSelectedSubSource(value);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          "0",
+          "0",
+          selectedWtp!,
+          selectedStateId!,
+          selectedScheme!);
+    } else if (value == 6) {
+      setSelectedSubSource(value);
+    } else if (value == 7) {
+      setSelectedHandpump(value);
+      setSelectedSubSource(1);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          selectedSubSource.toString(),
+          "0",
+          "0",
+          selectedStateId!,
+          selectedScheme!);
+    } else if (value == 8) {
+      setSelectedHandpump(value);
+      setSelectedSubSource(2);
+      fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          selectedSubSource.toString(),
+          "0",
+          "0",
+          selectedStateId!,
+          selectedScheme!);
+    }
     notifyListeners();
   }
 }

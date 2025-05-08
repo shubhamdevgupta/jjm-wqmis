@@ -104,10 +104,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                       child: Column(
                         children: [
                           CustomSearchableDropdown(
-                            title: "",
-                            value: provider.labList
-                                .firstWhere(
-                                  (lab) => lab.value == provider.selectedLab,
+                            title: 'Select Laboratory',
+                            value: provider.labList.firstWhere((lab) => lab.value == provider.selectedLab,
                               orElse: () => Alllabresponse(value: null, text: null),
                             ).text,
                             items: provider.labList.map((lab) => lab.text ?? '').toList(),

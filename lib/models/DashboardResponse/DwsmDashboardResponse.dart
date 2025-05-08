@@ -17,10 +17,10 @@ class Dwsmdashboardresponse {
 
   factory Dwsmdashboardresponse.fromJson(Map<String, dynamic> json) {
     return Dwsmdashboardresponse(
-      totalSchools: json['TotalSchools'] ?? 0,
-      totalSchoolsDemonstration: json['TotalSchools_Demonstration'] ?? 0,
-      totalAWCs: json['TotalAWCs'] ?? 0,
-      totalAWCsDemonstration: json['TotalAWCs_Demonstration'] ?? 0,
+      totalSchools: json['Total_School'] ?? 0,
+      totalSchoolsDemonstration: json['Total_School_Demonstrated'] ?? 0,
+      totalAWCs: json['Total_AWCs'] ?? 0,
+      totalAWCsDemonstration: json['Total_AWCs_Demonstrated'] ?? 0,
       status: json['Status'] ?? 0,
       message: json['Message'],
     );
@@ -28,10 +28,10 @@ class Dwsmdashboardresponse {
 
   Map<String, dynamic> toJson() {
     return {
-      'TotalSchools': totalSchools,
-      'TotalSchools_Demonstration': totalSchoolsDemonstration,
-      'TotalAWCs': totalAWCs,
-      'TotalAWCs_Demonstration': totalAWCsDemonstration,
+      'Total_School': totalSchools,
+      'Total_School_Demonstrated': totalSchoolsDemonstration,
+      'Total_AWCs': totalAWCs,
+      'Total_AWCs_Demonstrated': totalAWCsDemonstration,
       'Status': status,
       'Message': message,
     };

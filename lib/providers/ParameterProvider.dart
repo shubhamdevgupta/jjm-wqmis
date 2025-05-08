@@ -19,8 +19,7 @@ import '../models/LabInchargeResponse/AllLabResponse.dart';
 import '../models/LabInchargeResponse/ParameterResponse.dart';
 
 class ParameterProvider with ChangeNotifier {
-  final Lapparameterrepository _lapparameterrepository =
-      Lapparameterrepository();
+  final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
 
   LocalStorageService localStorage = LocalStorageService();
   bool isLoading = false;
@@ -83,13 +82,12 @@ class ParameterProvider with ChangeNotifier {
 
   int baseStatus = 0;
 
-  Future<void> fetchAllLabs(String StateId, String districtId, String blockid,
-      String gpid, String villageid, String isall) async {
-    print("lab call in parameter provider");
+  Future<void> fetchAllLabs(String stateId, String districtId, String blockId,
+      String gpId, String villageId, String isAll) async {
     isLoading = true;
     try {
       final rawLabList = await _lapparameterrepository.fetchAllLab(
-          StateId, districtId, blockid, gpid, villageid, isall);
+          stateId, districtId, blockId, gpId, villageId, isAll);
       if (rawLabList.status == 1) {
         labList = rawLabList.result;
       } else {
@@ -97,7 +95,6 @@ class ParameterProvider with ChangeNotifier {
       }
     } catch (e, stackTrace) {
       log('Error in fetching lab list provider: $e');
-      log('StackTrace: $stackTrace');
     } finally {
       isLoading = false;
       notifyListeners();
@@ -129,10 +126,7 @@ class ParameterProvider with ChangeNotifier {
 
     try {
       labIncharge = await _lapparameterrepository.fetchLabIncharge(labId);
-    //  baseStatus = labIncharge.
-      if (labIncharge == null) {
-        throw ApiException("Lab Incharge data is null");
-      }else{
+      if (labIncharge != null) {
         baseStatus = labIncharge!.status;
         errorMsg = labIncharge!.message;
       }
@@ -144,48 +138,7 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
-      int Gpid, int Villageid, int type) async {
-    isLoading = true;
-    notifyListeners();
 
-    try {
-      final response = await _lapparameterrepository.fetchSchoolInfo(
-          Stateid, Districtid, Blockid, Gpid, Villageid, type);
-
-      if (response != null) {
-        _schoolinfoResponse = response;
-
-        if (_schoolinfoResponse!.status == 1) {
-          schoolResult = _schoolinfoResponse!.result;
-
-          if (schoolResult
-              .any((schoolInfo) => schoolInfo.id == selectedSchoolResult)) {
-            selectedSchoolResult =
-                selectedSchoolResult; // Keep current selected if still valid
-          } else if (schoolResult.isNotEmpty) {
-            selectedSchoolResult =
-                schoolResult.first.name; // Reset if invalid or select first
-          } else {
-            selectedSchoolResult = ''; // Handle if list is empty
-          }
-        } else {
-          debugPrint("API Message: ${_schoolinfoResponse!.message}");
-          _schoolinfoResponse = SchoolinfoResponse(
-            status: 0,
-            message: _schoolinfoResponse!.message,
-            result: [], // Ensure empty labs list
-          );
-        }
-      }
-    } catch (e) {
-      debugPrint("Error fetching WTP Labs: $e");
-      _schoolinfoResponse = null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
 
   void setSelectedSchool(String? value) {
     selectedSchoolResult = value;
@@ -230,20 +183,8 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners(); // Notify before starting the fetch
 
     try {
-      var response =
-          await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
+      var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
 
-      /*if (response != null) {
-        _labResponse = response;
-      }
-      if (_labResponse!.status == false) {
-        debugPrint("API Message: ${_labResponse!.message}");
-        _labResponse = Paramlabresponse(
-          status: _labResponse!.status,
-          message: _labResponse!.message,
-          labs: [], // Ensure labs list is empty
-        );
-      }*/
       if (response.status == 1) {
         _labResponse = response.result;
         _selectedParamLabId = response.result.first.labId;
@@ -264,7 +205,7 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchWTPLab(Masterprovider masterProvider) async {
     isLoading = true;
     notifyListeners();
-// masterProvider.selectedStateId!, masterProvider.selectedWtp!
+
     try {
       final response = await _lapparameterrepository.fetchWtpLabs(
           masterProvider.selectedStateId!, masterProvider.selectedWtp!);
@@ -342,21 +283,6 @@ class ParameterProvider with ChangeNotifier {
     } else {
       cart!.add(parameter);
     }
-    /* if(isLab) {
-      cart!.add(parameter);
-      final labId = selectedLab?.isNotEmpty == true
-          ? selectedLab
-          : selectedWtpLab;
-      print("---------- $selectedLab");
-      if (labId != null && labId.isNotEmpty) {
-      //  fetchLabIncharge(int.parse(labId));
-      }
-    }else{
-      cart!.add(parameter);
-    */ /*  var paramterId=cart!.sublist(0,cart!.length).join(",");
-      print('card selected param-------- ${cart!.sublist(0,cart!.length).join(",")}');
-      fetchParamLabs("31",paramterId);*/ /*
-    }*/
     notifyListeners(); // Notify UI of changes
   }
 
@@ -398,8 +324,11 @@ class ParameterProvider with ChangeNotifier {
     setSelectedWtpLab(value);
 
     fetchAllParameter(
-      value!, masterPr.selectedStateId ?? "0", "0", localStorage.getString(AppConstants.prefRegId).toString(), "0",
+      value,
+      masterPr.selectedStateId ?? "0",
+      "0",
+      localStorage.getString(AppConstants.prefRegId).toString(),
+      "0",
     );
-
   }
 }

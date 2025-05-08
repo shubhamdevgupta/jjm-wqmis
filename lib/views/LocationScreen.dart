@@ -288,13 +288,16 @@ class _LocationscreenState extends State<Locationscreen> {
                 },
               ),
               SizedBox(height: 12),
-              Center(
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
 
                   onPressed: () async {
                     print("flagggggggggg ${ widget.flag}");
                     print("loading--------->${paramProvider.isLoading}");
                     await paramProvider.fetchLocation();
+                    print("currentLatitude--------->${paramProvider.currentLatitude}");
+                    print("currentLongitude--------->${paramProvider.currentLongitude}");
                     print("loading--------->${paramProvider.isLoading}");
                     if (widget.flag == AppConstants.openSampleListScreen) {
 
@@ -303,11 +306,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/sampleList',
-
                         ModalRoute.withName('/dashboard'),
-                        // This removes all previous routes up to Dashboard
-
-
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen &&
@@ -322,7 +321,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     }
 
                     //TODO LGD code
-         /*             masterProvider.fetchVillageDetails(
+                         /*             masterProvider.fetchVillageDetails(
                           paramProvider.currentLongitude!,
                           paramProvider.currentLatitude!);
                       print('Going to Save Sample screen');

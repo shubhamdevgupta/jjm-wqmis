@@ -14,22 +14,20 @@ class AuthenticaitonRepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<LoginResponse> loginUser(
-      String phoneNumber, String password, String roleId, String txtSalt) async {
+      String phoneNumber, String password, String txtSalt, int appId) async {
     try {
       // Call the POST method from BaseApiService
-      final response = await _apiService.post(
-        'APIMobile/Login',
+      final response = await _apiService.post('APIMobile/Login',
         body: jsonEncode({
           'loginid': phoneNumber,
           'password': password,
-          'role_id': roleId,
           'txtSaltedHash': txtSalt,
+           'App_id':appId
         }),
       );
 
       return LoginResponse.fromJson(response);
     } catch (e) {
-      debugPrint('Error in loginUser: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
@@ -40,35 +38,14 @@ class AuthenticaitonRepository {
       String endpoint = '/apiMobile/dashbord?role_id=$roleId&userid=$userId&stateid=$stateId';
       final response = await _apiService.get(endpoint);
 
-      print("----->response $response");
-      if (response is Map<String, dynamic>) {
         return Dashboardresponse.fromJson(response);
-      } else {
-        throw ApiException('Invalid response format');
-      }
-    } catch (e) {
-      debugPrint('Error in fetchDataresponse: $e');
+    } catch ( e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
 
-  Future<Dwsmdashboardresponse> fetchDwsmDashboardData(int stateId, int districtId) async {
-    try {
-      String endpoint = '/apiMobile/Dashboarddwsm?stateid=$stateId&districtid=$districtId';
-      final response = await _apiService.get(endpoint);
 
-      if (response is Map<String, dynamic>) {
-        return Dwsmdashboardresponse.fromJson(response);
-      } else {
-        throw ApiException('Invalid response format');
-      }
-    } catch (e) {
-      debugPrint('Error in fetchDataresponse: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
-  }
 
 
 

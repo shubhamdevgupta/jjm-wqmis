@@ -61,166 +61,138 @@ class _LoginpageState extends State<Loginscreen> {
                           height: 30,
                         ),
                         Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          color: Colors.white.withOpacity(0.95),
-                          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          elevation: 6,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          color: Colors.white,
+                          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                           child: Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Mobile Number Field
-                                Text('Mobile Number / Username',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                                SizedBox(height: 6),
-                                TextFormField(
+                                buildFormLabel('Mobile Number / Username'),
+                                buildTextFormField(
                                   controller: phoneController,
+                                  hint: 'Enter Mobile Number or Username',
+                                  icon: Icons.person_outline,
+                                  keyboardType: TextInputType.phone,
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(10),
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.phone, color: Colors.blueGrey),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade100,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    hintText: "Enter Mobile Number / Username",
-                                  ),
-                                  keyboardType: TextInputType.number,
                                 ),
+                                SizedBox(height: 20),
 
-                                SizedBox(height: 15),
-
-                                // Password Field
-                                Text('Password',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                                SizedBox(height: 6),
-                                TextFormField(
+                                buildFormLabel('Password'),
+                                buildTextFormField(
                                   controller: passwordController,
+                                  hint: 'Enter your password',
+                                  icon: Icons.lock_outline,
                                   obscureText: !provider.isShownPassword,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.lock, color: Colors.blueGrey),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade100,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    hintText: "Enter password",
-                                    suffixIcon: IconButton(
-                                      icon: Icon(provider.isShownPassword
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      provider.isShownPassword
                                           ? Icons.visibility_off
-                                          : Icons.visibility),
+                                          : Icons.visibility,
                                       color: Colors.blueGrey,
-                                      onPressed: provider.togglePasswordVisibility,
                                     ),
+                                    onPressed: provider.togglePasswordVisibility,
                                   ),
                                 ),
+                                SizedBox(height: 20),
 
-                                SizedBox(height: 15),
-
-                                // CAPTCHA Section
+                                buildFormLabel('Security Check'),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        height: 45,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
+                                        height: 50,
                                         alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFF1F3F4),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
                                         child: Text(
                                           '${provider.randomOne} + ${provider.randomTwo} = ?',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),
                                     SizedBox(width: 10),
-                                    GestureDetector(
+                                    InkWell(
                                       onTap: provider.generateCaptcha,
+                                      borderRadius: BorderRadius.circular(30),
                                       child: CircleAvatar(
-                                        radius: 22,
-                                        backgroundColor: Colors.white,
-                                        child: Icon(Icons.refresh, color: Colors.blueGrey, size: 24),
+                                        backgroundColor: Colors.blue.shade50,
+                                        child: Icon(Icons.refresh, color: Colors.blue),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
+                                SizedBox(height: 16),
 
-                                SizedBox(height: 10),
-
-                                // CAPTCHA Input
-                                TextFormField(
+                                buildTextFormField(
                                   controller: captchaController,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.security, color: Colors.blueGrey),
-                                    filled: true,
-                                    fillColor: Colors.grey.shade100,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    hintText: "Enter Captcha",
-                                  ),
+                                  hint: 'Enter result',
+                                  icon: Icons.verified_user,
                                   keyboardType: TextInputType.number,
                                 ),
+                                SizedBox(height: 30),
 
-                                SizedBox(height: 20),
-
-                                // Login Button
                                 SizedBox(
                                   width: double.infinity,
-                                  height: 48,
+                                  height: 52,
                                   child: ElevatedButton(
                                     onPressed: () {
                                       if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
-                                          passwordController.text,
-                                          "4",
+                                          passwordController.text, 1,
                                               () {
-                                            print('Successful login');
-                                         //   provider.loadDashboardData(roleId, userId, stateId)
-                                            Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
+                                            if(provider.loginResponse?.roleId==4){
+                                              Navigator.pushReplacementNamed(
+                                                  context, AppConstants.navigateToDashboard);
+                                            }else if(provider.loginResponse?.roleId==8){
+                                              Navigator.pushReplacementNamed(
+                                                  context, AppConstants.navigateToDwsmDashboard);
+                                            }
                                           },
                                               (errorMessage) {
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: Text(errorMessage)),
-                                            );
+                                                SnackBar(content: Text(errorMessage)));
                                           },
                                         );
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text(provider.errorMsg)),
-                                        );
+                                            SnackBar(content: Text(provider.errorMsg)));
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Appcolor.btncolor,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(14)),
+                                      elevation: 4,
+                                      padding: EdgeInsets.symmetric(vertical: 14),
                                     ),
                                     child: Text(
-                                      'Login',
-                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        color:Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ),
-
                                 SizedBox(height: 15),
-
                                 Align(
                                   alignment: Alignment.centerRight,
-                                  child: Image.asset("assets/nicone.png", height: 45),
+                                  child: Image.asset("assets/nicone.png", height: 40),
                                 ),
                               ],
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   ),
@@ -241,12 +213,8 @@ class _LoginpageState extends State<Loginscreen> {
 
     int? enteredCaptcha = int.tryParse(captcha);
     // Using a single if-else statement
-    provider.errorMsg = (phone.isNotEmpty &&
-            phone.length == 10 &&
-            RegExp(r'^[0-9]{10}$').hasMatch(phone))
-        ? (password.isNotEmpty
-            ? (captcha.isNotEmpty &&
-                    enteredCaptcha == provider.captchResult // Compare as int
+    provider.errorMsg = (phone.isNotEmpty && phone.length == 10 && RegExp(r'^[0-9]{10}$').hasMatch(phone))
+        ? (password.isNotEmpty ? (captcha.isNotEmpty && enteredCaptcha == provider.captchResult // Compare as int
                 ? ""
                 : "Please Enter Correct Captcha")
             : "Please Enter Password")
@@ -310,5 +278,49 @@ class _LoginpageState extends State<Loginscreen> {
       ],
     );
   }
+  Widget buildFormLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  Widget buildTextFormField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    Widget? suffixIcon,
+    List<TextInputFormatter>? inputFormatters,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: Colors.blueGrey),
+        suffixIcon: suffixIcon,
+        filled: true,
+        fillColor: Color(0xFFF5F7FA),
+        hintText: hint,
+        contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+    );
+  }
+
+
 
 }

@@ -27,7 +27,6 @@ class BaseApiService {
     }
   }
 
-  // POST Request Function
   Future<dynamic> post(
     String endpoint, {
     Map<String, String>? headers,
@@ -35,89 +34,50 @@ class BaseApiService {
   }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
-    // Ensure headers are not null and set default Content-Type
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
-    // Log the request
     log('POST Request: URL: $url');
+    log('POST_Request--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
-    try {
+
       await _checkConnectivity();
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body, // Sending raw JSON body
-      );
+      final response = await http.post(url, headers: headers, body: body,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
       }
 
-      // Logging the full response for better debugging
-      log('Response Status Code: ${response.statusCode}');
-      log('Response Headers: ${response.headers}');
-      log('Response Body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        throw ApiException("API Error: ${response.statusCode}");
-      }
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } catch (e) {
-      log('Exception during POST request: $e');
-      throw Exception('Error during POST request');
-    }
-  }
-
-  Future<dynamic> get(
-      String endpoint, {
-        ApiType apiType = ApiType.ejalShakti, // Default to ejalShakti
-        Map<String, String>? headers,
-      }) async {
-    final String baseUrl = getBaseUrl(apiType);
-    final Uri url = Uri.parse('$baseUrl$endpoint');
-
-    // Ensure headers are not null and set default Content-Type
-    headers ??= {};
-    headers.putIfAbsent('Content-Type', () => 'application/json');
-
-    // Log the request
-    log('GET Request: URL: $url');
-    log('Headers: ${headers.toString()}');
-
-    try {
-      await _checkConnectivity();
-
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
-
-      if (response.headers['content-type']?.contains(',') ?? false) {
-        response.headers['content-type'] = 'application/json; charset=utf-8';
-      }
-      // Log the response
-      log('Response: ${response.statusCode}');
+      log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
       log('Response Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('API Error : $e');
-    }
+  }
+
+  Future<dynamic> get(String endpoint, {ApiType apiType = ApiType.ejalShakti, Map<String, String>? headers}) async {
+    final String baseUrl = getBaseUrl(apiType);
+    final Uri url = Uri.parse('$baseUrl$endpoint');
+
+    headers ??= {};
+    headers.putIfAbsent('Content-Type', () => 'application/json');
+
+    log('GET Request: URL: $url \n Headers: ${headers.toString()}');
+
+      await _checkConnectivity();
+
+      final response = await http.get(url, headers: headers,);
+
+      if (response.headers['content-type']?.contains(',') ?? false) {
+        response.headers['content-type'] = 'application/json; charset=utf-8';
+      }
+      log('Response: ${response.statusCode} : Body: ${response.body}');
+
+      return _processResponse(response);
   }
 
   Future<void> _checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      // No internet connection
       throw NetworkException(
           'No internet connection. Please check your connection and try again.');
     }
@@ -137,6 +97,8 @@ class BaseApiService {
         throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
       case 502:
         throw ApiException('Bad Gateway: ${handleErrorResp(response.body,'')}');
+        case 408:
+        throw ApiException('Request Timeout : Please Try after some time');
       default:
         throw ApiException('Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body,'')}');
     }
