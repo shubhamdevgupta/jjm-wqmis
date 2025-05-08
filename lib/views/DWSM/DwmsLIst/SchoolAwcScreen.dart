@@ -20,12 +20,13 @@ class SchoolAWC extends StatefulWidget {
 class _SchoolAWCState extends State<SchoolAWC> {
   final LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
-  String? districtId = "471";
+  String? districtId;
   String? titleName = "";
 
   @override
   void initState() {
     stateId = _localStorageService.getString(AppConstants.prefStateId);
+    districtId = _localStorageService.getString(AppConstants.prefDistrictId);
     // districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
