@@ -136,7 +136,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'Test Price',
+                                          'Price',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16, fontFamily: 'OpenSans',

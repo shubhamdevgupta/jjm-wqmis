@@ -224,7 +224,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                           ),
                                           DataColumn(
                                             label: Text(
-                                              'Test Price',
+                                              'Price',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                                                 fontSize: 16,
