@@ -11,7 +11,7 @@ class UpdateService extends ChangeNotifier{
       if (response.statusCode == 200) {
         print("ressssssssssssssssss ${response.body}");
         return jsonDecode(response.body);
-        // <--- PARSE JSON
+
       }
     } catch (e) {
       print('Error fetching update info: $e');
