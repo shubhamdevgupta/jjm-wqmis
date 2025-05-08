@@ -55,7 +55,7 @@ class ToastHelper {
           message,
           style: const TextStyle(
             color: _snackBarTextColor,
-            fontFamily: 'Montserrat',
+            fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.normal,
           ),

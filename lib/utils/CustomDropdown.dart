@@ -95,7 +95,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                   ),
                 ),
               ]
@@ -127,7 +127,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: 'OpenSans',
                       color: (selectedValue == null || selectedValue!.isEmpty)
                           ? Colors.black54
                           : Colors.black,

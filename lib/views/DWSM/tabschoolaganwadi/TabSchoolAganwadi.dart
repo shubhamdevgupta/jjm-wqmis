@@ -100,7 +100,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           "School",
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white, fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -114,7 +114,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           'Anganwadi',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white, fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -130,7 +130,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text("Select School/ Anganwadi",
-              style: TextStyle(color: Colors.white)),
+              style: TextStyle( fontFamily: 'OpenSans',color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,

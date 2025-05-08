@@ -25,9 +25,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final ScrollController _scrollController = ScrollController();
 
   TextStyle _headerTextStyle() =>
-      TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+      TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'OpenSans',);
 
-  TextStyle _rowTextStyle() => TextStyle(fontSize: 14);
+  TextStyle _rowTextStyle() => TextStyle(fontSize: 14, fontFamily: 'OpenSans',);
 
   @override
   void dispose() {

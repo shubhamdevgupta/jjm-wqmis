@@ -72,7 +72,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   Stack(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.shopping_cart,
+                        icon: const Icon(Icons.location_on_outlined,
                             color: Colors.white),
                         // Cart icon
                         onPressed: () {
@@ -84,7 +84,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               double screenwidth =
                                   MediaQuery.of(context).size.width;
 
-                              Provider.of<Masterprovider>(context, listen: false).clearsampleinfo();
+
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
@@ -167,11 +167,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             Text(
               "Select Scheme",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color:
                 Colors.black87, // Dark text for better readability
-                  fontFamily: 'OpenSans'
+
 
               ),
             ),
@@ -191,7 +191,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     scheme.schemeName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
                   ),
                 );
               }).toList(),

@@ -30,7 +30,7 @@ class AppTextWidgets {
                 message,
                 style: const TextStyle(
                   color: Colors.redAccent,
-                  fontSize: 14,
+                  fontSize: 14, fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -50,7 +50,7 @@ class AppTextWidgets {
         message,
         style: const TextStyle(
           color: Colors.grey,
-          fontSize: 14,
+          fontSize: 14, fontFamily: 'OpenSans',
         ),
       ),
     );

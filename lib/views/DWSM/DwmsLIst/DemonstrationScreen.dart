@@ -58,7 +58,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             title: const Text(
               "Demonstrations List",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),

@@ -17,7 +17,7 @@ class Utilityclass{
                 '⚠ No Internet Connection',
                 style: TextStyle(
                     fontSize: 18,
-                    fontFamily: "Poppins",
+                    fontFamily: 'OpenSans',
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               )),

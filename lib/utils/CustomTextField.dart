@@ -28,7 +28,7 @@ class CustomTextField extends StatelessWidget {
                 : labelText, // Use the title as-is if no asterisk is present
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 16, fontFamily: 'OpenSans',
               fontWeight: FontWeight.bold,
             ),
             children: isRequired
@@ -37,7 +37,7 @@ class CustomTextField extends StatelessWidget {
                 text: '*', // Add a red asterisk
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: 18,
+                  fontSize: 18, fontFamily: 'OpenSans',
                   fontWeight: FontWeight.bold,
                 ),
               ),

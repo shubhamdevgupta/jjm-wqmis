@@ -5,7 +5,7 @@ import 'package:jjm_wqmis/utils/Appcolor.dart';
 
 class AppStyles {
   static TextStyle appBarTitle = const TextStyle(
-    fontSize: 20,
+    fontSize: 20, fontFamily: 'OpenSans',
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
@@ -16,13 +16,14 @@ class AppStyles {
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
+      fontFamily: 'OpenSans',
     );
   }
 
   static TextStyle style16NormalBlack = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.normal,
-    color: Colors.black,
+    color: Colors.black, fontFamily: 'OpenSans',
   );
 
 

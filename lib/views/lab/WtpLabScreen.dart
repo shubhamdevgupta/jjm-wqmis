@@ -91,7 +91,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                         child: Text(
                           '${provider.cart!.length}',
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 14, fontFamily: 'OpenSans',
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -161,7 +161,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                             child: Text(
                               '${provider.cart!.length}',
                               // Show count dynamically
-                              style: const TextStyle(
+                              style: const TextStyle( fontFamily: 'OpenSans',
                                   fontSize: 14,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -228,7 +228,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                   children: [
                                     const Text(
                                       'Select Parameter Type:',
-                                      style: TextStyle(
+                                      style: TextStyle( fontFamily: 'OpenSans',
                                           fontWeight: FontWeight.bold),
                                     ),
                                     DropdownButton<int>(
