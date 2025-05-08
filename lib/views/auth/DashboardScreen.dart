@@ -393,9 +393,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () async {
+                        onPressed: ()  {
 
-                          final result  = await showDialog<bool>(
+                          showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight =
@@ -416,10 +416,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               );
                             },
                           );
-                          if (result == false) {
+                      /*    if (result == false) {
                             Provider.of<Masterprovider>(context, listen: false)
                                 .clearData();
-                          }
+                          }*/
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),

@@ -306,11 +306,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/sampleList',
-
                         ModalRoute.withName('/dashboard'),
-                        // This removes all previous routes up to Dashboard
-
-
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen &&

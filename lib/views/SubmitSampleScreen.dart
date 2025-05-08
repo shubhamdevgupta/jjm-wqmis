@@ -1187,7 +1187,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     (route) => false, // Clear back stack
 
                   );
-                  masterProvider.clearData();
+              //    masterProvider.clearData();
                   paramProvider.clearData();
                 },
                 child: const Text(

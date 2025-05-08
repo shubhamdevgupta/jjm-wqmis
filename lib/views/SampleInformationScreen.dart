@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 import '../utils/Showerrormsg.dart';
+import 'LocationScreen.dart';
 import 'lab/LabParameterScreen.dart';
 
 class Sampleinformationscreen extends StatefulWidget {
@@ -67,6 +68,40 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     }
                   },
                 ),
+                actions: [
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.shopping_cart,
+                            color: Colors.white),
+                        // Cart icon
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              double screenHeight =
+                                  MediaQuery.of(context).size.height;
+                              double screenwidth =
+                                  MediaQuery.of(context).size.width;
+
+                              return AlertDialog(
+                                contentPadding: const EdgeInsets.all(10),
+                                content: Container(
+                                  color: Colors.white,
+                                  height: screenHeight * 0.8,
+                                  width: screenwidth * 0.99,
+                                  child: const Locationscreen(
+                                      flag: AppConstants
+                                          .openSampleInfoScreen), // Your widget
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ],
                 title: Text(
                   'Sample Collection Form',
                   style: AppStyles.appBarTitle,

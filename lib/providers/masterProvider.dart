@@ -563,14 +563,14 @@ class Masterprovider extends ChangeNotifier {
     selectedScheme = null;
     schemes.clear();
     districts.clear(); // Clear districts when state changes
-    blocks.clear(); // Clear blocks when state changes
+    blocks.clear(); // C
     gramPanchayat.clear();
     village.clear();
     habitationId.clear();
     notifyListeners();
   }
 
-  void clearData() {
+/*  void clearData() {
     states.clear();
     isLoading = false;
     selectedStateId = null;
@@ -607,9 +607,8 @@ class Masterprovider extends ChangeNotifier {
     _validateVillageResponse = null;
 
     notifyListeners();
-  }
+  }*/
 
-////////////////////////  Shakti RADIO BUTTON IMPL  //////////////////////////////////////
 
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {

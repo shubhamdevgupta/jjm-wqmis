@@ -39,7 +39,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
-      masterProvider.clearData();
+   //   masterProvider.clearData();
       await masterProvider.fetchDistricts(stateId);
     });
   }
@@ -448,8 +448,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () async {
-                          final result = await showDialog<bool>(
+                        onPressed: ()  {
+                           showDialog<bool>(
                             // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
@@ -466,10 +466,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               );
                             },
                           );
-                          if (result == false) {
+                      /*    if (result == false) {
                             Provider.of<Masterprovider>(context, listen: false)
                                 .clearData();
-                          }
+                          }*/
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),
