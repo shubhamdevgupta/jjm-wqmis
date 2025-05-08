@@ -417,8 +417,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             },
                           );
                       /*    if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false)
-                                .clearData();
+                            Provider.of<Masterprovider>(context, listen: false)  .clearData();
                           }*/
                         },
                         style: ElevatedButton.styleFrom(
