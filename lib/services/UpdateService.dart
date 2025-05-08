@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:package_info_plus/package_info_plus.dart';
 
-class UpdateService {
+class UpdateService extends ChangeNotifier{
   final String updateInfoUrl = 'https://raw.githubusercontent.com/shubhamdevgupta/jjm-wqmis/update_app/assets/update_info.json';
 
   Future<Map<String, dynamic>?> fetchUpdateInfo() async {
@@ -16,7 +16,9 @@ class UpdateService {
     } catch (e) {
       print('Error fetching update info: $e');
     }
-    return null;
+    finally{
+      notifyListeners();
+    }
   }
 
   Future<bool> isUpdateAvailable() async {

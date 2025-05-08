@@ -53,6 +53,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
    //   masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
       dashboardProvider.fetchLocation();
+      checkAndPromptUpdate(context);
     });
   }
 
@@ -398,8 +399,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: ()  {
-                              checkAndPromptUpdate(context);
-                      /*    showDialog(
+                          showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight =
@@ -419,7 +419,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 ),
                               );
                             },
-                          );*/
+                          );
                       /*    if (result == false) {
                             Provider.of<Masterprovider>(context, listen: false)
                                 .clearData();
