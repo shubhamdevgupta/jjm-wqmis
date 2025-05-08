@@ -9,7 +9,9 @@ class UpdateService {
     try {
       final response = await http.get(Uri.parse(updateInfoUrl));  // <--- READ update_info.json
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);  // <--- PARSE JSON
+        print("ressssssssssssssssss ${response.body}");
+        return jsonDecode(response.body);
+        // <--- PARSE JSON
       }
     } catch (e) {
       print('Error fetching update info: $e');
@@ -24,7 +26,8 @@ class UpdateService {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final currentVersion = packageInfo.version;
     final latestVersion = updateInfo['version'];
-
+    print("currentVersion $currentVersion");
+    print("latestVersion $latestVersion");
     return _compareVersions(latestVersion, currentVersion);  // <--- COMPARE
   }
 

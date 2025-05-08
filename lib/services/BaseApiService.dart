@@ -17,16 +17,6 @@ class BaseApiService {
   static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
 
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
-
-  Future<void> checkAndPromptUpdate(BuildContext context) async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
-    if (isAvailable) {
-      final info = await _updateViewModel.getUpdateInfo();
-      DialogUtils.showUpdateDialog(context, info!);
-    }
-  }
-
   Future<dynamic> post(
     String endpoint, {
     Map<String, String>? headers,

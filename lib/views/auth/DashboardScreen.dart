@@ -8,8 +8,10 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+import '../../utils/UpdateDialog.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -20,6 +22,8 @@ class Dashboardscreen extends StatefulWidget {
 
 class _DashboardscreenState extends State<Dashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
+
   String stateName = '';
   String userName = '';
   String mobile = '';
@@ -52,6 +56,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     });
   }
 
+  Future<void> checkAndPromptUpdate(BuildContext context) async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+    if (isAvailable) {
+      final info = await _updateViewModel.getUpdateInfo();
+      print('inffffffffooooooo $info');
+      DialogUtils.showUpdateDialog(context, info!);
+    }else{
+      print('inffffffffooooo not avialable ');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -394,8 +408,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: ()  {
-
-                          showDialog(
+                              checkAndPromptUpdate(context);
+                      /*    showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               double screenHeight =
@@ -415,7 +429,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 ),
                               );
                             },
-                          );
+                          );*/
                       /*    if (result == false) {
                             Provider.of<Masterprovider>(context, listen: false)
                                 .clearData();
