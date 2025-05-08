@@ -81,7 +81,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                         child: Text(
                           '${provider.cart!.length}',
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 14, fontFamily: 'OpenSans',
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
@@ -129,18 +129,18 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                           'Select Test',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.blueGrey,
+                                            fontSize: 16, fontFamily: 'OpenSans',
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'Test Price',
+                                          'Price',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.blueGrey,
+                                            fontSize: 16, fontFamily: 'OpenSans',
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -179,7 +179,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: TextStyle(
-                                                          fontSize: 14),
+                                                          fontFamily: 'OpenSans',   fontSize: 14),
                                                     ),
                                                   ),
                                                 ],
@@ -193,7 +193,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                               },
                                               child: Text(
                                                 param.deptRate.toString(),
-                                                style: TextStyle(fontSize: 14),
+                                                style: TextStyle(fontSize: 14 ,fontFamily: 'OpenSans',),
                                               ),
                                             ),
                                           ),
@@ -206,7 +206,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                 Text(
                                   'Selected Param: ${provider.cart!.length}',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16, fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

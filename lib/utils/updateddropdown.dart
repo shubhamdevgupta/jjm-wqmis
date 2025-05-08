@@ -63,12 +63,12 @@ class _UpdateCustomSearchableDropdownState extends State<UpdateCustomSearchableD
           RichText(
             text: TextSpan(
               text: widget.hint.replaceAll('*', ''),
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'OpenSans',),
               children: widget.hint.contains('*')
                   ? const [
                 TextSpan(
                   text: ' *',
-                  style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'OpenSans',),
                 ),
               ]
                   : [],
@@ -99,7 +99,7 @@ class _UpdateCustomSearchableDropdownState extends State<UpdateCustomSearchableD
                   child: Text(
                     selectedItem['schemeName'] ?? "--Select--",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: 'OpenSans',
                       color: selectedItem.isEmpty ? Colors.black54 : Colors.black,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -154,7 +154,7 @@ class _SearchDialogState extends State<_SearchDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.appBarTitle, style: const TextStyle(color: Colors.white)),
+        title: Text(widget.appBarTitle, style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans',)),
         backgroundColor: Colors.blue,
       ),
 

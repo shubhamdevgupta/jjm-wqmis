@@ -34,7 +34,7 @@ class ExceptionScreen extends StatelessWidget {
               Text(
                 "Service is not working \n $errorMessage",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 18, color: Colors.black87),
+                style: const TextStyle(fontSize: 18, color: Colors.black87, fontFamily: 'OpenSans',),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -42,7 +42,7 @@ class ExceptionScreen extends StatelessWidget {
                   errorProvider.clearError();
                   Navigator.of(context).pop(); // ✅ This dismisses the dialog
                 },
-                child:  Text('Dismiss' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red),),
+                child:  Text('Dismiss' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),),
               ),
             ],
           ),

@@ -62,7 +62,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: Colors.black, fontFamily: 'OpenSans',
               ),
               children: widget.title.contains('*')
                   ? [
@@ -71,7 +71,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                   ),
                 ),
               ]
@@ -106,7 +106,7 @@ class _CustomSearchableDropdownState extends State<CustomSearchableDropdown> {
                   child: Text(
                     selectedValue ?? "--${widget.title}--",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: 'OpenSans',
                       color: selectedValue == null ? Colors.black54 : Colors.black,
                     ),
                     maxLines: 1,
@@ -181,7 +181,7 @@ class _SearchDialogState extends State<SearchDialog> {
         ),
         title: Text(
           widget.title,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle( fontFamily: 'OpenSans',color: Colors.white),
         ),
         backgroundColor: Colors.blue,
       ),

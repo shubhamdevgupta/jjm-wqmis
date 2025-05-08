@@ -87,7 +87,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                           '${provider.cart!.length}',
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.white,
+                            color: Colors.white, fontFamily: 'OpenSans',
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -152,7 +152,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                   children: [
                                     const Text(
                                       'Select Parameter Type:',
-                                      style: TextStyle(
+                                      style: TextStyle( fontFamily: 'OpenSans',
                                           fontWeight: FontWeight.bold),
                                     ),
                                     DropdownButton<int>(
@@ -161,14 +161,14 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                       items: const [
                                         DropdownMenuItem(
                                             value: 1,
-                                            child: Text('All Parameter')),
+                                            child: Text('All Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                         DropdownMenuItem(
                                             value: 2,
-                                            child: Text('Chemical Parameter')),
+                                            child: Text('Chemical Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                         DropdownMenuItem(
                                             value: 3,
                                             child: Text(
-                                                'Bacteriological Parameter')),
+                                                'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                       ],
                                       onChanged: (value) {
                                         if (value == null) return;
@@ -216,19 +216,19 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                             label: Text(
                                               'Select Test',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                                                 fontSize: 16,
-                                                color: Colors.blueGrey,
+                                                color: Colors.black,
                                               ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: Text(
-                                              'Test Price',
+                                              'Price',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                                                 fontSize: 16,
-                                                color: Colors.blueGrey,
+                                                color: Colors.black,
                                               ),
                                             ),
                                           ),
@@ -262,7 +262,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                         child: Text(
                                                           param.parameterName,
                                                           overflow: TextOverflow.ellipsis,
-                                                          style: TextStyle(fontSize: 14),
+                                                          style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
                                                         ),
                                                       ),
                                                     ],
@@ -276,7 +276,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                   },
                                                   child: Text(
                                                     param.deptRate.toString(),
-                                                    style: TextStyle(fontSize: 14),
+                                                    style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
                                                   ),
                                                 ),
                                               ),

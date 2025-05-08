@@ -20,7 +20,7 @@ class LoaderUtils {
                   if (message != null)
                     Text(
                       message,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'OpenSans',),
                     ),
                 ],
               ),

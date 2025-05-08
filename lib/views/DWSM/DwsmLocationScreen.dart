@@ -38,7 +38,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 'Choose Location',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
                   color: Colors.white,
                 ),
               ),
@@ -104,7 +104,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   Text(
                     'State *',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: 'OpenSans',
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
@@ -118,7 +118,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(color: Colors.blueAccent),
+                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(color: Colors.grey, width: 2),
@@ -148,7 +148,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.black, fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
                       ),

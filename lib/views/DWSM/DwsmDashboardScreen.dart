@@ -60,7 +60,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             title: const Text(
               AppConstants.appTitle,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -121,12 +121,12 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     children: [
                       const Text(
                         "DWSM Official",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'OpenSans',),
                       ),
                       Text(
                         stateName, // Provide a fallback value if null
                         style: const TextStyle(
-                            color: Colors.white70, fontSize: 16),
+                            color: Colors.white70, fontSize: 16, fontFamily: 'OpenSans',),
                       ),
                     ],
                   ),

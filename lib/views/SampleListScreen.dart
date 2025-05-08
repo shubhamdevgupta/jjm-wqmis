@@ -281,7 +281,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           },
                           child: const Text(
                             "Search",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans',),
                           ),
                         ),
                       ],
@@ -329,7 +329,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 "${index + 1}",
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Colors.white, fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -349,7 +349,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 "ID: ${sample.sampleId ?? 'N/A'}",
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Colors.white, fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -394,7 +394,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 sample.labName ?? 'N/A',
                                                 style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 14, fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -416,7 +416,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 "${sample.blockName ?? 'N/A'}, "
                                                 "${sample.districtName ?? 'N/A'}",
                                                 style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 14, fontFamily: 'OpenSans',
                                                   color: Colors.grey[700],
                                                 ),
                                               ),
@@ -439,7 +439,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   Text(
                                                     "Test Result: ",
                                                     style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 14, fontFamily: 'OpenSans',
                                                       fontWeight:
                                                           FontWeight.w500,
                                                     ),
@@ -481,7 +481,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                                     .blue[800],
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 14,
+                                                        fontSize: 14, fontFamily: 'OpenSans',
                                                       ),
                                                     ),
                                                   ),
@@ -503,7 +503,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                             Text(
                                               "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 14, fontFamily: 'OpenSans',
                                                 color: Colors.grey[600],
                                               ),
                                             ),
