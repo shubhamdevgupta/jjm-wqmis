@@ -40,7 +40,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $dep");
 
     getToken();
-
+    checkAndPromptUpdate(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -53,7 +53,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
    //   masterProvider.clearData();
       masterProvider.fetchDistricts(stateId);
       dashboardProvider.fetchLocation();
-      checkAndPromptUpdate(context);
+     // checkAndPromptUpdate(context);
     });
   }
 
