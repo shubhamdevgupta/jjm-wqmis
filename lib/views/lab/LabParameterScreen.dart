@@ -43,17 +43,17 @@ class _LabParameterScreen extends State<Labparameterscreen>
         paramProvider.cart!.clear();
         paramProvider.isLabSelected = false;
         paramProvider.selectedLab = null;
-        fetchAllLabs();
+      //  fetchAllLabs();
       } else if (mTabController.index == 1) {
         paramProvider.parameterList.clear();
         paramProvider.parameterType = 1;
         paramProvider.cart!.clear();
         paramProvider.selectedLab = null;
-        fetchAllParameters();
+    //    fetchAllParameters();
       }
     });
 
-    fetchAllLabs();
+  //  fetchAllLabs();
   }
 
   void fetchAllLabs() {

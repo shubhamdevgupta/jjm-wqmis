@@ -17,15 +17,25 @@ class AsPerLabTabView extends StatefulWidget {
 
 class _AsPerLabTabView extends State<AsPerLabTabView> {
   late Masterprovider masterProvider;
+  late ParameterProvider paramProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
-      Provider.of<ParameterProvider>(context, listen: false).isParam=false;
+      paramProvider.isLab=true;
+      paramProvider.isParam=false;
+      paramProvider.fetchAllLabs(
+        masterProvider.selectedStateId!,
+        masterProvider.selectedDistrictId!,
+        masterProvider.selectedBlockId!,
+        masterProvider.selectedGramPanchayat!,
+        masterProvider.selectedVillage!,
+        "1",
+      );
     });
   }
 

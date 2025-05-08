@@ -64,20 +64,13 @@ class _LocationscreenState extends State<Locationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-
-              return Stack(
-                children: [
-                  SingleChildScrollView(
+              return masterProvider.isLoading
+                      ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                      :SingleChildScrollView(
                       child: Column(
                     children: [buildStateVillage(masterProvider,paramProvider)],
-                  )),
-                  if (masterProvider.isLoading)
-                    LoaderUtils.conditionalLoader(
-                        isLoading: masterProvider.isLoading)
-                  else if(paramProvider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
-                ],
-              );
+                  ));
+
             })));
 
   }

@@ -3,6 +3,8 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/masterProvider.dart';
+import '../../services/LocalStorageService.dart';
+import '../../utils/AppConstants.dart';
 import '../../utils/LoaderUtils.dart';
 import '../SubmitSampleScreen.dart';
 
@@ -13,16 +15,30 @@ class Asperparameterview extends StatefulWidget {
 
 class _AsperparameterviewState extends State<Asperparameterview> {
   late Masterprovider masterProvider;
+  late ParameterProvider paramProvider;
+  final LocalStorageService _localStorage = LocalStorageService();
+  late var regId;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
+
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ParameterProvider>(context, listen: false).isLab = false;
-      Provider.of<ParameterProvider>(context, listen: false).isParam = true;
+      paramProvider.isLab = false;
+      paramProvider.isParam = true;
+      paramProvider.fetchAllParameter(
+        "0",
+        masterProvider.selectedStateId ?? "0",
+        "0",
+        regId,
+        "1",
+      );
     });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -30,7 +46,9 @@ class _AsperparameterviewState extends State<Asperparameterview> {
       value: Provider.of<ParameterProvider>(context, listen: false),
       child: Consumer<ParameterProvider>(
         builder: (context, provider, child) {
-          return Container(
+          return provider.isLoading
+              ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+              : Container(
             child: Scaffold(
               floatingActionButton: Stack(
                 clipBehavior: Clip.none,
@@ -92,9 +110,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                 ],
               ),
               backgroundColor: Colors.transparent,
-              body: provider.isLoading
-                  ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                  : SingleChildScrollView(
+              body: SingleChildScrollView(
                       child: Center(
                         child: Card(
                           elevation: 5,
