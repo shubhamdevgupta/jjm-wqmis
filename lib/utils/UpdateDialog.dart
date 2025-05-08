@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
   static void showUpdateDialog(BuildContext context, Map<String, dynamic> updateInfo) {
@@ -14,23 +15,24 @@ class DialogUtils {
             children: [
               Text('What\'s New:'),
               SizedBox(height: 8),
-              Text(updateInfo['whats_new']),
+              Text(updateInfo['whats_new'] ?? 'No info provided'),
             ],
           ),
           actions: [
-
-        /*    ElevatedButton(
+            ElevatedButton(
               child: Text('Update Now'),
               onPressed: () async {
                 final url = updateInfo['apk_url'];
-                if (await canLaunch(url)) {
-                  await launch(url);
+                final uri = Uri.parse(url);
+                if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                  throw 'Could not launch $url';
                 }
               },
-            ),*/
+            ),
           ],
         );
       },
     );
   }
 }
+

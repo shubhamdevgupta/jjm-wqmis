@@ -56,16 +56,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     });
   }
 
-  Future<void> checkAndPromptUpdate(BuildContext context) async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
-    if (isAvailable) {
-      final info = await _updateViewModel.getUpdateInfo();
-      print('inffffffffooooooo $info');
-      DialogUtils.showUpdateDialog(context, info!);
-    }else{
-      print('inffffffffooooo not avialable ');
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -531,7 +521,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
-
+  Future<void> checkAndPromptUpdate(BuildContext context) async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+    if (isAvailable) {
+      final info = await _updateViewModel.getUpdateInfo();
+      print('inffffffffooooooo $info');
+      DialogUtils.showUpdateDialog(context, info!);
+    }else{
+      print('inffffffffooooo not avialable ');
+    }
+  }
 
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';

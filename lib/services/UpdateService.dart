@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
 class UpdateService {
-  final String updateInfoUrl = 'https://raw.githubusercontent.com/shubhamdevgupta/jjm-wqmis/update_info.json';
+  final String updateInfoUrl = 'https://raw.githubusercontent.com/shubhamdevgupta/jjm-wqmis/update_app/assets/update_info.json';
 
   Future<Map<String, dynamic>?> fetchUpdateInfo() async {
     try {
@@ -23,8 +23,7 @@ class UpdateService {
     final updateInfo = await fetchUpdateInfo();  // <--- GET the Map
     if (updateInfo == null) return false;
 
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final currentVersion = packageInfo.version;
+    final currentVersion = '1.0.0';
     final latestVersion = updateInfo['version'];
     print("currentVersion $currentVersion");
     print("latestVersion $latestVersion");
