@@ -218,7 +218,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
                                   ),
                                 ),
-                                const SizedBox(height: 4),
                                 Text(
                                   userName,
                                   style: const TextStyle(
@@ -229,7 +228,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   ),
                                 ),
 
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 4),
 
                                 // Department and Phone
                                 Row(

@@ -130,7 +130,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16, fontFamily: 'OpenSans',
-                                            color: Colors.blueGrey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
@@ -140,7 +140,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16, fontFamily: 'OpenSans',
-                                            color: Colors.blueGrey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
