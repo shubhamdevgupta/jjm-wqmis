@@ -35,7 +35,9 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
       value: Provider.of<ParameterProvider>(context, listen: false),
       child: Consumer<ParameterProvider>(
         builder: (context, provider, child) {
-          return Container(
+          return provider.isLoading
+              ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+              :Container(
             child: Scaffold(
               backgroundColor: Colors.transparent,
               floatingActionButton: Stack(
@@ -305,8 +307,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                     ),
                   ),
 
-                  if (provider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
             ),

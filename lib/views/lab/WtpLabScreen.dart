@@ -185,211 +185,207 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                     ),
                   )
               ),
-              body: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          CustomDropdown(
-                            title: "Select WTP Lab *",
-                            value: provider.selectedWtpLab,
-                            items: provider.wtpLab.map((wtpLab) {
-                              return DropdownMenuItem<String>(
-                                value: wtpLab.labId,
-                                child: Text(
-                                  wtpLab.labName,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+              body: provider.isLoading
+                  ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                  :SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      CustomDropdown(
+                        title: "Select WTP Lab *",
+                        value: provider.selectedWtpLab,
+                        items: provider.wtpLab.map((wtpLab) {
+                          return DropdownMenuItem<String>(
+                            value: wtpLab.labId,
+                            child: Text(
+                              wtpLab.labName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                        provider.proccessOnChanged(value!,masterProvider);
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Visibility(
+                        visible: provider.isLabSelected,
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          margin: EdgeInsets.all(5),
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Select Parameter Type:',
+                                  style: TextStyle( fontFamily: 'OpenSans',
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                            provider.proccessOnChanged(value!,masterProvider);
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Visibility(
-                            visible: provider.isLabSelected,
-                            child: Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              margin: EdgeInsets.all(5),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Select Parameter Type:',
-                                      style: TextStyle( fontFamily: 'OpenSans',
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    DropdownButton<int>(
-                                      isExpanded: true,
-                                      value: provider.parameterType ?? 1,
-                                      items: const [
-                                        DropdownMenuItem(
-                                            value: 1,
-                                            child: Text('All Parameter')),
-                                        const DropdownMenuItem(
-                                            value: 2,
-                                            child: Text('Chemical Parameter')),
-                                        DropdownMenuItem(
-                                            value: 3,
-                                            child: Text(
-                                                'Bacteriological Parameter')),
-                                      ],
-                                      onChanged: (value) {
-                                        if (value == null) return;
-                                        provider.setParameterType(value);
-                                        provider.cart!.clear();
-                                        provider.fetchAllParameter(
-                                          provider.selectedWtpLab!,
-                                          masterProvider.selectedStateId!,
-                                          "0",
-                                          _localStorage.getString(AppConstants.prefRegId).toString(),
-                                          value.toString(),
-                                        );
-                                      },
-                                    ),
+                                DropdownButton<int>(
+                                  isExpanded: true,
+                                  value: provider.parameterType ?? 1,
+                                  items: const [
+                                    DropdownMenuItem(
+                                        value: 1,
+                                        child: Text('All Parameter')),
+                                    const DropdownMenuItem(
+                                        value: 2,
+                                        child: Text('Chemical Parameter')),
+                                    DropdownMenuItem(
+                                        value: 3,
+                                        child: Text(
+                                            'Bacteriological Parameter')),
                                   ],
+                                  onChanged: (value) {
+                                    if (value == null) return;
+                                    provider.setParameterType(value);
+                                    provider.cart!.clear();
+                                    provider.fetchAllParameter(
+                                      provider.selectedWtpLab!,
+                                      masterProvider.selectedStateId!,
+                                      "0",
+                                      _localStorage.getString(AppConstants.prefRegId).toString(),
+                                      value.toString(),
+                                    );
+                                  },
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Visibility(
+                        visible: provider.isLabSelected,
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          Visibility(
-                            visible: provider.isLabSelected,
-                            child: Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              margin: EdgeInsets.all(5),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Tests Available:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.blueAccent,
+                          margin: EdgeInsets.all(5),
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Tests Available:',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    columnSpacing: 20,
+                                    headingRowHeight: 50,
+                                    dataRowHeight: 60,
+                                    columns: const <DataColumn>[
+                                      DataColumn(
+                                        label: Text(
+                                          'Select Test',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.blueGrey,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columnSpacing: 20,
-                                        headingRowHeight: 50,
-                                        dataRowHeight: 60,
-                                        columns: const <DataColumn>[
-                                          DataColumn(
-                                            label: Text(
-                                              'Select Test',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
+                                      DataColumn(
+                                        label: Text(
+                                          'Test Price',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.blueGrey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: provider.parameterList.map((param) {
+                                      bool isSelected = provider.cart!.any(
+                                            (item) => item.parameterId == param.parameterId,
+                                      );
+
+                                      return DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.toggleCart(param);
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Checkbox(
+                                                    value: isSelected,
+                                                    onChanged: (bool? value) {
+                                                      print('the selected value labview------- $value');
+                                                      if (value != null) {
+                                                        provider.toggleCart(param);
+                                                      }
+                                                    },
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  SizedBox(
+                                                    width: 150,
+                                                    child: Text(
+                                                      param.parameterName,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(fontSize: 14),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Test Price',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
+                                          DataCell(
+                                            GestureDetector(
+                                              onTap: () {
+                                                provider.toggleCart(param);
+                                              },
+                                              child: Text(
+                                                param.deptRate.toString(),
+                                                style: TextStyle(fontSize: 14),
                                               ),
                                             ),
                                           ),
                                         ],
-                                        rows: provider.parameterList.map((param) {
-                                          bool isSelected = provider.cart!.any(
-                                                (item) => item.parameterId == param.parameterId,
-                                          );
-
-                                          return DataRow(
-                                            cells: <DataCell>[
-                                              DataCell(
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    provider.toggleCart(param);
-                                                  },
-                                                  child: Row(
-                                                    children: [
-                                                      Checkbox(
-                                                        value: isSelected,
-                                                        onChanged: (bool? value) {
-                                                          print('the selected value labview------- $value');
-                                                          if (value != null) {
-                                                            provider.toggleCart(param);
-                                                          }
-                                                        },
-                                                      ),
-                                                      SizedBox(width: 10),
-                                                      SizedBox(
-                                                        width: 150,
-                                                        child: Text(
-                                                          param.parameterName,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: TextStyle(fontSize: 14),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              DataCell(
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    provider.toggleCart(param);
-                                                  },
-                                                  child: Text(
-                                                    param.deptRate.toString(),
-                                                    style: TextStyle(fontSize: 14),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      'Selected Param: ${provider.cart!.length}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                                      );
+                                    }).toList(),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Selected Param: ${provider.cart!.length}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  if (provider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                ],
+                ),
               ),
             ),
           );

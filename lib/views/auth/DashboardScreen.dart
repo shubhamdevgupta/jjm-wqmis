@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+import '../../utils/LoaderUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -159,9 +160,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
-              final dashboardData = dashboardProvider.dashboardData;
-              print("dashboard data ${dashboardData}");
-              if (dashboardData == null) {
+              if (dashboardProvider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
@@ -204,203 +203,203 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           ),
                           const SizedBox(width: 16),
 
-                          // User Info
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Welcome Text
-                                Text(
-                                  '${AppConstants.welcome},',
-                                  style: TextStyle(
-                                    fontSize: 15, fontFamily: 'OpenSans',
-                                    color: Colors.grey.shade700,
-
-                                  ),
-                                ),
-                                Text(
-                                  userName,
-                                  style: const TextStyle(
-                                    fontSize: 20, fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-
-                                  ),
-                                ),
-
-                                const SizedBox(height: 4),
-
-                                // Department and Phone
-                                Row(
+                              // User Info
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
+                                    // Welcome Text
                                     Text(
-                                      'Departmental User',
+                                      '${AppConstants.welcome},',
+                                      style: TextStyle(
+                                        fontSize: 15, fontFamily: 'OpenSans',
+                                        color: Colors.grey.shade700,
+
+                                      ),
+                                    ),
+                                    Text(
+                                      userName,
                                       style: const TextStyle(
-                                        fontSize: 14, fontFamily: 'OpenSans',
+                                        fontSize: 20, fontFamily: 'OpenSans',
+                                        fontWeight: FontWeight.bold,
                                         color: Colors.black87,
-                                        fontWeight: FontWeight.w500
+
                                       ),
                                     ),
-                                  ],
-                                ),
 
-                                const SizedBox(height: 6),
+                                    const SizedBox(height: 4),
 
-                                Row(
-                                  children: [
-                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
-                                    Flexible(
-                                      child: Text(
-                                        mobile,
-                                        style: const TextStyle(
-                                          fontSize: 14, fontFamily: 'OpenSans',
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w500,
+                                    // Department and Phone
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          'Departmental User',
+                                          style: const TextStyle(
+                                              fontSize: 14, fontFamily: 'OpenSans',
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500
+                                          ),
                                         ),
-                                      ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                        const SizedBox(width: 6),
+                                        Flexible(
+                                          child: Text(
+                                            mobile,
+                                            style: const TextStyle(
+                                              fontSize: 14, fontFamily: 'OpenSans',
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-                    const SizedBox(height: 15),
-
-
-
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-
-                          GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 10.0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _buildMenuCard(
-                                title: AppConstants.totalSamplesSubmitted,
-                                icon: Icons.analytics,
-                                gradientColors: [Colors.lightBlue, Colors.blueAccent],
-                                value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                                imageName:  'medical-lab',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalPhysicalSubmitted,
-                                icon: Icons.attach_money,
-                                gradientColors: [Colors.deepOrange, Colors.orange],
-                                value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                                imageName:  'test',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalSampleTested,
-                                icon: Icons.check_circle,
-                                gradientColors: [Colors.teal, Colors.green],
-                                value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                                imageName:  'search',
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
-                                },
-                              ),
-                         /*     _buildMenuCard(
-                                title: AppConstants.totalRetest,
-                                icon: Icons.refresh,
-                                gradientColors: [Colors.red, Colors.deepOrange],
-                                value: '${dashboardProvider.dashboardData!.totalRetest}',
-                                onTap: () {
-                                  // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                                  ToastHelper.showSnackBar(context, "Admin can access this option only");
-                                },
-                              ),*/
-
-
-                            ],
-                          ),
-                          SizedBox(height: 15,),
-                          Center(
-                            child: const Text(
-                              "All figures are based on current year data.",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            final result = await showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                double screenHeight = MediaQuery.of(context).size.height;
-                                double screenwidth = MediaQuery.of(context).size.width;
-
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(10),
-                                  content: Container(
-                                    color: Colors.white,
-                                    height: screenHeight * 0.8,
-                                    width: screenwidth * 0.99,
-                                    child: const Locationscreen(flag: AppConstants.openSampleInfoScreen),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0468B1),
-                            textStyle: const TextStyle(fontSize: 16),
-                            minimumSize: const Size(300, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),// ← removes rounding
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                AppConstants.addSample,
-                                style: AppStyles.textStyle,
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    )
 
-                  ],
-                ),
-              );
+
+                        const SizedBox(height: 15),
+
+
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+
+                              GridView.count(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 20.0,
+                                mainAxisSpacing: 10.0,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: [
+                                  _buildMenuCard(
+                                    title: AppConstants.totalSamplesSubmitted,
+                                    icon: Icons.analytics,
+                                    gradientColors: [Colors.lightBlue, Colors.blueAccent],
+                                    value: '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                    imageName:  'medical-lab',
+                                    onTap: () {
+                                      Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});                                },
+                                  ),
+                                  _buildMenuCard(
+                                    title: AppConstants.totalPhysicalSubmitted,
+                                    icon: Icons.attach_money,
+                                    gradientColors: [Colors.deepOrange, Colors.orange],
+                                    value: '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                    imageName:  'test',
+                                    onTap: () {
+                                      Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalPhysicalSubmitted});
+                                    },
+                                  ),
+                                  _buildMenuCard(
+                                    title: AppConstants.totalSampleTested,
+                                    icon: Icons.check_circle,
+                                    gradientColors: [Colors.teal, Colors.green],
+                                    value: '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                    imageName:  'search',
+                                    onTap: () {
+                                      Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSampleTested});
+                                    },
+                                  ),
+                                  /*     _buildMenuCard(
+                                  title: AppConstants.totalRetest,
+                                  icon: Icons.refresh,
+                                  gradientColors: [Colors.red, Colors.deepOrange],
+                                  value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                  onTap: () {
+                                    // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                    ToastHelper.showSnackBar(context, "Admin can access this option only");
+                                  },
+                                ),*/
+
+
+                                ],
+                              ),
+                              SizedBox(height: 15,),
+                              Center(
+                                child: const Text(
+                                  "All figures are based on current year data.",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                        Center(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result = await showDialog<bool>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    double screenHeight = MediaQuery.of(context).size.height;
+                                    double screenwidth = MediaQuery.of(context).size.width;
+
+                                    return AlertDialog(
+                                      contentPadding: const EdgeInsets.all(10),
+                                      content: Container(
+                                        color: Colors.white,
+                                        height: screenHeight * 0.8,
+                                        width: screenwidth * 0.99,
+                                        child: const Locationscreen(flag: AppConstants.openSampleInfoScreen),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0468B1),
+                                textStyle: const TextStyle(fontSize: 16),
+                                minimumSize: const Size(300, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),// ← removes rounding
+                                ),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    AppConstants.addSample,
+                                    style: AppStyles.textStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+
+                      ],
+                    ),
+                  );
             },
           )),
     );
