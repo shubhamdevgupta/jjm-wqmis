@@ -84,15 +84,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               double screenwidth =
                                   MediaQuery.of(context).size.width;
 
+                              Provider.of<Masterprovider>(context, listen: false).clearsampleinfo();
                               return AlertDialog(
                                 contentPadding: const EdgeInsets.all(10),
                                 content: Container(
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child: const Locationscreen(
-                                      flag: AppConstants
-                                          .openSampleInfoScreen), // Your widget
+                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen), // Your widget
                                 ),
                               );
                             },
@@ -103,7 +102,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   ),
                 ],
                 title: Text(
-                  'Sample Collection Form',
+                  'Sample collection form',
                   style: AppStyles.appBarTitle,
                 ),
                 flexibleSpace: Container(
@@ -172,6 +171,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 fontWeight: FontWeight.bold,
                 color:
                 Colors.black87, // Dark text for better readability
+                  fontFamily: 'OpenSans'
+
               ),
             ),
 
@@ -244,7 +245,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               padding: const EdgeInsets.all(8.0),
               child: CustomDropdown(
                 title:
-                    "Location of source ",
+                    "Sample source location",
                 value: masterProvider.selectedWtsfilter,
                 items: masterProvider.wtsFilterList.map((wtsFilter) {
                   return DropdownMenuItem<String>(
@@ -262,8 +263,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.setSelectedWaterSourcefilter(value);
 
                     print("6666666666666 $value");
-                    masterProvider.fetchSchemes(
-                        masterProvider.selectedVillage!, "0", "0", value);
+                    masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
                   }
                 },
                 appBarTitle: "Select Location",
@@ -314,6 +314,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                    Text(
                     'Select Sub-Source Category:',
                       style: AppStyles.textStyleBoldBlack16,
+
                   ),
                   Row(
                     children: [
@@ -328,7 +329,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         onTap: () {
                           masterProvider.selectRadioOption(1);
                         },
-                        child: const Text('Ground water sources (GW)'),
+                        child: const Text('Ground water sources (GW)',style: TextStyle(fontWeight: FontWeight.w400,fontFamily: 'OpenSans'),),
                       ),
                     ],
                   ),
@@ -345,7 +346,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           onTap: () {
                             masterProvider.selectRadioOption(2);
                           },
-                          child: const Text('Surface water sources (SW)')),
+                          child: const Text('Surface water sources (SW)',style: TextStyle(fontWeight: FontWeight.w400,fontFamily: 'OpenSans'),)),
                     ],
                   ),
                 ],
@@ -394,6 +395,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 .setSelectedWaterSourceInformation(value);
                           },
                         ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
@@ -401,29 +406,33 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     height: 20,
                   ),
                   Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (validateSourceofScheme(masterProvider)) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeNotifierProvider.value(
-                                      value: masterProvider,
-                                      child: Labparameterscreen(),
-                                    )),
-                          );
-                        } else {
-                          ToastHelper.showToastMessage(masterProvider.errorMsg);
-                        }
-                      },
-                      style: AppStyles.buttonStylePrimary(),
-                      child: const Text(
-                        'Next',
-                        style: AppStyles.textStyle,
+                    child: SizedBox(
+                      width: double.infinity, // Full width of the parent
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (validateSourceofScheme(masterProvider)) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChangeNotifierProvider.value(
+                                  value: masterProvider,
+                                  child: Labparameterscreen(),
+                                ),
+                              ),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
+                        ),
                       ),
                     ),
                   )
+
                 ],
               ),
             ),

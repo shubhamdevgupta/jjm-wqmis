@@ -189,7 +189,14 @@ class __SearchDialogState extends State<_SearchDialog> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.appBarTitle ?? "Select Item"),
+        title: Text(widget.appBarTitle ?? "Select Item", style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color:
+            Colors.white, // Dark text for better readability
+            fontFamily: 'OpenSans'
+
+        ),),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         elevation: 2,

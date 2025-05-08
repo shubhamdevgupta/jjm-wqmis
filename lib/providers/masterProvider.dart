@@ -680,4 +680,13 @@ class Masterprovider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearsampleinfo(){
+    selectedWtsfilter = null;
+    selectedScheme = null;
+    notifyListeners();
+
+
+
+  }
 }

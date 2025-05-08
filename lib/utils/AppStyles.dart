@@ -30,6 +30,7 @@ class AppStyles {
     fontSize: 16,
     fontWeight: FontWeight.bold,
     color: Colors.black87,
+      fontFamily: 'OpenSans'
   );
 
 
@@ -37,6 +38,7 @@ class AppStyles {
     fontSize: 16,
     color: Colors.white,
     fontWeight: FontWeight.bold,
+      fontFamily: 'OpenSans'
   );
 
   static ButtonStyle buttonStylePrimary({

@@ -92,6 +92,7 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black87,
+                fontFamily: 'OpenSans'
             ),
           ),
           const SizedBox(height: 8),

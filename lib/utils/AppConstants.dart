@@ -47,5 +47,6 @@ class AppConstants {
   static const String selectedTest = 'Selected Test';
 
   static const String openSampleInfoScreen = "Sample List ";
+
   static const String openSampleListScreen = "Sample Screen";
 }
