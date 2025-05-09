@@ -261,8 +261,8 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  void showDemonstartionButton() {
-    _showDemonstartion = true;
+  void showDemonstartionButton( bool value) {
+    _showDemonstartion = value;
     notifyListeners();
   }
   void setSelectedSchool(String id, String name, int demonstrationId) {
