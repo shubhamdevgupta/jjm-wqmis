@@ -40,7 +40,7 @@ class DwsmRepository{
     }
   }
 
-  Future<BaseResponseModel<SchoolResult>> fetchSchoolInfo(int Stateid, int Districtid,
+  Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int Stateid, int Districtid,
       int Blockid, int Gpid, int Villageid, int type) async {
     try {
       final response = await _apiService.get(

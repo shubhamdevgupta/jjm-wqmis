@@ -11,9 +11,11 @@ import '../models/DashboardResponse/DwsmDashboardResponse.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
+import '../views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 
 class DwsmProvider extends ChangeNotifier {
   final DwsmRepository _dwsmRepository = DwsmRepository();
+
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
@@ -27,6 +29,8 @@ class DwsmProvider extends ChangeNotifier {
   List<SchoolResult> schoolResultList = [];
   String? selectedSchoolResult;
   String? selectedSchoolName;
+
+  DataState dataState = DataState.initial;
 
   List<SchoolResult> anganwadiList = [];
   String? selectedAnganwadi;
@@ -106,12 +110,13 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
+  Future<void> fetchSchoolAwcInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     _isLoading = true;
-
+    dataState=DataState.loading;
+notifyListeners();
     try {
-      final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
+      final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
 
       if (rawSchoolInfo.status == 1) {
@@ -120,8 +125,10 @@ class DwsmProvider extends ChangeNotifier {
         } else if (type == 1) {
           anganwadiList = rawSchoolInfo.result;
         }
+        dataState = DataState.loaded;
       } else {
         errorMsg = rawSchoolInfo.message;
+        dataState = DataState.error;
       }
       baseStatus = rawSchoolInfo.status;
     } catch (e) {
@@ -281,7 +288,7 @@ class DwsmProvider extends ChangeNotifier {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
     mDemonstrationId = demonstrationId;
-
+    schoolResultList=[];
     notifyListeners();
   }
 
@@ -295,6 +302,7 @@ class DwsmProvider extends ChangeNotifier {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
     mDemonstrationId = 101;
+    anganwadiList=[];
     notifyListeners();
   }
 }
