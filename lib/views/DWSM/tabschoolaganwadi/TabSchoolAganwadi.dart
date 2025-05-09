@@ -31,7 +31,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
       if (mTabController.index == 0) {
 
-        dwsmDashboardProvider.fetchSchoolInfo(
+        dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           int.parse(masterProvider.selectedBlockId!),
@@ -46,7 +46,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         dwsmDashboardProvider.anganwadiList.clear();
         dwsmDashboardProvider.clearSelectedAnganwadi();
 
-        dwsmDashboardProvider.fetchSchoolInfo(
+        dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           int.parse(masterProvider.selectedBlockId!),
@@ -74,7 +74,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
     // Fetch data if needed when widget is first built
     if (mTabController.index == 0) {
-      dwsmDashboardProvider.fetchSchoolInfo(
+      dwsmDashboardProvider.fetchSchoolAwcInfo(
         int.parse(masterProvider.selectedStateId!),
         int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
         int.parse(masterProvider.selectedBlockId!),
@@ -201,3 +201,4 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     );
   }
 }
+enum DataState { initial, loading, error, loaded }
