@@ -129,7 +129,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Text(
                                     "$titleType Details",
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 18,fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue,
                                     ),
@@ -154,7 +154,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         village.villageName,
                                       ]),
                                       style: const TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 14,fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black87,
                                       ),
@@ -162,7 +162,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   ),
                                 ],
                               ),
-
                               // School Name
                               _infoRow("$titleType Name", "$titleType",
                                   Icons.school, Colors.deepPurple),
@@ -178,8 +177,14 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Icons.label,
                                   Colors.green),
 
+
+                              _infoRow(
+                                  "Remark",
+                                  village.remark,
+                                  Icons.message,
+                                  Colors.teal),
                               // Remark
-                              Padding(
+                           /*   Padding(
                                 padding:
                                      EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
@@ -203,7 +208,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                     ),
                                   ],
                                 ),
-                              ),
+                              ),*/
 
                               const Divider(height: 30),
                               Align(
@@ -256,25 +261,48 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _iconCircle(icon, color),
-          const SizedBox(width: 10),
-          Text(
-            "$title: ",
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
+          const SizedBox(width: 5),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 14),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.05), // Light background tone
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'OpenSans',
+                    color: Colors.black87,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "$title: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value.isEmpty ? "No data provided" : value,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+
 
   Widget _iconCircle(IconData icon, Color bgColor) {
     return Container(

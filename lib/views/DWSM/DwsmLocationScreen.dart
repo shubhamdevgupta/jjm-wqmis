@@ -139,8 +139,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                               _localStorage.getString(AppConstants.prefStateId),
                           // Ensure this matches the selected value
 
-                          child: Text(_localStorage
-                                  .getString(AppConstants.prefStateName) ??
+                          child: Text(_localStorage.getString(AppConstants.prefStateName) ??
                               'Unknown State'), // Display state name
                         ),
                       ],
@@ -201,7 +200,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                           // Ensure this matches the selected value
 
                           child: Text(_localStorage
-                              .getString(AppConstants.prefDistrictId) ??
+                              .getString(AppConstants.prefDistName) ??
                               'Unknown State'), // Display state name
                         ),
                       ],
@@ -262,9 +261,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                     onChanged: (value) {
                       masterProvider.setSelectedBlock(value);
                       if (value != null) {
-                        masterProvider.fetchGramPanchayat(
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedDistrictId!,
+                        masterProvider.fetchGramPanchayat(masterProvider.selectedStateId!, _localStorage.getString(AppConstants.prefDistrictId).toString(),
                             value);
                       }
                     },
@@ -291,7 +288,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   if (value != null) {
                     masterProvider.fetchVillage(
                         masterProvider.selectedStateId!,
-                        masterProvider.selectedDistrictId!,
+                        _localStorage.getString(AppConstants.prefDistrictId).toString(),
                         masterProvider.selectedBlockId!,
                         value);
                   }
@@ -316,7 +313,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   if (value != null) {
                     masterProvider.fetchHabitations(
                         masterProvider.selectedStateId!,
-                        masterProvider.selectedDistrictId!,
+                        _localStorage.getString(AppConstants.prefDistrictId).toString(),
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value);
@@ -344,7 +341,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                 },
               ),
               SizedBox(height: 12),
-              Center(
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
                     await dwsmprovider.fetchLocation(context);

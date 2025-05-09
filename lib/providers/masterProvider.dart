@@ -17,6 +17,8 @@ import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
+import '../services/LocalStorageService.dart';
+import '../utils/AppConstants.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
@@ -26,6 +28,7 @@ class Masterprovider extends ChangeNotifier {
   List<Stateresponse> states = [];
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
   String? selectedStateId;
 
@@ -85,6 +88,7 @@ class Masterprovider extends ChangeNotifier {
   String errorMsg = '';
   String otherSourceLocation = '';
   String sampleTypeOther = '';
+  final LocalStorageService localStorage = LocalStorageService();
 
   Future<void> fetchStates() async {
     print('Calling the state function...');
@@ -120,6 +124,15 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = rawDistricts.message;
       }
+
+      for (int i = 0; i < districts.length; i++) {
+        if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
+            districts[i].jjmDistrictId) {
+
+          localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
+
+        }
+      }
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -131,8 +144,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
-    setSelectedState(stateId);
-    setSelectedDistrict(districtId);
+    /*setSelectedState(stateId);
+    setSelectedDistrict(districtId);*/
 
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
@@ -457,7 +470,6 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
     notifyListeners();
@@ -614,7 +626,6 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }*/
 
-
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {
       setSelectedSubSource(value);
@@ -686,12 +697,9 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearsampleinfo(){
+  void clearsampleinfo() {
     selectedWtsfilter = null;
     selectedScheme = null;
     notifyListeners();
-
-
-
   }
 }

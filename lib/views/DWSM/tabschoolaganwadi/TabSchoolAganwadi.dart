@@ -76,7 +76,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     if (mTabController.index == 0) {
       dwsmDashboardProvider.fetchSchoolInfo(
         int.parse(masterProvider.selectedStateId!),
-        int.parse(masterProvider.selectedDistrictId!),
+        int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
         int.parse(masterProvider.selectedBlockId!),
         int.parse(masterProvider.selectedGramPanchayat!),
         int.parse(masterProvider.selectedVillage!),
