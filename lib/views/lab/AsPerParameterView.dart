@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/masterProvider.dart';
+import '../../utils/LoaderUtils.dart';
 import '../SubmitSampleScreen.dart';
 
 class Asperparameterview extends StatefulWidget {
@@ -91,18 +92,8 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                 ],
               ),
               backgroundColor: Colors.transparent,
-              body: provider.isLoading ||
-                      provider.parameterList
-                          .isEmpty // Show loader if data is loading or list is empty
-                  ? Container(
-                      color:
-                          Colors.black.withOpacity(0.2), // Background opacity
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
+              body: provider.isLoading
+                  ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                   : SingleChildScrollView(
                       child: Center(
                         child: Card(
@@ -130,17 +121,17 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16, fontFamily: 'OpenSans',
-                                            color: Colors.blueGrey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'Test Price',
+                                          'Price',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16, fontFamily: 'OpenSans',
-                                            color: Colors.blueGrey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                       ),

@@ -10,6 +10,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
+import '../utils/LoaderUtils.dart';
 import '../utils/Showerrormsg.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
@@ -93,7 +94,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     style: AppStyles.appBarTitle,
                   ),
                 ),
-                body: Column(
+                body: provider.isLoading
+                    ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                    :Column(
                   children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.height *

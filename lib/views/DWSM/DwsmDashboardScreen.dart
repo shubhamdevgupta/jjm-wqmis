@@ -177,8 +177,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           ),
           body: Consumer<DwsmDashboardProvider>(
             builder: (context, dwsmDashboardProvider, child) {
-              final data = dwsmDashboardProvider.dwsmdashboardresponse;
-              if (data == null) {
+              if (dwsmDashboardProvider.dwsmdashboardresponse == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
@@ -458,10 +457,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               );
                             },
                           );
-                      /*    if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false)
-                                .clearData();
-                          }*/
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),

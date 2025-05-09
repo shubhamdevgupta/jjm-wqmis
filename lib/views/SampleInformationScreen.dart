@@ -120,28 +120,23 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
-                return Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            //card for state district selection
-                            buildSampleTaken(masterProvider),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            // card for location of source from where sample taken
-                          ],
+                return masterProvider.isLoading
+                    ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                    :Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        //card for state district selection
+                        buildSampleTaken(masterProvider),
+                        SizedBox(
+                          height: 12,
                         ),
-                      ),
+                        // card for location of source from where sample taken
+                      ],
                     ),
-                    if (masterProvider.isLoading)
-                      LoaderUtils.conditionalLoader(
-                          isLoading: masterProvider.isLoading)
-                  ],
+                  ),
                 );
               })),
         ),

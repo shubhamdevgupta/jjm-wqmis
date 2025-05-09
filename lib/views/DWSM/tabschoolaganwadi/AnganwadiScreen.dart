@@ -48,39 +48,40 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
           return Container(
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              body: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          dwsmprovider.anganwadiList.isEmpty
-                              ? AppTextWidgets.errorText(dwsmprovider.errorMsg)
-                              : CustomDropdown(
-                                  title: "Select Anganwadi",
-                                  value: dwsmprovider.selectedAnganwadi,
-                                  items: dwsmprovider.anganwadiList
-                                      .map((anganwadi) {
-                                    return DropdownMenuItem<String>(
-                                      value: anganwadi.id.toString(),
-                                      child: Text(
-                                        anganwadi.name,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (selectedId) {
-                                    final selectedAnnganwadi =
-                                        dwsmprovider.anganwadiList.firstWhere(
-                                      (item) =>
-                                          item.id.toString() == selectedId,
-                                    );
-                                    dwsmprovider.setSelectedAnganwadi(
-                                        selectedId!,
-                                        selectedAnnganwadi.name,
-                                        selectedAnnganwadi.demonstrated);
+              body:dwsmprovider.isLoading
+                  ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
+                  : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      dwsmprovider.anganwadiList.isEmpty
+                          ? AppTextWidgets.errorText(dwsmprovider.errorMsg)
+                          : CustomDropdown(
+                              title: "Select Anganwadi",
+                              value: dwsmprovider.selectedAnganwadi,
+                              items: dwsmprovider.anganwadiList
+                                  .map((anganwadi) {
+                                return DropdownMenuItem<String>(
+                                  value: anganwadi.id.toString(),
+                                  child: Text(
+                                    anganwadi.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (selectedId) {
+                                final selectedAnnganwadi =
+                                    dwsmprovider.anganwadiList.firstWhere(
+                                  (item) =>
+                                      item.id.toString() == selectedId,
+                                );
+                                dwsmprovider.setSelectedAnganwadi(
+                                    selectedId!,
+                                    selectedAnnganwadi.name,
+                                    selectedAnnganwadi.demonstrated);
+
 
                                     if (dwsmprovider.mDemonstrationId == 1) {
                                       dwsmprovider.fetchDemonstrationList(
@@ -113,13 +114,19 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       offset: Offset(0, 2),
                                     ),
                                   ],
+
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
+
                                       const SizedBox(height: 4),
                                       Row(
                                         children: [
@@ -156,16 +163,18 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
+
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
+
 
                           SizedBox(height: 10,),
 
@@ -522,6 +531,131 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.white),
+
+                        ),
+                      ),
+                      dwsmprovider.mDemonstrationId == 1
+                          ? Container(
+                              margin: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blue.shade100
+                                        .withOpacity(0.4),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    // Heading
+                                    Row(
+                                      children: [
+                                        _iconCircle(Icons.location_city,
+                                            Colors.blue),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "Anganwadi Details",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(height: 30),
+                                    const SizedBox(height: 12),
+
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _iconCircle(
+                                            Icons.location_on, Colors.red),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            _buildLocationPath([
+                                             village != null
+                                            ?village?.stateName:"",
+                                             village != null
+                                            ?village?.districtName:"",
+                                             village != null
+                                            ?village?.blockName:"",
+                                             village != null
+                                            ?village?.panchayatName:"",
+                                             village != null
+                                            ?village?.villageName:"",
+                                            ]),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    // School Name
+                                    /*  _infoRow("$titleType Name", "$titleType",
+                                  Icons.school, Colors.deepPurple),
+              */
+                                    // Category
+                                    _infoRow(
+                                        "Category",
+                                        village != null
+                                            ? village!.InstitutionCategory
+                                            : "",
+                                        Icons.category,
+                                        Colors.orange),
+
+                                    // Classification
+                                    _infoRow(
+                                        "Classification",
+                                        village != null
+                                            ? village!
+                                                .InstitutionSubCategory
+                                            : "",
+                                        Icons.label,
+                                        Colors.green),
+
+                                    // Remark
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          _iconCircle(
+                                              Icons.comment, Colors.teal),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.teal.shade50,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        12),
+                                              ),
+                                              child: const Text(
+                                                "No remark provided",
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.teal),
+                                              ),
+
                                             ),
                                             style:
                                             AppStyles.buttonStylePrimary()),
@@ -545,6 +679,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           ),
                                         ],
                                       ),
+
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: Column(
@@ -753,210 +888,271 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                 TextInputType.multiline,
                                             textInputAction:
                                                 TextInputAction.newline,
+
                                           ),
                                         ),
                                       ),
-                                      Card(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Visibility(
+                              visible:
+                                  dwsmprovider.selectedAnganwadi != null,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: TextFormField(
+                                        controller: remarkController,
+                                        maxLines: 2,
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              EdgeInsets.symmetric(
+                                                  vertical: 14,
+                                                  horizontal: 16),
+                                          border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.1),
-                                                blurRadius: 6,
-                                                offset: Offset(0, 2),
-                                              ),
-                                            ],
+                                            borderSide: BorderSide(
+                                                color: Colors.grey.shade300,
+                                                width: 1),
                                           ),
-                                          child: Column(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: Text(
-                                                  "Capture Sample Image",
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors
-                                                        .blueGrey.shade700,
-                                                  ),
-                                                ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            borderSide: BorderSide(
+                                                color: Colors.blueAccent,
+                                                width: 1.5),
+                                          ),
+                                          hintText: "Enter your remarks",
+                                          hintStyle: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey.shade600),
+                                          suffixIcon: remarkController
+                                                  .text.isNotEmpty
+                                              ? IconButton(
+                                                  icon: Icon(Icons.clear,
+                                                      color: Colors.grey),
+                                                  onPressed: () {
+                                                    remarkController
+                                                        .clear();
+                                                  },
+                                                )
+                                              : null,
+                                        ),
+                                        keyboardType:
+                                            TextInputType.multiline,
+                                        textInputAction:
+                                            TextInputAction.newline,
+                                      ),
+                                    ),
+                                  ),
+                                  Card(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey
+                                                .withOpacity(0.1),
+                                            blurRadius: 6,
+                                            offset: Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.all(10),
+                                            child: Text(
+                                              "Capture Sample Image",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors
+                                                    .blueGrey.shade700,
                                               ),
-                                              Divider(
-                                                  thickness: 1,
-                                                  color: Colors.grey.shade300),
-                                              SizedBox(height: 2),
-                                              Center(
-                                                child: _cameraHelper
-                                                            .imageFile ==
-                                                        null
-                                                    ? GestureDetector(
-                                                        onTap: () async {
-                                                          await _cameraHelper
-                                                              .pickFromCamera();
-                                                          setState(() {});
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            color: Colors.white,
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: Colors
-                                                                    .blueGrey
-                                                                    .withOpacity(
-                                                                        0.2),
-                                                                blurRadius: 8,
-                                                                offset: Offset(
-                                                                    0, 4),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(24),
-                                                          child: Icon(
-                                                              Icons.camera_alt,
-                                                              size: 40,
-                                                              color:
-                                                                  Colors.blue),
-                                                        ),
-                                                      )
-                                                    : Stack(
-                                                        children: [
-                                                          Container(
-                                                            height: 160,
-                                                            width: 120,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              image:
-                                                                  DecorationImage(
-                                                                image: FileImage(
-                                                                    _cameraHelper
-                                                                        .imageFile!),
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Positioned(
-                                                            top: 0,
-                                                            right: 0,
-                                                            child: IconButton(
-                                                              icon: Icon(
-                                                                  Icons.close,
-                                                                  color: Colors
-                                                                      .white),
-                                                              onPressed: () {
-                                                                _cameraHelper
-                                                                    .removeImage();
-                                                                setState(() {});
-                                                              },
-                                                            ),
+                                            ),
+                                          ),
+                                          Divider(
+                                              thickness: 1,
+                                              color: Colors.grey.shade300),
+                                          SizedBox(height: 2),
+                                          Center(
+                                            child: _cameraHelper
+                                                        .imageFile ==
+                                                    null
+                                                ? GestureDetector(
+                                                    onTap: () async {
+                                                      await _cameraHelper
+                                                          .pickFromCamera();
+                                                      setState(() {});
+                                                    },
+                                                    child: Container(
+                                                      decoration:
+                                                          BoxDecoration(
+                                                        shape:
+                                                            BoxShape.circle,
+                                                        color: Colors.white,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors
+                                                                .blueGrey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                            blurRadius: 8,
+                                                            offset: Offset(
+                                                                0, 4),
                                                           ),
                                                         ],
                                                       ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0, horizontal: 12.0),
-                                        child: Card(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.1),
-                                                  blurRadius: 6,
-                                                  offset: Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            padding: const EdgeInsets.all(10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                // Heading
-                                                Text(
-                                                  'Geo Location of Sample Taken',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors
-                                                        .blueGrey.shade700,
-                                                  ),
-                                                ),
-                                                Divider(
-                                                    thickness: 1,
-                                                    color:
-                                                        Colors.grey.shade300),
-                                                SizedBox(height: 8),
-                                                // Row for Latitude and Longitude
-                                                Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Icon(Icons.location_on,
-                                                            color: Colors.blue,
-                                                            size: 18),
-                                                        Text(
-                                                          'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
-                                                          // Reduces to 3 decimal places
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.7)),
-                                                        ),
-                                                      ],
+                                                      padding:
+                                                          const EdgeInsets
+                                                              .all(24),
+                                                      child: Icon(
+                                                          Icons.camera_alt,
+                                                          size: 40,
+                                                          color:
+                                                              Colors.blue),
                                                     ),
-                                                    SizedBox(width: 12),
-                                                    Row(
-                                                      children: [
-                                                        Icon(Icons.location_on,
-                                                            color: Colors.blue,
-                                                            size: 18),
-                                                        Text(
-                                                          'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
-                                                          // Reduces to 3 decimal places
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.7)),
+                                                  )
+                                                : Stack(
+                                                    children: [
+                                                      Container(
+                                                        height: 160,
+                                                        width: 120,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      12),
+                                                          image:
+                                                              DecorationImage(
+                                                            image: FileImage(
+                                                                _cameraHelper
+                                                                    .imageFile!),
+                                                            fit: BoxFit
+                                                                .cover,
+                                                          ),
                                                         ),
-                                                      ],
+                                                      ),
+                                                      Positioned(
+                                                        top: 0,
+                                                        right: 0,
+                                                        child: IconButton(
+                                                          icon: Icon(
+                                                              Icons.close,
+                                                              color: Colors
+                                                                  .white),
+                                                          onPressed: () {
+                                                            _cameraHelper
+                                                                .removeImage();
+                                                            setState(() {});
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 12.0),
+                                    child: Card(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey
+                                                  .withOpacity(0.1),
+                                              blurRadius: 6,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Heading
+                                            Text(
+                                              'Geo Location of Sample Taken',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors
+                                                    .blueGrey.shade700,
+                                              ),
+                                            ),
+                                            Divider(
+                                                thickness: 1,
+                                                color:
+                                                    Colors.grey.shade300),
+                                            SizedBox(height: 8),
+                                            // Row for Latitude and Longitude
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.location_on,
+                                                        color: Colors.blue,
+                                                        size: 18),
+                                                    Text(
+                                                      'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
+                                                      // Reduces to 3 decimal places
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight
+                                                                  .w400,
+                                                          color: Colors
+                                                              .black
+                                                              .withOpacity(
+                                                                  0.7)),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(width: 12),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.location_on,
+                                                        color: Colors.blue,
+                                                        size: 18),
+                                                    Text(
+                                                      'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
+                                                      // Reduces to 3 decimal places
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors
+                                                              .black
+                                                              .withOpacity(
+                                                                  0.7)),
                                                     ),
                                                   ],
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          ],
                                         ),
                                       ),
+
                                       ElevatedButton(
                                           onPressed: () async {
                                             if (await validate(dwsmprovider)) {
@@ -1003,11 +1199,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
             ],
                       ),
                     ),
+
                   ),
-                  if (dwsmprovider.isLoading)
-                    LoaderUtils.conditionalLoader(
-                        isLoading: dwsmprovider.isLoading)
-                ],
+                ),
               ),
             ),
           );
