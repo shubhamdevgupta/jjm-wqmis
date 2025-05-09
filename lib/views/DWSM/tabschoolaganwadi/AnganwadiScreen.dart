@@ -434,8 +434,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                               ),
                                             ),
                                           ),
-                                          if (dwsmprovider.showDemonstartion)
-                                            buildCaptureWidget(dwsmprovider),
                                         ],
                                       )
 
@@ -603,7 +601,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     );
   }
 
-  Widget showForm(DwsmDashboardProvider dwsmprovider ){
+  Widget showForm(DwsmProvider dwsmprovider ){
     return Visibility(
       visible:
       dwsmprovider.selectedAnganwadi != null,

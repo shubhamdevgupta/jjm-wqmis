@@ -86,7 +86,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               selectedId!,
                                               selectedSchool.name,
                                               selectedSchool.demonstrated);
-                                          dwsmprovider.setShowDemonstration(false);
+                                          dwsmprovider.showDemonstartionButton(false);
                                           if (dwsmprovider.mDemonstrationId ==
                                               1) {
                                             dwsmprovider.fetchDemonstrationList(
@@ -432,8 +432,6 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               ),
                                             ),
                                           ),
-                                          if (dwsmprovider.showDemonstartion)
-                                            buildCaptureWidget(dwsmprovider),
                                         ],
                                       )
                                     : showForm(dwsmprovider ),
@@ -599,7 +597,7 @@ class _SchoolScreen extends State<SchoolScreen> {
   }
 
 
-  Widget showForm(DwsmDashboardProvider dwsmprovider ){
+  Widget showForm(DwsmProvider dwsmprovider ){
     return Visibility(
       visible:
       dwsmprovider.selectedSchoolResult !=
