@@ -136,7 +136,7 @@ class DwsmProvider extends ChangeNotifier {
 
   Future<void> fetchDashboardSchoolList(
       int stateId, int districtId, int demonstrationType) async {
-    isLoading = true;
+    _isLoading = true;
 
     notifyListeners();
     print('loading startt.............................');
