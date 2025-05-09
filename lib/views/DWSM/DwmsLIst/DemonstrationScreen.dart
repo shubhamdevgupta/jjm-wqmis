@@ -21,13 +21,14 @@ class Demonstrationscreen extends StatefulWidget {
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
   LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
-  String? districtId = "471";
+  String? districtId;
   String? titleType = "";
+  late DwsmDashboardProvider dwsmProvider;
 
   @override
   void initState() {
     stateId = _localStorageService.getString(AppConstants.prefStateId);
-    //   districtId = _localStorageService.getString(AppConstants.prefDistrictId);
+    districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<DwsmDashboardProvider>(context, listen: false)
@@ -35,6 +36,11 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
               "2025-2026", 0, widget.type!);
     });
     super.initState();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    dwsmProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
   }
 
   @override
@@ -175,24 +181,23 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                               // Remark
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
+                                     EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _iconCircle(Icons.comment, Colors.teal),
-                                    const SizedBox(width: 10),
+                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Container(
-                                        padding: const EdgeInsets.all(10),
+                                        padding:  EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                           color: Colors.teal.shade50,
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
-                                        child: const Text(
-                                          "No remark provided",
+                                        child:  Text( village.remark.isEmpty?"No remark provided":village.remark,
                                           style: TextStyle(
-                                              fontSize: 13, color: Colors.teal),
+                                              fontSize: 13, color: Colors.teal,fontFamily: 'OpenSans'),
                                         ),
                                       ),
                                     ),
@@ -223,6 +228,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         showImage(imageBytes);
                                       },
                                     );
+                                    if (!mounted) return;
                                   },
                                   icon: const Icon(Icons.remove_red_eye,
                                       size: 18),
