@@ -47,6 +47,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
 
   String? get deviceId => _deviceId;
 
+  bool _showDemonstartion = false;
+  bool get showDemonstartion => _showDemonstartion;
+
   String? ftkSubmitResponse;
   String? villagePhoto;
 
@@ -258,6 +261,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
+  void showDemonstartionButton() {
+    _showDemonstartion = true;
+    notifyListeners();
+  }
   void setSelectedSchool(String id, String name, int demonstrationId) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
