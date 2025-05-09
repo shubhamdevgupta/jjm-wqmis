@@ -36,7 +36,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-          Provider.of<DwsmDashboardProvider>(context, listen: false);
+          Provider.of<DwsmProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
@@ -175,7 +175,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               ],
             ),
           ),
-          body: Consumer<DwsmDashboardProvider>(
+          body: Consumer<DwsmProvider>(
             builder: (context, dwsmDashboardProvider, child) {
               if (dwsmDashboardProvider.dwsmdashboardresponse == null) {
                 return const Center(child: CircularProgressIndicator());

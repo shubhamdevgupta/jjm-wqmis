@@ -31,7 +31,7 @@ class _SchoolAWCState extends State<SchoolAWC> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-          Provider.of<DwsmDashboardProvider>(context, listen: false);
+          Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
           int.parse(stateId!), int.parse(districtId!), widget.type!);
       print('responsssssssss ${dashboardProvider.dashboardSchoolListModel}');
@@ -62,7 +62,8 @@ class _SchoolAWCState extends State<SchoolAWC> {
             title: Text(
               "$titleName Demonstrations List",
               style: TextStyle(
-                fontSize: 20, fontFamily: 'OpenSans',
+                fontSize: 20,
+                fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -92,8 +93,7 @@ class _SchoolAWCState extends State<SchoolAWC> {
             ),
             elevation: 5,
           ),
-          body: Consumer<DwsmDashboardProvider>(
-              builder: (context, provider, child) {
+          body: Consumer<DwsmProvider>(builder: (context, provider, child) {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 : ListView.builder(
@@ -128,7 +128,8 @@ class _SchoolAWCState extends State<SchoolAWC> {
                                   Text(
                                     "$titleName Details",
                                     style: const TextStyle(
-                                      fontSize: 18, fontFamily: 'OpenSans',
+                                      fontSize: 18,
+                                      fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue,
                                     ),
