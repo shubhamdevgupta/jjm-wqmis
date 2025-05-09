@@ -12,7 +12,7 @@ import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
-class DwsmDashboardProvider extends ChangeNotifier {
+class DwsmProvider extends ChangeNotifier {
   final DwsmRepository _dwsmRepository = DwsmRepository();
   bool _isLoading = true;
   bool get isLoading => _isLoading;
@@ -47,6 +47,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
   String? _deviceId;
 
   String? get deviceId => _deviceId;
+
+  bool _showDemonstartion = false;
+  bool get showDemonstartion => _showDemonstartion;
 
   String? ftkSubmitResponse;
   String? villagePhoto;
@@ -262,6 +265,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
+  void setShowDemonstration(bool value) {
+    _showDemonstartion = value;
+    notifyListeners(); // This is CRUCIAL
+  }
   void setSelectedSchool(String id, String name, int demonstrationId) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
