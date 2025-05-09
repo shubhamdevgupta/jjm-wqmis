@@ -265,9 +265,10 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  void setShowDemonstration(bool value) {
+  void showDemonstartionButton( bool value) {
     _showDemonstartion = value;
-    notifyListeners(); // This is CRUCIAL
+    notifyListeners();
+
   }
   void setSelectedSchool(String id, String name, int demonstrationId) {
     selectedSchoolResult = id;
