@@ -43,8 +43,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   Widget build(BuildContext context) {
 
     return ChangeNotifierProvider.value(
-      value: Provider.of<DwsmDashboardProvider>(context, listen: false),
-      child: Consumer<DwsmDashboardProvider>(
+      value: Provider.of<DwsmProvider>(context, listen: false),
+      child: Consumer<DwsmProvider>(
         builder: (context, dwsmprovider, child) {
           return dwsmprovider.isLoading
               ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
@@ -86,7 +86,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                               selectedAnnganwadi.name,
                                               selectedAnnganwadi.demonstrated);
 
+
                                           if (dwsmprovider.mDemonstrationId == 1) {
+
                                             dwsmprovider.fetchDemonstrationList(
                                                 int.parse(stateId),
                                                 int.parse(districtId),
@@ -189,7 +191,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                               onPressed: () async {
                                                 print(
                                                     "pppppppppppp before ${dwsmprovider.showDemonstartion}");
+
                                                 dwsmprovider.showDemonstartionButton(true);
+
                                                 print(
                                                     "pppppppppppp after ${dwsmprovider.showDemonstartion}");
                                               },
@@ -216,10 +220,12 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                               ),
                                             ),
                                           ),
+
                                           Visibility(
                                             visible: dwsmprovider.selectedAnganwadi != null && dwsmprovider.showDemonstartion,
                                             child: showForm(dwsmprovider),
                                           ),
+
                                           SizedBox(
                                             height: 5,
                                           ),
@@ -428,9 +434,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                               ),
                                             ),
                                           ),
+                                          if (dwsmprovider.showDemonstartion)
+                                            buildCaptureWidget(dwsmprovider),
                                         ],
                                       )
+
                                     : showForm(dwsmprovider),
+
                               ],
                             ),
                           ),
@@ -444,7 +454,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     );
   }
 
-  Future<bool> validate(DwsmDashboardProvider dwsmprovider) async {
+  Future<bool> validate(DwsmProvider dwsmprovider) async {
     await dwsmprovider.fetchDeviceId();
 
     if (dwsmprovider.selectedAnganwadi == null) {
@@ -458,7 +468,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     return true;
   }
 
-  void showResponse(DwsmDashboardProvider dwsmprovider) {
+  void showResponse(DwsmProvider dwsmprovider) {
     if (dwsmprovider.baseStatus == 1) {
       showDialog(
         context: context,
@@ -592,6 +602,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       },
     );
   }
+
   Widget showForm(DwsmDashboardProvider dwsmprovider ){
     return Visibility(
       visible:
@@ -669,11 +680,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   BoxShadow(
                     color: Colors.grey
                         .withOpacity(0.1),
+
                     blurRadius: 6,
                     offset: Offset(0, 2),
                   ),
                 ],
               ),
+
               child: Column(
                 children: [
                   Padding(

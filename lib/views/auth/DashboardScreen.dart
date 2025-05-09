@@ -40,15 +40,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
     getToken();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
       final dashboardProvider = Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
-      dashboardProvider.loadDashboardData();
-      print("dashboard data${dashboardProvider.dashboardData}");
+      await dashboardProvider.loadDashboardData();
+      print("dashboard ${dashboardProvider.isLoading}");
+      print("master provider  data${masterProvider.isLoading}");
 
       //masterProvider.clearData();
-      masterProvider.fetchDistricts(stateId);
+   await   masterProvider.fetchDistricts(stateId);
     });
   }
 
@@ -138,11 +139,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   onTap: () {
                     Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalSamplesSubmitted,});
                   },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
-                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),

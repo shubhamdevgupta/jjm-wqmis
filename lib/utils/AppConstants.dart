@@ -32,6 +32,7 @@ class AppConstants {
   static const String submitSample = 'Submit';
   static const String submitSampleInfo = 'Submit Sample Info ';
   static const String listOfSamples = 'List of Samples';
+  static const String listOfDemonstration = 'List of Demonstration';
   static const String maintenance = 'Maintenance';
   static const String logout = 'Logout';
   static const String dashboardOverview = 'Dashboard Overview';

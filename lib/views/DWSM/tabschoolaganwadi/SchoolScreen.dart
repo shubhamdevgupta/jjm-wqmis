@@ -28,7 +28,6 @@ class _SchoolScreen extends State<SchoolScreen> {
   String districtId = '';
   final CameraHelper _cameraHelper = CameraHelper();
 
-  bool redemo = false;
   TextEditingController remarkController = TextEditingController();
   Village? village;
 
@@ -42,8 +41,8 @@ class _SchoolScreen extends State<SchoolScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: Provider.of<DwsmDashboardProvider>(context, listen: false),
-      child: Consumer<DwsmDashboardProvider>(
+      value: Provider.of<DwsmProvider>(context, listen: false),
+      child: Consumer<DwsmProvider>(
         builder: (context, dwsmprovider, child) {
           return dwsmprovider.isLoading
               ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
@@ -87,7 +86,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               selectedId!,
                                               selectedSchool.name,
                                               selectedSchool.demonstrated);
-
+                                          dwsmprovider.setShowDemonstration(false);
                                           if (dwsmprovider.mDemonstrationId ==
                                               1) {
                                             dwsmprovider.fetchDemonstrationList(
@@ -187,12 +186,14 @@ class _SchoolScreen extends State<SchoolScreen> {
                                     ? Column(
                                         children: [
                                           Visibility(
+
                                             visible: dwsmprovider.selectedSchoolResult != null && !dwsmprovider.showDemonstartion,
                                             child: ElevatedButton(
                                               onPressed: () async {
                                                 setState(() {
                                                   dwsmprovider.showDemonstartionButton(true);
                                                 });
+
                                               },
                                               child: Text(
                                                 "New Demonstration",
@@ -216,10 +217,12 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               ),
                                             ),
                                           ),
+                                          
                                            Visibility(
                                              visible: dwsmprovider.selectedSchoolResult != null && dwsmprovider.showDemonstartion,
                                                   child:  showForm(dwsmprovider )
                                                 ),
+
                                           SizedBox(
                                             height: 5,
                                           ),
@@ -429,6 +432,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               ),
                                             ),
                                           ),
+                                          if (dwsmprovider.showDemonstartion)
+                                            buildCaptureWidget(dwsmprovider),
                                         ],
                                       )
                                     : showForm(dwsmprovider ),
@@ -445,7 +450,7 @@ class _SchoolScreen extends State<SchoolScreen> {
     );
   }
 
-  Future<bool> validate(DwsmDashboardProvider dwsmprovider) async {
+  Future<bool> validate(DwsmProvider dwsmprovider) async {
     await dwsmprovider.fetchDeviceId();
     if (dwsmprovider.selectedSchoolResult == null) {
       dwsmprovider.errorMsg = "Please Select School first.";
@@ -458,7 +463,7 @@ class _SchoolScreen extends State<SchoolScreen> {
     return true;
   }
 
-  void showResponse(DwsmDashboardProvider dwsmprovider) {
+  void showResponse(DwsmProvider dwsmprovider) {
     if (dwsmprovider.baseStatus == 1) {
       showDialog(
         context: context,
@@ -593,6 +598,7 @@ class _SchoolScreen extends State<SchoolScreen> {
     );
   }
 
+
   Widget showForm(DwsmDashboardProvider dwsmprovider ){
     return Visibility(
       visible:
@@ -662,11 +668,14 @@ class _SchoolScreen extends State<SchoolScreen> {
             ),
           ),
           Card(
+
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius:
+
                 BorderRadius.circular(12),
+
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey
@@ -676,6 +685,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   ),
                 ],
               ),
+
               child: Column(
                 children: [
                   Padding(
@@ -691,12 +701,14 @@ class _SchoolScreen extends State<SchoolScreen> {
                         color: Colors.blueGrey
                             .shade700,
                       ),
+
                     ),
                   ),
                   Divider(
                       thickness: 1,
                       color: Colors
                           .grey.shade300),
+
                   SizedBox(height: 2),
                   Center(
                     child: _cameraHelper

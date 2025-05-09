@@ -17,7 +17,7 @@ class Tabschoolaganwadi extends StatefulWidget {
 class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
-  late DwsmDashboardProvider dwsmDashboardProvider;
+  late DwsmProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -69,7 +69,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     super.didChangeDependencies();
 
     // Only assign once to avoid repeated calls when dependencies change
-    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     // Fetch data if needed when widget is first built

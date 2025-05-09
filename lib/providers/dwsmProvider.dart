@@ -12,10 +12,11 @@ import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
-class DwsmDashboardProvider extends ChangeNotifier {
+class DwsmProvider extends ChangeNotifier {
   final DwsmRepository _dwsmRepository = DwsmRepository();
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
 
-  bool isLoading = false;
 
   List<Village> villages = [];
   String errorMsg = '';
@@ -57,7 +58,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   BaseResponseModel<FTKResponse>? ftkResponse;
 
   Future<void> fetchDwsmDashboard(int userId) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       final response = await _dwsmRepository.fetchDwsmDashboard(userId);
       _dwsmdashboardresponse = response;
@@ -65,7 +66,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -73,8 +74,9 @@ class DwsmDashboardProvider extends ChangeNotifier {
   Future<void> fetchDemonstrationList(int stateId, int districtId,
       String fineYear, int schoolId, int demonstrationType,
       {Function(Village result)? onSuccess}) async {
-    isLoading = true;
-    notifyListeners();
+
+    _isLoading = true;
+
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(
         stateId: stateId,
@@ -99,14 +101,14 @@ class DwsmDashboardProvider extends ChangeNotifier {
       debugPrint('Error in fetchDemonstrationList: $e');
      // GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchSchoolInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
-    isLoading = true;
+    _isLoading = true;
 
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolInfo(
@@ -126,14 +128,16 @@ class DwsmDashboardProvider extends ChangeNotifier {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
+
   Future<void> fetchDashboardSchoolList(
       int stateId, int districtId, int demonstrationType) async {
-    isLoading = true;
+    _isLoading = true;
+
     notifyListeners();
     print('loading startt.............................');
     try {
@@ -151,7 +155,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       print('loading stoppeddd.............................');
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -168,7 +172,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     String ipAddress,
     Function onSuccess,
   ) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -193,7 +197,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -213,7 +217,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
   Future<void> fetchLocation(BuildContext context) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     bool hasPermission = await checkLocationPermission();
@@ -256,7 +260,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint("Error during fetchLocation(): $e");
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -264,6 +268,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   void showDemonstartionButton( bool value) {
     _showDemonstartion = value;
     notifyListeners();
+
   }
   void setSelectedSchool(String id, String name, int demonstrationId) {
     selectedSchoolResult = id;

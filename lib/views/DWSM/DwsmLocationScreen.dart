@@ -27,7 +27,7 @@ class _DwsmLocation extends State<DwsmLocation> {
 
   @override
   Widget build(BuildContext) {
-    final dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: true);
+    final dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: true);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -84,7 +84,7 @@ class _DwsmLocation extends State<DwsmLocation> {
   }
 
   Widget buildStateVillage(
-      Masterprovider masterProvider, DwsmDashboardProvider dwsmprovider) {
+      Masterprovider masterProvider, DwsmProvider dwsmprovider) {
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(

@@ -1,14 +1,13 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/authentication_provider.dart';
 import '../../services/LocalStorageService.dart';
-import '../webView/NativeLocationService.dart';
 import 'DwmsLIst/SchoolAwcScreen.dart';
 import 'DwsmLocationScreen.dart';
 
@@ -36,11 +35,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-          Provider.of<DwsmDashboardProvider>(context, listen: false);
+          Provider.of<DwsmProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
-   //   masterProvider.clearData();
+      //   masterProvider.clearData();
       await masterProvider.fetchBlocks(stateId, districtId);
     });
   }
@@ -61,35 +60,24 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             title: const Text(
               AppConstants.appTitle,
               style: TextStyle(
-                fontSize: 20, fontFamily: 'OpenSans',
+                fontSize: 20,
+                fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            ),
-            leading: Builder(
-              builder: (context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white),
-                  // Drawer icon
-                  onPressed: () {
-                    Scaffold.of(context)
-                        .openDrawer(); // Open the Navigation Drawer
-                  },
-                );
-              },
             ),
             actions: [
               Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.notifications_active,
-                        color: Colors.white),
-                      onPressed: () async {
-                        final location = await NativeLocationService.getLocation();
-                        if (location != null) {
-                          print("SHAKTI>>Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
-                        }
-                      },
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                    onPressed: () async {
+                      final authProvider = Provider.of<AuthenticationProvider>(
+                          context,
+                          listen: false);
+                      await authProvider.logoutUser();
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                    },
                   ),
                 ],
               ),
@@ -109,7 +97,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             ),
             elevation: 5,
           ),
-          drawer: Drawer(
+          /*drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -141,24 +129,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.submitSampleInfo),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSaveSample);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.listOfSamples),
+                  title: const Text(AppConstants.listOfDemonstration),
                   onTap: () {
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToSampleList);
                   },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text(AppConstants.maintenance),
-                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
@@ -174,8 +149,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 ),
               ],
             ),
-          ),
-          body: Consumer<DwsmDashboardProvider>(
+          ),*/
+          body: Consumer<DwsmProvider>(
             builder: (context, dwsmDashboardProvider, child) {
               if (dwsmDashboardProvider.dwsmdashboardresponse == null) {
                 return const Center(child: CircularProgressIndicator());
@@ -186,7 +161,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -206,16 +182,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
-                                colors: [Colors.blue.shade300, Colors.blue.shade800],
+                                colors: [
+                                  Colors.blue.shade300,
+                                  Colors.blue.shade800
+                                ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                             ),
-                            padding: const EdgeInsets.all(2), // Border-like effect
+                            padding: const EdgeInsets.all(2),
+                            // Border-like effect
                             child: CircleAvatar(
                               radius: 32,
                               backgroundColor: Colors.grey[100],
-                              backgroundImage: const AssetImage('assets/user.png'),
+                              backgroundImage:
+                                  const AssetImage('assets/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -229,19 +210,19 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 Text(
                                   '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 15, fontFamily: 'OpenSans',
+                                    fontSize: 15,
+                                    fontFamily: 'OpenSans',
                                     color: Colors.grey.shade700,
-
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   userName,
                                   style: const TextStyle(
-                                    fontSize: 20, fontFamily: 'OpenSans',
+                                    fontSize: 20,
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
-
                                   ),
                                 ),
 
@@ -250,15 +231,16 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
+                                    const Icon(Icons.account_balance_sharp,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
                                       'DWSM User',
                                       style: const TextStyle(
-                                          fontSize: 14, fontFamily: 'OpenSans',
+                                          fontSize: 14,
+                                          fontFamily: 'OpenSans',
                                           color: Colors.black87,
-                                          fontWeight: FontWeight.w500
-                                      ),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -267,13 +249,15 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                                 Row(
                                   children: [
-                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
+                                    const Icon(Icons.phone_android,
+                                        size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
                                         mobile,
                                         style: const TextStyle(
-                                          fontSize: 14, fontFamily: 'OpenSans',
+                                          fontSize: 14,
+                                          fontFamily: 'OpenSans',
                                           color: Colors.black87,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -327,21 +311,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.school_rounded,
                                   iconColor: Colors.blue,
                                   title: "Schools",
-                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
                                   onTap: () {
-
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child:const SchoolAWC( type: 10,),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: const SchoolAWC(
+                                            type: 10,
+                                          ),
+                                        ),
                                       ),
                                     );
-
-
                                   },
                                 ),
                               ),
@@ -360,7 +344,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(type: 10,),
+                                          child: Demonstrationscreen(
+                                            type: 10,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -398,12 +384,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child:const SchoolAWC( type: 11),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: const SchoolAWC(type: 11),
+                                        ),
                                       ),
                                     );
-
                                   },
                                 ),
                               ),
@@ -421,10 +406,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child: Demonstrationscreen(
-                                                type: 11,),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: Demonstrationscreen(
+                                            type: 11,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
@@ -439,8 +425,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: ()  {
-                           showDialog<bool>(
+                        onPressed: () {
+                          showDialog<bool>(
                             // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
@@ -487,6 +473,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           )),
     );
   }
+
   Widget _buildInfoCard({
     required IconData icon,
     required Color iconColor,

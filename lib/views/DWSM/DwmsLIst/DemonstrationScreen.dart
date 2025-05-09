@@ -23,7 +23,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
   String? stateId;
   String? districtId;
   String? titleType = "";
-  late DwsmDashboardProvider dwsmProvider;
+  late DwsmProvider dwsmProvider;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false)
+      Provider.of<DwsmProvider>(context, listen: false)
           .fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!),
               "2025-2026", 0, widget.type!);
     });
@@ -40,7 +40,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    dwsmProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    dwsmProvider = Provider.of<DwsmProvider>(context, listen: false);
   }
 
   @override
@@ -94,7 +94,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             ),
             elevation: 5,
           ),
-          body: Consumer<DwsmDashboardProvider>(
+          body: Consumer<DwsmProvider>(
               builder: (context, provider, child) {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)

@@ -22,8 +22,8 @@ class ParameterProvider with ChangeNotifier {
   final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
 
   LocalStorageService localStorage = LocalStorageService();
-  bool isLoading = false;
-
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
   List<Parameterresponse> parameterList = [];
   int? selectedParameter;
 
@@ -84,7 +84,7 @@ class ParameterProvider with ChangeNotifier {
 
   Future<void> fetchAllLabs(String stateId, String districtId, String blockId,
       String gpId, String villageId, String isAll) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       final rawLabList = await _lapparameterrepository.fetchAllLab(
           stateId, districtId, blockId, gpId, villageId, isAll);
@@ -96,14 +96,14 @@ class ParameterProvider with ChangeNotifier {
     } catch (e, stackTrace) {
       log('Error in fetching lab list provider: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchAllParameter(String labid, String stateid, String sid,
       String reg_id, String parameteetype) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       final rawParameterList = await _lapparameterrepository.fetchAllParameter(
           labid, stateid, sid, reg_id, parameteetype);
@@ -115,13 +115,13 @@ class ParameterProvider with ChangeNotifier {
     } catch (e) {
       debugPrint('Error in fetching All Parameter list: $e');
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchLabIncharge(int labId) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -133,7 +133,7 @@ class ParameterProvider with ChangeNotifier {
     } catch (e) {
       debugPrint(" Error fetching Lab Incharge: $e");
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -146,7 +146,7 @@ class ParameterProvider with ChangeNotifier {
   }
 
   Future<void> fetchLocation() async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -172,14 +172,14 @@ class ParameterProvider with ChangeNotifier {
     } catch (e) {
       debugPrint("Error during fetchLocation(): $e");
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   /// Fetch Labs from API
   Future<void> fetchParamLabs(String stateId, String parameterIds) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners(); // Notify before starting the fetch
 
     try {
@@ -197,13 +197,13 @@ class ParameterProvider with ChangeNotifier {
     } catch (e) {
       debugPrint("Error fetching Lab Incharge: $e");
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners(); // Notify at the end of the fetch process
     }
   }
 
   Future<void> fetchWTPLab(Masterprovider masterProvider) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -225,7 +225,7 @@ class ParameterProvider with ChangeNotifier {
       debugPrint("Error fetching WTP Labs: $e");
       _wtpLabModel = null;
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -287,7 +287,7 @@ class ParameterProvider with ChangeNotifier {
   }
 
   void clearData() {
-    isLoading = false;
+    _isLoading = false;
 
     parameterList.clear();
     selectedParameter = null;
