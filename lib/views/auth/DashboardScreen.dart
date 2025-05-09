@@ -141,11 +141,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text(AppConstants.maintenance,style: AppStyles.style16NormalBlack,),
-                  onTap: () {},
-                ),
-                ListTile(
                   leading: const Icon(Icons.logout),
                   title:  Text(AppConstants.logout,style: AppStyles.style16NormalBlack,),
                   onTap: () async {

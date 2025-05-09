@@ -1038,19 +1038,25 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                       visible:
                       paramProvider.isLab && paramProvider.baseStatus != 0,
                       // Show only when status is true
-                      child: ElevatedButton(
-                          onPressed: () {
-                            validateAndSubmit(context, provider, masterProvider,
-                                paramProvider);
-                          },
-                          child: Text(
-                            AppConstants.submitSample,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          style: AppStyles.buttonStylePrimary()),
+                      child: Padding(
+                        padding:EdgeInsets.only(right: 14,left: 14),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                validateAndSubmit(context, provider, masterProvider,
+                                    paramProvider);
+                              },
+                              child: Text(
+                                AppConstants.submitSample,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              style: AppStyles.buttonStylePrimary()),
+                        ),
+                      ),
                     ),
                     Visibility(
                       visible: paramProvider.isParam &&
