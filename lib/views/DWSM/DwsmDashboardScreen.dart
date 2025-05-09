@@ -26,6 +26,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   String userID = '';
   String mobile = '';
   String stateId = '';
+  String districtId = '';
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
    //   masterProvider.clearData();
-      await masterProvider.fetchDistricts(stateId);
+      await masterProvider.fetchBlocks(stateId, districtId);
     });
   }
 
@@ -185,8 +186,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -206,21 +206,16 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade300,
-                                  Colors.blue.shade800
-                                ],
+                                colors: [Colors.blue.shade300, Colors.blue.shade800],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               ),
                             ),
-                            padding: const EdgeInsets.all(2),
-                            // Border-like effect
+                            padding: const EdgeInsets.all(2), // Border-like effect
                             child: CircleAvatar(
                               radius: 32,
                               backgroundColor: Colors.grey[100],
-                              backgroundImage:
-                                  const AssetImage('assets/user.png'),
+                              backgroundImage: const AssetImage('assets/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -234,37 +229,35 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 Text(
                                   '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 15, fontFamily: 'OpenSans',
                                     color: Colors.grey.shade700,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
+
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   userName,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 20, fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
-                                    fontFamily: 'Poppins',
+
                                   ),
                                 ),
 
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
 
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    Icon(Icons.account_balance_sharp,
-                                        size: 18, color: Colors.teal),
+                                    const Icon(Icons.account_balance_sharp, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'DWSM Official',
+                                      'DWSM User',
                                       style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
+                                          fontSize: 14, fontFamily: 'OpenSans',
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500
                                       ),
                                     ),
                                   ],
@@ -274,14 +267,13 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                                 Row(
                                   children: [
-                                    const Icon(Icons.phone_android,
-                                        size: 18, color: Colors.teal),
+                                    const Icon(Icons.phone_android, size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
                                         mobile,
                                         style: const TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 14, fontFamily: 'OpenSans',
                                           color: Colors.black87,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -566,6 +558,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
+    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

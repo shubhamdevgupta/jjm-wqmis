@@ -68,19 +68,24 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDemonstrationList(int stateId, int districtId, String fineYear, int schoolId,int demonstrationType,
+  Future<void> fetchDemonstrationList(int stateId, int districtId,
+      String fineYear, int schoolId, int demonstrationType,
       {Function(Village result)? onSuccess}) async {
+
     _isLoading = true;
+
     try {
-      final rawLIst = await _dwsmRepository.fetchDemonstrationList(stateId: stateId,
+      final rawLIst = await _dwsmRepository.fetchDemonstrationList(
+        stateId: stateId,
         districtId: districtId,
         fineYear: fineYear,
         schoolId: schoolId,
-        demonstrationType: demonstrationType,);
+        demonstrationType: demonstrationType,
+      );
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {
-            onSuccess(rawLIst.result[0]/*.photo*/);
+            onSuccess(rawLIst.result[0] /*.photo*/);
           }
         } else {
           villages = rawLIst.result;
@@ -91,7 +96,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error in fetchDemonstrationList: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
+     // GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -126,8 +131,10 @@ class DwsmDashboardProvider extends ChangeNotifier {
   }
 
 
-  Future<void> fetchDashboardSchoolList(int stateId, int districtId, int demonstrationType) async {
-    _isLoading = true;
+  Future<void> fetchDashboardSchoolList(
+      int stateId, int districtId, int demonstrationType) async {
+    isLoading = true;
+
     notifyListeners();
     print('loading startt.............................');
     try {
@@ -255,13 +262,14 @@ class DwsmDashboardProvider extends ChangeNotifier {
     }
   }
 
-  void setSelectedSchool(String id, String name) {
+  void setSelectedSchool(String id, String name, int demonstrationId) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
+    mDemonstrationId = demonstrationId;
     notifyListeners();
   }
 
-  void setSelectedAnganwadi(String id, String name,int demonstrationId) {
+  void setSelectedAnganwadi(String id, String name, int demonstrationId) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
     mDemonstrationId = demonstrationId;
@@ -278,7 +286,7 @@ class DwsmDashboardProvider extends ChangeNotifier {
   void clearSelectedAnganwadi() {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
-    mDemonstrationId=101;
+    mDemonstrationId = 101;
     notifyListeners();
   }
 }

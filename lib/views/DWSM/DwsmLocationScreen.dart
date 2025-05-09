@@ -159,7 +159,67 @@ class _DwsmLocation extends State<DwsmLocation> {
               ),
               SizedBox(width: 10),
               //district data here--------------
-              Padding(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'District *',
+                    style: TextStyle(
+                      fontSize: 16, fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: DropdownButtonFormField<String>(
+                      value: _localStorage.getString(AppConstants.prefDistrictId),
+                      // Ensure this matches the DropdownMenuItem value
+                      decoration: InputDecoration(
+                        filled: true,
+                        // Grey background to indicate it's non-editable
+                        fillColor: Colors.grey[300],
+                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+
+                          borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 2), // Avoid focus effect
+                        ),
+                        contentPadding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      ),
+                      items: [
+                        DropdownMenuItem<String>(
+                          value:
+                          _localStorage.getString(AppConstants.prefDistrictId),
+                          // Ensure this matches the selected value
+
+                          child: Text(_localStorage
+                              .getString(AppConstants.prefDistrictId) ??
+                              'Unknown State'), // Display state name
+                        ),
+                      ],
+                      onChanged: null,
+                      // Disable selection (non-editable)
+                      isExpanded: true,
+                      style: TextStyle(
+                        color: Colors.black, fontFamily: 'OpenSans',
+                        fontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+
+              /*    Padding(
                   padding: EdgeInsets.only(top: 4.0),
                   child: CustomDropdown(
                       value: masterProvider.selectedDistrictId,
@@ -180,7 +240,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                           masterProvider.fetchBlocks(
                               masterProvider.selectedStateId!, value);
                         }
-                      })),
+                      })),*/
               SizedBox(height: 12),
               //block data here--------------
               Column(
