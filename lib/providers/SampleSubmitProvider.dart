@@ -11,7 +11,7 @@ class Samplesubprovider extends ChangeNotifier {
   Sampleresponse? sampleresponse;
   String errorMsg = '';
 
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool get isLoading => _isLoading;
 
   String? _deviceId;

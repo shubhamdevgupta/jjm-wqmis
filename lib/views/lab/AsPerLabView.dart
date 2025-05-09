@@ -17,25 +17,15 @@ class AsPerLabTabView extends StatefulWidget {
 
 class _AsPerLabTabView extends State<AsPerLabTabView> {
   late Masterprovider masterProvider;
-  late ParameterProvider paramProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      paramProvider.isLab=true;
-      paramProvider.isParam=false;
-      paramProvider.fetchAllLabs(
-        masterProvider.selectedStateId!,
-        masterProvider.selectedDistrictId!,
-        masterProvider.selectedBlockId!,
-        masterProvider.selectedGramPanchayat!,
-        masterProvider.selectedVillage!,
-        "1",
-      );
+      Provider.of<ParameterProvider>(context, listen: false).isLab=true;
+      Provider.of<ParameterProvider>(context, listen: false).isParam=false;
     });
   }
 
@@ -69,8 +59,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            child: const SubmitSampleScreen(),
-                             // child: const SelectedTestScreenNew(),
+                              child: const SubmitSampleScreen(),
+                              // child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );
@@ -180,7 +170,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         DropdownMenuItem(
                                             value: 3,
                                             child: Text(
-                                                'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
+                                              'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                       ],
                                       onChanged: (value) {
                                         if (value == null) return;
