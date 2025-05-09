@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/ParameterProvider.dart';
 import '../../providers/dwsmProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
@@ -19,15 +16,18 @@ class DwsmLocation extends StatefulWidget {
 
 class _DwsmLocation extends State<DwsmLocation> {
   final LocalStorageService _localStorage = LocalStorageService();
+  String districtId = '';
 
   @override
   void initState() {
     super.initState();
+    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
   }
 
   @override
   Widget build(BuildContext) {
-    final dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: true);
+    final dwsmDashboardProvider =
+        Provider.of<DwsmProvider>(context, listen: true);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -38,7 +38,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                 'Choose Location',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'OpenSans',
                   color: Colors.white,
                 ),
               ),
@@ -69,7 +70,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   SingleChildScrollView(
                       child: Column(
                     children: [
-                      buildStateVillage(masterProvider,dwsmDashboardProvider)
+                      buildStateVillage(masterProvider, dwsmDashboardProvider)
                     ],
                   )),
                   if (masterProvider.isLoading)
@@ -102,12 +103,12 @@ class _DwsmLocation extends State<DwsmLocation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'State *',
+                    'State',
                     style: TextStyle(
-                      fontSize: 16, fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Dark text for better readability
+                        fontFamily: 'OpenSans'),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 4.0),
@@ -118,7 +119,10 @@ class _DwsmLocation extends State<DwsmLocation> {
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
+                        labelStyle: TextStyle(
+                          color: Colors.blueAccent,
+                          fontFamily: 'OpenSans',
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(color: Colors.grey, width: 2),
@@ -138,8 +142,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                           value:
                               _localStorage.getString(AppConstants.prefStateId),
                           // Ensure this matches the selected value
-
-                          child: Text(_localStorage.getString(AppConstants.prefStateName) ??
+                          child: Text(_localStorage
+                                  .getString(AppConstants.prefStateName) ??
                               'Unknown State'), // Display state name
                         ),
                       ],
@@ -147,7 +151,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                       // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
-                        color: Colors.black, fontFamily: 'OpenSans',
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -162,23 +167,26 @@ class _DwsmLocation extends State<DwsmLocation> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'District *',
+                    'District',
                     style: TextStyle(
-                      fontSize: 16, fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Dark text for better readability
+                        fontFamily: 'OpenSans'),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: _localStorage.getString(AppConstants.prefDistrictId),
+                      value: districtId,
                       // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
+                        labelStyle: TextStyle(
+                          color: Colors.blueAccent,
+                          fontFamily: 'OpenSans',
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(color: Colors.grey, width: 2),
@@ -191,16 +199,15 @@ class _DwsmLocation extends State<DwsmLocation> {
                               width: 2), // Avoid focus effect
                         ),
                         contentPadding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value:
-                          _localStorage.getString(AppConstants.prefDistrictId),
+                          value: districtId,
                           // Ensure this matches the selected value
 
                           child: Text(_localStorage
-                              .getString(AppConstants.prefDistName) ??
+                                  .getString(AppConstants.prefDistName) ??
                               'Unknown State'), // Display state name
                         ),
                       ],
@@ -208,7 +215,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                       // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
-                        color: Colors.black, fontFamily: 'OpenSans',
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -217,29 +225,6 @@ class _DwsmLocation extends State<DwsmLocation> {
                   ),
                 ],
               ),
-
-              /*    Padding(
-                  padding: EdgeInsets.only(top: 4.0),
-                  child: CustomDropdown(
-                      value: masterProvider.selectedDistrictId,
-                      items: masterProvider.districts.map((district) {
-                        return DropdownMenuItem<String>(
-                          value: district.jjmDistrictId,
-                          child: Text(
-                            district.districtName,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        );
-                      }).toList(),
-                      title: 'District *',
-                      onChanged: (value) {
-                        masterProvider.setSelectedDistrict(value);
-                        if (value != null) {
-                          masterProvider.fetchBlocks(
-                              masterProvider.selectedStateId!, value);
-                        }
-                      })),*/
               SizedBox(height: 12),
               //block data here--------------
               Column(
@@ -261,8 +246,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                     onChanged: (value) {
                       masterProvider.setSelectedBlock(value);
                       if (value != null) {
-                        masterProvider.fetchGramPanchayat(masterProvider.selectedStateId!, _localStorage.getString(AppConstants.prefDistrictId).toString(),
-                            value);
+                        masterProvider.fetchGramPanchayat(
+                            masterProvider.selectedStateId!, districtId, value);
                       }
                     },
                   ),
@@ -286,11 +271,8 @@ class _DwsmLocation extends State<DwsmLocation> {
                 onChanged: (value) {
                   masterProvider.setSelectedGrampanchayat(value);
                   if (value != null) {
-                    masterProvider.fetchVillage(
-                        masterProvider.selectedStateId!,
-                        _localStorage.getString(AppConstants.prefDistrictId).toString(),
-                        masterProvider.selectedBlockId!,
-                        value);
+                    masterProvider.fetchVillage(masterProvider.selectedStateId!,
+                        districtId, masterProvider.selectedBlockId!, value);
                   }
                 },
               ),
@@ -313,7 +295,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   if (value != null) {
                     masterProvider.fetchHabitations(
                         masterProvider.selectedStateId!,
-                        _localStorage.getString(AppConstants.prefDistrictId).toString(),
+                        districtId,
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value);
