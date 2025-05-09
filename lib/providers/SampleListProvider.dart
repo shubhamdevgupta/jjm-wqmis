@@ -9,11 +9,11 @@ class Samplelistprovider extends ChangeNotifier {
 
 
  List<Sample> samples = []; // Correctly storing List<Sample>
-  bool isLoading = false;
-  String errorMsg='';
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;  String errorMsg='';
 
   Future<void> fetchSampleList(int regId, int page, String search, int cstatus, String sampleId, int stateid, int districtid, int blockid, int gpid, int villageid) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -25,7 +25,7 @@ class Samplelistprovider extends ChangeNotifier {
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }

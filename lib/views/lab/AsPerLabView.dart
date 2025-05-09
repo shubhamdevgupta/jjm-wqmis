@@ -59,8 +59,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            child: const SubmitSampleScreen(),
-                             // child: const SelectedTestScreenNew(),
+                              child: const SubmitSampleScreen(),
+                              // child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );
@@ -170,7 +170,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                         DropdownMenuItem(
                                             value: 3,
                                             child: Text(
-                                                'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
+                                              'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                       ],
                                       onChanged: (value) {
                                         if (value == null) return;

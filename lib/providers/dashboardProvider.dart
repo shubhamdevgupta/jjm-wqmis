@@ -10,7 +10,7 @@ class DashboardProvider extends ChangeNotifier{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
   Dashboardresponse? dashboardData;
