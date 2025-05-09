@@ -129,7 +129,7 @@ class Masterprovider extends ChangeNotifier {
         if (localStorage.getString(AppConstants.prefDistrictId).toString() == districts[i].jjmDistrictId) {
 
           localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
-            setSelectedDistrict(districts[i].jjmDistrictId);
+           /* setSelectedDistrict(districts[i].jjmDistrictId);*/
         }
       }
     } catch (e) {
