@@ -40,7 +40,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
       //   masterProvider.clearData();
+      await masterProvider.fetchDistricts(stateId);
       await masterProvider.fetchBlocks(stateId, districtId);
+
+
     });
   }
 
@@ -296,7 +299,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           const Text(
                             "School",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22, fontFamily: 'OpenSans',
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
@@ -361,7 +364,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           const Text(
                             "Anganwadi",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22, fontFamily: 'OpenSans',
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
@@ -460,7 +463,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                             SizedBox(width: 8),
                             Text(
                               AppConstants.addSchool,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
                             ),
                           ],
                         ),
@@ -512,7 +515,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 14, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -526,7 +529,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               child: Text(
                 value.toString(),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16, fontFamily: 'OpenSans',
                   fontWeight: FontWeight.bold,
                   color: iconColor,
                 ),
