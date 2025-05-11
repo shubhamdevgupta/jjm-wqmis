@@ -1,14 +1,13 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/authentication_provider.dart';
 import '../../services/LocalStorageService.dart';
-import '../webView/NativeLocationService.dart';
 import 'DwmsLIst/SchoolAwcScreen.dart';
 import 'DwsmLocationScreen.dart';
 
@@ -26,6 +25,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   String userID = '';
   String mobile = '';
   String stateId = '';
+  String districtId = '';
 
   @override
   void initState() {
@@ -35,12 +35,15 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-          Provider.of<DwsmDashboardProvider>(context, listen: false);
+          Provider.of<DwsmProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
-   //   masterProvider.clearData();
+      //   masterProvider.clearData();
       await masterProvider.fetchDistricts(stateId);
+      await masterProvider.fetchBlocks(stateId, districtId);
+
+
     });
   }
 
@@ -61,34 +64,23 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               AppConstants.appTitle,
               style: TextStyle(
                 fontSize: 20,
+                fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            ),
-            leading: Builder(
-              builder: (context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white),
-                  // Drawer icon
-                  onPressed: () {
-                    Scaffold.of(context)
-                        .openDrawer(); // Open the Navigation Drawer
-                  },
-                );
-              },
             ),
             actions: [
               Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.notifications_active,
-                        color: Colors.white),
-                      onPressed: () async {
-                        final location = await NativeLocationService.getLocation();
-                        if (location != null) {
-                          print("SHAKTI>>Latitude: ${location['latitude']}, Longitude: ${location['longitude']}");
-                        }
-                      },
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                    onPressed: () async {
+                      final authProvider = Provider.of<AuthenticationProvider>(
+                          context,
+                          listen: false);
+                      await authProvider.logoutUser();
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                    },
                   ),
                 ],
               ),
@@ -108,7 +100,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             ),
             elevation: 5,
           ),
-          drawer: Drawer(
+          /*drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -121,12 +113,12 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     children: [
                       const Text(
                         "DWSM Official",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'OpenSans',),
                       ),
                       Text(
                         stateName, // Provide a fallback value if null
                         style: const TextStyle(
-                            color: Colors.white70, fontSize: 16),
+                            color: Colors.white70, fontSize: 16, fontFamily: 'OpenSans',),
                       ),
                     ],
                   ),
@@ -140,24 +132,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.submitSampleInfo),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSaveSample);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: const Text(AppConstants.listOfSamples),
+                  title: const Text(AppConstants.listOfDemonstration),
                   onTap: () {
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToSampleList);
                   },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text(AppConstants.maintenance),
-                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
@@ -173,11 +152,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 ),
               ],
             ),
-          ),
-          body: Consumer<DwsmDashboardProvider>(
+          ),*/
+          body: Consumer<DwsmProvider>(
             builder: (context, dwsmDashboardProvider, child) {
-              final data = dwsmDashboardProvider.dwsmdashboardresponse;
-              if (data == null) {
+              if (dwsmDashboardProvider.dwsmdashboardresponse == null) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
@@ -235,10 +213,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 Text(
                                   '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 15,
+                                    fontFamily: 'OpenSans',
                                     color: Colors.grey.shade700,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -246,27 +223,27 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   userName,
                                   style: const TextStyle(
                                     fontSize: 20,
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
-                                    fontFamily: 'Poppins',
                                   ),
                                 ),
 
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
 
                                 // Department and Phone
                                 Row(
                                   children: [
-                                    Icon(Icons.account_balance_sharp,
+                                    const Icon(Icons.account_balance_sharp,
                                         size: 18, color: Colors.teal),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'DWSM Official',
+                                      'DWSM User',
                                       style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                          fontSize: 14,
+                                          fontFamily: 'OpenSans',
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -283,6 +260,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         mobile,
                                         style: const TextStyle(
                                           fontSize: 14,
+                                          fontFamily: 'OpenSans',
                                           color: Colors.black87,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -321,7 +299,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           const Text(
                             "School",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22, fontFamily: 'OpenSans',
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
@@ -336,21 +314,21 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   icon: Icons.school_rounded,
                                   iconColor: Colors.blue,
                                   title: "Schools",
-                                  value: '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                  value:
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
                                   onTap: () {
-
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child:const SchoolAWC( type: 10,),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: const SchoolAWC(
+                                            type: 10,
+                                          ),
+                                        ),
                                       ),
                                     );
-
-
                                   },
                                 ),
                               ),
@@ -369,7 +347,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(type: 10,),
+                                          child: Demonstrationscreen(
+                                            type: 10,
+                                          ),
                                         ),
                                       ),
                                     );
@@ -384,7 +364,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           const Text(
                             "Anganwadi",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22, fontFamily: 'OpenSans',
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
@@ -407,12 +387,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child:const SchoolAWC( type: 11),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: const SchoolAWC(type: 11),
+                                        ),
                                       ),
                                     );
-
                                   },
                                 ),
                               ),
@@ -430,10 +409,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
-                                              value: dwsmDashboardProvider,
-                                              child: Demonstrationscreen(
-                                                type: 11,),
-                                            ),
+                                          value: dwsmDashboardProvider,
+                                          child: Demonstrationscreen(
+                                            type: 11,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
@@ -448,8 +428,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: ()  {
-                           showDialog<bool>(
+                        onPressed: () {
+                          showDialog<bool>(
                             // <- await and expecting result now
                             context: context,
                             builder: (BuildContext context) {
@@ -466,10 +446,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               );
                             },
                           );
-                      /*    if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false)
-                                .clearData();
-                          }*/
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0468B1),
@@ -487,7 +463,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                             SizedBox(width: 8),
                             Text(
                               AppConstants.addSchool,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
                             ),
                           ],
                         ),
@@ -500,6 +476,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           )),
     );
   }
+
   Widget _buildInfoCard({
     required IconData icon,
     required Color iconColor,
@@ -538,7 +515,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 14, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -552,7 +529,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
               child: Text(
                 value.toString(),
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16, fontFamily: 'OpenSans',
                   fontWeight: FontWeight.bold,
                   color: iconColor,
                 ),
@@ -571,6 +548,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
+    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

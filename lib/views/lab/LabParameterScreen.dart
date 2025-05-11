@@ -26,7 +26,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   void initState() {
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
-     regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
+    regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
 
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
@@ -57,7 +57,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllLabs() {
-     regId = _localStorage.getString(AppConstants.prefRegId) ?? "0";
+    regId = _localStorage.getString(AppConstants.prefRegId) ?? "0";
     paramProvider.fetchAllLabs(
       masterProvider.selectedStateId!,
       masterProvider.selectedDistrictId!,
@@ -94,7 +94,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
           "Select Laboratory",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 16, fontFamily: 'OpenSans',
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -108,7 +108,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
           'Test by Parameter',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 16, fontFamily: 'OpenSans',
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -119,7 +119,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text("Select Lab/Parameter",
-          style: AppStyles.appBarTitle),
+            style: AppStyles.appBarTitle),
         automaticallyImplyLeading: false,
         elevation: 5,
         centerTitle: true,
@@ -148,15 +148,15 @@ class _LabParameterScreen extends State<Labparameterscreen>
           unselectedLabelColor: Colors.white70,
           // Slightly faded for unselected tabs
           labelStyle:
-              const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          unselectedLabelStyle: const TextStyle(fontSize: 14),
+          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'OpenSans',),
+          unselectedLabelStyle: const TextStyle(fontSize: 14, fontFamily: 'OpenSans'),
           indicator: BoxDecoration(
             color: Color(0xFF5FAFE5), // Light blue indicator
             borderRadius: BorderRadius.circular(8),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(

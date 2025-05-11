@@ -35,7 +35,9 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
       value: Provider.of<ParameterProvider>(context, listen: false),
       child: Consumer<ParameterProvider>(
         builder: (context, provider, child) {
-          return Container(
+          return provider.isLoading
+              ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+              :Container(
             child: Scaffold(
               backgroundColor: Colors.transparent,
               floatingActionButton: Stack(
@@ -57,8 +59,8 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                     value: masterProvider),
                                 ChangeNotifierProvider.value(value: provider),
                               ],
-                            child: const SubmitSampleScreen(),
-                             // child: const SelectedTestScreenNew(),
+                              child: const SubmitSampleScreen(),
+                              // child: const SelectedTestScreenNew(),
                             ),
                           ),
                         );
@@ -87,7 +89,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                           '${provider.cart!.length}',
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.white,
+                            color: Colors.white, fontFamily: 'OpenSans',
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -152,7 +154,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                   children: [
                                     const Text(
                                       'Select Parameter Type:',
-                                      style: TextStyle(
+                                      style: TextStyle( fontFamily: 'OpenSans',
                                           fontWeight: FontWeight.bold),
                                     ),
                                     DropdownButton<int>(
@@ -161,14 +163,14 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                       items: const [
                                         DropdownMenuItem(
                                             value: 1,
-                                            child: Text('All Parameter')),
+                                            child: Text('All Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                         DropdownMenuItem(
                                             value: 2,
-                                            child: Text('Chemical Parameter')),
+                                            child: Text('Chemical Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                         DropdownMenuItem(
                                             value: 3,
                                             child: Text(
-                                                'Bacteriological Parameter')),
+                                              'Bacteriological Parameter',style: TextStyle( fontFamily: 'OpenSans',fontWeight: FontWeight.w400,fontSize: 15),)),
                                       ],
                                       onChanged: (value) {
                                         if (value == null) return;
@@ -193,109 +195,110 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                           ),
                           Visibility(
                             visible: provider.isLabSelected,
-                            child: Card(
-                              elevation: 5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              margin: EdgeInsets.all(5),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columnSpacing: 20,
-                                        headingRowHeight: 50,
-                                        dataRowHeight: 60,
-                                        columns: const <DataColumn>[
-                                          DataColumn(
-                                            label: Text(
-                                              'Select Test',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                margin: EdgeInsets.all(5),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: DataTable(
+                                          columnSpacing: 20,
+                                          headingRowHeight: 50,
+                                          dataRowHeight: 60,
+                                          columns: const <DataColumn>[
+                                            DataColumn(
+                                              label: Text(
+                                                'Select Test',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'Test Price',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.blueGrey,
+                                            DataColumn(
+                                              label: Text(
+                                                'Price',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                        rows: provider.parameterList.map((param) {
-                                          bool isSelected = provider.cart!.any(
-                                                (item) => item.parameterId == param.parameterId,
-                                          );
+                                          ],
+                                          rows: provider.parameterList.map((param) {
+                                            bool isSelected = provider.cart!.any(
+                                                  (item) => item.parameterId == param.parameterId,
+                                            );
 
-                                          return DataRow(
-                                            cells: <DataCell>[
-                                              DataCell(
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    provider.toggleCart(param);
-                                                  },
-                                                  child: Row(
-                                                    children: [
-                                                      Checkbox(
-                                                        value: isSelected,
-                                                        onChanged: (bool? value) {
-                                                          print('the selected value labview------- $value');
-                                                          if (value != null) {
-                                                            provider.toggleCart(param);
-                                                          }
-                                                        },
-                                                      ),
-                                                      SizedBox(width: 10),
-                                                      SizedBox(
-                                                        width: 150,
-                                                        child: Text(
-                                                          param.parameterName,
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: TextStyle(fontSize: 14),
+                                            return DataRow(
+                                              cells: <DataCell>[
+                                                DataCell(
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      provider.toggleCart(param);
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Checkbox(
+                                                          value: isSelected,
+                                                          onChanged: (bool? value) {
+                                                            print('the selected value labview------- $value');
+                                                            if (value != null) {
+                                                              provider.toggleCart(param);
+                                                            }
+                                                          },
                                                         ),
-                                                      ),
-                                                    ],
+                                                        SizedBox(width: 10),
+                                                        SizedBox(
+                                                          width: 150,
+                                                          child: Text(
+                                                            param.parameterName,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              DataCell(
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    provider.toggleCart(param);
-                                                  },
-                                                  child: Text(
-                                                    param.deptRate.toString(),
-                                                    style: TextStyle(fontSize: 14),
+                                                DataCell(
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      provider.toggleCart(param);
+                                                    },
+                                                    child: Text(
+                                                      param.deptRate.toString(),
+                                                      style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          );
-                                        }).toList(),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
                                       ),
-                                    ),
-
-
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      'Selected Param: ${provider.cart!.length}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        'Selected Param: ${provider.cart!.length}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -305,8 +308,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                     ),
                   ),
 
-                  if (provider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
             ),

@@ -5,13 +5,18 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+
 import '../../utils/UpdateDialog.dart';
+
+import '../../utils/LoaderUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -40,19 +45,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $dep");
 
     getToken();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
 
-      dashboardProvider.loadDashboardData();
-      print("dashboard data${dashboardProvider.dashboardData}");
+      await dashboardProvider.loadDashboardData();
+      print("dashboard ${dashboardProvider.isLoading}");
+      print("master provider  data${masterProvider.isLoading}");
 
-   //   masterProvider.clearData();
-      masterProvider.fetchDistricts(stateId);
-      dashboardProvider.fetchLocation();
-     // checkAndPromptUpdate(context);
+      //masterProvider.clearData();
+      await masterProvider.fetchDistricts(stateId);
     });
   }
 
@@ -159,14 +165,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: Text(
-                    AppConstants.maintenance,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {},
-                ),
-                ListTile(
                   leading: const Icon(Icons.logout),
                   title: Text(
                     AppConstants.logout,
@@ -186,9 +184,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
-              final dashboardData = dashboardProvider.dashboardData;
-              print("dashboard data ${dashboardData}");
-              if (dashboardData == null) {
+              if (dashboardProvider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
@@ -244,22 +240,20 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               children: [
                                 // Welcome Text
                                 Text(
-                                  '${AppConstants.welcome}',
+                                  '${AppConstants.welcome},',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 15,
+                                    fontFamily: 'OpenSans',
                                     color: Colors.grey.shade700,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
                                 Text(
                                   userName,
                                   style: const TextStyle(
                                     fontSize: 20,
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
-                                    fontFamily: 'Poppins',
                                   ),
                                 ),
 
@@ -274,15 +268,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Text(
                                       'Departmental User',
                                       style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                          fontSize: 14,
+                                          fontFamily: 'OpenSans',
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
 
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 6),
 
                                 Row(
                                   children: [
@@ -294,6 +288,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         mobile,
                                         style: const TextStyle(
                                           fontSize: 14,
+                                          fontFamily: 'OpenSans',
                                           color: Colors.black87,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -307,142 +302,152 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    Column(
-                      children: [
-                        GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 20.0,
-                          mainAxisSpacing: 15.0,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          childAspectRatio: 1.4, // Adjust this to control card height
-                          children: [
-                            _buildMenuCard(
-                              title: AppConstants.totalSamplesSubmitted,
-                              icon: Icons.analytics,
-                              gradientColors: [
-                                Colors.lightBlue,
-                                Colors.blueAccent
-                              ],
-                              value:
-                                  '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                    });
-                              },
-                            ),
-                            _buildMenuCard(
-                              title: AppConstants.totalPhysicalSubmitted,
-                              icon: Icons.attach_money,
-                              gradientColors: [Colors.amber, Colors.orange],
-                              value:
-                                  '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalPhysicalSubmitted
-                                    });
-                              },
-                            ),
-                            _buildMenuCard(
-                              title: AppConstants.totalSampleTested,
-                              icon: Icons.check_circle,
-                              gradientColors: [Colors.teal, Colors.green],
-                              value:
-                                  '${dashboardProvider.dashboardData!.totalSamplesTested}',
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppConstants.navigateToSampleList,
-                                    arguments: {
-                                      'flag': AppConstants.totalSampleTested
-                                    });
-                              },
-                            ),
-                            /*       _buildMenuCard(
-                                title: AppConstants.totalRetest,
-                                icon: Icons.refresh,
-                                gradientColors: [Colors.red, Colors.deepOrange],
-                                value: '${dashboardProvider.dashboardData!.totalRetest}',
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          GridView.count(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20.0,
+                            mainAxisSpacing: 10.0,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              _buildMenuCard(
+                                title: AppConstants.totalSamplesSubmitted,
+                                icon: Icons.analytics,
+                                gradientColors: [
+                                  Colors.lightBlue,
+                                  Colors.blueAccent
+                                ],
+                                value:
+                                    '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                imageName: 'medical-lab',
                                 onTap: () {
-                                 // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                                  ToastHelper.showSnackBar(context, "Admin can access this option only");
+                                  Navigator.pushNamed(context,
+                                      AppConstants.navigateToSampleList,
+                                      arguments: {
+                                        'flag':
+                                            AppConstants.totalSamplesSubmitted,
+                                      });
                                 },
-                              ),*/
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                          child: const Text(
-                            "All figures are based on current year data.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic,
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalPhysicalSubmitted,
+                                icon: Icons.attach_money,
+                                gradientColors: [
+                                  Colors.deepOrange,
+                                  Colors.orange
+                                ],
+                                value:
+                                    '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                imageName: 'test',
+                                onTap: () {
+                                  Navigator.pushNamed(context,
+                                      AppConstants.navigateToSampleList,
+                                      arguments: {
+                                        'flag':
+                                            AppConstants.totalPhysicalSubmitted
+                                      });
+                                },
+                              ),
+                              _buildMenuCard(
+                                title: AppConstants.totalSampleTested,
+                                icon: Icons.check_circle,
+                                gradientColors: [Colors.teal, Colors.green],
+                                value:
+                                    '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                imageName: 'search',
+                                onTap: () {
+                                  Navigator.pushNamed(context,
+                                      AppConstants.navigateToSampleList,
+                                      arguments: {
+                                        'flag': AppConstants.totalSampleTested
+                                      });
+                                },
+                              ),
+                              /*     _buildMenuCard(
+                                  title: AppConstants.totalRetest,
+                                  icon: Icons.refresh,
+                                  gradientColors: [Colors.red, Colors.deepOrange],
+                                  value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                  onTap: () {
+                                    // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
+                                    ToastHelper.showSnackBar(context, "Admin can access this option only");
+                                  },
+                                ),*/
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Center(
+                            child: const Text(
+                              "All figures are based on current year data.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 18),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: ()  {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              double screenHeight =
-                                  MediaQuery.of(context).size.height;
-                              double screenwidth =
-                                  MediaQuery.of(context).size.width;
 
-                              return AlertDialog(
-                                contentPadding: const EdgeInsets.all(10),
-                                content: Container(
-                                  color: Colors.white,
-                                  height: screenHeight * 0.8,
-                                  width: screenwidth * 0.99,
-                                  child: const Locationscreen(
-                                      flag: AppConstants
-                                          .openSampleInfoScreen), // Your widget
-                                ),
-                              );
-                            },
-                          );
-                      /*    if (result == false) {
-                            Provider.of<Masterprovider>(context, listen: false)
-                                .clearData();
-                          }*/
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0468B1),
-                          textStyle: const TextStyle(fontSize: 16),
-                          minimumSize: const Size(300, 50),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 18,
+                    const SizedBox(height: 20),
+                    Center(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final result = await showDialog<bool>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                double screenHeight =
+                                    MediaQuery.of(context).size.height;
+                                double screenwidth =
+                                    MediaQuery.of(context).size.width;
+                                return AlertDialog(
+                                  contentPadding: const EdgeInsets.all(10),
+                                  content: Container(
+                                    color: Colors.white,
+                                    height: screenHeight * 0.8,
+                                    width: screenwidth * 0.99,
+                                    child: const Locationscreen(
+                                        flag:
+                                            AppConstants.openSampleInfoScreen),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0468B1),
+                            textStyle: const TextStyle(fontSize: 16),
+                            minimumSize: const Size(300, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8), // ← removes rounding
                             ),
-                            SizedBox(width: 8),
-                            Text(
-                              AppConstants.addSample,
-                              style: AppStyles.textStyle,
-                            ),
-                          ],
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                AppConstants.addSample,
+                                style: AppStyles.textStyle,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -458,13 +463,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     required String title,
     required IconData icon,
     required String value,
+    required String imageName, // Renamed here
     required VoidCallback onTap,
     required List<Color> gradientColors,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
@@ -476,43 +482,72 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
-              offset: const Offset(2, 4),
+              offset: Offset(2, 4),
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Row(
-              children: [
-                Icon(
-                  icon,
-                  color: Colors.white.withOpacity(0.8),
-                  size: 24,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: EdgeInsets.all(8), // Slightly increased for spacing
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(1, 2),
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
+                  ],
                 ),
-              ],
+                child: Image.asset(
+                  'assets/$imageName.png',
+                  width: 26, // Increased size
+                  height: 28,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                  fontFamily: 'OpenSans',
+                  shadows: [
+                    Shadow(
+                      color: Colors.black12,
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  height: 1.3,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black54,
+                      offset: Offset(2, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

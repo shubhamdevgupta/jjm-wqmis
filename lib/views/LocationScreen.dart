@@ -64,20 +64,13 @@ class _LocationscreenState extends State<Locationscreen> {
             ),
             body: Consumer<Masterprovider>(
                 builder: (context, masterProvider, child) {
-
-              return Stack(
-                children: [
-                  SingleChildScrollView(
+              return masterProvider.isLoading
+                      ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                      :SingleChildScrollView(
                       child: Column(
                     children: [buildStateVillage(masterProvider,paramProvider)],
-                  )),
-                  if (masterProvider.isLoading)
-                    LoaderUtils.conditionalLoader(
-                        isLoading: masterProvider.isLoading)
-                  else if(paramProvider.isLoading)
-                    LoaderUtils.conditionalLoader(isLoading: paramProvider.isLoading)
-                ],
-              );
+                  ));
+
             })));
 
   }
@@ -102,7 +95,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   Text(
                     'State *',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: 'OpenSans',
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
@@ -117,7 +110,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         filled:
                             true, // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(color: Colors.blueAccent),
+                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(color: Colors.grey, width: 2),
@@ -145,7 +138,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       // Disable selection (non-editable)
                       isExpanded: true,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.black, fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -312,6 +305,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == AppConstants.openSampleInfoScreen &&
                         validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();
+                      masterProvider.clearsampleinfo();
                       print('Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
@@ -339,8 +333,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF096DA8),
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 100.0),
+                    padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
 
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -349,7 +342,7 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   child: const Text(
                     'Next',
-                    style: AppStyles.textStyle,
+                    style: AppStyles.textStyle
                   ),
                 ),
               ),

@@ -21,20 +21,26 @@ class Demonstrationscreen extends StatefulWidget {
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
   LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
-  String? districtId = "471";
+  String? districtId;
   String? titleType = "";
+  late DwsmProvider dwsmProvider;
 
   @override
   void initState() {
     stateId = _localStorageService.getString(AppConstants.prefStateId);
-    //   districtId = _localStorageService.getString(AppConstants.prefDistrictId);
+    districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmDashboardProvider>(context, listen: false)
+      Provider.of<DwsmProvider>(context, listen: false)
           .fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!),
               "2025-2026", 0, widget.type!);
     });
     super.initState();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    dwsmProvider = Provider.of<DwsmProvider>(context, listen: false);
   }
 
   @override
@@ -58,7 +64,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             title: const Text(
               "Demonstrations List",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20, fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -88,7 +94,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             ),
             elevation: 5,
           ),
-          body: Consumer<DwsmDashboardProvider>(
+          body: Consumer<DwsmProvider>(
               builder: (context, provider, child) {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
@@ -123,7 +129,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Text(
                                     "$titleType Details",
                                     style: const TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 18,fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue,
                                     ),
@@ -148,7 +154,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         village.villageName,
                                       ]),
                                       style: const TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 14,fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black87,
                                       ),
@@ -156,7 +162,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   ),
                                 ],
                               ),
-
                               // School Name
                               _infoRow("$titleType Name", "$titleType",
                                   Icons.school, Colors.deepPurple),
@@ -172,33 +177,38 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Icons.label,
                                   Colors.green),
 
+
+                              _infoRow(
+                                  "Remark",
+                                  village.remark,
+                                  Icons.message,
+                                  Colors.teal),
                               // Remark
-                              Padding(
+                           /*   Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
+                                     EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _iconCircle(Icons.comment, Colors.teal),
-                                    const SizedBox(width: 10),
+                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Container(
-                                        padding: const EdgeInsets.all(10),
+                                        padding:  EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                           color: Colors.teal.shade50,
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
-                                        child: const Text(
-                                          "No remark provided",
+                                        child:  Text( village.remark.isEmpty?"No remark provided":village.remark,
                                           style: TextStyle(
-                                              fontSize: 13, color: Colors.teal),
+                                              fontSize: 13, color: Colors.teal,fontFamily: 'OpenSans'),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                              ),*/
 
                               const Divider(height: 30),
                               Align(
@@ -223,6 +233,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         showImage(imageBytes);
                                       },
                                     );
+                                    if (!mounted) return;
                                   },
                                   icon: const Icon(Icons.remove_red_eye,
                                       size: 18),
@@ -250,25 +261,48 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _iconCircle(icon, color),
-          const SizedBox(width: 10),
-          Text(
-            "$title: ",
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
+          const SizedBox(width: 5),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 14),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.05), // Light background tone
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'OpenSans',
+                    color: Colors.black87,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "$title: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value.isEmpty ? "No data provided" : value,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+
 
   Widget _iconCircle(IconData icon, Color bgColor) {
     return Container(

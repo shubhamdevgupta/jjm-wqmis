@@ -17,6 +17,8 @@ import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../repository/LapParameterRepository.dart';
+import '../services/LocalStorageService.dart';
+import '../utils/AppConstants.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
@@ -24,7 +26,10 @@ class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
 
   List<Stateresponse> states = [];
-  bool isLoading = false;
+
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
   String? selectedStateId;
 
   List<Districtresponse> districts = [];
@@ -83,10 +88,11 @@ class Masterprovider extends ChangeNotifier {
   String errorMsg = '';
   String otherSourceLocation = '';
   String sampleTypeOther = '';
+  final LocalStorageService localStorage = LocalStorageService();
 
   Future<void> fetchStates() async {
     print('Calling the state function...');
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     try {
       final basestates = await _masterRepository.fetchStates();
@@ -99,7 +105,7 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -107,7 +113,7 @@ class Masterprovider extends ChangeNotifier {
   Future<void> fetchDistricts(String stateId) async {
     print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -118,24 +124,34 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = rawDistricts.message;
       }
+
+      if(localStorage.getString(AppConstants.prefRoleId)=="8"){
+      for (int i = 0; i < districts.length; i++) {
+        if (localStorage.getString(AppConstants.prefDistrictId).toString() == districts[i].jjmDistrictId) {
+
+          localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
+            setSelectedDistrict(districts[i].jjmDistrictId);
+        }
+      }}
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load districts.";
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
+
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
       notifyListeners();
       return;
     }
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -153,7 +169,7 @@ class Masterprovider extends ChangeNotifier {
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load blocks.";
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -166,7 +182,7 @@ class Masterprovider extends ChangeNotifier {
       return;
     }
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -191,7 +207,7 @@ class Masterprovider extends ChangeNotifier {
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load Gram Panchayats.";
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -207,7 +223,7 @@ class Masterprovider extends ChangeNotifier {
       return;
     }
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -240,7 +256,7 @@ class Masterprovider extends ChangeNotifier {
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load villages.";
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -253,7 +269,7 @@ class Masterprovider extends ChangeNotifier {
       return;
     }
 
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
@@ -278,14 +294,14 @@ class Masterprovider extends ChangeNotifier {
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load habitations.";
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchSchemes(String villageId, String habitationId,
       String districtid, String filter) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     try {
       final mSchemes = await _masterRepository.fetchSchemes(
@@ -320,7 +336,7 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in fetching scheme: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -335,7 +351,7 @@ class Masterprovider extends ChangeNotifier {
     String stateId,
     String schemeId,
   ) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       final rawWaterSource = await _masterRepository.fetchSourceInformation(
           villageId,
@@ -360,13 +376,13 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchWTPList(String stateId, String schemeId) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     try {
       final fetchedList =
@@ -385,13 +401,13 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> fetchWatersourcefilterList() async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners(); // Start loading
     try {
       final rawWtsFilterList =
@@ -406,13 +422,13 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners(); // Finish loading
     }
   }
 
   Future<void> fetchVillageDetails(double lon, double lat) async {
-    isLoading = true;
+    _isLoading = true;
     errorMsg = "";
     notifyListeners();
 
@@ -432,13 +448,13 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in fetchVillageDetails: $e');
       errorMsg = e.toString();
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> validateVillage(String villageId, String lgdCode) async {
-    isLoading = true;
+    _isLoading = true;
     errorMsg = "";
     notifyListeners();
     try {
@@ -447,11 +463,10 @@ class Masterprovider extends ChangeNotifier {
     } catch (e) {
       errorMsg = e.toString();
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
-
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
@@ -609,7 +624,6 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }*/
 
-
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {
       setSelectedSubSource(value);
@@ -678,6 +692,12 @@ class Masterprovider extends ChangeNotifier {
           selectedStateId!,
           selectedScheme!);
     }
+    notifyListeners();
+  }
+
+  void clearsampleinfo() {
+    selectedWtsfilter = null;
+    selectedScheme = null;
     notifyListeners();
   }
 }

@@ -37,7 +37,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Samplesubprovider()),
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => Samplelistprovider()),
-        ChangeNotifierProvider(create: (context) => DwsmDashboardProvider()),
+        ChangeNotifierProvider(create: (context) => DwsmProvider()),
       ],
       child: MyApp(),
     ),

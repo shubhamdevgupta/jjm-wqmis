@@ -17,7 +17,7 @@ class Tabschoolaganwadi extends StatefulWidget {
 class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     with SingleTickerProviderStateMixin {
   late TabController mTabController;
-  late DwsmDashboardProvider dwsmDashboardProvider;
+  late DwsmProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
   final LocalStorageService _localStorage = LocalStorageService();
 
@@ -31,7 +31,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
       if (mTabController.index == 0) {
 
-        dwsmDashboardProvider.fetchSchoolInfo(
+        dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           int.parse(masterProvider.selectedBlockId!),
@@ -46,7 +46,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         dwsmDashboardProvider.anganwadiList.clear();
         dwsmDashboardProvider.clearSelectedAnganwadi();
 
-        dwsmDashboardProvider.fetchSchoolInfo(
+        dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
           int.parse(masterProvider.selectedDistrictId!),
           int.parse(masterProvider.selectedBlockId!),
@@ -69,14 +69,14 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     super.didChangeDependencies();
 
     // Only assign once to avoid repeated calls when dependencies change
-    dwsmDashboardProvider = Provider.of<DwsmDashboardProvider>(context, listen: false);
+    dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     // Fetch data if needed when widget is first built
     if (mTabController.index == 0) {
-      dwsmDashboardProvider.fetchSchoolInfo(
+      dwsmDashboardProvider.fetchSchoolAwcInfo(
         int.parse(masterProvider.selectedStateId!),
-        int.parse(masterProvider.selectedDistrictId!),
+        int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
         int.parse(masterProvider.selectedBlockId!),
         int.parse(masterProvider.selectedGramPanchayat!),
         int.parse(masterProvider.selectedVillage!),
@@ -100,7 +100,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           "School",
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white, fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -114,7 +114,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           'Anganwadi',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.white, fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -130,7 +130,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text("Select School/ Anganwadi",
-              style: TextStyle(color: Colors.white)),
+              style: TextStyle( fontFamily: 'OpenSans',color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,
@@ -201,3 +201,4 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     );
   }
 }
+enum DataState { initial, loading, error, loaded }

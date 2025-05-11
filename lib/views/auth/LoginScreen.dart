@@ -114,7 +114,7 @@ class _LoginpageState extends State<Loginscreen> {
                                         ),
                                         child: Text(
                                           '${provider.randomOne} + ${provider.randomTwo} = ?',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'OpenSans',),
                                         ),
                                       ),
                                     ),
@@ -178,7 +178,7 @@ class _LoginpageState extends State<Loginscreen> {
                                       'LOGIN',
                                       style: TextStyle(
                                         color:Colors.white,
-                                        fontSize: 17,
+                                        fontSize: 17, fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
@@ -244,7 +244,7 @@ class _LoginpageState extends State<Loginscreen> {
                 'Jal Jeevan Mission',
                 style: TextStyle(
                   fontSize: 18, // Slightly reduced for better balance
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w700, fontFamily: 'OpenSans',
                   color: Appcolor.txtColor,
                 ),
                 maxLines: 1,
@@ -254,7 +254,7 @@ class _LoginpageState extends State<Loginscreen> {
               Text(
                 'Water Quality Management Information System',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 12, fontFamily: 'OpenSans',
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[800], // Softer color for better contrast
                 ),
@@ -266,7 +266,7 @@ class _LoginpageState extends State<Loginscreen> {
                 '(JJM-WQMIS)',
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w600, fontFamily: 'OpenSans',
                   color: Colors.grey[700], // Slightly softer color
                 ),
                 maxLines: 1,

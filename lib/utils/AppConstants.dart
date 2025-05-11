@@ -12,6 +12,7 @@ class AppConstants {
   static const String prefMobile = 'mobile';
   static const String prefStateId = 'stateId';
   static const String prefStateName = 'stateName';
+  static const String prefDistName = 'prefDistName';
   static const String prefDistrictId = 'districtID';
   static const String prefRegId = 'reg_id';
 
@@ -32,6 +33,7 @@ class AppConstants {
   static const String submitSample = 'Submit';
   static const String submitSampleInfo = 'Submit Sample Info ';
   static const String listOfSamples = 'List of Samples';
+  static const String listOfDemonstration = 'List of Demonstration';
   static const String maintenance = 'Maintenance';
   static const String logout = 'Logout';
   static const String dashboardOverview = 'Dashboard Overview';
@@ -47,5 +49,6 @@ class AppConstants {
   static const String selectedTest = 'Selected Test';
 
   static const String openSampleInfoScreen = "Sample List ";
+
   static const String openSampleListScreen = "Sample Screen";
 }
