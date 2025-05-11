@@ -1,15 +1,19 @@
-
 import 'package:flutter/cupertino.dart';
+import '../models/UpdateResponse.dart';
+import '../repository/AppUpdateRepo.dart';
 
-import '../services/UpdateService.dart';
-
-class UpdateViewModel extends ChangeNotifier{
-  final UpdateService _updateService = UpdateService();
+class UpdateViewModel extends ChangeNotifier {
+  final Appupdaterepo _repo = Appupdaterepo();
 
   Future<bool> checkForUpdate() async {
-    return await _updateService.isUpdateAvailable();
+    return await _repo.isUpdateAvailable();
   }
-  Future<Map<String, dynamic>?> getUpdateInfo() async {
-    return await _updateService.fetchUpdateInfo();
+
+  Future<Updateresponse?> getUpdateInfo() async {
+    try {
+      return await _repo.fetchUpdateInfo();
+    } catch (_) {
+      return null;
+    }
   }
 }

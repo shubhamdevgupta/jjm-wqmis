@@ -40,7 +40,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $dep");
 
     getToken();
-    checkAndPromptUpdate(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -521,17 +520,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
-  Future<void> checkAndPromptUpdate(BuildContext context) async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
-    if (isAvailable) {
-      final info = await _updateViewModel.getUpdateInfo();
-      print('inffffffffooooooo $info');
-      DialogUtils.showUpdateDialog(context, info!);
-    }else{
-      print('inffffffffooooo not avialable ');
-    }
-  }
-
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';

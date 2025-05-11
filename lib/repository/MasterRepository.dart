@@ -197,14 +197,4 @@ class MasterRepository {
       rethrow; // Propagate the exception for further handling
     }
   }
-
-
-
-
-
-
-}
-enum ApiType {
-  ejalShakti,
-  reverseGeocoding,
 }
