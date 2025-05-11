@@ -35,34 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print("Dialog will show with: ${updateInfo.apkUrl}, ${updateInfo.whatsNew}");
 
         // Show dialog and stop further navigation until user interacts
-        await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text('Update Available'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('What\'s New:'),
-                SizedBox(height: 8),
-                Text(updateInfo.whatsNew),
-              ],
-            ),
-            actions: [
-              ElevatedButton(
-                child: Text('Update Now'),
-                onPressed: () async {
-                  final url = updateInfo.apkUrl;
-                  final uri = Uri.parse(url);
-                  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-                    throw 'Could not launch $url';
-                  }
-                },
-              ),
-            ],
-          ),
-        );
+         DialogUtils.showUpdateDialog(context, updateInfo);
         return;
       }
     }

@@ -11,7 +11,7 @@ class Appupdaterepo extends ChangeNotifier {
   Future<Updateresponse> fetchUpdateInfo() async {
     try {
       final response = await _apiService.get(
-        'shubhamdevgupta/jjm-wqmis/contents/assets/update_info.json?ref=update_app',
+        'shubhamdevgupta/jjm-wqmis/contents/assets/update_info.json?ref=master&ts=${DateTime.now().millisecondsSinceEpoch}',
         apiType: ApiType.github,
       );
 
@@ -25,7 +25,7 @@ class Appupdaterepo extends ChangeNotifier {
 
       return Updateresponse.fromJson(jsonData);
     } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    print("update not working there");
       rethrow;
     }
   }
