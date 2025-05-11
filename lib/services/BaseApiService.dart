@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 
 import '../repository/MasterRepository.dart';
 import '../utils/CustomException.dart';
-import '../utils/GlobalExceptionHandler.dart';
 
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
   static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
-
+  static const String github = "https://api.github.com/repos/";
 
   Future<dynamic> post(
     String endpoint, {
@@ -29,20 +27,26 @@ class BaseApiService {
     log('POST_Request--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
-      final response = await http.post(url, headers: headers, body: body,);
+    await _checkConnectivity();
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
 
-      if (response.headers['content-type']?.contains(',') ?? false) {
-        response.headers['content-type'] = 'application/json; charset=utf-8';
-      }
+    if (response.headers['content-type']?.contains(',') ?? false) {
+      response.headers['content-type'] = 'application/json; charset=utf-8';
+    }
 
-      log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
-      log('Response Body: ${response.body}');
+    log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
+    log('Response Body: ${response.body}');
 
-      return _processResponse(response);
+    return _processResponse(response);
   }
 
-  Future<dynamic> get(String endpoint, {ApiType apiType = ApiType.ejalShakti, Map<String, String>? headers}) async {
+  Future<dynamic> get(String endpoint,
+      {ApiType apiType = ApiType.ejalShakti,
+      Map<String, String>? headers}) async {
     final String baseUrl = getBaseUrl(apiType);
     final Uri url = Uri.parse('$baseUrl$endpoint');
 
@@ -51,16 +55,19 @@ class BaseApiService {
 
     log('GET Request: URL: $url \n Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
+    await _checkConnectivity();
 
-      final response = await http.get(url, headers: headers,);
+    final response = await http.get(
+      url,
+      headers: headers,
+    );
 
-      if (response.headers['content-type']?.contains(',') ?? false) {
-        response.headers['content-type'] = 'application/json; charset=utf-8';
-      }
-      log('Response: ${response.statusCode} : Body: ${response.body}');
+    if (response.headers['content-type']?.contains(',') ?? false) {
+      response.headers['content-type'] = 'application/json; charset=utf-8';
+    }
+    log('Response: ${response.statusCode} : Body: ${response.body}');
 
-      return _processResponse(response);
+    return _processResponse(response);
   }
 
   Future<void> _checkConnectivity() async {
@@ -76,36 +83,49 @@ class BaseApiService {
       case 200:
         return jsonDecode(response.body);
       case 400:
-        throw ApiException('Bad Request: ${handleErrorResp(response.body,'')}');
+        throw ApiException(
+            'Bad Request: ${handleErrorResp(response.body, '')}');
       case 404:
         throw ApiException('Page not found (404) ,Please contact to admin');
       case 401:
-        throw ApiException('Unauthorized: ${handleErrorResp(response.body,'')}');
+        throw ApiException(
+            'Unauthorized: ${handleErrorResp(response.body, '')}');
       case 500:
-        throw ApiException(handleErrorResp(response.body,'Internal Server Error'));
+        throw ApiException(
+            handleErrorResp(response.body, 'Internal Server Error'));
       case 502:
-        throw ApiException('Bad Gateway: ${handleErrorResp(response.body,'')}');
-        case 408:
+        throw ApiException(
+            'Bad Gateway: ${handleErrorResp(response.body, '')}');
+      case 408:
         throw ApiException('Request Timeout : Please Try after some time');
       default:
-        throw ApiException('Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body,'')}');
+        throw ApiException(
+            'Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body, '')}');
     }
   }
+
   String getBaseUrl(ApiType apiType) {
     switch (apiType) {
       case ApiType.ejalShakti:
         return ejalShakti;
       case ApiType.reverseGeocoding:
         return reverseGeocoding;
+      case ApiType.github:
+        return github;
     }
   }
 
-  String handleErrorResp(String responseBody,String defMessage) {
+  String handleErrorResp(String responseBody, String defMessage) {
     final Map<String, dynamic> jsonData = jsonDecode(responseBody);
- //   final String errType = jsonData['ExceptionType'] ?? '';
+    //   final String errType = jsonData['ExceptionType'] ?? '';
     final String message = jsonData['ExceptionMessage'] ?? defMessage;
-    String res=  " $message";
+    String res = " $message";
     return res;
   }
+}
 
+enum ApiType {
+  ejalShakti,
+  reverseGeocoding,
+  github,
 }
