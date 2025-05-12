@@ -322,7 +322,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.blueAccent
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted??0}',
                                 imageName: 'medical-lab',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -341,7 +341,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.orange
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ??0}',
                                 imageName: 'test',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -357,7 +357,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 icon: Icons.check_circle,
                                 gradientColors: [Colors.teal, Colors.green],
                                 value:
-                                    '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesTested??0}',
                                 imageName: 'search',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -371,7 +371,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   title: AppConstants.totalRetest,
                                   icon: Icons.refresh,
                                   gradientColors: [Colors.red, Colors.deepOrange],
-                                  value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                  value: '${dashboardProvider.dashboardData?.totalRetest??0}',
                                   onTap: () {
                                     // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
                                     ToastHelper.showSnackBar(context, "Admin can access this option only");
