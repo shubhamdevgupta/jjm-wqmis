@@ -315,7 +315,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.blue,
                                   title: "Schools",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -339,7 +339,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.deepOrange,
                                   title: "Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -380,7 +380,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.teal,
                                   title: "Anganwadi",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -402,7 +402,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.purple,
                                   title: "Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
