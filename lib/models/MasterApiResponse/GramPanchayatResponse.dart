@@ -1,6 +1,14 @@
+import 'package:hive/hive.dart';
+
+part 'GramPanchayatResponse.g.dart'; // 👈 Required for build_runner
+
+@HiveType(typeId: 6)
 class GramPanchayatApiResponse {
+  @HiveField(0)
   final int status;
+  @HiveField(1)
   final String message;
+  @HiveField(2)
   final List<GramPanchayatresponse> result;
 
   GramPanchayatApiResponse({
@@ -20,8 +28,11 @@ class GramPanchayatApiResponse {
   }
 }
 
+@HiveType(typeId: 7)
 class GramPanchayatresponse {
+  @HiveField(0)
   final String jjmPanchayatId;
+  @HiveField(1)
   final String panchayatName;
 
   GramPanchayatresponse({

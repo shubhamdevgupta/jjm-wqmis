@@ -1,6 +1,15 @@
+
+import 'package:hive/hive.dart';
+
+part 'HabitationResponse.g.dart'; // 👈 Required for build_runner
+
+@HiveType(typeId: 10)
 class HabitationApiResponse {
+  @HiveField(0)
   final int status;
+  @HiveField(1)
   final String message;
+  @HiveField(2)
   final List<HabitationResponse> result;
 
   HabitationApiResponse({
@@ -20,9 +29,13 @@ class HabitationApiResponse {
   }
 }
 
+@HiveType(typeId: 11)
 class HabitationResponse {
+  @HiveField(0)
   final String villageId;
+  @HiveField(1)
   final String habitationId;
+  @HiveField(2)
   final String habitationName;
 
   HabitationResponse({

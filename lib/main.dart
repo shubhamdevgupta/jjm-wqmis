@@ -3,7 +3,10 @@ import 'package:hive/hive.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
@@ -34,13 +37,19 @@ void main() async {
   final appDocDir = await getApplicationDocumentsDirectory();
   Hive.init(appDocDir.path);
 
-  Hive.registerAdapter(StateApiResponseAdapter()); // use your response class
-  Hive.registerAdapter(DistrictApiResponseAdapter());
-  Hive.registerAdapter(BlockApiResponseAdapter());
+  Hive.registerAdapter(StateresponseAdapter()); // use your response class
+  Hive.registerAdapter(DistrictresponseAdapter());
+  Hive.registerAdapter(BlockResponseAdapter());
+  Hive.registerAdapter(GramPanchayatresponseAdapter());
+  Hive.registerAdapter(VillageresponseAdapter());
+  Hive.registerAdapter(HabitationResponseAdapter());
 
-  await Hive.openBox<Stateresponse>('statesBox');
-  await Hive.openBox<Districtresponse>('districtsBox');
-  await Hive.openBox<BlockResponse>('blocksBox');
+  await Hive.openBox('statesBox');
+  await Hive.openBox('districtsBox');
+  await Hive.openBox('blocksBox');
+  await Hive.openBox('gpBox');
+  await Hive.openBox('villagesBox');
+  await Hive.openBox('habitationBox');
   await LocalStorageService.init();
   runApp(
     MultiProvider(

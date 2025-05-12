@@ -55,50 +55,39 @@ class MasterRepository {
 
 
 
-    Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
-      await Hive.box<List<Districtresponse>>('districtsBox');
-      final box = Hive.box<List<Districtresponse>>('districtsBox');
-
-      try {
-        final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
-        final apiResponse = BaseResponseModel<Districtresponse>.fromJson(
-          response,
-              (json) => Districtresponse.fromJson(json),
-        );
-
-        if (apiResponse.status == 1) {
-          await box.put(stateId, apiResponse.result); // Cache by stateId
-        }
-
-        return apiResponse;
-      } catch (e) {
-        final cachedData = box.get(stateId);
-        if (cachedData != null) {
-          return BaseResponseModel<Districtresponse>(
-            status: 1,
-            message: 'Loaded from cache',
-            result: cachedData,
-          );
-        }
-        //  debugPrint('Error in fetching districts: $e');
-          if (e is Exception) {
-            GlobalExceptionHandler.handleException(e);
-          } else {
-          //  debugPrintStack(stackTrace: stackTrace);
-          }
-          //errorMsg = "Failed to load districts.";
-
-        GlobalExceptionHandler.handleException(e as Exception);
-        rethrow;
+  Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
+    final box = Hive.box('districtsBox'); // Non-generic box
+    try {
+      final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
+      final apiResponse = BaseResponseModel<Districtresponse>.fromJson(response, (json) => Districtresponse.fromJson(json),);
+      if (apiResponse.status == 1) {
+        await box.put(stateId, apiResponse.result); // Save only the list
       }
+      return apiResponse;
+    } catch (e) {
+      final cachedData = box.get(stateId);
+
+      if (cachedData != null) {
+        final List<Districtresponse> cachedList = List<Districtresponse>.from(cachedData);
+
+        return BaseResponseModel<Districtresponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedList,
+        );
+      }
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      }
+      rethrow;
     }
+  }
 
 
   Future<BaseResponseModel<BlockResponse>> fetchBlocks(
       String stateId, String districtId) async {
-    final box = await Hive.box<List<BlockResponse>>('blocksBox');
-    final cacheKey = '$stateId|$districtId';
-
+    final box = Hive.box('blocksBox'); // Non-generic box
+    final cacheKey = '$stateId-$districtId'; // Unique key for state+district combo
     try {
       final response = await _apiService.get(
         '/apimaster/getblock?stateid=$stateId&districtid=$districtId',
@@ -109,51 +98,112 @@ class MasterRepository {
       );
 
       if (apiResponse.status == 1) {
-        await box.put(cacheKey, apiResponse.result); // Cache per state+district
+        await box.put(cacheKey, apiResponse.result); // Save only the list
       }
 
       return apiResponse;
     } catch (e) {
       final cachedData = box.get(cacheKey);
       if (cachedData != null) {
+        final List<BlockResponse> cachedList = List<BlockResponse>.from(cachedData);
         return BaseResponseModel<BlockResponse>(
           status: 1,
           message: 'Loaded from cache',
-          result: cachedData,
+          result: cachedList,
         );
       }
-
-      GlobalExceptionHandler.handleException(e as Exception);
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      }
       rethrow;
     }
   }
+
 
 
   Future<BaseResponseModel<GramPanchayatresponse>> fetchGramPanchayats(
       String stateId, String districtId, String blockId) async {
+    final box = Hive.box('gpBox'); // create this box in main.dart
+    final cacheKey = '$stateId-$districtId-$blockId';
+
     try {
-      final response = await _apiService.get('/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId',);
+      final response = await _apiService.get(
+        '/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId',
+      );
 
-      return BaseResponseModel<GramPanchayatresponse>.fromJson(response,(json)=>GramPanchayatresponse.fromJson(json));
+      final apiResponse = BaseResponseModel<GramPanchayatresponse>.fromJson(
+        response,
+            (json) => GramPanchayatresponse.fromJson(json),
+      );
 
+      if (apiResponse.status == 1) {
+        await box.put(cacheKey, apiResponse.result);
+      }
+
+      return apiResponse;
     } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+      final cachedData = box.get(cacheKey);
+      if (cachedData != null) {
+        final List<GramPanchayatresponse> cachedList =
+        List<GramPanchayatresponse>.from(cachedData);
+
+        return BaseResponseModel<GramPanchayatresponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedList,
+        );
+      }
+
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      }
+
       rethrow;
     }
   }
+
 
   Future<BaseResponseModel<Villageresponse>> fetchVillages(
       String stateId, String districtId, String blockId, String gpId) async {
+    final box = Hive.box('villagesBox');
+    final cacheKey = '$stateId-$districtId-$blockId-$gpId';
+
     try {
-      final response = await _apiService.get('/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId',);
+      final response = await _apiService.get(
+        '/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId',
+      );
 
-      return BaseResponseModel<Villageresponse>.fromJson(response,(json)=>Villageresponse.fromJson(json));
+      final apiResponse = BaseResponseModel<Villageresponse>.fromJson(
+        response,
+            (json) => Villageresponse.fromJson(json),
+      );
 
+      if (apiResponse.status == 1) {
+        await box.put(cacheKey, apiResponse.result);
+      }
+
+      return apiResponse;
     } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+      final cachedData = box.get(cacheKey);
+      if (cachedData != null) {
+        final List<Villageresponse> cachedList =
+        List<Villageresponse>.from(cachedData);
+
+        return BaseResponseModel<Villageresponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedList,
+        );
+      }
+
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      }
+
       rethrow;
     }
   }
+
 
 
   Future<BaseResponseModel<HabitationResponse>> fetchHabitations(
@@ -162,18 +212,45 @@ class MasterRepository {
       String blockId,
       String gpId,
       String villageId) async {
+    final box = Hive.box('habitationBox');
+    final cacheKey = '$stateId-$districtId-$blockId-$gpId-$villageId';
+
     try {
       final response = await _apiService.get(
         '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId',
       );
 
-      return BaseResponseModel<HabitationResponse>.fromJson(response,(json)=>HabitationResponse.fromJson(json));
+      final apiResponse = BaseResponseModel<HabitationResponse>.fromJson(
+        response,
+            (json) => HabitationResponse.fromJson(json),
+      );
 
+      if (apiResponse.status == 1) {
+        await box.put(cacheKey, apiResponse.result);
+      }
+
+      return apiResponse;
     } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+      final cachedData = box.get(cacheKey);
+      if (cachedData != null) {
+        final List<HabitationResponse> cachedList =
+        List<HabitationResponse>.from(cachedData);
+
+        return BaseResponseModel<HabitationResponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedList,
+        );
+      }
+
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      }
+
       rethrow;
     }
   }
+
 
   Future<BaseResponseModel<SchemeResponse>> fetchSchemes(
       String villageId,
