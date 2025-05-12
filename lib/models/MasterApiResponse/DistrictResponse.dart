@@ -1,6 +1,13 @@
+import 'package:hive/hive.dart';
+part 'DistrictResponse.g.dart'; // 👈 Required for build_runner
+
+@HiveType(typeId: 2)
 class DistrictApiResponse {
+  @HiveField(0)
   final int status;
+  @HiveField(1)
   final String message;
+  @HiveField(2)
   final List<Districtresponse> result;
 
   DistrictApiResponse({
@@ -19,11 +26,15 @@ class DistrictApiResponse {
     );
   }
 }
-
+@HiveType(typeId: 3)
 class Districtresponse {
+  @HiveField(0)
   final String jjmDistrictId;
+  @HiveField(1)
   final String districtName;
+  @HiveField(2)
   final String jjmStateId;
+  @HiveField(3)
   final String? stateName;
 
   Districtresponse({

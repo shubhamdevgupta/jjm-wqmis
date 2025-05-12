@@ -10,17 +10,14 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
-import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
 import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
-import '../repository/LapParameterRepository.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppConstants.dart';
 import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -125,17 +122,23 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = rawDistricts.message;
       }
 
-      if(localStorage.getString(AppConstants.prefRoleId)=="8"){
-      for (int i = 0; i < districts.length; i++) {
-        if (localStorage.getString(AppConstants.prefDistrictId).toString() == districts[i].jjmDistrictId) {
-
-          localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
+      if (localStorage.getString(AppConstants.prefRoleId) == "8") {
+        for (int i = 0; i < districts.length; i++) {
+          if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
+              districts[i].jjmDistrictId) {
+            localStorage.saveString(
+                AppConstants.prefDistName, districts[i].districtName);
             setSelectedDistrict(districts[i].jjmDistrictId);
+          }
         }
-      }}
-    } catch (e) {
-      debugPrint('Error in fetching districts: master provider $e');
-      GlobalExceptionHandler.handleException(e as Exception);
+      }
+    } catch (e, stackTrace) {
+      debugPrint('Error in fetching districts: $e');
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      } else {
+        debugPrintStack(stackTrace: stackTrace);
+      }
       errorMsg = "Failed to load districts.";
     } finally {
       _isLoading = false;
@@ -144,7 +147,6 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
-
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
       notifyListeners();

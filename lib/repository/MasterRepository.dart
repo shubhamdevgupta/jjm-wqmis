@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:hive/hive.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
@@ -22,29 +23,106 @@ class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<Stateresponse>> fetchStates() async {
-      final response = await _apiService.get('/apimaster/GetState');
-      return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
-  }
+    final box = await Hive.box<List<Stateresponse>>('statesBox');
 
-
-  Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
     try {
-      final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
-      return BaseResponseModel<Districtresponse>.fromJson(response, (json)=>Districtresponse.fromJson(json));
+      final response = await _apiService.get('/apimaster/GetState');
+      final apiResponse = BaseResponseModel<Stateresponse>.fromJson(
+        response,
+            (json) => Stateresponse.fromJson(json),
+      );
+
+      if (apiResponse.status == 1) {
+        await box.put('states', apiResponse.result); // Cache it
+      }
+
+      return apiResponse;
     } catch (e) {
+      // Offline fallback
+      final cachedData = box.get('states');
+      if (cachedData != null) {
+        return BaseResponseModel<Stateresponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedData,
+        );
+      }
+
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
 
+
+
+    Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
+      await Hive.box<List<Districtresponse>>('districtsBox');
+      final box = Hive.box<List<Districtresponse>>('districtsBox');
+
+      try {
+        final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
+        final apiResponse = BaseResponseModel<Districtresponse>.fromJson(
+          response,
+              (json) => Districtresponse.fromJson(json),
+        );
+
+        if (apiResponse.status == 1) {
+          await box.put(stateId, apiResponse.result); // Cache by stateId
+        }
+
+        return apiResponse;
+      } catch (e) {
+        final cachedData = box.get(stateId);
+        if (cachedData != null) {
+          return BaseResponseModel<Districtresponse>(
+            status: 1,
+            message: 'Loaded from cache',
+            result: cachedData,
+          );
+        }
+        //  debugPrint('Error in fetching districts: $e');
+          if (e is Exception) {
+            GlobalExceptionHandler.handleException(e);
+          } else {
+          //  debugPrintStack(stackTrace: stackTrace);
+          }
+          //errorMsg = "Failed to load districts.";
+
+        GlobalExceptionHandler.handleException(e as Exception);
+        rethrow;
+      }
+    }
+
+
   Future<BaseResponseModel<BlockResponse>> fetchBlocks(
       String stateId, String districtId) async {
+    final box = await Hive.box<List<BlockResponse>>('blocksBox');
+    final cacheKey = '$stateId|$districtId';
+
     try {
-      final response = await _apiService.get('/apimaster/getblock?stateid=$stateId&districtid=$districtId');
+      final response = await _apiService.get(
+        '/apimaster/getblock?stateid=$stateId&districtid=$districtId',
+      );
+      final apiResponse = BaseResponseModel<BlockResponse>.fromJson(
+        response,
+            (json) => BlockResponse.fromJson(json),
+      );
 
-      return BaseResponseModel<BlockResponse>.fromJson(response,(json)=>BlockResponse.fromJson(json));
+      if (apiResponse.status == 1) {
+        await box.put(cacheKey, apiResponse.result); // Cache per state+district
+      }
 
+      return apiResponse;
     } catch (e) {
+      final cachedData = box.get(cacheKey);
+      if (cachedData != null) {
+        return BaseResponseModel<BlockResponse>(
+          status: 1,
+          message: 'Loaded from cache',
+          result: cachedData,
+        );
+      }
+
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }

@@ -1,5 +1,9 @@
  import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/StateResponse.dart';
 import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
@@ -20,12 +24,23 @@ import 'package:jjm_wqmis/views/SampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final appDocDir = await getApplicationDocumentsDirectory();
+  Hive.init(appDocDir.path);
+
+  Hive.registerAdapter(StateApiResponseAdapter()); // use your response class
+  Hive.registerAdapter(DistrictApiResponseAdapter());
+  Hive.registerAdapter(BlockApiResponseAdapter());
+
+  await Hive.openBox<Stateresponse>('statesBox');
+  await Hive.openBox<Districtresponse>('districtsBox');
+  await Hive.openBox<BlockResponse>('blocksBox');
   await LocalStorageService.init();
   runApp(
     MultiProvider(

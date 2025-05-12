@@ -1,6 +1,14 @@
-class StateApiResponse {
+import 'package:hive/hive.dart';
+part 'StateResponse.g.dart'; // 👈 Required for build_runner
+@HiveType(typeId: 0)
+class StateApiResponse extends HiveObject {
+  @HiveField(0)
   final int status;
+
+  @HiveField(1)
   final String message;
+
+  @HiveField(2)
   final List<Stateresponse> result;
 
   StateApiResponse({
@@ -20,11 +28,18 @@ class StateApiResponse {
   }
 }
 
+@HiveType(typeId: 1)
 class Stateresponse {
+  @HiveField(0)
   final String jjmStateId;
+
+  @HiveField(1)
   final String stateName;
 
-  Stateresponse({required this.jjmStateId, required this.stateName});
+  Stateresponse({
+    required this.jjmStateId,
+    required this.stateName,
+  });
 
   factory Stateresponse.fromJson(Map<String, dynamic> json) {
     return Stateresponse(
@@ -33,12 +48,10 @@ class Stateresponse {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'JJM_StateId': jjmStateId,
-      'StateName': stateName,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'JJM_StateId': jjmStateId,
+    'StateName': stateName,
+  };
 
   @override
   String toString() => 'StateModel(id: $jjmStateId, name: $stateName)';

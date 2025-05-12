@@ -1,6 +1,13 @@
+import 'package:hive/hive.dart';
+part 'BlockResponse.g.dart'; // 👈 Required for build_runner
+
+@HiveType(typeId: 4)
 class BlockApiResponse {
+  @HiveField(0)
   final int status;
+  @HiveField(1)
   final String message;
+  @HiveField(2)
   final List<BlockResponse> result;
 
   BlockApiResponse({
@@ -19,11 +26,15 @@ class BlockApiResponse {
     );
   }
 }
-
+@HiveType(typeId: 5)
 class BlockResponse {
+  @HiveField(0)
   final String jjmBlockId;
+  @HiveField(1)
   final String blockName;
+  @HiveField(2)
   final String jjmDistrictId;
+  @HiveField(3)
   final String? districtName;
 
   BlockResponse({
