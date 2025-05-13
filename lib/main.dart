@@ -11,6 +11,8 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmDashboardScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmLocationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/dwsmList/DemonstrationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/dwsmList/SchoolAwcScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/AnganwadiScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/SchoolScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
@@ -27,6 +29,7 @@ import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
 import 'package:jjm_wqmis/views/lab/AsPerParameterView.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
+import 'package:jjm_wqmis/views/webView/testReport.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -65,20 +68,29 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
+        //auth
         AppConstants.navigateToDashboardScreen: (context) => Dashboardscreen(),
         AppConstants.navigateToLoginScreen: (context) => Loginscreen(),
         '/': (context) => SplashScreen(),
+
+        //dwsmList
+        AppConstants.navigateToDemonstrationScreen:(context) => Demonstrationscreen(type: 0),
+        AppConstants.navigateToSchoolAwsScreen:(context) => SchoolAWCScreen(type: 0),
+        //tabschoolaganwadi
         AppConstants.navigateToAnganwadiScreen: (context) => AnganwadiScreen(),
         AppConstants.navigateToSchoolScreen:(context)=>SchoolScreen(),
         AppConstants.navigateToTabSchoolAganwadi:(context) =>Tabschoolaganwadi(),
-
+        //dwsm
         AppConstants.navigateToDwsmDashboard: (context) => Dwsdashboardscreen(),
         AppConstants.navigateToDwsmLocaitonScreen: (context) =>DwsmLocation(),
-
+        //lab
         AppConstants.navigateLabView: (context) =>AsPerLabTabView(),
         AppConstants.navigateToParameterView: (context) =>Asperparameterview(),
         AppConstants.navigateToLabParam: (context) => Labparameterscreen(),
         AppConstants.navigateToWTPLab: (context) => Wtplabscreen(),
+
+        //webview
+        AppConstants.navigateToTestReport: (context) => TestReport(url: '',),
 
         AppConstants.navigateToExceptionScreen: (context) => ExceptionScreen(errorMessage: ''),
         AppConstants.navigateToLocationScreen: (context) => Locationscreen(flag: ''),
