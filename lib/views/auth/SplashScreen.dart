@@ -51,12 +51,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (authProvider.isLoggedIn) {
       if (roleId == "4") {
-        Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboard);
+        Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
       } else if (roleId == "8") {
         Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
       }
     } else {
-      Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+      Navigator.pushReplacementNamed(context, AppConstants.navigateToLoginScreen);
     }
   }
 

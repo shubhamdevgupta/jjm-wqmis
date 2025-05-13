@@ -147,7 +147,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ),
                   onTap: () {
                     Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSaveSample);
+                        context, AppConstants.navigateToSubmitSampleScreen);
                   },
                 ),
                 ListTile(
@@ -158,7 +158,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ),
                   onTap: () {
                     Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleList,
+                        context, AppConstants.navigateToSampleListScreen,
                         arguments: {
                           'flag': AppConstants.totalSamplesSubmitted,
                         });
@@ -176,7 +176,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         listen: false);
                     await authProvider.logoutUser();
                     Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToLogin);
+                        context, AppConstants.navigateToLoginScreen);
                   },
                 ),
               ],
@@ -326,7 +326,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 imageName: 'medical-lab',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
                                             AppConstants.totalSamplesSubmitted,
@@ -345,7 +345,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 imageName: 'test',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
                                             AppConstants.totalPhysicalSubmitted
@@ -361,7 +361,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 imageName: 'search',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag': AppConstants.totalSampleTested
                                       });

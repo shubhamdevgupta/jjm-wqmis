@@ -17,15 +17,41 @@ class AppConstants {
   static const String prefRegId = 'reg_id';
 
   /////////////////////   Routes literals  //////////////////////////////////
-  static const String navigateToSaveSample = '/savesample';
-  static const String navigateToDashboard = '/dashboard';
+
+  //DWSM
+  //dwsm List
+  static const String navigateToDemonstrationScreen = '/demonstrationScreen';
+  static const String navigateToSchoolAwsScreen = '/schoolAwsScreen';
+  //tabschoolanganwadi
+  static const String navigateToAnganwadiScreen = '/AnganwadiScreen';
+  static const String navigateToSchoolScreen = '/schoolScreen';
+  static const String navigateToTabSchoolAganwadi = '/tabSchoolAnganwadi';
+
+  static const String navigateToDwsmLocaitonScreen = '/dwsmLocation';
   static const String navigateToDwsmDashboard = '/dwsm_dashboard';
-  static const String navigateToLogin = '/login';
-  static const String navigateToLocation = '/location';
-  static const String navigateToLabParam = '/labParam';
-  static const String navigateToSampleList = '/sampleList';
-  static const String navigateToTest = 'test';
-  static const String navigateToSubmit_info = '/tabSchoolAganwadi';
+
+
+  //lab
+  static const String navigateLabView = '/lavView';
+  static const String navigateToParameterView = '/paramView';
+  static const String navigateToLabParam = '/TabLabParam';
+  static const String navigateToWTPLab = '/WtpLab';
+
+  //webView
+  static const String navigateToTestReport = '/testReport';
+
+  //auth
+  static const String navigateToDashboardScreen = '/dashboardScreen';
+  static const String navigateToLoginScreen = '/loginScreen ';
+
+
+  static const String navigateToExceptionScreen = '/exceptionScreen';
+  static const String navigateToLocationScreen = '/locationScreen';
+  static const String navigateToSampleInformationScreen = '/sampleInfo';
+  static const String navigateToSampleListScreen = '/sampleList';
+  static const String navigateToSubmitSampleScreen = '/sampleSubmit';
+
+
 
 //////////////////////////////////////////////////////////////////////////
   static const String departmentalUser = 'Departmental User';

@@ -151,7 +151,7 @@ class _LoginpageState extends State<Loginscreen> {
                                               () {
                                             if(provider.loginResponse?.roleId==4){
                                               Navigator.pushReplacementNamed(
-                                                  context, AppConstants.navigateToDashboard);
+                                                  context, AppConstants.navigateToDashboardScreen);
                                             }else if(provider.loginResponse?.roleId==8){
                                               Navigator.pushReplacementNamed(
                                                   context, AppConstants.navigateToDwsmDashboard);

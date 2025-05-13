@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/webView/webview.dart';
+import 'package:jjm_wqmis/views/webView/testReport.dart';
 import 'package:provider/provider.dart';
 
 import '../models/SampleListResponse.dart';
@@ -254,7 +254,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                 ),
                               ],
                             ),
-                            child: const TextField(
+                            child:  TextField(
+                              controller: searchController,
                               decoration: InputDecoration(
                                 hintText: 'Search...',
                                 border: InputBorder.none,
@@ -271,9 +272,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                               horizontalPadding: 20,
                               verticalPadding: 14),
                           onPressed: () {
-                            if (searchController.text != null) {
-                              provider.fetchSampleList(int.parse(userId!), 1,
-                                  "", 0, searchController.text, 0, 0, 0, 0, 0);
+                            print("------------ ${searchController.text}");
+                            if (searchController.text.isNotEmpty) {
+                              provider.fetchSampleList(int.parse(userId!), 1, "", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
                               ToastHelper.showErrorSnackBar(
                                   context, "Please enter sample id");
@@ -363,7 +364,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                      builder: (_) => MyWebView(
+                                                      builder: (_) => TestReport(
                                                           url:
                                                               'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
                                                     ),
