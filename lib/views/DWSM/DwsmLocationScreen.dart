@@ -144,7 +144,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                           // Ensure this matches the selected value
                           child: Text(_localStorage
                                   .getString(AppConstants.prefStateName) ??
-                              'Unknown State'), // Display state name
+                              'Unknown State',style: TextStyle(color: Colors.black87,fontFamily: 'OpensSans',fontWeight: FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -208,7 +208,7 @@ class _DwsmLocation extends State<DwsmLocation> {
 
                           child: Text(_localStorage
                                   .getString(AppConstants.prefDistName) ??
-                              'Unknown State'), // Display state name
+                              'Unknown State',style: TextStyle(color: Colors.black87,fontFamily: 'OpensSans',fontWeight: FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,

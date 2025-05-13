@@ -248,7 +248,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       style: ElevatedButton
                                                           .styleFrom(
                                                         backgroundColor:
-                                                            Colors.blueAccent,
+                                                            Appcolor.buttonBgColor,
                                                         foregroundColor:
                                                             Colors.white,
                                                         padding:
@@ -417,8 +417,18 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                               Icons.label,
                                                               Colors.green),
 
+                                                          _infoRow(
+                                                              "Remark",
+                                                              village != null
+                                                                  ? village!.remark: "",
+                                                              Icons.message,
+                                                              Colors.teal),
+
+
+
+
                                                           // Remark
-                                                          Padding(
+                                                      /*    Padding(
                                                             padding:
                                                                 const EdgeInsets
                                                                     .symmetric(
@@ -467,7 +477,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                 ),
                                                               ],
                                                             ),
-                                                          ),
+                                                          ),*/
                                                           const Divider(
                                                               height: 30),
                                                           Align(
@@ -658,28 +668,41 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   String _buildLocationPath(List<String?> parts) {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
-
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _iconCircle(icon, color),
-          const SizedBox(width: 10),
-          Text(
-            "$title: ",
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              fontFamily: 'OpenSans',
-            ),
-          ),
+          const SizedBox(width: 5),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontFamily: 'OpenSans',
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.05), // Light background tone
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'OpenSans',
+                    color: Colors.black87,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "$title: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value.isEmpty ? "No data provided" : value,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -718,7 +741,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: SizedBox(
               width: double.infinity,
               child: TextFormField(
@@ -758,6 +781,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               ),
             ),
           ),
+
+          SizedBox(height: 10,),
           Card(
             child: Container(
               decoration: BoxDecoration(
@@ -776,7 +801,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "Capture Sample Image",
+                      "Capture Anganwadi Image",
                       style: TextStyle(
                         fontSize: 18,
                         fontFamily: 'OpenSans',
@@ -786,7 +811,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                     ),
                   ),
                   Divider(thickness: 1, color: Colors.grey.shade300),
-                  SizedBox(height: 2),
+
                   Center(
                     child: _cameraHelper.imageFile == null
                         ? GestureDetector(
@@ -838,15 +863,16 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             ],
                           ),
                   ),
+                  SizedBox(height: 5),
                 ],
               ),
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
             child: Card(
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -864,11 +890,11 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   children: [
                     // Heading
                     Text(
-                      'Geo Location of Sample Taken',
+                      'Geo Location',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         color: Colors.blueGrey.shade700,
                       ),
                     ),
@@ -914,36 +940,39 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               ),
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (await validate(dwsmprovider)) {
-                    await dwsmprovider.submitFtkData(
-                        int.parse(userId),
-                        int.parse(dwsmprovider.selectedAnganwadi!),
-                        int.parse(stateId),
-                        _cameraHelper.base64Image!,
-                        "2025-2026",
-                        remarkController.text,
-                        dwsmprovider.currentLatitude.toString(),
-                        dwsmprovider.currentLatitude.toString(),
-                        dwsmprovider.deviceId!, () {
-                      showResponse(dwsmprovider);
-                    });
-                  } else {
-                    ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
-                  }
-                },
-                child: Text(
-                  AppConstants.submitSample,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                style: AppStyles.buttonStylePrimary()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (await validate(dwsmprovider)) {
+                      await dwsmprovider.submitFtkData(
+                          int.parse(userId),
+                          int.parse(dwsmprovider.selectedAnganwadi!),
+                          int.parse(stateId),
+                          _cameraHelper.base64Image!,
+                          "2025-2026",
+                          remarkController.text,
+                          dwsmprovider.currentLatitude.toString(),
+                          dwsmprovider.currentLatitude.toString(),
+                          dwsmprovider.deviceId!, () {
+                        showResponse(dwsmprovider);
+                      });
+                    } else {
+                      ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
+                    }
+                  },
+                  child: Text(
+                    AppConstants.submitSample,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  style: AppStyles.buttonStylePrimary()),
+            ),
           ),
         ],
       ),
