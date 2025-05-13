@@ -60,7 +60,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
             // Removes the default back button
             centerTitle: true,
             title: Text(
-              "$titleName Demonstrations List",
+              "$titleName List",
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'OpenSans',
@@ -195,19 +195,40 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
 
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _iconCircle(icon, color),
-          const SizedBox(width: 10),
-          Text(
-            "$title: ",
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
+          const SizedBox(width: 5),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontSize: 14),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.05), // Light background tone
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'OpenSans',
+                    color: Colors.black87,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "$title: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value.isEmpty ? "No data provided" : value,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
