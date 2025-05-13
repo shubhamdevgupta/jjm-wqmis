@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         //auth
         AppConstants.navigateToDashboardScreen: (context) => Dashboardscreen(),
         AppConstants.navigateToLoginScreen: (context) => Loginscreen(),
-        AppConstants.navigateToSplashScreen: (context) => SplashScreen(),
+        '/': (context) => SplashScreen(),
 
         //dwsmList
         AppConstants.navigateToDemonstrationScreen:(context) => Demonstrationscreen(type: 0),
