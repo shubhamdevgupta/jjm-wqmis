@@ -136,8 +136,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     style: AppStyles.style16NormalBlack,
                   ),
                   onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSubmitSampleScreen);
+
                   },
                 ),
                 ListTile(
