@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../providers/ParameterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppStyles.dart';
+import '../utils/CurrentLocation.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
@@ -22,7 +23,8 @@ class Locationscreen extends StatefulWidget {
 
 class _LocationscreenState extends State<Locationscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
-
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
   @override
   void initState() {
     super.initState();
@@ -288,13 +290,8 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   onPressed: () async {
                     print("flagggggggggg ${ widget.flag}");
-                    print("loading--------->${paramProvider.isLoading}");
-                    await paramProvider.fetchLocation();
-                    print("currentLatitude--------->${paramProvider.currentLatitude}");
-                    print("currentLongitude--------->${paramProvider.currentLongitude}");
-                    print("loading--------->${paramProvider.isLoading}");
+                    await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-
                       print('Going to Sample List screen');
 
                       Navigator.pushNamedAndRemoveUntil(

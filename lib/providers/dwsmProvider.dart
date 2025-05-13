@@ -41,12 +41,6 @@ class DwsmProvider extends ChangeNotifier {
 
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
 
-  double? get currentLatitude => _currentLatitude;
-  double? get currentLongitude => _currentLongitude;
-
-  double? _currentLatitude;
-  double? _currentLongitude;
-
   String? _deviceId;
 
   String? get deviceId => _deviceId;
@@ -201,37 +195,6 @@ class DwsmProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchLocation() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      debugPrint('Requesting location permission...');
-      bool permissionGranted = await LocationUtils.requestLocationPermission();
-
-      if (permissionGranted) {
-        debugPrint('Permission granted. Fetching location...');
-        final locationData = await LocationUtils.getCurrentLocation();
-
-        if (locationData != null) {
-          _currentLatitude = locationData['latitude'];
-          _currentLongitude = locationData['longitude'];
-
-          debugPrint(
-              'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
-        } else {
-          debugPrint("Location fetch failed (locationData is null)");
-        }
-      } else {
-        debugPrint("Permission denied. Cannot fetch location.");
-      }
-    } catch (e) {
-      debugPrint("Error during fetchLocation(): $e");
     } finally {
       _isLoading = false;
       notifyListeners();

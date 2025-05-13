@@ -12,6 +12,7 @@ import '../../../providers/dwsmProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
+import '../../../utils/CurrentLocation.dart';
 import '../../../utils/CustomDropdown.dart';
 import '../../../utils/LoaderUtils.dart';
 import '../../../utils/toast_helper.dart';
@@ -31,7 +32,8 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   TextEditingController remarkController = TextEditingController();
   Village? village;
-
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
   void initState() {
     super.initState();
     userId = _localStorage.getString(AppConstants.prefUserId)!;
@@ -806,7 +808,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 color: Colors.blue, size: 18),
                             SizedBox(width: 5,),
                             Text(
-                              'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
+                              'Latitude: ${lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -823,7 +825,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 color: Colors.blue, size: 18),
                             SizedBox(width: 5,),
                             Text(
-                              'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
+                              'Longitude: ${lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -853,8 +855,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          dwsmprovider.currentLatitude.toString(),
-                          dwsmprovider.currentLatitude.toString(),
+                          lat.toString(),
+                          lng.toString(),
                           dwsmprovider.deviceId!, () {
                         showResponse(dwsmprovider);
                       });

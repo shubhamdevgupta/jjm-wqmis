@@ -149,6 +149,7 @@ class _LoginpageState extends State<Loginscreen> {
                                           phoneController.text,
                                           passwordController.text, 1,
                                               () {
+                                            provider.fetchLocation();
                                             if(provider.loginResponse?.roleId==4){
                                               Navigator.pushReplacementNamed(
                                                   context, AppConstants.navigateToDashboardScreen);
