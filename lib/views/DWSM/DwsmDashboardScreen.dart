@@ -218,7 +218,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                     color: Colors.grey.shade700,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
                                 Text(
                                   userName,
                                   style: const TextStyle(
