@@ -81,8 +81,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
         String district = args['dis'] ?? "0";
         String block = args['block'] ?? "0";
 
-        if (flag == AppConstants.totalSamplesSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
+        if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) {
           C_STATUS = 1;
           sampleListProvider.fetchSampleList(
               int.parse(userId!),
@@ -95,17 +94,17 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(block),
               int.parse(masterprovider.selectedGramPanchayat ?? "0"),
               int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
+        }
+        else if (flag == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
           sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
               C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSampleTested ||
-            flag == AppConstants.openSampleListScreen) {
+        }
+        else if (flag == AppConstants.totalSampleTested || flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(
               int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalRetest ||
-            flag == AppConstants.openSampleListScreen) {
+        }
+        else if (flag == AppConstants.totalRetest || flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(
             int.parse(userId!),
             1,
@@ -208,8 +207,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       color: Colors.white,
                       height: screenHeight * 0.8,
                       width: screenHeight * 0.4,
-                      child: const Locationscreen(
-                        flag: AppConstants.openSampleListScreen,
+                      child: const Locationscreen(flag: AppConstants.openSampleListScreen,
                       ),
                     ),
                   );
