@@ -147,7 +147,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
                 Navigator.pop(context);
               } else {
                 Navigator.pushReplacementNamed(
-                    context, AppConstants.navigateToSaveSample);
+                    context, AppConstants.navigateToSubmitSampleScreen);
               }
             },
           ),

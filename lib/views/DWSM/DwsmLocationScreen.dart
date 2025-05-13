@@ -330,7 +330,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                     await dwsmprovider.fetchLocation(context);
 
                     Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSubmit_info);
+                        context, AppConstants.navigateToTabSchoolAganwadi);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF096DA8),

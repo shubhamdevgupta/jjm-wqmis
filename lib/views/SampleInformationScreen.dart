@@ -64,7 +64,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       Navigator.pop(context);
                     } else {
                       Navigator.pushReplacementNamed(
-                          context, AppConstants.navigateToDashboard);
+                          context, AppConstants.navigateToDashboardScreen);
                     }
                   },
                 ),

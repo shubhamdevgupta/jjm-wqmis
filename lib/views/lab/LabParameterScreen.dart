@@ -136,7 +136,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
               Navigator.pop(context);
             } else {
               Navigator.pushReplacementNamed(
-                  context, AppConstants.navigateToSaveSample);
+                  context, AppConstants.navigateToSubmitSampleScreen);
             }
           },
         ),
