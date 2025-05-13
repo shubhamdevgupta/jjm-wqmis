@@ -17,7 +17,9 @@ import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppConstants.dart';
+import '../utils/CurrentLocation.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -52,6 +54,14 @@ class Masterprovider extends ChangeNotifier {
 
   List<Wtp> wtpList = [];
   String? selectedWtp;
+
+
+  double? _currentLatitude;
+  double? _currentLongitude;
+
+  double? get currentLatitude => _currentLatitude;
+
+  double? get currentLongitude => _currentLongitude;
 
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
@@ -445,6 +455,43 @@ class Masterprovider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error in fetchVillageDetails: $e');
       errorMsg = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchLocation() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      debugPrint('Requesting location permission...');
+      bool permissionGranted = await LocationUtils.requestLocationPermission();
+
+      if (permissionGranted) {
+        debugPrint('Permission granted. Fetching location...');
+        final locationData = await LocationUtils.getCurrentLocation();
+
+        if (locationData != null) {
+          _currentLatitude = locationData['latitude'];
+          _currentLongitude = locationData['longitude'];
+
+          // 🔥 Set global current location
+          CurrentLocation.setLocation(
+            lat: _currentLatitude!,
+            lng: _currentLongitude!,
+          );
+
+          debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
+        } else {
+          debugPrint("Location fetch failed (locationData is null)");
+        }
+      } else {
+        debugPrint("Permission denied. Cannot fetch location.");
+      }
+    } catch (e) {
+      debugPrint("Error during fetchLocation(): $e");
     } finally {
       _isLoading = false;
       notifyListeners();

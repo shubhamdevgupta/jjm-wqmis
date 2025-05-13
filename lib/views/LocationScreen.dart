@@ -289,6 +289,7 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   onPressed: () async {
                     print("flagggggggggg ${ widget.flag}");
+                    await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
                       print('Going to Sample List screen');
 

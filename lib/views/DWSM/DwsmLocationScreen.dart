@@ -343,6 +343,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
+                    await masterProvider.fetchLocation();
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToTabSchoolAganwadi);
                   },
