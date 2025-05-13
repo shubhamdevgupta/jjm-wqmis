@@ -31,7 +31,7 @@ class _SchoolAWCState extends State<SchoolAWC> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
-      Provider.of<DwsmProvider>(context, listen: false);
+          Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
           int.parse(stateId!), int.parse(districtId!), widget.type!);
       print('responsssssssss ${dashboardProvider.dashboardSchoolListModel}');
@@ -97,98 +97,98 @@ class _SchoolAWCState extends State<SchoolAWC> {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 : ListView.builder(
-              itemCount: provider.dashboardSchoolListModel.length,
-              itemBuilder: (context, index) {
-                final dashboardSchool =
-                provider.dashboardSchoolListModel[index];
+                    itemCount: provider.dashboardSchoolListModel.length,
+                    itemBuilder: (context, index) {
+                      final dashboardSchool =
+                          provider.dashboardSchoolListModel[index];
 
-                return Container(
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.shade100.withOpacity(0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Heading
-                        Row(
-                          children: [
-                            _iconCircle(Icons.location_city, Colors.blue),
-                            const SizedBox(width: 10),
-                            Text(
-                              "$titleName Details",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'OpenSans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
+                      return Container(
+                        margin: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.shade100.withOpacity(0.4),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-                        const Divider(height: 30),
-                        const SizedBox(height: 12),
-
-                        // Location Info
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _iconCircle(Icons.location_on, Colors.red),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                _buildLocationPath([
-                                  dashboardSchool.stateName,
-                                  dashboardSchool.districtName,
-                                  dashboardSchool.blockName,
-                                  dashboardSchool.panchayatName,
-                                  dashboardSchool.villageName,
-                                ]),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87,
-                                ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Heading
+                              Row(
+                                children: [
+                                  _iconCircle(Icons.location_city, Colors.blue),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    "$titleName Details",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'OpenSans',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              const Divider(height: 30),
+                              const SizedBox(height: 12),
+
+                              // Location Info
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _iconCircle(Icons.location_on, Colors.red),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      _buildLocationPath([
+                                        dashboardSchool.stateName,
+                                        dashboardSchool.districtName,
+                                        dashboardSchool.blockName,
+                                        dashboardSchool.panchayatName,
+                                        dashboardSchool.villageName,
+                                      ]),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // $titleName Name
+                              _infoRow("$titleName Name", "schoolName",
+                                  Icons.school, Colors.deepPurple),
+
+                              // Category
+                              _infoRow(
+                                  "Category",
+                                  dashboardSchool.institutionCategory,
+                                  Icons.category,
+                                  Colors.orange),
+
+                              // Classification
+                              _infoRow(
+                                  "Classification",
+                                  dashboardSchool.institutionSubCategory,
+                                  Icons.label,
+                                  Colors.green),
+
+                              // Remark
+                            ],
+                          ),
                         ),
-
-                        // $titleName Name
-                        _infoRow("$titleName Name", "schoolName",
-                            Icons.school, Colors.deepPurple),
-
-                        // Category
-                        _infoRow(
-                            "Category",
-                            dashboardSchool.institutionCategory,
-                            Icons.category,
-                            Colors.orange),
-
-                        // Classification
-                        _infoRow(
-                            "Classification",
-                            dashboardSchool.institutionSubCategory,
-                            Icons.label,
-                            Colors.green),
-
-                        // Remark
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
+                      );
+                    },
+                  );
           })),
     );
   }
@@ -239,7 +239,7 @@ class _SchoolAWCState extends State<SchoolAWC> {
         return;
       }
       String base64String =
-      result.contains(',') ? result.split(',').last : result;
+          result.contains(',') ? result.split(',').last : result;
       final imageBytes = base64Decode(base64String);
 
       showDialog(
