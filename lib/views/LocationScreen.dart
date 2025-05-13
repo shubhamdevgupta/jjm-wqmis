@@ -11,9 +11,10 @@ import '../utils/AppStyles.dart';
 import '../utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
-  final String flag; // Declare flag parameter
+  final String flag;
+  final String flagFloating; // Declare flag parameter
 
-  const Locationscreen({super.key, required this.flag });
+  const Locationscreen({super.key, required this.flag , required this.flagFloating });
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
@@ -300,7 +301,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         context,
                         '/sampleList',
                         ModalRoute.withName('/dashboard'),
-                        arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId},
+                        arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();

@@ -48,7 +48,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
         dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
-          int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
+          int.parse(masterProvider.selectedDistrictId!),
           int.parse(masterProvider.selectedBlockId!),
           int.parse(masterProvider.selectedGramPanchayat!),
           int.parse(masterProvider.selectedVillage!),
@@ -61,7 +61,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     });
 
 
-   }
+  }
 
 
   @override
@@ -159,7 +159,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
             unselectedLabelColor: Colors.white70,
             // Slightly faded for unselected tabs
             labelStyle:
-                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
               color: Color(0xFF5FAFE5), // Light blue indicator
@@ -167,7 +167,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
             ),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(

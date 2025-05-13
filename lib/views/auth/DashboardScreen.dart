@@ -329,7 +329,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
-                                            AppConstants.totalSamplesSubmitted,
+                                            AppConstants.totalSamplesSubmitted,'flagFloating' : ""
                                       });
                                 },
                               ),
@@ -347,7 +347,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
-                                        'flag': AppConstants.totalPhysicalSubmitted
+                                        'flag':
+                                            AppConstants.totalPhysicalSubmitted,'flagFloating' : ""
                                       });
                                 },
                               ),
@@ -362,7 +363,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
-                                        'flag': AppConstants.totalSampleTested
+                                        'flag': AppConstants.totalSampleTested,
+                                        'flagFloating' : ""
                                       });
                                 },
                               ),
@@ -417,7 +419,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     width: screenwidth * 0.99,
                                     child: const Locationscreen(
                                         flag:
-                                            AppConstants.openSampleInfoScreen),
+                                            AppConstants.openSampleInfoScreen,flagFloating: "",),
                                   ),
                                 );
                               },
