@@ -27,6 +27,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
   TextEditingController searchController = TextEditingController();
   final encryption = AesEncryption();
   String flag = "";
+  String flagfloation = "";
 
   int? selectedYear;
   int PAGE = 1;
@@ -78,12 +79,21 @@ class _SampleListScreenState extends State<SampleListScreen> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
       if (args != null) {
         flag = args['flag'];
+        flagfloation = args['flagFloating'];
         String district = args['dis'] ?? "0";
         String block = args['block'] ?? "0";
 
-        if (flag == AppConstants.totalSamplesSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
-          C_STATUS = 1;
+        if ( (flagfloation == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) && (flagfloation == AppConstants.totalPhysicalSubmitted|| flag == AppConstants.openSampleListScreen) &&(flag == AppConstants.openSampleListScreen ||   flagfloation == AppConstants.totalSampleTested) ) {
+
+
+          if(flagfloation == AppConstants.totalSamplesSubmitted){
+            C_STATUS = 1;
+          }else if(flagfloation == AppConstants.totalPhysicalSubmitted){
+            C_STATUS = 2;
+          }
+          else{
+            C_STATUS = 6;
+          }
           sampleListProvider.fetchSampleList(
               int.parse(userId!),
               PAGE,
@@ -95,29 +105,15 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(block),
               int.parse(masterprovider.selectedGramPanchayat ?? "0"),
               int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
+        } else if (flag == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
-              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSampleTested ||
-            flag == AppConstants.openSampleListScreen) {
-          sampleListProvider.fetchSampleList(
-              int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalRetest ||
-            flag == AppConstants.openSampleListScreen) {
-          sampleListProvider.fetchSampleList(
-            int.parse(userId!),
-            1,
-            "0",
-            0,
-            "0",
-            int.parse(masterprovider.selectedStateId!),
-            int.parse(masterprovider.selectedDistrictId!),
-            int.parse(masterprovider.selectedBlockId!),
-            int.parse(masterprovider.selectedGramPanchayat!),
-            int.parse(masterprovider.selectedVillage!),
-          );
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSampleTested || flag == AppConstants.openSampleListScreen) {
+          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);}
+        else if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) {
+          C_STATUS = 1;
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+
         }
       }
     });
@@ -128,6 +124,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     flag = args?['flag'];
+    flagfloation = args?['flagFloating'];
 
     return WillPopScope(
       onWillPop: () async {
@@ -208,8 +205,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       color: Colors.white,
                       height: screenHeight * 0.8,
                       width: screenHeight * 0.4,
-                      child: const Locationscreen(
+                      child:  Locationscreen(
                         flag: AppConstants.openSampleListScreen,
+                        flagFloating:  flag ,
                       ),
                     ),
                   );

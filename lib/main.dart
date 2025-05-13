@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         AppConstants.navigateToTestReport: (context) => TestReport(url: '',),
 
         AppConstants.navigateToExceptionScreen: (context) => ExceptionScreen(errorMessage: ''),
-        AppConstants.navigateToLocationScreen: (context) => Locationscreen(flag: ''),
+        AppConstants.navigateToLocationScreen: (context) => Locationscreen(flag: '',flagFloating: ''),
         AppConstants.navigateToSampleInformationScreen: (context) => Sampleinformationscreen(),
         AppConstants.navigateToSampleListScreen: (context) => SampleListScreen(),
         AppConstants.navigateToSubmitSampleScreen: (context) => SubmitSampleScreen(),
