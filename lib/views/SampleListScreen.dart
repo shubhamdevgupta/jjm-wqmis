@@ -85,7 +85,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
         if ( (flagfloation == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) && (flagfloation == AppConstants.totalPhysicalSubmitted|| flag == AppConstants.openSampleListScreen) &&(flag == AppConstants.openSampleListScreen ||   flagfloation == AppConstants.totalSampleTested) ) {
 
-
           if(flagfloation == AppConstants.totalSamplesSubmitted){
             C_STATUS = 1;
           }else if(flagfloation == AppConstants.totalPhysicalSubmitted){
