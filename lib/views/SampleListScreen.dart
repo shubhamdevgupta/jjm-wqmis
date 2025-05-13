@@ -12,6 +12,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
 import '../utils/AppStyles.dart';
+import '../utils/Showerrormsg.dart';
 import 'LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
@@ -83,14 +84,17 @@ class _SampleListScreenState extends State<SampleListScreen> {
         String district = args['dis'] ?? "0";
         String block = args['block'] ?? "0";
 
-        if ( (flagfloation == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) && (flagfloation == AppConstants.totalPhysicalSubmitted|| flag == AppConstants.openSampleListScreen) &&(flag == AppConstants.openSampleListScreen ||   flagfloation == AppConstants.totalSampleTested) ) {
-
-          if(flagfloation == AppConstants.totalSamplesSubmitted){
+        if ((flagfloation == AppConstants.totalSamplesSubmitted ||
+                flag == AppConstants.openSampleListScreen) &&
+            (flagfloation == AppConstants.totalPhysicalSubmitted ||
+                flag == AppConstants.openSampleListScreen) &&
+            (flag == AppConstants.openSampleListScreen ||
+                flagfloation == AppConstants.totalSampleTested)) {
+          if (flagfloation == AppConstants.totalSamplesSubmitted) {
             C_STATUS = 1;
-          }else if(flagfloation == AppConstants.totalPhysicalSubmitted){
+          } else if (flagfloation == AppConstants.totalPhysicalSubmitted) {
             C_STATUS = 2;
-          }
-          else{
+          } else if(flagfloation == AppConstants.totalSampleTested) {
             C_STATUS = 6;
           }
           sampleListProvider.fetchSampleList(
@@ -104,15 +108,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(block),
               int.parse(masterprovider.selectedGramPanchayat ?? "0"),
               int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) {
+        } else if (flag == AppConstants.totalPhysicalSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSampleTested || flag == AppConstants.openSampleListScreen) {
-          sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);}
-        else if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) {
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSampleTested ||
+            flag == AppConstants.openSampleListScreen) {
+          sampleListProvider.fetchSampleList(
+              int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSamplesSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           C_STATUS = 1;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         }
       }
     });
@@ -169,7 +178,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
               },
             ),
             title: Text(
-              flag,
+              flagfloation != "" ? flagfloation : flag,
               style: AppStyles.appBarTitle,
             ),
             actions: [
@@ -204,9 +213,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       color: Colors.white,
                       height: screenHeight * 0.8,
                       width: screenHeight * 0.4,
-                      child:  Locationscreen(
+                      child: Locationscreen(
                         flag: AppConstants.openSampleListScreen,
-                        flagFloating:  flag ,
+                        flagFloating: flag,
                       ),
                     ),
                   );
@@ -227,7 +236,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
           ),
           body: Consumer<Samplelistprovider>(
             builder: (context, provider, child) {
-              return Column(
+              return
+              Column(
                 children: [
                   SizedBox(height: 20),
 
@@ -251,7 +261,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                 ),
                               ],
                             ),
-                            child:  TextField(
+                            child: TextField(
                               controller: searchController,
                               decoration: InputDecoration(
                                 hintText: 'Search...',
@@ -271,7 +281,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           onPressed: () {
                             print("------------ ${searchController.text}");
                             if (searchController.text.isNotEmpty) {
-                              provider.fetchSampleList(int.parse(userId!), 1, "", 0, searchController.text, 0, 0, 0, 0, 0);
+                              provider.fetchSampleList(int.parse(userId!), 1,
+                                  "", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
                               ToastHelper.showErrorSnackBar(
                                   context, "Please enter sample id");
@@ -279,7 +290,10 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           },
                           child: const Text(
                             "Search",
-                            style: TextStyle(color: Colors.white, fontFamily: 'OpenSans',),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'OpenSans',
+                            ),
                           ),
                         ),
                       ],
@@ -288,9 +302,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
                   // Expanded to prevent infinite height issue
                   provider.isLoading
-                      ? LoaderUtils.conditionalLoader(
-                          isLoading: provider.isLoading)
-                      : Expanded(
+                      ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                      : provider.samples.isEmpty?AppTextWidgets.errorText(provider.errorMsg):Expanded(
                           child: ListView.builder(
                             itemCount: provider.samples.length,
                             itemBuilder: (context, index) {
@@ -327,7 +340,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 "${index + 1}",
                                                 style: TextStyle(
-                                                  color: Colors.white, fontFamily: 'OpenSans',
+                                                  color: Colors.white,
+                                                  fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -347,7 +361,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 "ID: ${sample.sampleId ?? 'N/A'}",
                                                 style: TextStyle(
-                                                  color: Colors.white, fontFamily: 'OpenSans',
+                                                  color: Colors.white,
+                                                  fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -392,7 +407,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 sample.labName ?? 'N/A',
                                                 style: TextStyle(
-                                                  fontSize: 14, fontFamily: 'OpenSans',
+                                                  fontSize: 14,
+                                                  fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -414,7 +430,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 "${sample.blockName ?? 'N/A'}, "
                                                 "${sample.districtName ?? 'N/A'}",
                                                 style: TextStyle(
-                                                  fontSize: 14, fontFamily: 'OpenSans',
+                                                  fontSize: 14,
+                                                  fontFamily: 'OpenSans',
                                                   color: Colors.grey[700],
                                                 ),
                                               ),
@@ -437,7 +454,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   Text(
                                                     "Test Result: ",
                                                     style: TextStyle(
-                                                      fontSize: 14, fontFamily: 'OpenSans',
+                                                      fontSize: 14,
+                                                      fontFamily: 'OpenSans',
                                                       fontWeight:
                                                           FontWeight.w500,
                                                     ),
@@ -479,7 +497,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                                     .blue[800],
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 14, fontFamily: 'OpenSans',
+                                                        fontSize: 14,
+                                                        fontFamily: 'OpenSans',
                                                       ),
                                                     ),
                                                   ),
@@ -501,7 +520,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                             Text(
                                               "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
                                               style: TextStyle(
-                                                fontSize: 14, fontFamily: 'OpenSans',
+                                                fontSize: 14,
+                                                fontFamily: 'OpenSans',
                                                 color: Colors.grey[600],
                                               ),
                                             ),
