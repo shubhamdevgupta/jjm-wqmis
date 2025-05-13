@@ -34,6 +34,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         fetchSchoolAwc(0);
         dwsmDashboardProvider.clearSelectedAnganwadi();
       } else if (mTabController.index == 1) {
+        dwsmDashboardProvider.clearSelectedAnganwadi();
         fetchSchoolAwc(1);
         dwsmDashboardProvider.clearSelectedSchool();
       }

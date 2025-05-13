@@ -57,7 +57,7 @@ class AppRoutes {
       AppConstants.navigateToExceptionScreen: (context) =>
           ExceptionScreen(errorMessage: ''),
       AppConstants.navigateToLocationScreen: (context) =>
-          Locationscreen(flag: ''),
+          Locationscreen(flag: '',flagFloating: '',),
       AppConstants.navigateToSampleInformationScreen: (context) =>
           Sampleinformationscreen(),
       AppConstants.navigateToSampleListScreen: (context) => SampleListScreen(),

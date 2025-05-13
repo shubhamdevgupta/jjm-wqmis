@@ -113,7 +113,6 @@ class DwsmProvider extends ChangeNotifier {
       int Gpid, int Villageid, int type) async {
     _isLoading = true;
     dataState=DataState.loading;
-notifyListeners();
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
