@@ -42,7 +42,6 @@ class DwsmProvider extends ChangeNotifier {
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
 
   double? get currentLatitude => _currentLatitude;
-
   double? get currentLongitude => _currentLongitude;
 
   double? _currentLatitude;
@@ -209,41 +208,9 @@ notifyListeners();
     }
   }
 
-  Future<bool> checkLocationPermission() async {
-    PermissionStatus permission = await Permission.location.status;
-    if (permission != PermissionStatus.granted) {
-      return false;
-    }
-    return true;
-  }
-
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
-
-  Future<void> fetchLocation(BuildContext context) async {
+  Future<void> fetchLocation() async {
     _isLoading = true;
     notifyListeners();
-
-    bool hasPermission = await checkLocationPermission();
-
-    if (!hasPermission) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Please enable location permission in settings"),
-          action: SnackBarAction(
-            label: 'SETTINGS',
-            onPressed: () {
-              openAppSettings();
-            },
-          ),
-        ),
-      );
-      return;
-    }
-
     try {
       debugPrint('Requesting location permission...');
       bool permissionGranted = await LocationUtils.requestLocationPermission();
@@ -272,6 +239,13 @@ notifyListeners();
     }
   }
 
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
+  }
+
+
   void showDemonstartionButton( bool value) {
     _showDemonstartion = value;
     notifyListeners();
@@ -295,6 +269,7 @@ notifyListeners();
   void clearSelectedSchool() {
     selectedSchoolResult = null;
     selectedSchoolName = 'N/A';
+    schoolResultList=[];
     notifyListeners();
   }
 
@@ -303,6 +278,16 @@ notifyListeners();
     selectedAnganwadiName = 'N/A';
     mDemonstrationId = 101;
     anganwadiList=[];
+    notifyListeners();
+  }
+  void clearData(){
+    selectedAnganwadi = null;
+    selectedAnganwadiName = 'N/A';
+    mDemonstrationId = 101;
+    anganwadiList.clear();
+    selectedSchoolResult = null;
+    selectedSchoolName = 'N/A';
+    schoolResultList=[];
     notifyListeners();
   }
 }

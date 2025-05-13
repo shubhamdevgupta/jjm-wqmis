@@ -69,6 +69,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 children: [
                                   CustomDropdown(
                                     title: "Select School",
+                                    appBarTitle: "Select School",
                                     value: dwsmprovider.selectedSchoolResult,
                                     items: dwsmprovider.schoolResultList
                                         .map((school) {
