@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/dwsmProvider.dart';
-import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppConstants.dart';
 import 'AnganwadiScreen.dart';
 import 'SchoolScreen.dart';
@@ -19,72 +17,40 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
   late TabController mTabController;
   late DwsmProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
-  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void initState() {
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
-
+    dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
+    masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<DwsmProvider>(context, listen: false).clearData();
+    });
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return;
 
       if (mTabController.index == 0) {
-
-        dwsmDashboardProvider.fetchSchoolAwcInfo(
-          int.parse(masterProvider.selectedStateId!),
-          int.parse(masterProvider.selectedDistrictId!),
-          int.parse(masterProvider.selectedBlockId!),
-          int.parse(masterProvider.selectedGramPanchayat!),
-          int.parse(masterProvider.selectedVillage!),
-          0,
-        );
+        fetchSchoolAwc(0);
         dwsmDashboardProvider.clearSelectedAnganwadi();
-        dwsmDashboardProvider.anganwadiList.clear();
-
-      }else if (mTabController.index == 1) {
-        dwsmDashboardProvider.anganwadiList.clear();
-        dwsmDashboardProvider.clearSelectedAnganwadi();
-
-        dwsmDashboardProvider.fetchSchoolAwcInfo(
-          int.parse(masterProvider.selectedStateId!),
-          int.parse(masterProvider.selectedDistrictId!),
-          int.parse(masterProvider.selectedBlockId!),
-          int.parse(masterProvider.selectedGramPanchayat!),
-          int.parse(masterProvider.selectedVillage!),
-          1,
-        );
-        dwsmDashboardProvider.schoolResultList.clear();
+      } else if (mTabController.index == 1) {
+        fetchSchoolAwc(1);
         dwsmDashboardProvider.clearSelectedSchool();
       }
-
     });
-
-
+    fetchSchoolAwc(0); //zero for schoool and 1 for anganwadi
   }
 
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // Only assign once to avoid repeated calls when dependencies change
-    dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
-    masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
-    // Fetch data if needed when widget is first built
-    if (mTabController.index == 0) {
-      dwsmDashboardProvider.fetchSchoolAwcInfo(
-        int.parse(masterProvider.selectedStateId!),
-        int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
-        int.parse(masterProvider.selectedBlockId!),
-        int.parse(masterProvider.selectedGramPanchayat!),
-        int.parse(masterProvider.selectedVillage!),
-        0,
-      );
-    }
+  void fetchSchoolAwc(int type) {
+    dwsmDashboardProvider.fetchSchoolAwcInfo(
+      int.parse(masterProvider.selectedStateId!),
+      int.parse(masterProvider.selectedDistrictId!),
+      int.parse(masterProvider.selectedBlockId!),
+      int.parse(masterProvider.selectedGramPanchayat!),
+      int.parse(masterProvider.selectedVillage!),
+      type,
+    );
   }
-
 
   @override
   void dispose() {
@@ -100,7 +66,8 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           "School",
           style: TextStyle(
-            color: Colors.white, fontFamily: 'OpenSans',
+            color: Colors.white,
+            fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -114,7 +81,8 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         child: Text(
           'Anganwadi',
           style: TextStyle(
-            color: Colors.white, fontFamily: 'OpenSans',
+            color: Colors.white,
+            fontFamily: 'OpenSans',
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -130,7 +98,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text("Select School/ Anganwadi",
-              style: TextStyle( fontFamily: 'OpenSans',color: Colors.white)),
+              style: TextStyle(fontFamily: 'OpenSans', color: Colors.white)),
           automaticallyImplyLeading: false,
           elevation: 5,
           centerTitle: true,
@@ -159,7 +127,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
             unselectedLabelColor: Colors.white70,
             // Slightly faded for unselected tabs
             labelStyle:
-            const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
               color: Color(0xFF5FAFE5), // Light blue indicator
@@ -167,7 +135,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
             ),
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -201,4 +169,5 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
     );
   }
 }
+
 enum DataState { initial, loading, error, loaded }

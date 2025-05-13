@@ -71,6 +71,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       children: [
                                         CustomDropdown(
                                           title: "Select Anganwadi",
+                                          appBarTitle: "Select Anganwadi",
                                           value: dwsmprovider.selectedAnganwadi,
                                           items: dwsmprovider.anganwadiList
                                               .map((anganwadi) {
