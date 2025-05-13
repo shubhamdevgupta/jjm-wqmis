@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 import '../../../providers/dwsmProvider.dart';
 import '../../../utils/AppConstants.dart';
 
-class SchoolAWC extends StatefulWidget {
+class SchoolAWCScreen extends StatefulWidget {
   final int? type;
 
-  const SchoolAWC({super.key, required this.type});
+  const SchoolAWCScreen({super.key, required this.type});
 
   @override
-  State<SchoolAWC> createState() => _SchoolAWCState();
+  State<SchoolAWCScreen> createState() => _SchoolAWCScreenState();
 }
 
-class _SchoolAWCState extends State<SchoolAWC> {
+class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
   final LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
   String? districtId;

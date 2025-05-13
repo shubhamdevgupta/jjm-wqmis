@@ -323,7 +323,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: const SchoolAWC(
+                                          child: const SchoolAWCScreen(
                                             type: 10,
                                           ),
                                         ),
@@ -388,7 +388,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         builder: (context) =>
                                             ChangeNotifierProvider.value(
                                           value: dwsmDashboardProvider,
-                                          child: const SchoolAWC(type: 11),
+                                          child: const SchoolAWCScreen(type: 11),
                                         ),
                                       ),
                                     );

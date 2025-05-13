@@ -43,6 +43,7 @@ class AppConstants {
   //auth
   static const String navigateToDashboardScreen = '/dashboardScreen';
   static const String navigateToLoginScreen = '/loginScreen ';
+  static const String navigateToSplashScreen = '/ ';
 
 
   static const String navigateToExceptionScreen = '/exceptionScreen';
