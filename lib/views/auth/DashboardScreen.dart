@@ -10,8 +10,12 @@ import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+
+import '../../utils/UpdateDialog.dart';
+
 import '../../utils/LoaderUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
@@ -23,6 +27,8 @@ class Dashboardscreen extends StatefulWidget {
 
 class _DashboardscreenState extends State<Dashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
+
   String stateName = '';
   String userName = '';
   String mobile = '';
@@ -39,6 +45,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $dep");
 
     getToken();
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
@@ -140,7 +147,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ),
                   onTap: () {
                     Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSaveSample);
+                        context, AppConstants.navigateToSubmitSampleScreen);
                   },
                 ),
                 ListTile(
@@ -151,7 +158,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ),
                   onTap: () {
                     Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleList,
+                        context, AppConstants.navigateToSampleListScreen,
                         arguments: {
                           'flag': AppConstants.totalSamplesSubmitted,
                         });
@@ -169,7 +176,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         listen: false);
                     await authProvider.logoutUser();
                     Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToLogin);
+                        context, AppConstants.navigateToLoginScreen);
                   },
                 ),
               ],
@@ -315,11 +322,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.blueAccent
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData!.totalSamplesSubmitted}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted??0}',
                                 imageName: 'medical-lab',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
                                             AppConstants.totalSamplesSubmitted,
@@ -334,11 +341,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.orange
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData!.samplesPhysicallySubmitted}',
+                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ??0}',
                                 imageName: 'test',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
                                             AppConstants.totalPhysicalSubmitted
@@ -350,11 +357,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 icon: Icons.check_circle,
                                 gradientColors: [Colors.teal, Colors.green],
                                 value:
-                                    '${dashboardProvider.dashboardData!.totalSamplesTested}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesTested??0}',
                                 imageName: 'search',
                                 onTap: () {
                                   Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleList,
+                                      AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag': AppConstants.totalSampleTested
                                       });
@@ -364,7 +371,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   title: AppConstants.totalRetest,
                                   icon: Icons.refresh,
                                   gradientColors: [Colors.red, Colors.deepOrange],
-                                  value: '${dashboardProvider.dashboardData!.totalRetest}',
+                                  value: '${dashboardProvider.dashboardData?.totalRetest??0}',
                                   onTap: () {
                                     // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
                                     ToastHelper.showSnackBar(context, "Admin can access this option only");
@@ -389,6 +396,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
@@ -402,7 +410,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     MediaQuery.of(context).size.height;
                                 double screenwidth =
                                     MediaQuery.of(context).size.width;
-
                                 return AlertDialog(
                                   contentPadding: const EdgeInsets.all(10),
                                   content: Container(
@@ -548,7 +555,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
-
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';

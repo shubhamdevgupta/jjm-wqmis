@@ -48,7 +48,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
         dwsmDashboardProvider.fetchSchoolAwcInfo(
           int.parse(masterProvider.selectedStateId!),
-          int.parse(masterProvider.selectedDistrictId!),
+          int.parse(_localStorage.getString(AppConstants.prefDistrictId).toString()),
           int.parse(masterProvider.selectedBlockId!),
           int.parse(masterProvider.selectedGramPanchayat!),
           int.parse(masterProvider.selectedVillage!),
@@ -147,7 +147,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
                 Navigator.pop(context);
               } else {
                 Navigator.pushReplacementNamed(
-                    context, AppConstants.navigateToSaveSample);
+                    context, AppConstants.navigateToSubmitSampleScreen);
               }
             },
           ),

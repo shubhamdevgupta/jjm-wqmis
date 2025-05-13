@@ -208,6 +208,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                         onChanged: (value) {
                         provider.proccessOnChanged(value!,masterProvider);
                         },
+                        appBarTitle: "Wtp Lab",
                       ),
                       SizedBox(
                         height: 10,
@@ -269,116 +270,119 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                       ),
                       Visibility(
                         visible: provider.isLabSelected,
-                        child: Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          margin: EdgeInsets.all(5),
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Tests Available:',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.blueAccent,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            margin: EdgeInsets.all(5),
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Tests Available:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Colors.blueAccent,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 15),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    columnSpacing: 20,
-                                    headingRowHeight: 50,
-                                    dataRowHeight: 60,
-                                    columns: const <DataColumn>[
-                                      DataColumn(
-                                        label: Text(
-                                          'Select Test',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.blueGrey,
+                                  const SizedBox(height: 8),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: DataTable(
+                                      columnSpacing: 20,
+                                      headingRowHeight: 50,
+                                      dataRowHeight: 60,
+                                      columns: const <DataColumn>[
+                                        DataColumn(
+                                          label: Text(
+                                            'Select Test',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.blueGrey,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          'Test Price',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.blueGrey,
+                                        DataColumn(
+                                          label: Text(
+                                            'Test Price',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.blueGrey,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                    rows: provider.parameterList.map((param) {
-                                      bool isSelected = provider.cart!.any(
-                                            (item) => item.parameterId == param.parameterId,
-                                      );
+                                      ],
+                                      rows: provider.parameterList.map((param) {
+                                        bool isSelected = provider.cart!.any(
+                                              (item) => item.parameterId == param.parameterId,
+                                        );
 
-                                      return DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(
-                                            GestureDetector(
-                                              onTap: () {
-                                                provider.toggleCart(param);
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Checkbox(
-                                                    value: isSelected,
-                                                    onChanged: (bool? value) {
-                                                      print('the selected value labview------- $value');
-                                                      if (value != null) {
-                                                        provider.toggleCart(param);
-                                                      }
-                                                    },
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  SizedBox(
-                                                    width: 150,
-                                                    child: Text(
-                                                      param.parameterName,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      style: TextStyle(fontSize: 14),
+                                        return DataRow(
+                                          cells: <DataCell>[
+                                            DataCell(
+                                              GestureDetector(
+                                                onTap: () {
+                                                  provider.toggleCart(param);
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Checkbox(
+                                                      value: isSelected,
+                                                      onChanged: (bool? value) {
+                                                        print('the selected value labview------- $value');
+                                                        if (value != null) {
+                                                          provider.toggleCart(param);
+                                                        }
+                                                      },
                                                     ),
-                                                  ),
-                                                ],
+                                                    SizedBox(width: 10),
+                                                    SizedBox(
+                                                      width: 150,
+                                                      child: Text(
+                                                        param.parameterName,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(fontSize: 14),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          DataCell(
-                                            GestureDetector(
-                                              onTap: () {
-                                                provider.toggleCart(param);
-                                              },
-                                              child: Text(
-                                                param.deptRate.toString(),
-                                                style: TextStyle(fontSize: 14),
+                                            DataCell(
+                                              GestureDetector(
+                                                onTap: () {
+                                                  provider.toggleCart(param);
+                                                },
+                                                child: Text(
+                                                  param.deptRate.toString(),
+                                                  style: TextStyle(fontSize: 14),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    }).toList(),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  'Selected Param: ${provider.cart!.length}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                  const SizedBox(height: 18),
+                                  Text(
+                                    'Selected Param: ${provider.cart!.length}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/DWSM/DwmsLIst/DemonstrationScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
 import '../../services/LocalStorageService.dart';
-import 'DwmsLIst/SchoolAwcScreen.dart';
 import 'DwsmLocationScreen.dart';
+import 'dwsmList/DemonstrationScreen.dart';
+import 'dwsmList/SchoolAwcScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
   const Dwsdashboardscreen({super.key});
@@ -79,7 +79,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           context,
                           listen: false);
                       await authProvider.logoutUser();
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToLogin);
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToLoginScreen);
                     },
                   ),
                 ],
@@ -315,7 +315,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.blue,
                                   title: "Schools",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -339,7 +339,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.deepOrange,
                                   title: "Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalSchoolsDemonstration}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -380,7 +380,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.teal,
                                   title: "Anganwadi",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,
@@ -402,7 +402,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.purple,
                                   title: "Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCsDemonstration}',
+                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration??0}',
                                   onTap: () {
                                     Navigator.push(
                                       context,

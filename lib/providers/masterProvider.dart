@@ -125,14 +125,14 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = rawDistricts.message;
       }
 
+      if(localStorage.getString(AppConstants.prefRoleId)=="8"){
       for (int i = 0; i < districts.length; i++) {
-        if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
-            districts[i].jjmDistrictId) {
+        if (localStorage.getString(AppConstants.prefDistrictId).toString() == districts[i].jjmDistrictId) {
 
           localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
-
+           /* setSelectedDistrict(districts[i].jjmDistrictId);*/
         }
-      }
+      }}
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -144,8 +144,6 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
-    /*setSelectedState(stateId);
-    setSelectedDistrict(districtId);*/
 
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";

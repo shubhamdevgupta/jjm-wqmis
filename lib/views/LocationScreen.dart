@@ -308,7 +308,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       masterProvider.clearsampleinfo();
                       print('Going to Show information screen');
                       Navigator.pop(context, true);
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSaveSample);
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
                     } else {
                       /*ToastHelper.showErrorSnackBar(context, masterProvider.errorMsg);*/
                       ToastHelper.showToastMessage(masterProvider.errorMsg);

@@ -54,7 +54,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                 children: [
                   SingleChildScrollView(
                     child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Builder(builder: (context) {
                           switch (dwsmprovider.dataState) {
                             case DataState.loading:
@@ -370,51 +370,15 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                         Icons.label,
                                                         Colors.green),
 
+                                                    _infoRow(
+                                                        "Remark",
+                                                        village != null
+                                                            ? village!.remark: "",
+                                                        Icons.message,
+                                                        Colors.teal),
+
                                                     // Remark
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          vertical: 12),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          _iconCircle(
-                                                              Icons.comment,
-                                                              Colors.teal),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          Expanded(
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(10),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .teal
-                                                                    .shade50,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            12),
-                                                              ),
-                                                              child: const Text(
-                                                                "No remark provided",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontFamily:
-                                                                        'OpenSans',
-                                                                    color: Colors
-                                                                        .teal),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+
                                                     const Divider(height: 30),
                                                     Align(
                                                       alignment:
@@ -602,22 +566,40 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _iconCircle(icon, color),
-          const SizedBox(width: 10),
-          Text(
-            "$title: ",
-            style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontFamily: 'OpenSans',
-                fontSize: 14),
-          ),
+          const SizedBox(width: 5),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontFamily: 'OpenSans', fontSize: 14),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.05), // Light background tone
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'OpenSans',
+                    color: Colors.black87,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "$title: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value.isEmpty ? "No data provided" : value,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -655,7 +637,7 @@ class _SchoolScreen extends State<SchoolScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(vertical: 5),
             child: SizedBox(
               width: double.infinity,
               child: TextFormField(
@@ -695,6 +677,7 @@ class _SchoolScreen extends State<SchoolScreen> {
               ),
             ),
           ),
+          SizedBox(height: 5,),
           Card(
             child: Container(
               decoration: BoxDecoration(
@@ -723,7 +706,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                     ),
                   ),
                   Divider(thickness: 1, color: Colors.grey.shade300),
-                  SizedBox(height: 2),
+
                   Center(
                     child: _cameraHelper.imageFile == null
                         ? GestureDetector(
@@ -775,15 +758,17 @@ class _SchoolScreen extends State<SchoolScreen> {
                             ],
                           ),
                   ),
+
+                  SizedBox(height: 5),
                 ],
               ),
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
             child: Card(
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -801,11 +786,11 @@ class _SchoolScreen extends State<SchoolScreen> {
                   children: [
                     // Heading
                     Text(
-                      'Geo Location of Sample Taken',
+                      'Geo Location',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         color: Colors.blueGrey.shade700,
                       ),
                     ),
@@ -818,6 +803,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                           children: [
                             Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
+                            SizedBox(width: 5,),
                             Text(
                               'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
@@ -834,6 +820,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                           children: [
                             Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
+                            SizedBox(width: 5,),
                             Text(
                               'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
@@ -851,36 +838,39 @@ class _SchoolScreen extends State<SchoolScreen> {
               ),
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (await validate(dwsmprovider)) {
-                    await dwsmprovider.submitFtkData(
-                        int.parse(userId),
-                        int.parse(dwsmprovider.selectedSchoolResult!),
-                        int.parse(stateId),
-                        _cameraHelper.base64Image!,
-                        "2025-2026",
-                        remarkController.text,
-                        dwsmprovider.currentLatitude.toString(),
-                        dwsmprovider.currentLatitude.toString(),
-                        dwsmprovider.deviceId!, () {
-                      showResponse(dwsmprovider);
-                    });
-                  } else {
-                    ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
-                  }
-                },
-                child: Text(
-                  AppConstants.submitSample,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                style: AppStyles.buttonStylePrimary()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (await validate(dwsmprovider)) {
+                      await dwsmprovider.submitFtkData(
+                          int.parse(userId),
+                          int.parse(dwsmprovider.selectedSchoolResult!),
+                          int.parse(stateId),
+                          _cameraHelper.base64Image!,
+                          "2025-2026",
+                          remarkController.text,
+                          dwsmprovider.currentLatitude.toString(),
+                          dwsmprovider.currentLatitude.toString(),
+                          dwsmprovider.deviceId!, () {
+                        showResponse(dwsmprovider);
+                      });
+                    } else {
+                      ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
+                    }
+                  },
+                  child: Text(
+                    AppConstants.submitSample,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  style: AppStyles.buttonStylePrimary()),
+            ),
           ),
         ],
       ),

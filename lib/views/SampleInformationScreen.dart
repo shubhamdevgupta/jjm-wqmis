@@ -64,7 +64,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       Navigator.pop(context);
                     } else {
                       Navigator.pushReplacementNamed(
-                          context, AppConstants.navigateToDashboard);
+                          context, AppConstants.navigateToDashboardScreen);
                     }
                   },
                 ),
@@ -442,153 +442,158 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     return Visibility(
       visible: masterProvider.selectedWtsfilter == "5" &&
           (masterProvider.selectedScheme?.isNotEmpty ?? false),
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              CustomDropdown(
-                value: masterProvider.selectedWtp,
-                items: masterProvider.wtpList.map((wtpData) {
-                  return DropdownMenuItem<String>(
-                    value: wtpData.wtpId,
-                    child: Text(
-                      wtpData.wtpName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  );
-                }).toList(),
-                title: "Select water treatment plant (WTP)",
-                onChanged: (value) {
-                  masterProvider.setSelectedWTP(value);
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        children: [
+          Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Radio(
-                        value: 5,
-                        groupValue: masterProvider.selectedSubSource,
-                        onChanged: (value) {
-                          masterProvider.selectRadioOption(value!);
-                        },
-                      ),
-                      InkWell(
-                          onTap: () {
-                            masterProvider.selectRadioOption(5);
-                          },
-                          child: const Text('Inlet of WTP'))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Radio(
-                        value: 6,
-                        groupValue: masterProvider.selectedSubSource,
-                        onChanged: (value) {
-                          masterProvider.selectRadioOption(value!);
-                        },
-                      ),
-                      InkWell(
-                          onTap: () {
-                            masterProvider.selectRadioOption(6);
-                          },
-                          child: const Text('Outlet of WTP'))
-                    ],
-                  ),
-                  Visibility(
-                    visible: masterProvider.selectedSubSource != null &&
-                        masterProvider.selectedWtsfilter == "5",
-                    child: Card(
-                      elevation: 5,
-                      // Increased elevation for a more modern shadow effect
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      margin: EdgeInsets.all(5),
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // Align text to the left
-                          children: [
-                            Visibility(
-                              visible: masterProvider.selectedSubSource == 5,
-                              child: CustomDropdown(
-                                title: "Select Water Source *",
-                                value: masterProvider.selectedWaterSource,
-                                items: masterProvider.waterSource
-                                    .map((waterSource) {
-                                  return DropdownMenuItem<String>(
-                                    value: waterSource.locationId,
-                                    child: Text(
-                                      waterSource.locationName,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  masterProvider
-                                      .setSelectedWaterSourceInformation(value);
-                                },
-                              ),
-                            ),
-                            CustomDateTimePicker(onDateTimeSelected: (value) {
-                              masterProvider.setSelectedDateTime(value);
-                            }),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Center(
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (validateWtpWaterFields(masterProvider)) {
-                                    //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
-
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ChangeNotifierProvider.value(
-                                                value: masterProvider,
-                                                child: Wtplabscreen(),
-                                              )),
-                                    );
-                                  } else {
-                                    ToastHelper.showToastMessage(
-                                        masterProvider.errorMsg);
-                                  }
-                                },
-                                style: AppStyles.buttonStylePrimary(),
-                                child: const Text(
-                                  'Next',
-                                  style: AppStyles.textStyle,
-                                ),
-                              ),
-                            )
-                          ],
+                  CustomDropdown(
+                    value: masterProvider.selectedWtp,
+                    items: masterProvider.wtpList.map((wtpData) {
+                      return DropdownMenuItem<String>(
+                        value: wtpData.wtpId,
+                        child: Text(
+                          wtpData.wtpName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
+                      );
+                    }).toList(),
+                    title: "Select water treatment plant (WTP)",
+                    onChanged: (value) {
+                      masterProvider.setSelectedWTP(value);
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Radio(
+                            value: 5,
+                            groupValue: masterProvider.selectedSubSource,
+                            onChanged: (value) {
+                              masterProvider.selectRadioOption(value!);
+                            },
+                          ),
+                          InkWell(
+                              onTap: () {
+                                masterProvider.selectRadioOption(5);
+                              },
+                              child: const Text('Inlet of WTP'))
+                        ],
                       ),
-                    ),
+                      Row(
+                        children: [
+                          Radio(
+                            value: 6,
+                            groupValue: masterProvider.selectedSubSource,
+                            onChanged: (value) {
+                              masterProvider.selectRadioOption(value!);
+                            },
+                          ),
+                          InkWell(
+                              onTap: () {
+                                masterProvider.selectRadioOption(6);
+                              },
+                              child: const Text('Outlet of WTP'))
+                        ],
+                      ),
+                    ],
                   ),
                 ],
-              )
-            ],
+              ),
+            ),
           ),
-        ),
+          Visibility(
+            visible: masterProvider.selectedSubSource != null &&
+                masterProvider.selectedWtsfilter == "5",
+            child: Card(
+              elevation: 5,
+              // Increased elevation for a more modern shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: EdgeInsets.all(5),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // Align text to the left
+                  children: [
+                    Visibility(
+                      visible: masterProvider.selectedSubSource == 5,
+                      child: CustomDropdown(
+                        title: "Select Water Source *",
+                        value: masterProvider.selectedWaterSource,
+                        items: masterProvider.waterSource
+                            .map((waterSource) {
+                          return DropdownMenuItem<String>(
+                            value: waterSource.locationId,
+                            child: Text(
+                              waterSource.locationName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          masterProvider
+                              .setSelectedWaterSourceInformation(value);
+                        },
+                      ),
+                    ),
+                    CustomDateTimePicker(onDateTimeSelected: (value) {
+                      masterProvider.setSelectedDateTime(value);
+                    }),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (validateWtpWaterFields(masterProvider)) {
+                            //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangeNotifierProvider.value(
+                                        value: masterProvider,
+                                        child: Wtplabscreen(),
+                                      )),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(
+                                masterProvider.errorMsg);
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+        ],
       ),
     );
   }
