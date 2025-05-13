@@ -5,18 +5,11 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
-
-import '../../utils/UpdateDialog.dart';
-
-import '../../utils/LoaderUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -27,7 +20,6 @@ class Dashboardscreen extends StatefulWidget {
 
 class _DashboardscreenState extends State<Dashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   String stateName = '';
   String userName = '';
@@ -46,7 +38,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
     getToken();
 
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -57,7 +48,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       print("dashboard ${dashboardProvider.isLoading}");
       print("master provider  data${masterProvider.isLoading}");
 
-      //masterProvider.clearData();
       await masterProvider.fetchDistricts(stateId);
     });
   }
@@ -322,7 +312,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.blueAccent
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted??0}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
                                 imageName: 'medical-lab',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -341,7 +331,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.orange
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ??0}',
+                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
                                 imageName: 'test',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -357,7 +347,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 icon: Icons.check_circle,
                                 gradientColors: [Colors.teal, Colors.green],
                                 value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesTested??0}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
                                 imageName: 'search',
                                 onTap: () {
                                   Navigator.pushNamed(context,
@@ -396,7 +386,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
@@ -555,6 +544,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
+
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
