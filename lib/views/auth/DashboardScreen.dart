@@ -347,8 +347,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
-                                        'flag':
-                                            AppConstants.totalPhysicalSubmitted
+                                        'flag': AppConstants.totalPhysicalSubmitted
                                       });
                                 },
                               ),
