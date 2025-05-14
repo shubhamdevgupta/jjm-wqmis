@@ -23,11 +23,13 @@ class Locationscreen extends StatefulWidget {
 
 class _LocationscreenState extends State<Locationscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
+  String districtId = '';
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
   @override
   void initState() {
     super.initState();
+    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
   }
 
   @override
@@ -152,30 +154,73 @@ class _LocationscreenState extends State<Locationscreen> {
               ),
               SizedBox(width: 10),
               //district data here--------------
-              Padding(
-                  padding: EdgeInsets.only(top: 4.0),
-                  child: CustomDropdown(
-                      value: masterProvider.selectedDistrictId,
-                      items: masterProvider.districts.map((district) {
-                        return DropdownMenuItem<String>(
-                          value: district.jjmDistrictId,
-                          child: Text(
-                            district.districtName,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        );
-                      }).toList(),
-                      title: 'District *',
-                      onChanged: (value) {
-                        masterProvider.setSelectedDistrict(value);
-                        if (value != null &&value.isNotEmpty) {
-                          masterProvider.fetchBlocks(
-                              masterProvider.selectedStateId!, value);
-                        }
-                      },
-                    appBarTitle: "Select District",
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'District',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black, // Dark text for better readability
+                        fontFamily: 'OpenSans'),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    child: DropdownButtonFormField<String>(
+                      value: districtId,
+                      // Ensure this matches the DropdownMenuItem value
+                      decoration: InputDecoration(
+                        filled: true,
+                        // Grey background to indicate it's non-editable
+                        fillColor: Colors.grey[300],
+                        labelStyle: TextStyle(
+                          color: Colors.blueAccent,
+                          fontFamily: 'OpenSans',
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+
+                          borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 2), // Avoid focus effect
+                        ),
+                        contentPadding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
+                      items: [
+                        DropdownMenuItem<String>(
+                          value: districtId,
+                          // Ensure this matches the selected value
+
+                          child: Text(
+                              _localStorage
+                                  .getString(AppConstants.prefDistName) ??
+                                  'Unknown State',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: 'OpensSans',
+                                  fontWeight:
+                                  FontWeight.w500)), // Display state name
+                        ),
+                      ],
+                      onChanged: null,
+                      // Disable selection (non-editable)
+                      isExpanded: true,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
+                        fontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 12),
               //block data here--------------
