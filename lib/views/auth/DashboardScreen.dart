@@ -363,8 +363,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
-                                        'flag': AppConstants.totalSampleTested,
-                                        'flagFloating' : ""
+                                        'flag': AppConstants.totalSampleTested,'flagFloating':''
                                       });
                                 },
                               ),
@@ -418,8 +417,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
                                     child: const Locationscreen(
-                                        flag:
-                                            AppConstants.openSampleInfoScreen,flagFloating: "",),
+                                        flag: AppConstants.openSampleInfoScreen,flagFloating: "",),
                                   ),
                                 );
                               },

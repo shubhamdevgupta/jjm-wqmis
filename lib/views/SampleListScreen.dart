@@ -86,7 +86,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
         if ( (flagfloation == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) && (flagfloation == AppConstants.totalPhysicalSubmitted|| flag == AppConstants.openSampleListScreen) &&(flag == AppConstants.openSampleListScreen ||   flagfloation == AppConstants.totalSampleTested) ) {
 
           if(flagfloation == AppConstants.totalSamplesSubmitted){
-            C_STATUS = 1;
+          C_STATUS = 1;
           }else if(flagfloation == AppConstants.totalPhysicalSubmitted){
             C_STATUS = 2;
           }
@@ -104,10 +104,13 @@ class _SampleListScreenState extends State<SampleListScreen> {
               int.parse(block),
               int.parse(masterprovider.selectedGramPanchayat ?? "0"),
               int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) {
+        } else if (flag == AppConstants.totalPhysicalSubmitted ||
+            flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSampleTested || flag == AppConstants.openSampleListScreen) {
+          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSampleTested ||
+            flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);}
         else if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) {
           C_STATUS = 1;
@@ -205,8 +208,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       height: screenHeight * 0.8,
                       width: screenHeight * 0.4,
                       child:  Locationscreen(
-                        flag: AppConstants.openSampleListScreen,
-                        flagFloating:  flag ,
+                        flag: AppConstants.openSampleListScreen,flagFloating: "",
                       ),
                     ),
                   );
