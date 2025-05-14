@@ -345,8 +345,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         ModalRoute.withName('/dashboard'),
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
-                    } else if (widget.flag == AppConstants.openSampleInfoScreen &&
-                        validateStateVillage(masterProvider)) {
+                    } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();
                       masterProvider.clearsampleinfo();
                       print('Going to Show information screen');

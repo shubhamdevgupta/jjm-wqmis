@@ -261,7 +261,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                 ),
                               ],
                             ),
-                            child: TextField(
+                            child:  TextField(
                               controller: searchController,
                               decoration: InputDecoration(
                                 hintText: 'Search...',
@@ -340,8 +340,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                               child: Text(
                                                 "${index + 1}",
                                                 style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.white, fontFamily: 'OpenSans',
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
