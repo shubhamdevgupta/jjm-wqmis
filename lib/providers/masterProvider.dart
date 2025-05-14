@@ -131,8 +131,6 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = rawDistricts.message;
       }
-
-      if (localStorage.getString(AppConstants.prefRoleId) == "8") {
         for (int i = 0; i < districts.length; i++) {
           if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
               districts[i].jjmDistrictId) {
@@ -141,7 +139,7 @@ class Masterprovider extends ChangeNotifier {
             setSelectedDistrict(districts[i].jjmDistrictId);
           }
         }
-      }
+
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);

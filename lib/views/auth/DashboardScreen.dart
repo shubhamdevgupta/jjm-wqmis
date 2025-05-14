@@ -6,7 +6,6 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
@@ -24,6 +23,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
 
   String stateName = '';
+  String districtId = '';
   String userName = '';
   String mobile = '';
   String stateId = '';
@@ -38,7 +38,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("Aesen-----> $dep");
 
     getToken();
-    checkVersion();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -50,6 +49,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       print("master provider  data${masterProvider.isLoading}");
 
       await masterProvider.fetchDistricts(stateId);
+      await masterProvider.fetchBlocks(stateId, districtId);
     });
   }
 
@@ -136,9 +136,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
@@ -319,7 +317,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
-                                            AppConstants.totalSamplesSubmitted,'flagFloating' : ""
+                                            AppConstants.totalSamplesSubmitted,
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -338,7 +337,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
-                                            AppConstants.totalPhysicalSubmitted,'flagFloating' : ""
+                                            AppConstants.totalPhysicalSubmitted,
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -354,7 +354,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag': AppConstants.totalSampleTested,
-                                        'flagFloating' : ""
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -407,8 +407,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
                                     child: const Locationscreen(
-                                        flag:
-                                            AppConstants.openSampleInfoScreen,flagFloating: "",),
+                                      flag: AppConstants.openSampleInfoScreen,
+                                      flagFloating: "",
+                                    ),
                                   ),
                                 );
                               },
@@ -552,12 +553,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
+    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }
-  void checkVersion() async {
-    final version = await VersionUtils.getNativeAppVersion();
-    print("Native version: $version");
-  }
-
 }
