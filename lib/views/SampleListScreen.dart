@@ -12,6 +12,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
 import '../utils/AppStyles.dart';
+import '../utils/DataState.dart';
 import '../utils/Showerrormsg.dart';
 import 'LocationScreen.dart';
 
@@ -94,7 +95,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
             C_STATUS = 1;
           } else if (flagfloation == AppConstants.totalPhysicalSubmitted) {
             C_STATUS = 2;
-          } else if(flagfloation == AppConstants.totalSampleTested) {
+          } else if (flagfloation == AppConstants.totalSampleTested) {
             C_STATUS = 6;
           }
           sampleListProvider.fetchSampleList(
@@ -236,307 +237,326 @@ class _SampleListScreenState extends State<SampleListScreen> {
           ),
           body: Consumer<Samplelistprovider>(
             builder: (context, provider, child) {
-              return
-              Column(
-                children: [
-                  SizedBox(height: 20),
+              switch (provider.dataState) {
+                case DataState.initial:
+                  return const Center(
+                      child: Text("Please initiate search or action."));
+                case DataState.loading:
+                  return Center(
+                      child: LoaderUtils.conditionalLoader(isLoading: true));
+                case DataState.loaded:
 
-                  // Search Bar
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
+                  return Column(
+                    children: [
+                      SizedBox(height: 20),
+
+                      // Search Bar
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: TextField(
-                              controller: searchController,
-                              decoration: InputDecoration(
-                                hintText: 'Search...',
-                                border: InputBorder.none,
+                                child: TextField(
+                                  controller: searchController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Search...',
+                                    border: InputBorder.none,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          style: AppStyles.buttonStylePrimary(
-                              backgroundColor: const Color(0xFF0468B1),
-                              fontSize: 16,
-                              borderRadius: 6,
-                              horizontalPadding: 20,
-                              verticalPadding: 14),
-                          onPressed: () {
-                            print("------------ ${searchController.text}");
-                            if (searchController.text.isNotEmpty) {
-                              provider.fetchSampleList(int.parse(userId!), 1,
-                                  "", 0, searchController.text, 0, 0, 0, 0, 0);
-                            } else {
-                              ToastHelper.showErrorSnackBar(
-                                  context, "Please enter sample id");
-                            }
-                          },
-                          child: const Text(
-                            "Search",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Expanded to prevent infinite height issue
-                  provider.isLoading
-                      ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                      : provider.samples.isEmpty?AppTextWidgets.errorText(provider.errorMsg):Expanded(
-                          child: ListView.builder(
-                            itemCount: provider.samples.length,
-                            itemBuilder: (context, index) {
-                              Sample sample = provider.samples[
-                                  index]; // where result is List<Sample>
-
-                              return Card(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            SizedBox(width: 10),
+                            ElevatedButton(
+                              style: AppStyles.buttonStylePrimary(
+                                  backgroundColor: const Color(0xFF0468B1),
+                                  fontSize: 16,
+                                  borderRadius: 6,
+                                  horizontalPadding: 20,
+                                  verticalPadding: 14),
+                              onPressed: () {
+                                print("------------ ${searchController.text}");
+                                if (searchController.text.isNotEmpty) {
+                                  provider.fetchSampleList(
+                                      int.parse(userId!),
+                                      1,
+                                      "",
+                                      0,
+                                      searchController.text,
+                                      0,
+                                      0,
+                                      0,
+                                      0,
+                                      0);
+                                } else {
+                                  ToastHelper.showErrorSnackBar(
+                                      context, "Please enter sample id");
+                                }
+                              },
+                              child: const Text(
+                                "Search",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'OpenSans',
                                 ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.blue, width: 2),
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(12),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // ID Row
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CircleAvatar(
-                                              backgroundColor: Colors.blue,
-                                              child: Text(
-                                                "${index + 1}",
-                                                style: TextStyle(
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Expanded to prevent infinite height issue
+                      /*  provider.isLoading
+                          ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                          : provider.samples.isEmpty?AppTextWidgets.errorText(provider.errorMsg):*/
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: provider.samples.length,
+                          itemBuilder: (context, index) {
+                            Sample sample = provider
+                                .samples[index]; // where result is List<Sample>
+
+                            return Card(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.blue, width: 2),
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // ID Row
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: Colors.blue,
+                                            child: Text(
+                                              "${index + 1}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'OpenSans',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          //SizedBox(width: 10),
+
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 5,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black87,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              "ID: ${sample.sampleId ?? 'N/A'}",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'OpenSans',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+
+                                          Visibility(
+                                            visible: sample.testResult ==
+                                                "Report Approved",
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => TestReport(
+                                                        url:
+                                                            'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
+                                                  ),
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.brown,
+                                                child: Icon(
+                                                  Icons.download,
                                                   color: Colors.white,
-                                                  fontFamily: 'OpenSans',
-                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            //SizedBox(width: 10),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
 
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 10,
-                                                vertical: 5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black87,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                "ID: ${sample.sampleId ?? 'N/A'}",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: 'OpenSans',
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
+                                      Divider(),
 
-                                            Visibility(
-                                              visible: sample.testResult ==
-                                                  "Report Approved",
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (_) => TestReport(
-                                                          url:
-                                                              'https://ejalshakti.gov.in/WQMIS/Common/final_report_print?s_id=${encryption.encryptText(sample.sId.toString())}'),
-                                                    ),
-                                                  );
-                                                },
-                                                child: CircleAvatar(
-                                                  backgroundColor: Colors.brown,
-                                                  child: Icon(
-                                                    Icons.download,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-
-                                        Divider(),
-
-                                        // Lab Name
-                                        Row(
-                                          children: [
-                                            Icon(Icons.business,
-                                                color: Colors.blue),
-                                            SizedBox(width: 5),
-                                            Expanded(
-                                              child: Text(
-                                                sample.labName ?? 'N/A',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'OpenSans',
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-
-                                        // Location
-                                        Row(
-                                          children: [
-                                            Icon(Icons.location_on,
-                                                color: Colors.blue),
-                                            SizedBox(width: 5),
-                                            Expanded(
-                                              child: Text(
-                                                "${sample.villageName ?? 'N/A'}, "
-                                                "${sample.gramPanchayatName ?? 'N/A'}, "
-                                                "${sample.blockName ?? 'N/A'}, "
-                                                "${sample.districtName ?? 'N/A'}",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: 'OpenSans',
-                                                  color: Colors.grey[700],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-
-                                        Divider(),
-
-                                        // Test Result
-                                        Row(
-                                          children: [
-                                            Icon(Icons.category,
-                                                color: Colors.blue),
-                                            SizedBox(width: 5),
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "Test Result: ",
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontFamily: 'OpenSans',
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 4,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: sample
-                                                                  .testResult ==
-                                                              "Report Approved"
-                                                          ? Colors.green[100]
-                                                          : sample.testResult ==
-                                                                  "Under Process"
-                                                              ? Colors
-                                                                  .yellow[100]
-                                                              : Colors
-                                                                  .blue[100],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
-                                                    ),
-                                                    child: Text(
-                                                      sample.testResult ??
-                                                          'N/A',
-                                                      style: TextStyle(
-                                                        color: sample
-                                                                    .testResult ==
-                                                                "Report Approved"
-                                                            ? Colors.green[800]
-                                                            : sample.testResult ==
-                                                                    "Under Process"
-                                                                ? Colors
-                                                                    .orange[800]
-                                                                : Colors
-                                                                    .blue[800],
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14,
-                                                        fontFamily: 'OpenSans',
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-
-                                        Divider(),
-
-                                        // Date of Submission
-                                        Row(
-                                          children: [
-                                            Icon(Icons.calendar_today,
-                                                color: Colors.blue),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
+                                      // Lab Name
+                                      Row(
+                                        children: [
+                                          Icon(Icons.business,
+                                              color: Colors.blue),
+                                          SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              sample.labName ?? 'N/A',
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontFamily: 'OpenSans',
-                                                color: Colors.grey[600],
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+
+                                      // Location
+                                      Row(
+                                        children: [
+                                          Icon(Icons.location_on,
+                                              color: Colors.blue),
+                                          SizedBox(width: 5),
+                                          Expanded(
+                                            child: Text(
+                                              "${sample.villageName ?? 'N/A'}, "
+                                              "${sample.gramPanchayatName ?? 'N/A'}, "
+                                              "${sample.blockName ?? 'N/A'}, "
+                                              "${sample.districtName ?? 'N/A'}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'OpenSans',
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+
+                                      Divider(),
+
+                                      // Test Result
+                                      Row(
+                                        children: [
+                                          Icon(Icons.category,
+                                              color: Colors.blue),
+                                          SizedBox(width: 5),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "Test Result: ",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'OpenSans',
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 4,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: sample.testResult ==
+                                                            "Report Approved"
+                                                        ? Colors.green[100]
+                                                        : sample.testResult ==
+                                                                "Under Process"
+                                                            ? Colors.yellow[100]
+                                                            : Colors.blue[100],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                  ),
+                                                  child: Text(
+                                                    sample.testResult ?? 'N/A',
+                                                    style: TextStyle(
+                                                      color: sample
+                                                                  .testResult ==
+                                                              "Report Approved"
+                                                          ? Colors.green[800]
+                                                          : sample.testResult ==
+                                                                  "Under Process"
+                                                              ? Colors
+                                                                  .orange[800]
+                                                              : Colors
+                                                                  .blue[800],
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                      fontFamily: 'OpenSans',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+
+                                      Divider(),
+
+                                      // Date of Submission
+                                      Row(
+                                        children: [
+                                          Icon(Icons.calendar_today,
+                                              color: Colors.blue),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'OpenSans',
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                ],
-              );
+                      ),
+                    ],
+                  );
+
+                case DataState.error:
+                  return Center(
+                    child: AppTextWidgets.errorText(provider.errorMsg),
+                  );
+              }
             },
           ),
         ),

@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isAvailable = await _updateViewModel.checkForUpdate();
     print('Update available: $isAvailable');
 
-    if (isAvailable && mounted) {
+    if (false/*isAvailable && mounted*/) {
       final updateInfo = await _updateViewModel.getUpdateInfo();
 
       if (updateInfo != null) {

@@ -12,6 +12,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
+import 'package:jjm_wqmis/utils/DataState.dart';
 
 import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
@@ -89,70 +90,68 @@ class Masterprovider extends ChangeNotifier {
   String otherSourceLocation = '';
   String sampleTypeOther = '';
   final LocalStorageService localStorage = LocalStorageService();
+  DataState dataState = DataState.initial;
 
   Future<void> fetchStates() async {
-    print('Calling the state function...');
-    _isLoading = true;
-    notifyListeners();
+    loading();
     try {
       final basestates = await _masterRepository.fetchStates();
       if (basestates.status == 1) {
         states = basestates.result;
+        dataState = DataState.loaded;
       } else {
         errorMsg = basestates.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> fetchDistricts(String stateId) async {
-    print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
-    _isLoading = true;
-    notifyListeners();
+    loading();
 
     try {
       final rawDistricts = await _masterRepository.fetchDistricts(stateId);
       baseStatus = rawDistricts.status;
       if (rawDistricts.status == 1) {
         districts = rawDistricts.result;
+        dataState = DataState.loaded;
       } else {
         errorMsg = rawDistricts.message;
+        dataState = DataState.error;
       }
 
-      if(localStorage.getString(AppConstants.prefRoleId)=="8"){
-      for (int i = 0; i < districts.length; i++) {
-        if (localStorage.getString(AppConstants.prefDistrictId).toString() == districts[i].jjmDistrictId) {
-
-          localStorage.saveString(AppConstants.prefDistName, districts[i].districtName);
+      if (localStorage.getString(AppConstants.prefRoleId) == "8") {
+        for (int i = 0; i < districts.length; i++) {
+          if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
+              districts[i].jjmDistrictId) {
+            localStorage.saveString(
+                AppConstants.prefDistName, districts[i].districtName);
             setSelectedDistrict(districts[i].jjmDistrictId);
+          }
         }
-      }}
+      }
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load districts.";
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
-
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
       notifyListeners();
       return;
     }
-
-    _isLoading = true;
-    notifyListeners();
+    loading();
 
     try {
       final rawBlocks =
@@ -161,16 +160,17 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawBlocks.status == 1) {
         blocks = rawBlocks.result;
+        dataState = DataState.loaded;
       } else {
         errorMsg = rawBlocks.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in fetching blocks: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load blocks.";
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
@@ -181,9 +181,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-
-    _isLoading = true;
-    notifyListeners();
+    loading();
 
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
@@ -193,22 +191,21 @@ class Masterprovider extends ChangeNotifier {
 
       if (rawGPs.status == 1) {
         gramPanchayat = rawGPs.result;
-
-        // ✅ Auto-select if only one Gram Panchayat is available
-        if (gramPanchayat != null && gramPanchayat!.length == 1) {
+        dataState = DataState.loaded;
+        if (gramPanchayat != null && gramPanchayat.length == 1) {
           final singleGP = gramPanchayat!.first;
           setSelectedGrampanchayat(singleGP.jjmPanchayatId);
         }
       } else {
         errorMsg = rawGPs.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in fetching grampanchayat: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load Gram Panchayats.";
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
@@ -223,9 +220,7 @@ class Masterprovider extends ChangeNotifier {
       return;
     }
 
-    _isLoading = true;
-    notifyListeners();
-
+    loading();
     try {
       final rawVillages = await _masterRepository.fetchVillages(
           stateId, districtId, blockId, gpID);
@@ -239,7 +234,6 @@ class Masterprovider extends ChangeNotifier {
           final singleVillage = village!.first;
           setSelectedVillage(singleVillage.jjmVillageId);
 
-          /// ✅ Automatically trigger habitation fetch
           await fetchHabitations(
             stateId,
             districtId,
@@ -247,17 +241,19 @@ class Masterprovider extends ChangeNotifier {
             gpID,
             singleVillage.jjmVillageId,
           );
+        } else {
+          dataState = DataState.loaded;
         }
       } else {
         errorMsg = rawVillages.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in fetching village: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load villages.";
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
@@ -268,9 +264,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
       return;
     }
-
-    _isLoading = true;
-    notifyListeners();
+    loading();
 
     try {
       final rawHabitations = await _masterRepository.fetchHabitations(
@@ -281,28 +275,28 @@ class Masterprovider extends ChangeNotifier {
       if (rawHabitations.status == 1) {
         habitationId = rawHabitations.result;
 
-        // ✅ Auto-select habitation if only one is present
         if (habitationId != null && habitationId!.length == 1) {
           final singleHabitation = habitationId!.first;
           setSelectedHabitation(singleHabitation.habitationId);
         }
+        dataState = DataState.loaded;
       } else {
         errorMsg = rawHabitations.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in fetching habitation: $e');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load habitations.";
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> fetchSchemes(String villageId, String habitationId,
       String districtid, String filter) async {
-    _isLoading = true;
-    notifyListeners();
+    loading();
+
     try {
       final mSchemes = await _masterRepository.fetchSchemes(
           villageId, habitationId, districtid, filter);
@@ -310,11 +304,13 @@ class Masterprovider extends ChangeNotifier {
 
       if (baseStatus == 1) {
         schemes = mSchemes.result;
+        dataState = DataState.loaded;
         if (schemes.length == 1) {
           selectedScheme = schemes.first.schemeId.toString();
         }
       } else {
         errorMsg = mSchemes.message;
+        dataState = DataState.error;
       }
       if (selectedWtsfilter == "5") {
         await fetchWTPList(selectedStateId!, selectedScheme!);
@@ -336,8 +332,7 @@ class Masterprovider extends ChangeNotifier {
       debugPrint('Error in fetching scheme: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
@@ -351,7 +346,7 @@ class Masterprovider extends ChangeNotifier {
     String stateId,
     String schemeId,
   ) async {
-    _isLoading = true;
+    loading();
     try {
       final rawWaterSource = await _masterRepository.fetchSourceInformation(
           villageId,
@@ -365,72 +360,74 @@ class Masterprovider extends ChangeNotifier {
       baseStatus = rawWaterSource.status;
 
       if (rawWaterSource.status == 1) {
+        dataState = DataState.loaded;
         waterSource = rawWaterSource.result;
         if (waterSource.length == 1) {
           selectedWaterSource = waterSource.first.locationId.toString();
         }
       } else {
         errorMsg = rawWaterSource.message;
+        dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> fetchWTPList(String stateId, String schemeId) async {
-    _isLoading = true;
-    notifyListeners();
+    loading();
+
     try {
       final fetchedList =
           await _masterRepository.fetchWTPlist(stateId, schemeId);
 
       if (fetchedList.status == 1) {
+        dataState = DataState.loaded;
         wtpList = fetchedList.result;
         if (wtpList.length == 1) {
           selectedWtp = wtpList.first.wtpId;
         }
       } else {
         errorMsg = fetchedList.message;
+        dataState = DataState.error;
       }
       baseStatus = fetchedList.status;
     } catch (e) {
       debugPrint('Error in fetching WTP list: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> fetchWatersourcefilterList() async {
-    _isLoading = true;
-    notifyListeners(); // Start loading
+    loading();
+
     try {
       final rawWtsFilterList =
           await _masterRepository.fetchWaterSourceFilterList();
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
+        dataState = DataState.loaded;
         wtsFilterList = rawWtsFilterList.result;
       } else {
+        dataState = DataState.error;
         errorMsg = rawWtsFilterList.message;
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
-      notifyListeners(); // Finish loading
+      loadingStop();
     }
   }
 
   Future<void> fetchVillageDetails(double lon, double lat) async {
-    _isLoading = true;
+    loading();
     errorMsg = "";
-    notifyListeners();
 
     try {
       String formattedLon = lon.toStringAsFixed(8);
@@ -442,30 +439,44 @@ class Masterprovider extends ChangeNotifier {
       );
 
       if (_villageDetails.isEmpty) {
+        dataState = DataState.error;
         errorMsg = "No village details found.";
+      } else {
+        dataState = DataState.loaded;
       }
     } catch (e) {
       debugPrint('Error in fetchVillageDetails: $e');
       errorMsg = e.toString();
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
   }
 
   Future<void> validateVillage(String villageId, String lgdCode) async {
-    _isLoading = true;
+    loading();
     errorMsg = "";
-    notifyListeners();
+
     try {
       _validateVillageResponse =
           await _masterRepository.validateVillage(villageId, lgdCode);
+      dataState = DataState.loaded;
     } catch (e) {
       errorMsg = e.toString();
+      dataState = DataState.error;
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      loadingStop();
     }
+  }
+
+  void loading() {
+    dataState = DataState.loading;
+    _isLoading = true;
+    notifyListeners();
+  }
+
+  void loadingStop() {
+    _isLoading = false;
+    notifyListeners();
   }
 
   void setSelectedDateTime(String? value) {

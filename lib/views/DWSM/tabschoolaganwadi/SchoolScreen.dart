@@ -13,6 +13,7 @@ import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
 import '../../../utils/CustomDropdown.dart';
+import '../../../utils/DataState.dart';
 import '../../../utils/LoaderUtils.dart';
 import '../../../utils/toast_helper.dart';
 import 'TabSchoolAganwadi.dart';
@@ -45,8 +46,7 @@ class _SchoolScreen extends State<SchoolScreen> {
       value: Provider.of<DwsmProvider>(context, listen: false),
       child: Consumer<DwsmProvider>(
         builder: (context, dwsmprovider, child) {
-          return dwsmprovider.isLoading
-              ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
+          return dwsmprovider.isLoading ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
               : Container(
             child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -60,7 +60,6 @@ class _SchoolScreen extends State<SchoolScreen> {
                             case DataState.loading:
                               return LoaderUtils.conditionalLoader(
                                   isLoading: true);
-
                             case DataState.error:
                               return AppTextWidgets.errorText(
                                   dwsmprovider.errorMsg);
@@ -447,7 +446,9 @@ class _SchoolScreen extends State<SchoolScreen> {
                             default:
                               return const SizedBox(); // or any placeholder
                           }
-                        })),
+                        }
+                        )
+                    ),
                   ),
                 ],
               ),

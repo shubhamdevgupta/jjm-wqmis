@@ -315,7 +315,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
                               _buildMenuCard(
-                                title: AppConstants.totalSamplesSubmitted,
+                                title: AppConstants.totalSamplesSubmitted,  // New Samples Registered
                                 icon: Icons.analytics,
                                 gradientColors: [
                                   Colors.lightBlue,

@@ -184,31 +184,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Icons.message,
                                   Colors.teal),
                               // Remark
-                           /*   Padding(
-                                padding:
-                                     EdgeInsets.symmetric(vertical: 12),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _iconCircle(Icons.comment, Colors.teal),
-                                     SizedBox(width: 10),
-                                    Expanded(
-                                      child: Container(
-                                        padding:  EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal.shade50,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child:  Text( village.remark.isEmpty?"No remark provided":village.remark,
-                                          style: TextStyle(
-                                              fontSize: 13, color: Colors.teal,fontFamily: 'OpenSans'),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),*/
 
                               const Divider(height: 30),
                               Align(
@@ -223,8 +198,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                       village.schoolId,
                                       widget.type!,
                                       onSuccess: (result) {
-                                        String base64String =
-                                            result.photo.contains(',')
+                                        String base64String = result.photo.contains(',')
                                                 ?  result.photo.split(',').last
                                                 :  result.photo;
                                         final imageBytes =
@@ -319,7 +293,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
 
-  void showImage(Uint8List imageBytes) {
+  void showImage(Uint8List? imageBytes) {
     showDialog(
       context: context,
       builder: (context) {
@@ -327,7 +301,31 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           title: Text("$titleType Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.memory(imageBytes, fit: BoxFit.contain),
+            child: (imageBytes == null || imageBytes.isEmpty)
+                ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/ic_no_image.png',
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "No Image Found",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            )
+                : Image.memory(
+              imageBytes,
+              fit: BoxFit.contain,
+            ),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -342,4 +340,5 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
       },
     );
   }
+
 }
