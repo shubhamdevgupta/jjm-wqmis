@@ -489,7 +489,7 @@ class _SchoolScreen extends State<SchoolScreen> {
           title: Column(
             children: [
               Image.asset(
-                'assets/check.png',
+                'assets/icons/check.png',
                 // <-- Your success image (PNG) path here
                 height: 60,
                 width: 80,

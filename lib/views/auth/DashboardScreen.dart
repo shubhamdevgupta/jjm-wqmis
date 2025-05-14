@@ -58,7 +58,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -216,7 +216,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               radius: 32,
                               backgroundColor: Colors.grey[100],
                               backgroundImage:
-                                  const AssetImage('assets/user.png'),
+                                  const AssetImage('assets/icons/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -495,7 +495,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ],
                 ),
                 child: Image.asset(
-                  'assets/$imageName.png',
+                  'assets/icons/$imageName.png',
                   width: 26, // Increased size
                   height: 28,
                   fit: BoxFit.contain,

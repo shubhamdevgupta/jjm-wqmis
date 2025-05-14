@@ -52,7 +52,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -199,7 +199,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               radius: 32,
                               backgroundColor: Colors.grey[100],
                               backgroundImage:
-                                  const AssetImage('assets/user.png'),
+                                  const AssetImage('assets/icons/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),

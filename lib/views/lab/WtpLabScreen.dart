@@ -39,7 +39,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
         return Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+                image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
           ),
           child: Scaffold(
             floatingActionButton: Stack(
