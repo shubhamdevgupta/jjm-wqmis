@@ -12,6 +12,7 @@ import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Appcolor.dart';
 import '../../../utils/Camera.dart';
+import '../../../utils/CurrentLocation.dart';
 import '../../../utils/CustomDropdown.dart';
 import '../../../utils/LoaderUtils.dart';
 import '../../../utils/toast_helper.dart';
@@ -31,6 +32,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
   final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
 
   @override
   void initState() {
@@ -71,6 +74,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                       children: [
                                         CustomDropdown(
                                           title: "Select Anganwadi",
+                                          appBarTitle: "Select Anganwadi",
                                           value: dwsmprovider.selectedAnganwadi,
                                           items: dwsmprovider.anganwadiList
                                               .map((anganwadi) {
@@ -908,7 +912,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
+                              'Latitude: ${lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -924,7 +928,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
+                              'Longitude: ${lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -954,8 +958,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          dwsmprovider.currentLatitude.toString(),
-                          dwsmprovider.currentLatitude.toString(),
+                          lat.toString(),
+                          lng.toString(),
                           dwsmprovider.deviceId!, () {
                         showResponse(dwsmprovider);
                       });

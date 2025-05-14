@@ -48,7 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final roleId = localStorage.getString(AppConstants.prefRoleId);
     await authProvider.checkLoginStatus();
-
     if (authProvider.isLoggedIn) {
       if (roleId == "4") {
         Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);

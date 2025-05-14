@@ -36,6 +36,15 @@ class MainActivity: FlutterActivity() {
                         result.error("LOCATION_ERROR", "Location not available", null)
                     }
                 }
+                "getVersionName"->{
+                    try {
+                        val pInfo = applicationContext.packageManager.getPackageInfo(applicationContext.packageName, 0)
+                        val version = pInfo.versionName
+                        result.success(version)
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        result.error("UNAVAILABLE", "Version name not available.", null)
+                    }
+                }
                 else -> {
                     result.notImplemented()
                 }

@@ -142,9 +142,15 @@ class _DwsmLocation extends State<DwsmLocation> {
                           value:
                               _localStorage.getString(AppConstants.prefStateId),
                           // Ensure this matches the selected value
-                          child: Text(_localStorage
-                                  .getString(AppConstants.prefStateName) ??
-                              'Unknown State',style: TextStyle(color: Colors.black87,fontFamily: 'OpensSans',fontWeight: FontWeight.w500)), // Display state name
+                          child: Text(
+                              _localStorage
+                                      .getString(AppConstants.prefStateName) ??
+                                  'Unknown State',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: 'OpensSans',
+                                  fontWeight:
+                                      FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -206,9 +212,15 @@ class _DwsmLocation extends State<DwsmLocation> {
                           value: districtId,
                           // Ensure this matches the selected value
 
-                          child: Text(_localStorage
-                                  .getString(AppConstants.prefDistName) ??
-                              'Unknown State',style: TextStyle(color: Colors.black87,fontFamily: 'OpensSans',fontWeight: FontWeight.w500)), // Display state name
+                          child: Text(
+                              _localStorage
+                                      .getString(AppConstants.prefDistName) ??
+                                  'Unknown State',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: 'OpensSans',
+                                  fontWeight:
+                                      FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -250,6 +262,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                             masterProvider.selectedStateId!, districtId, value);
                       }
                     },
+                    appBarTitle: "Select Block",
                   ),
                 ],
               ),
@@ -275,6 +288,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         districtId, masterProvider.selectedBlockId!, value);
                   }
                 },
+                appBarTitle: "Select Gram Panchayat",
               ),
               SizedBox(height: 12),
               ///// village data heree ----------
@@ -302,6 +316,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                     masterProvider.fetchWatersourcefilterList();
                   }
                 },
+                appBarTitle: "Select Village",
               ),
               SizedBox(height: 12),
               ///// habitation  data heree ----------
@@ -321,14 +336,14 @@ class _DwsmLocation extends State<DwsmLocation> {
                 onChanged: (value) {
                   masterProvider.setSelectedHabitation(value);
                 },
+                appBarTitle: "Select Habitation",
               ),
               SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await dwsmprovider.fetchLocation(context);
-
+                    await masterProvider.fetchLocation();
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToTabSchoolAganwadi);
                   },
