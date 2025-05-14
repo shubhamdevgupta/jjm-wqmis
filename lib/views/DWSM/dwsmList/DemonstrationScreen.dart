@@ -53,7 +53,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,

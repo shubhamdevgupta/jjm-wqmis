@@ -59,7 +59,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/header_bg.png'),
+                    image: AssetImage('assets/icons/header_bg.png'),
                     fit: BoxFit.cover),
               ),
               child: Scaffold(
@@ -1222,7 +1222,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
           title: Column(
             children: [
               Image.asset(
-                'assets/check.png',
+                'assets/icons/check.png',
                 // <-- Your success image (PNG) path here
                 height: 60,
                 width: 80,

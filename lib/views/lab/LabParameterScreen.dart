@@ -176,7 +176,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/header_bg.png',
+              'assets/icons/header_bg.png',
               fit: BoxFit.cover,
             ),
           ),

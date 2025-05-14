@@ -93,7 +93,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
 
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('assets/header_bg.png')),
+        image: DecorationImage(image: AssetImage('assets/icons/header_bg.png')),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
