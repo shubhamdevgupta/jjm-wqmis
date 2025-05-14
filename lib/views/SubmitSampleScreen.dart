@@ -1168,6 +1168,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       return;
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
+    await masterProvider.fetchLocation();
     await provider.fetchDeviceId();
     //TODO lab is null here
     print("00000000 ${paramProvider.selectedLab.toString()}");

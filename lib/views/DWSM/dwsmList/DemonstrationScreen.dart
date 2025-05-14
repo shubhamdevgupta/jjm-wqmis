@@ -183,33 +183,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   village.remark,
                                   Icons.message,
                                   Colors.teal),
-                              // Remark
-                           /*   Padding(
-                                padding:
-                                     EdgeInsets.symmetric(vertical: 12),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _iconCircle(Icons.comment, Colors.teal),
-                                     SizedBox(width: 10),
-                                    Expanded(
-                                      child: Container(
-                                        padding:  EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal.shade50,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child:  Text( village.remark.isEmpty?"No remark provided":village.remark,
-                                          style: TextStyle(
-                                              fontSize: 13, color: Colors.teal,fontFamily: 'OpenSans'),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),*/
-
                               const Divider(height: 30),
                               Align(
                                 alignment: Alignment.bottomRight,
