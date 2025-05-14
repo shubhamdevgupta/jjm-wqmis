@@ -6,10 +6,12 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+import '../../utils/VersionUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -30,14 +32,13 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   @override
   void initState() {
     super.initState();
-
     var enc = encryption.encryptText("Beneficiaryname");
     print("Aesen-----> $enc");
     var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
     print("Aesen-----> $dep");
 
     getToken();
-
+    checkVersion();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -554,4 +555,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     print("token-------------- $token ----state naem$stateName");
     return token;
   }
+  void checkVersion() async {
+    final version = await VersionUtils.getNativeAppVersion();
+    print("Native version: $version");
+  }
+
 }
