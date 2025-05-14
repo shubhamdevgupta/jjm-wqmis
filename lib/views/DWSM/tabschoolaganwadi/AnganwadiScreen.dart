@@ -192,7 +192,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                 SizedBox(width: 8),
                                                                 Expanded(
                                                                   child: Text(
-                                                                    "This Anganwadi has already been demonstrated.",
+                                                                    "This Anganwadi has already been demonstrated successfully..",
                                                                     style: TextStyle(
                                                                       fontSize: 14,
                                                                       fontFamily: 'OpenSans',

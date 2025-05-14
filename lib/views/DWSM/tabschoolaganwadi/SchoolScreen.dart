@@ -183,7 +183,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                           SizedBox(width: 8),
                                                           Expanded(
                                                             child: Text(
-                                                              "This school has already been demonstrated.",
+                                                              "This School has already been demonstrated successfully..",
                                                               style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontFamily: 'OpenSans',
