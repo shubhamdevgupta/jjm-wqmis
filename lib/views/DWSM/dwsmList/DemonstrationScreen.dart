@@ -31,12 +31,16 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     districtId = _localStorageService.getString(AppConstants.prefDistrictId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmProvider>(context, listen: false)
-          .fetchDemonstrationList(int.parse(stateId!), int.parse(districtId!),
-              "2025-2026", 0, widget.type!);
+      Provider.of<DwsmProvider>(context, listen: false).fetchDemonstrationList(
+          int.parse(stateId!),
+          int.parse(districtId!),
+          "2025-2026",
+          0,
+          widget.type!);
     });
     super.initState();
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -64,7 +68,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             title: const Text(
               "Demonstrations List",
               style: TextStyle(
-                fontSize: 20, fontFamily: 'OpenSans',
+                fontSize: 20,
+                fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -94,8 +99,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             ),
             elevation: 5,
           ),
-          body: Consumer<DwsmProvider>(
-              builder: (context, provider, child) {
+          body: Consumer<DwsmProvider>(builder: (context, provider, child) {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 : ListView.builder(
@@ -129,7 +133,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Text(
                                     "$titleType Details",
                                     style: const TextStyle(
-                                      fontSize: 18,fontFamily: 'OpenSans',
+                                      fontSize: 18,
+                                      fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.blue,
                                     ),
@@ -154,7 +159,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         village.villageName,
                                       ]),
                                       style: const TextStyle(
-                                        fontSize: 14,fontFamily: 'OpenSans',
+                                        fontSize: 14,
+                                        fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black87,
                                       ),
@@ -177,11 +183,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   Icons.label,
                                   Colors.green),
 
-
-                              _infoRow(
-                                  "Remark",
-                                  village.remark,
-                                  Icons.message,
+                              _infoRow("Remark", village.remark, Icons.message,
                                   Colors.teal),
                               const Divider(height: 30),
                               Align(
@@ -198,8 +200,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                       onSuccess: (result) {
                                         String base64String =
                                             result.photo.contains(',')
-                                                ?  result.photo.split(',').last
-                                                :  result.photo;
+                                                ? result.photo.split(',').last
+                                                : result.photo;
                                         final imageBytes =
                                             base64Decode(base64String);
                                         LoaderUtils.hideLoaderDialog(context);
@@ -275,8 +277,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     );
   }
 
-
-
   Widget _iconCircle(IconData icon, Color bgColor) {
     return Container(
       padding: const EdgeInsets.all(6),
@@ -292,7 +292,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
 
-  void showImage(Uint8List imageBytes) {
+  void showImage(Uint8List? imageBytes) {
     showDialog(
       context: context,
       builder: (context) {
@@ -300,7 +300,31 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           title: Text("$titleType Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.memory(imageBytes, fit: BoxFit.contain),
+            child: (imageBytes == null || imageBytes.isEmpty)
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/icons/ic_no_image.png',
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "No Image Found",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  )
+                : Image.memory(
+                    imageBytes,
+                    fit: BoxFit.contain,
+                  ),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

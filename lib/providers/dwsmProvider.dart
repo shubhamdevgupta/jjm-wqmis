@@ -87,7 +87,7 @@ class DwsmProvider extends ChangeNotifier {
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {
-            onSuccess(rawLIst.result[0] /*.photo*/);
+            onSuccess(rawLIst.result.first /*.photo*/);
           }
         } else {
           villages = rawLIst.result;
