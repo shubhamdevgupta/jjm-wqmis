@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/AppStyles.dart';
@@ -159,13 +160,13 @@ class _LoginpageState extends State<Loginscreen> {
                                             }
                                           },
                                               (errorMessage) {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                SnackBar(content: Text(errorMessage)));
+                                            /*ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(content: Text(errorMessage)));*/
+                                                ToastHelper.showToastMessage(errorMessage);
                                           },
                                         );
                                       } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text(provider.errorMsg)));
+                                        ToastHelper.showToastMessage(provider.errorMsg);
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(

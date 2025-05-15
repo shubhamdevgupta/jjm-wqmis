@@ -28,7 +28,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   String mobile = '';
   String stateId = '';
   final encryption = AesEncryption();
-
+late DashboardProvider dashboardProvider;
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
     getToken();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final dashboardProvider =
+       dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
@@ -74,14 +74,26 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               builder: (context) {
                 return IconButton(
                   icon: const Icon(Icons.menu, color: Colors.white),
-                  // Drawer icon
                   onPressed: () {
-                    Scaffold.of(context)
-                        .openDrawer(); // Open the Navigation Drawer
+                    Scaffold.of(context).openDrawer();
                   },
                 );
               },
             ),
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.refresh,
+                        color: Colors.white),
+                    // Cart icon
+                    onPressed: () {
+                      dashboardProvider.loadDashboardData();
+                    },
+                  )
+                ],
+              ),
+            ],
             //elevation
             flexibleSpace: Container(
               decoration: const BoxDecoration(
@@ -373,7 +385,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           SizedBox(
                             height: 15,
                           ),
-                          Center(
+                      /*    Center(
                             child: const Text(
                               "All figures are based on current year data.",
                               style: TextStyle(
@@ -383,7 +395,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -393,7 +405,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            final result = await showDialog<bool>(
+                             showDialog<bool>(
                               context: context,
                               builder: (BuildContext context) {
                                 double screenHeight =
