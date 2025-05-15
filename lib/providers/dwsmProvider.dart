@@ -73,9 +73,9 @@ class DwsmProvider extends ChangeNotifier {
   Future<void> fetchDemonstrationList(int stateId, int districtId,
       String fineYear, int schoolId, int demonstrationType,
       {Function(Village result)? onSuccess}) async {
-
     _isLoading = true;
-
+    villages=[];
+    notifyListeners();
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(
         stateId: stateId,
