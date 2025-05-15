@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CustomException.dart';
+import 'package:jjm_wqmis/utils/DataState.dart';
 
 import '../models/DWSM/SchoolinfoResponse.dart';
 
@@ -75,16 +76,24 @@ class ParameterProvider with ChangeNotifier {
   String? selectedSchoolResult;
 
   int baseStatus = 0;
+  DataState  dataState = DataState.initial;
 
   Future<void> fetchAllLabs(String stateId, String districtId, String blockId,
       String gpId, String villageId, String isAll) async {
     _isLoading = true;
+    dataState = DataState.loading;
     try {
       final rawLabList = await _lapparameterrepository.fetchAllLab(
           stateId, districtId, blockId, gpId, villageId, isAll);
       if (rawLabList.status == 1) {
+        dataState = DataState.loaded;
         labList = rawLabList.result;
       } else {
+       if(labList.isEmpty){
+         dataState = DataState.loadedEmpty;
+       }else{
+         dataState = DataState.error;
+       }
         errorMsg = rawLabList.message;
       }
     } catch (e, stackTrace) {
@@ -98,12 +107,19 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchAllParameter(String labid, String stateid, String sid,
       String reg_id, String parameteetype) async {
     _isLoading = true;
+    dataState = DataState.loading;
     try {
       final rawParameterList = await _lapparameterrepository.fetchAllParameter(
           labid, stateid, sid, reg_id, parameteetype);
       if (rawParameterList.status == 1) {
+        dataState = DataState.loaded;
         parameterList = rawParameterList.result;
       } else {
+        if(parameterList.isEmpty){
+          dataState = DataState.loadedEmpty;
+        }else{
+          dataState = DataState.error;
+        }
         errorMsg = rawParameterList.message;
       }
     } catch (e) {
@@ -117,9 +133,10 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchLabIncharge(int labId) async {
     _isLoading = true;
     notifyListeners();
-
+    dataState = DataState.loading;
     try {
       labIncharge = await _lapparameterrepository.fetchLabIncharge(labId);
+      dataState = DataState.loaded;
       if (labIncharge != null) {
         baseStatus = labIncharge!.status;
         errorMsg = labIncharge!.message;
@@ -142,15 +159,21 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchParamLabs(String stateId, String parameterIds) async {
     _isLoading = true;
     notifyListeners(); // Notify before starting the fetch
-
+    dataState = DataState.loading;
     try {
       var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
 
       if (response.status == 1) {
+
         _labResponse = response.result;
         _selectedParamLabId = response.result.first.labId;
         fetchLabIncharge(_selectedParamLabId!);
       } else {
+        if(_labResponse!.isEmpty){
+          dataState = DataState.loadedEmpty;
+        }else{
+          dataState = DataState.error;
+        }
         errorMsg = response.message;
       }
 
@@ -166,12 +189,13 @@ class ParameterProvider with ChangeNotifier {
   Future<void> fetchWTPLab(Masterprovider masterProvider) async {
     _isLoading = true;
     notifyListeners();
-
+    dataState = DataState.loading;
     try {
       final response = await _lapparameterrepository.fetchWtpLabs(
           masterProvider.selectedStateId!, masterProvider.selectedWtp!);
 
       if (response.status == 1) {
+        dataState = DataState.loaded;
         wtpLab = response.result;
         if (wtpLab.length == 1) {
           selectedWtpLab = response.result.first.labId;
@@ -179,6 +203,11 @@ class ParameterProvider with ChangeNotifier {
           proccessOnChanged(selectedWtpLab!, masterProvider);
         }
       } else {
+        if(wtpLab.isEmpty){
+          dataState = DataState.loadedEmpty;
+        }else{
+          dataState = DataState.error;
+        }
         errorMsg = response.message;
       }
       baseStatus = response.status;

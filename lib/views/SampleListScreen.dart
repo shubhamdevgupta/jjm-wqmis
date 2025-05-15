@@ -240,10 +240,11 @@ class _SampleListScreenState extends State<SampleListScreen> {
               switch (provider.dataState) {
                 case DataState.initial:
                   return const Center(
-                      child: Text("Please initiate search or action."));
+                      child: Text("Please wait..."));
                 case DataState.loading:
                   return Center(
                       child: LoaderUtils.conditionalLoader(isLoading: true));
+                case DataState.loadedEmpty:
                 case DataState.loaded:
 
                   return Column(
@@ -319,10 +320,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
                         ),
                       ),
 
-                      // Expanded to prevent infinite height issue
-                      /*  provider.isLoading
-                          ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                          : provider.samples.isEmpty?AppTextWidgets.errorText(provider.errorMsg):*/
                       Expanded(
                         child: ListView.builder(
                           itemCount: provider.samples.length,
@@ -417,141 +414,146 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
                                       Divider(),
 
-                                      // Lab Name
-                                      Row(
-                                        children: [
-                                          Icon(Icons.business,
-                                              color: Colors.blue),
-                                          SizedBox(width: 5),
-                                          Expanded(
-                                            child: Text(
-                                              sample.labName ?? 'N/A',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: 'OpenSans',
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-
-                                      // Location
-                                      Row(
-                                        children: [
-                                          Icon(Icons.location_on,
-                                              color: Colors.blue),
-                                          SizedBox(width: 5),
-                                          Expanded(
-                                            child: Text(
-                                              "${sample.villageName ?? 'N/A'}, "
-                                              "${sample.gramPanchayatName ?? 'N/A'}, "
-                                              "${sample.blockName ?? 'N/A'}, "
-                                              "${sample.districtName ?? 'N/A'}",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: 'OpenSans',
-                                                color: Colors.grey[700],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-
-                                      Divider(),
-
-                                      // Test Result
-                                      Row(
-                                        children: [
-                                          Icon(Icons.category,
-                                              color: Colors.blue),
-                                          SizedBox(width: 5),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "Test Result: ",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontFamily: 'OpenSans',
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
+                                        // Lab Name
+                                        Row(
+                                          children: [
+                                            Icon(Icons.business,
+                                                color: Colors.blue),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                sample.labName ?? 'N/A',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'OpenSans',
+                                                  fontWeight: FontWeight.w500,
                                                 ),
-                                                Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 4,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: sample.testResult ==
-                                                            "Report Approved"
-                                                        ? Colors.green[100]
-                                                        : sample.testResult ==
-                                                                "Under Process"
-                                                            ? Colors.yellow[100]
-                                                            : Colors.blue[100],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                  ),
-                                                  child: Text(
-                                                    sample.testResult ?? 'N/A',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+
+                                        // Location
+                                        Row(
+                                          children: [
+                                            Icon(Icons.location_on,
+                                                color: Colors.blue),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                "${sample.villageName ?? 'N/A'}, "
+                                                "${sample.gramPanchayatName ?? 'N/A'}, "
+                                                "${sample.blockName ?? 'N/A'}, "
+                                                "${sample.districtName ?? 'N/A'}",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.grey[700],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+
+                                        Divider(),
+
+                                        // Test Result
+                                        Row(
+                                          children: [
+                                            Icon(Icons.category,
+                                                color: Colors.blue),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Test Result: ",
                                                     style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontFamily: 'OpenSans',
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 4,
+                                                    ),
+                                                    decoration: BoxDecoration(
                                                       color: sample
                                                                   .testResult ==
                                                               "Report Approved"
-                                                          ? Colors.green[800]
+                                                          ? Colors.green[100]
                                                           : sample.testResult ==
                                                                   "Under Process"
                                                               ? Colors
-                                                                  .orange[800]
+                                                                  .yellow[100]
                                                               : Colors
-                                                                  .blue[800],
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
-                                                      fontFamily: 'OpenSans',
+                                                                  .blue[100],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
+                                                    ),
+                                                    child: Text(
+                                                      sample.testResult ??
+                                                          'N/A',
+                                                      style: TextStyle(
+                                                        color: sample
+                                                                    .testResult ==
+                                                                "Report Approved"
+                                                            ? Colors.green[800]
+                                                            : sample.testResult ==
+                                                                    "Under Process"
+                                                                ? Colors
+                                                                    .orange[800]
+                                                                : Colors
+                                                                    .blue[800],
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                        fontFamily: 'OpenSans',
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
 
-                                      Divider(),
+                                        Divider(),
 
-                                      // Date of Submission
-                                      Row(
-                                        children: [
-                                          Icon(Icons.calendar_today,
-                                              color: Colors.blue),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'OpenSans',
-                                              color: Colors.grey[600],
+                                        // Date of Submission
+                                        Row(
+                                          children: [
+                                            Icon(Icons.calendar_today,
+                                                color: Colors.blue),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontFamily: 'OpenSans',
+                                                color: Colors.grey[600],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-
+                ],
+              );
                 case DataState.error:
                   return Center(
                     child: AppTextWidgets.errorText(provider.errorMsg),

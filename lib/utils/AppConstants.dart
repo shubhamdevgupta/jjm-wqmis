@@ -71,7 +71,7 @@ class AppConstants {
   static const String totalSampleTested = 'Total Samples Tested';
   static const String totalRetest = 'Total Retest';
   static const String addSchool= 'Select Village';
-  static const String addSample= 'Upload Sample';
+  static const String uploadSample= 'Upload Sample';
 
   static const String selectedTest = 'Selected Test';
 

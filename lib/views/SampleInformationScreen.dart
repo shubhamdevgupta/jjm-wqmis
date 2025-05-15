@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
+import 'package:jjm_wqmis/utils/DataState.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
@@ -120,32 +121,47 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
-                return masterProvider.isLoading
-                    ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                    :Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        //card for state district selection
-                        buildSampleTaken(masterProvider),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        // card for location of source from where sample taken
-                      ],
-                    ),
-                  ),
-                );
-              })),
+
+                    switch(masterProvider.dataState ){
+
+                      case DataState.initial:
+                        return const Center(
+                            child: Text("Please wait..."));
+                      case DataState.loading:
+                        return Center(
+                            child: LoaderUtils.conditionalLoader(isLoading: true));
+                      case DataState.error:
+                        return Center(
+                          child: AppTextWidgets.errorText(masterProvider.errorMsg),
+                        );
+                      case DataState.loadedEmpty:
+                      case DataState.loaded:
+                        return Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                //card for state district selection
+                                buildSampleTaken(masterProvider),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                // card for location of source from where sample taken
+                              ],
+                            ),
+                          ),
+                        );
+                    }
+              }
+              )
+          ),
         ),
       ),
     );
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    print("tttttttttttttttttttttt ${masterProvider.schemes}");
     return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
       elevation: 5,
       shape: RoundedRectangleBorder(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/utils/DataState.dart';
 
 import '../models/SampleResponse.dart';
 import '../repository/SampleSubRepo.dart';
@@ -16,6 +17,7 @@ class Samplesubprovider extends ChangeNotifier {
 
   String? _deviceId;
   String? get deviceId => _deviceId;
+  DataState dataState = DataState.initial;
 
   Future<void> sampleSubmit(
       Lab_id,
@@ -44,6 +46,8 @@ class Samplesubprovider extends ChangeNotifier {
       sample_submit_type) async {
     _isLoading = true;
     notifyListeners();
+    dataState = DataState.loading;
+
     try {
       sampleresponse = await _samplesubrepo.sampleSubmit(
           Lab_id,
@@ -71,10 +75,14 @@ class Samplesubprovider extends ChangeNotifier {
           test_selected,
           sample_submit_type);
       notifyListeners();
+      dataState = DataState.loaded;
+
       if (sampleresponse!.status ==1) {
         isSubmitData = true;
         notifyListeners();
       } else {
+        dataState = DataState.error;
+
         errorMsg = sampleresponse!.message;
       }
     } catch (e) {

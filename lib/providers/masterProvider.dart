@@ -108,7 +108,7 @@ class Masterprovider extends ChangeNotifier {
         dataState = DataState.loaded;
       } else {
         errorMsg = basestates.message;
-        dataState = DataState.error;
+       dataState = DataState.error;
       }
     } catch (e) {
       debugPrint('Error in StateProvider: $e');
@@ -372,7 +372,11 @@ class Masterprovider extends ChangeNotifier {
         }
       } else {
         errorMsg = rawWaterSource.message;
+        if (waterSource.isEmpty) {
+          dataState = DataState.loadedEmpty;
+        }else {
         dataState = DataState.error;
+      }
       }
     } catch (e) {
       debugPrint('Error in fetching source information: $e');

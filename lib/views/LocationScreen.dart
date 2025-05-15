@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/DataState.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
@@ -10,6 +11,7 @@ import '../services/LocalStorageService.dart';
 import '../utils/AppStyles.dart';
 import '../utils/CurrentLocation.dart';
 import '../utils/CustomDropdown.dart';
+import '../utils/Showerrormsg.dart';
 
 class Locationscreen extends StatefulWidget {
   final String flag;
@@ -35,8 +37,7 @@ class _LocationscreenState extends State<Locationscreen> {
   @override
   Widget build(BuildContext) {
 
-    final paramProvider = Provider.of<ParameterProvider>(
-        context, listen: true);
+    final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -67,16 +68,31 @@ class _LocationscreenState extends State<Locationscreen> {
               ),
               elevation: 5,
             ),
-            body: Consumer<Masterprovider>(
-                builder: (context, masterProvider, child) {
-              return masterProvider.isLoading
-                      ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                      :SingleChildScrollView(
-                      child: Column(
-                    children: [buildStateVillage(masterProvider,paramProvider)],
-                  ));
+            body: Consumer<Masterprovider>(builder: (context, masterProvider, child) {
 
-            })));
+              switch(masterProvider.dataState){
+
+                case DataState.initial:
+                  return const Center(
+                      child: Text("Please wait..."));
+                case DataState.loading:
+                  return Center(
+                      child: LoaderUtils.conditionalLoader(isLoading: true));
+                case DataState.error:
+                 /* return Center(
+                    child: AppTextWidgets.errorText(masterProvider.errorMsg),
+                  );*/
+                case DataState.loadedEmpty:
+                case DataState.loaded:
+                  return SingleChildScrollView(
+                      child: Column(
+                        children: [buildStateVillage(masterProvider,paramProvider)],
+                      ));
+              }
+            }
+            )
+        )
+    );
 
   }
 
@@ -101,7 +117,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     'State *',
                     style: TextStyle(
                       fontSize: 16, fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -136,7 +152,11 @@ class _LocationscreenState extends State<Locationscreen> {
                               AppConstants.prefStateId), // Ensure this matches the selected value
 
                           child: Text(_localStorage.getString(AppConstants.prefStateName) ??
-                              'Unknown State'), // Display state name
+                              'Unknown State',style: TextStyle(
+                              color: Colors.black87,
+                              fontFamily: 'OpensSans',
+                              fontWeight:
+                              FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -200,7 +220,7 @@ class _LocationscreenState extends State<Locationscreen> {
                           child: Text(
                               _localStorage
                                   .getString(AppConstants.prefDistName) ??
-                                  'Unknown State',
+                                  'Unknown District',
                               style: TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
@@ -337,12 +357,8 @@ class _LocationscreenState extends State<Locationscreen> {
                     print("flagggggggggg ${ widget.flag}");
                     await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-                      print('Going to Sample List screen');
 
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/sampleList',
-                        ModalRoute.withName('/dashboard'),
+                      Navigator.pushNamedAndRemoveUntil(context, '/sampleList', ModalRoute.withName('/dashboard'),
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
