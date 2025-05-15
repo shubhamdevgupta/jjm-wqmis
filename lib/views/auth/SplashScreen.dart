@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/UpdateDialog.dart';
@@ -32,10 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
       final updateInfo = await _updateViewModel.getUpdateInfo();
 
       if (updateInfo != null) {
-        print("Dialog will show with: ${updateInfo.apkUrl}, ${updateInfo.whatsNew}");
+        print(
+            "Dialog will show with: ${updateInfo.apkUrl}, ${updateInfo.whatsNew}");
 
         // Show dialog and stop further navigation until user interacts
-         DialogUtils.showUpdateDialog(context, updateInfo);
+        DialogUtils.showUpdateDialog(context, updateInfo);
         return;
       }
     }
@@ -45,18 +46,21 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNextScreen() async {
     await Future.delayed(Duration(seconds: 1)); // Optional splash delay
 
-    final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final roleId = localStorage.getString(AppConstants.prefRoleId);
     await authProvider.checkLoginStatus();
-
     if (authProvider.isLoggedIn) {
       if (roleId == "4") {
-        Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
+        Navigator.pushReplacementNamed(
+            context, AppConstants.navigateToDashboardScreen);
       } else if (roleId == "8") {
-        Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
+        Navigator.pushReplacementNamed(
+            context, AppConstants.navigateToDwsmDashboard);
       }
     } else {
-      Navigator.pushReplacementNamed(context, AppConstants.navigateToLoginScreen);
+      Navigator.pushReplacementNamed(
+          context, AppConstants.navigateToLoginScreen);
     }
   }
 
@@ -68,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/wqmis_splash.jpg'),
+            image: AssetImage('assets/icons/wqmis_splash.jpg'),
             fit: BoxFit.cover,
           ),
         ),

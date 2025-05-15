@@ -343,7 +343,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await dwsmprovider.fetchLocation();
+                    await masterProvider.fetchLocation();
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToTabSchoolAganwadi);
                   },
@@ -366,25 +366,5 @@ class _DwsmLocation extends State<DwsmLocation> {
         ),
       ),
     );
-  }
-
-  bool validateStateVillage(Masterprovider provider) {
-    provider.errorMsg = provider.selectedStateId?.isNotEmpty == true
-        ? provider.selectedDistrictId?.isNotEmpty == true
-            ? provider.selectedBlockId?.isNotEmpty == true
-                ? provider.selectedGramPanchayat?.isNotEmpty == true
-                    ? (provider.selectedVillage != null &&
-                            provider.selectedVillage != "0"
-                        ? (provider.selectedHabitation != null &&
-                                provider.selectedHabitation != "0"
-                            ? ""
-                            : "Please select habitation before proceeding.")
-                        : "Please select village before proceeding.")
-                    : "Please select Gram Panchayat before proceeding."
-                : "Please select Block before proceeding."
-            : "Please select District before proceeding."
-        : "Please select State before proceeding.";
-
-    return provider.errorMsg.isEmpty;
   }
 }

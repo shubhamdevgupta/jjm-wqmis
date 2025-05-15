@@ -10,16 +10,15 @@ import 'package:jjm_wqmis/models/MasterApiResponse/VillageResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
-import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 import 'package:jjm_wqmis/utils/DataState.dart';
 
 import '../models/LgdResponse.dart';
 import '../models/MasterApiResponse/BlockResponse.dart';
 import '../models/ValidateVillage.dart';
-import '../repository/LapParameterRepository.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppConstants.dart';
+import '../utils/CurrentLocation.dart';
 import '../utils/GlobalExceptionHandler.dart';
 import '../utils/LocationUtils.dart';
 
@@ -56,6 +55,14 @@ class Masterprovider extends ChangeNotifier {
 
   List<Wtp> wtpList = [];
   String? selectedWtp;
+
+
+  double? _currentLatitude;
+  double? _currentLongitude;
+
+  double? get currentLatitude => _currentLatitude;
+
+  double? get currentLongitude => _currentLongitude;
 
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
@@ -125,8 +132,6 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = rawDistricts.message;
         dataState = DataState.error;
       }
-
-      if (localStorage.getString(AppConstants.prefRoleId) == "8") {
         for (int i = 0; i < districts.length; i++) {
           if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
               districts[i].jjmDistrictId) {
@@ -135,7 +140,7 @@ class Masterprovider extends ChangeNotifier {
             setSelectedDistrict(districts[i].jjmDistrictId);
           }
         }
-      }
+
     } catch (e) {
       debugPrint('Error in fetching districts: master provider $e');
       GlobalExceptionHandler.handleException(e as Exception);
@@ -449,6 +454,43 @@ class Masterprovider extends ChangeNotifier {
       errorMsg = e.toString();
     } finally {
       loadingStop();
+    }
+  }
+
+  Future<void> fetchLocation() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      debugPrint('Requesting location permission...');
+      bool permissionGranted = await LocationUtils.requestLocationPermission();
+
+      if (permissionGranted) {
+        debugPrint('Permission granted. Fetching location...');
+        final locationData = await LocationUtils.getCurrentLocation();
+
+        if (locationData != null) {
+          _currentLatitude = locationData['latitude'];
+          _currentLongitude = locationData['longitude'];
+
+          // 🔥 Set global current location
+          CurrentLocation.setLocation(
+            lat: _currentLatitude!,
+            lng: _currentLongitude!,
+          );
+
+          debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
+        } else {
+          debugPrint("Location fetch failed (locationData is null)");
+        }
+      } else {
+        debugPrint("Permission denied. Cannot fetch location.");
+      }
+    } catch (e) {
+      debugPrint("Error during fetchLocation(): $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 

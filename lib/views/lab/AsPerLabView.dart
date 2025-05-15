@@ -45,7 +45,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                 children: [
                   FloatingActionButton(
                     onPressed: () async{
-                      await provider.fetchLocation();
                       print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
                         provider.fetchLabIncharge(int.parse(provider.selectedLab!));

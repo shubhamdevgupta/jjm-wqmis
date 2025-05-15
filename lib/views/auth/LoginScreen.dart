@@ -42,7 +42,7 @@ class _LoginpageState extends State<Loginscreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/header_bg.png'),
+                    image: AssetImage('assets/icons/header_bg.png'),
                     fit: BoxFit.fill,
                     scale: 3),
               ),
@@ -149,6 +149,7 @@ class _LoginpageState extends State<Loginscreen> {
                                           phoneController.text,
                                           passwordController.text, 1,
                                               () {
+                                            provider.fetchLocation();
                                             if(provider.loginResponse?.roleId==4){
                                               Navigator.pushReplacementNamed(
                                                   context, AppConstants.navigateToDashboardScreen);
@@ -187,7 +188,7 @@ class _LoginpageState extends State<Loginscreen> {
                                 SizedBox(height: 15),
                                 Align(
                                   alignment: Alignment.centerRight,
-                                  child: Image.asset("assets/nicone.png", height: 40),
+                                  child: Image.asset("assets/icons/nicone.png", height: 40),
                                 ),
                               ],
                             ),
@@ -229,7 +230,7 @@ class _LoginpageState extends State<Loginscreen> {
       children: [
         // Logo
         Image.asset(
-          'assets/appjalicon.png',
+          'assets/icons/appjalicon.png',
           width: 55,
           height: 65,
         ),

@@ -5,18 +5,12 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/SampleListScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/UpdateProvider.dart';
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
-
-import '../../utils/UpdateDialog.dart';
-
-import '../../utils/LoaderUtils.dart';
+import '../../utils/VersionUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -27,9 +21,9 @@ class Dashboardscreen extends StatefulWidget {
 
 class _DashboardscreenState extends State<Dashboardscreen> {
   final LocalStorageService _localStorage = LocalStorageService();
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   String stateName = '';
+  String districtId = '';
   String userName = '';
   String mobile = '';
   String stateId = '';
@@ -38,15 +32,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   @override
   void initState() {
     super.initState();
-
     var enc = encryption.encryptText("Beneficiaryname");
     print("Aesen-----> $enc");
     var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
     print("Aesen-----> $dep");
 
     getToken();
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -57,8 +48,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       print("dashboard ${dashboardProvider.isLoading}");
       print("master provider  data${masterProvider.isLoading}");
 
-      //masterProvider.clearData();
       await masterProvider.fetchDistricts(stateId);
+      await masterProvider.fetchBlocks(stateId, districtId);
     });
   }
 
@@ -67,7 +58,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/header_bg.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -145,10 +136,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToSubmitSampleScreen);
-                  },
+                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.list),
@@ -228,7 +216,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                               radius: 32,
                               backgroundColor: Colors.grey[100],
                               backgroundImage:
-                                  const AssetImage('assets/user.png'),
+                                  const AssetImage('assets/icons/user.png'),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -322,14 +310,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.blueAccent
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted??0}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
                                 imageName: 'medical-lab',
                                 onTap: () {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
-                                            AppConstants.totalSamplesSubmitted,'flagFloating' : ""
+                                            AppConstants.totalSamplesSubmitted,
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -341,14 +330,15 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   Colors.orange
                                 ],
                                 value:
-                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ??0}',
+                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
                                 imageName: 'test',
                                 onTap: () {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag':
-                                            AppConstants.totalPhysicalSubmitted,'flagFloating' : ""
+                                            AppConstants.totalPhysicalSubmitted,
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -357,14 +347,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 icon: Icons.check_circle,
                                 gradientColors: [Colors.teal, Colors.green],
                                 value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesTested??0}',
+                                    '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
                                 imageName: 'search',
                                 onTap: () {
                                   Navigator.pushNamed(context,
                                       AppConstants.navigateToSampleListScreen,
                                       arguments: {
                                         'flag': AppConstants.totalSampleTested,
-                                        'flagFloating' : ""
+                                        'flagFloating': ""
                                       });
                                 },
                               ),
@@ -397,7 +387,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
@@ -418,8 +407,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
                                     child: const Locationscreen(
-                                        flag:
-                                            AppConstants.openSampleInfoScreen,flagFloating: "",),
+                                      flag: AppConstants.openSampleInfoScreen,
+                                      flagFloating: "",
+                                    ),
                                   ),
                                 );
                               },
@@ -505,7 +495,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                   ],
                 ),
                 child: Image.asset(
-                  'assets/$imageName.png',
+                  'assets/icons/$imageName.png',
                   width: 26, // Increased size
                   height: 28,
                   fit: BoxFit.contain,
@@ -556,12 +546,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
+
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
     stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
     userName = _localStorage.getString(AppConstants.prefName) ?? '';
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
+    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
     print("token-------------- $token ----state naem$stateName");
     return token;
   }

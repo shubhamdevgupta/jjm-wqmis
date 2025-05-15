@@ -148,7 +148,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
       child: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/header_bg.png'),
+            image: AssetImage('assets/icons/header_bg.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -271,7 +271,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                     ),
                                   ],
                                 ),
-                                child: TextField(
+                                child:  TextField(
                                   controller: searchController,
                                   decoration: InputDecoration(
                                     hintText: 'Search...',

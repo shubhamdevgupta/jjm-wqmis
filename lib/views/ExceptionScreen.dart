@@ -26,7 +26,7 @@ class ExceptionScreen extends StatelessWidget {
              // const Icon(Icons.error, color: Colors.red, size: 80),
               const SizedBox(height: 35),
               Image.asset(
-                'assets/ic_error.png',
+                'assets/icons/ic_error.png',
                 width: 60,
                 height: 60,
               ),

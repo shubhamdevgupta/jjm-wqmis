@@ -9,6 +9,7 @@ import '../providers/SampleSubmitProvider.dart';
 import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/AppStyles.dart';
+import '../utils/CurrentLocation.dart';
 import '../utils/CustomDropdown.dart';
 import '../utils/LoaderUtils.dart';
 import '../utils/Showerrormsg.dart';
@@ -24,6 +25,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final TextEditingController remarkController = TextEditingController();
   final LocalStorageService _localStorage = LocalStorageService();
   final ScrollController _scrollController = ScrollController();
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
 
   TextStyle _headerTextStyle() => TextStyle(
         color: Colors.white,
@@ -56,7 +59,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/header_bg.png'),
+                    image: AssetImage('assets/icons/header_bg.png'),
                     fit: BoxFit.cover),
               ),
               child: Scaffold(
@@ -576,7 +579,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "${paramProvider.currentLatitude}",
+                                                              "${lat}",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -611,7 +614,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "${paramProvider.currentLongitude}",
+                                                              "${lng}",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -1023,7 +1026,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "${paramProvider.currentLatitude}",
+                                                                          "${lat}",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1061,7 +1064,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "${paramProvider.currentLongitude}",
+                                                                          "${lng}",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1165,6 +1168,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       return;
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
+    await masterProvider.fetchLocation();
     await provider.fetchDeviceId();
     //TODO lab is null here
     print("00000000 ${paramProvider.selectedLab.toString()}");
@@ -1195,8 +1199,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.sampleTypeOther,
-      paramProvider.currentLatitude.toString(),
-      paramProvider.currentLongitude.toString(),
+      lat.toString(),
+      lng.toString(),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
@@ -1219,7 +1223,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
           title: Column(
             children: [
               Image.asset(
-                'assets/check.png',
+                'assets/icons/check.png',
                 // <-- Your success image (PNG) path here
                 height: 60,
                 width: 80,

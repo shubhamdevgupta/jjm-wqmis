@@ -30,23 +30,19 @@ class DwsmProvider extends ChangeNotifier {
   List<SchoolResult> schoolResultList = [];
   String? selectedSchoolResult;
   String? selectedSchoolName;
+  String? selectedSchoolDate;
 
   DataState dataState = DataState.initial;
 
   List<SchoolResult> anganwadiList = [];
   String? selectedAnganwadi;
   String? selectedAnganwadiName;
+  String? selectedAnganwadiDate;
   int? mDemonstrationId;
 
   Dwsmdashboardresponse? _dwsmdashboardresponse;
 
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
-
-  double? get currentLatitude => _currentLatitude;
-  double? get currentLongitude => _currentLongitude;
-
-  double? _currentLatitude;
-  double? _currentLongitude;
 
   String? _deviceId;
 
@@ -208,37 +204,6 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchLocation() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      debugPrint('Requesting location permission...');
-      bool permissionGranted = await LocationUtils.requestLocationPermission();
-
-      if (permissionGranted) {
-        debugPrint('Permission granted. Fetching location...');
-        final locationData = await LocationUtils.getCurrentLocation();
-
-        if (locationData != null) {
-          _currentLatitude = locationData['latitude'];
-          _currentLongitude = locationData['longitude'];
-
-          debugPrint(
-              'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
-        } else {
-          debugPrint("Location fetch failed (locationData is null)");
-        }
-      } else {
-        debugPrint("Permission denied. Cannot fetch location.");
-      }
-    } catch (e) {
-      debugPrint("Error during fetchLocation(): $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
     debugPrint('Device ID: $_deviceId');
@@ -251,17 +216,19 @@ class DwsmProvider extends ChangeNotifier {
     notifyListeners();
 
   }
-  void setSelectedSchool(String id, String name, int demonstrationId) {
+  void setSelectedSchool(String id, String name, int demonstrationId,String DemoDate) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
+    selectedSchoolDate = DemoDate;
     mDemonstrationId = demonstrationId;
     notifyListeners();
   }
 
-  void setSelectedAnganwadi(String id, String name, int demonstrationId) {
+  void setSelectedAnganwadi(String id, String name, int demonstrationId, String DemoDate) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
     mDemonstrationId = demonstrationId;
+    selectedAnganwadiDate = DemoDate;
     schoolResultList=[];
     notifyListeners();
   }
@@ -269,6 +236,7 @@ class DwsmProvider extends ChangeNotifier {
   void clearSelectedSchool() {
     selectedSchoolResult = null;
     selectedSchoolName = 'N/A';
+    selectedSchoolDate = 'N/A';
     schoolResultList=[];
     notifyListeners();
   }
@@ -276,6 +244,7 @@ class DwsmProvider extends ChangeNotifier {
   void clearSelectedAnganwadi() {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
+    selectedAnganwadiDate = 'N/A';
     mDemonstrationId = 101;
     anganwadiList=[];
     notifyListeners();
@@ -283,10 +252,12 @@ class DwsmProvider extends ChangeNotifier {
   void clearData(){
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
+    selectedAnganwadiDate = 'N/A';
     mDemonstrationId = 101;
     anganwadiList.clear();
     selectedSchoolResult = null;
     selectedSchoolName = 'N/A';
+    selectedSchoolDate = 'N/A';
     schoolResultList=[];
     notifyListeners();
   }

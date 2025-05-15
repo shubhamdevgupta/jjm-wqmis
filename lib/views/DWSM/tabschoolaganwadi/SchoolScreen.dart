@@ -12,6 +12,7 @@ import '../../../providers/dwsmProvider.dart';
 import '../../../services/LocalStorageService.dart';
 import '../../../utils/AppStyles.dart';
 import '../../../utils/Camera.dart';
+import '../../../utils/CurrentLocation.dart';
 import '../../../utils/CustomDropdown.dart';
 import '../../../utils/DataState.dart';
 import '../../../utils/LoaderUtils.dart';
@@ -32,7 +33,8 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   TextEditingController remarkController = TextEditingController();
   Village? village;
-
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
   void initState() {
     super.initState();
     userId = _localStorage.getString(AppConstants.prefUserId)!;
@@ -91,7 +93,10 @@ class _SchoolScreen extends State<SchoolScreen> {
                                       dwsmprovider.setSelectedSchool(
                                           selectedId!,
                                           selectedSchool.name,
-                                          selectedSchool.demonstrated);
+                                          selectedSchool.demonstrated,
+                                        selectedSchool.demonstrated_date.toString()
+
+                                      );
                                       dwsmprovider
                                           .showDemonstartionButton(false);
                                       if (dwsmprovider.mDemonstrationId == 1) {
@@ -114,84 +119,113 @@ class _SchoolScreen extends State<SchoolScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Visibility(
-                                    visible:
-                                        dwsmprovider.selectedSchoolResult !=
+                                  Visibility(visible: dwsmprovider.selectedSchoolResult !=
                                             null,
                                     child: Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(16),
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.1),
-                                              blurRadius: 6,
-                                              offset: Offset(0, 2),
+                                              color: Colors.grey.withOpacity(0.1),
+                                              blurRadius: 8,
+                                              offset: Offset(0, 4),
                                             ),
                                           ],
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const SizedBox(height: 4),
                                               Row(
                                                 children: [
-                                                  Icon(Icons.school_rounded,
-                                                      color: Colors.green),
-                                                  SizedBox(width: 8),
+                                                  Icon(Icons.school_rounded, color: Colors.green, size: 24),
+                                                  SizedBox(width: 10),
                                                   Expanded(
                                                     child: Text(
-                                                      '${dwsmprovider.selectedSchoolName ?? "N/A"}',
+                                                      dwsmprovider.selectedSchoolName ?? "N/A",
                                                       style: TextStyle(
-                                                        fontSize: 16,
+                                                        fontSize: 17,
                                                         fontFamily: 'OpenSans',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: Colors.black87,
                                                       ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(height: 12),
-                                              Visibility(
-                                                visible: dwsmprovider
-                                                        .mDemonstrationId ==
-                                                    1,
-                                                child: Row(
-                                                  children: const [
-                                                    Icon(Icons.info_outline,
-                                                        size: 18,
-                                                        color: Colors.orange),
-                                                    SizedBox(width: 6),
-                                                    Expanded(
-                                                      child: Text(
-                                                        "This School has already been demonstrated.",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily:
-                                                              'OpenSans',
-                                                          color:
-                                                              Colors.redAccent,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                      ),
+
+                                              SizedBox(height: 10),
+
+                                              if (dwsmprovider.mDemonstrationId == 1) ...[
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.orange.shade50,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                    border: Border.all(
+                                                      color: Colors.orange, // Border color
+                                                      width: 1.5,           // Border thickness
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
+                                                  ),
+
+                                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.info_outline, size: 20, color: Colors.orange),
+                                                          SizedBox(width: 8),
+                                                          Expanded(
+                                                            child: Text(
+                                                              "This School has already been demonstrated successfully..",
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontFamily: 'OpenSans',
+                                                                color: Colors.redAccent,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons.date_range, color: Colors.redAccent, size: 20),
+                                                          SizedBox(width: 6),
+                                                          Text(
+                                                            "Demonstration:",
+                                                            style: TextStyle(
+                                                              fontWeight: FontWeight.w600,
+                                                              fontFamily: 'OpenSans',
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 6),
+                                                          Text(
+                                                            dwsmprovider.selectedSchoolDate?.toString() ?? "",
+                                                            style: TextStyle(
+                                                              fontWeight: FontWeight.w500,
+                                                              fontFamily: 'OpenSans',
+                                                              color: Colors.black87,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
                                             ],
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    )
+
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -488,7 +522,7 @@ class _SchoolScreen extends State<SchoolScreen> {
           title: Column(
             children: [
               Image.asset(
-                'assets/check.png',
+                'assets/icons/check.png',
                 // <-- Your success image (PNG) path here
                 height: 60,
                 width: 80,
@@ -807,7 +841,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 color: Colors.blue, size: 18),
                             SizedBox(width: 5,),
                             Text(
-                              'Latitude: ${dwsmprovider.currentLatitude?.toStringAsFixed(5)}',
+                              'Latitude: ${lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -824,7 +858,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 color: Colors.blue, size: 18),
                             SizedBox(width: 5,),
                             Text(
-                              'Longitude: ${dwsmprovider.currentLongitude?.toStringAsFixed(5)}',
+                              'Longitude: ${lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -854,8 +888,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          dwsmprovider.currentLatitude.toString(),
-                          dwsmprovider.currentLatitude.toString(),
+                          lat.toString(),
+                          lng.toString(),
                           dwsmprovider.deviceId!, () {
                         showResponse(dwsmprovider);
                       });
