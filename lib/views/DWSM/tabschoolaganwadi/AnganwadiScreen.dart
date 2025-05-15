@@ -99,9 +99,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                 selectedId!,
                                                 selectedAnnganwadi.name,
                                                 selectedAnnganwadi.demonstrated,
-                                                selectedAnnganwadi.demonstrated_date.toString()
-
-                                            );
+                                                selectedAnnganwadi
+                                                    .demonstrated_date
+                                                    .toString());
 
                                             if (dwsmprovider.mDemonstrationId ==
                                                 1) {
@@ -127,118 +127,180 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           height: 10,
                                         ),
                                         Visibility(
-                                          visible:
-                                              dwsmprovider.selectedAnganwadi !=
-                                                  null,
-                                          child: Card(
-                                            elevation: 3,
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(16),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.1),
-                                                    blurRadius: 6,
-                                                    offset: Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16.0),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    // Header Row
-                                                    Row(
-                                                      children: [
-                                                        Icon(Icons.school_rounded, color: Colors.green, size: 24),
-                                                        SizedBox(width: 10),
-                                                        Expanded(
-                                                          child: Text(
-                                                            dwsmprovider.selectedAnganwadiName ?? "N/A",
-                                                            style: TextStyle(
-                                                              fontSize: 17,
-                                                              fontFamily: 'OpenSans',
-                                                              fontWeight: FontWeight.w600,
-                                                              color: Colors.black87,
+                                            visible: dwsmprovider
+                                                    .selectedAnganwadi !=
+                                                null,
+                                            child: Card(
+                                              elevation: 3,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16)),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1),
+                                                      blurRadius: 6,
+                                                      offset: Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // Header Row
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons
+                                                                  .school_rounded,
+                                                              color:
+                                                                  Colors.green,
+                                                              size: 24),
+                                                          SizedBox(width: 10),
+                                                          Expanded(
+                                                            child: Text(
+                                                              dwsmprovider
+                                                                      .selectedAnganwadiName ??
+                                                                  "N/A",
+                                                              style: TextStyle(
+                                                                fontSize: 17,
+                                                                fontFamily:
+                                                                    'OpenSans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .black87,
+                                                              ),
                                                             ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 16),
+
+                                                      // Demonstration Info Section
+                                                      if (dwsmprovider
+                                                              .mDemonstrationId ==
+                                                          1) ...[
+                                                        Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors
+                                                                .orange.shade50,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            border: Border.all(
+                                                              color:
+                                                                  Colors.yellow,
+                                                              width: 1.5,
+                                                            ),
+                                                          ),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      12,
+                                                                  vertical: 10),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              // Info Row
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                      Icons
+                                                                          .info_outline,
+                                                                      size: 20,
+                                                                      color: Colors
+                                                                          .orange),
+                                                                  SizedBox(
+                                                                      width: 8),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      "This Anganwadi has already been demonstrated successfully..",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontFamily:
+                                                                            'OpenSans',
+                                                                        color: Colors
+                                                                            .redAccent,
+                                                                        fontWeight:
+                                                                            FontWeight.w500,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 10),
+
+                                                              // Demonstration Date Row
+                                                              Row(
+                                                                children: [
+                                                                  Icon(
+                                                                      Icons
+                                                                          .date_range,
+                                                                      color: Colors
+                                                                          .redAccent,
+                                                                      size: 20),
+                                                                  SizedBox(
+                                                                      width: 6),
+                                                                  Text(
+                                                                    "Demonstration:",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontFamily:
+                                                                          'OpenSans',
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 6),
+                                                                  Text(
+                                                                    dwsmprovider
+                                                                            .selectedAnganwadiDate
+                                                                            ?.toString() ??
+                                                                        "",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      fontFamily:
+                                                                          'OpenSans',
+                                                                      color: Colors
+                                                                          .black87,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
-                                                    ),
-                                                    SizedBox(height: 16),
-
-                                                    // Demonstration Info Section
-                                                    if (dwsmprovider.mDemonstrationId == 1) ...[
-                                                      Container(
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.orange.shade50,
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          border: Border.all(
-                                                            color: Colors.yellow,
-                                                            width: 1.5,
-                                                          ),
-                                                        ),
-                                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            // Info Row
-                                                            Row(
-                                                              children: [
-                                                                Icon(Icons.info_outline, size: 20, color: Colors.orange),
-                                                                SizedBox(width: 8),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    "This Anganwadi has already been demonstrated successfully..",
-                                                                    style: TextStyle(
-                                                                      fontSize: 14,
-                                                                      fontFamily: 'OpenSans',
-                                                                      color: Colors.redAccent,
-                                                                      fontWeight: FontWeight.w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(height: 10),
-
-                                                            // Demonstration Date Row
-                                                            Row(
-                                                              children: [
-                                                                Icon(Icons.date_range, color: Colors.redAccent, size: 20),
-                                                                SizedBox(width: 6),
-                                                                Text(
-                                                                  "Demonstration:",
-                                                                  style: TextStyle(
-                                                                    fontWeight: FontWeight.w600,
-                                                                    fontFamily: 'OpenSans',
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 6),
-                                                                Text(
-                                                                  dwsmprovider.selectedAnganwadiDate?.toString() ?? "",
-                                                                  style: TextStyle(
-                                                                    fontWeight: FontWeight.w500,
-                                                                    fontFamily: 'OpenSans',
-                                                                    color: Colors.black87,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
                                                     ],
-                                                  ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-
-                                        ),
+                                            )),
                                         SizedBox(
                                           height: 10,
                                         ),
@@ -251,45 +313,46 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                             null &&
                                                         !dwsmprovider
                                                             .showDemonstartion,
-                                                    child: ElevatedButton(
-                                                      onPressed: () async {
-                                                        print(
-                                                            "pppppppppppp before ${dwsmprovider.showDemonstartion}");
+                                                    child: SizedBox(
+                                                      width: double.infinity,
+                                                      child: ElevatedButton(
+                                                        onPressed: () async {
+                                                          print(
+                                                              "pppppppppppp before ${dwsmprovider.showDemonstartion}");
 
-                                                        dwsmprovider
-                                                            .showDemonstartionButton(
-                                                                true);
+                                                          dwsmprovider
+                                                              .showDemonstartionButton(
+                                                                  true);
 
-                                                        print(
-                                                            "pppppppppppp after ${dwsmprovider.showDemonstartion}");
-                                                      },
-                                                      child: Text(
-                                                        "New Demonstration",
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'OpenSans',
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Appcolor.buttonBgColor,
-                                                        foregroundColor:
-                                                            Colors.white,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 100,
-                                                                vertical: 10),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
+                                                          print(
+                                                              "pppppppppppp after ${dwsmprovider.showDemonstartion}");
+                                                        },
+                                                        child: Text(
+                                                          "New Demonstration",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'OpenSans',
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Appcolor
+                                                                  .buttonBgColor,
+                                                          foregroundColor:
+                                                              Colors.white,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -449,15 +512,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                           _infoRow(
                                                               "Remark",
                                                               village != null
-                                                                  ? village!.remark: "",
+                                                                  ? village!
+                                                                      .remark
+                                                                  : "",
                                                               Icons.message,
                                                               Colors.teal),
 
-
-
-
                                                           // Remark
-                                                      /*    Padding(
+                                                          /*    Padding(
                                                             padding:
                                                                 const EdgeInsets
                                                                     .symmetric(
@@ -697,6 +759,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   String _buildLocationPath(List<String?> parts) {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
+
   Widget _infoRow(String title, String value, IconData icon, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -810,8 +873,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               ),
             ),
           ),
-
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Card(
             child: Container(
               decoration: BoxDecoration(
@@ -840,7 +904,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                     ),
                   ),
                   Divider(thickness: 1, color: Colors.grey.shade300),
-
                   Center(
                     child: _cameraHelper.imageFile == null
                         ? GestureDetector(

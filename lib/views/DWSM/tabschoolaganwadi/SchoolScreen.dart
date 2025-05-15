@@ -240,35 +240,35 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                       null &&
                                                   !dwsmprovider
                                                       .showDemonstartion,
-                                              child: ElevatedButton(
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    dwsmprovider
-                                                        .showDemonstartionButton(
-                                                            true);
-                                                  });
-                                                },
-                                                child: Text(
-                                                  "New Demonstration",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: 'OpenSans',
-                                                      color: Colors.white),
-                                                ),
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Appcolor.buttonBgColor,
-                                                  foregroundColor: Colors.white,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 100,
-                                                      vertical: 10),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
+                                              child: SizedBox(
+                                                width: double.infinity,
+                                                child: ElevatedButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      dwsmprovider
+                                                          .showDemonstartionButton(
+                                                              true);
+                                                    });
+                                                  },
+                                                  child: Text(
+                                                    "New Demonstration",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: 'OpenSans',
+                                                        color: Colors.white),
+                                                  ),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Appcolor.buttonBgColor,
+                                                    foregroundColor: Colors.white,
+
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
