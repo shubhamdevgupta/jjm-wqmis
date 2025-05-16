@@ -158,7 +158,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                             ),
                           ],
                         ),
-
                         const Divider(height: 30),
 
                         /// 🔷 Location Path
