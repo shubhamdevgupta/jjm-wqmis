@@ -71,9 +71,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                if (Navigator.of(context).canPop()) {
-                  Navigator.pop(context);
-                }
+                Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
               },
             ),
 
