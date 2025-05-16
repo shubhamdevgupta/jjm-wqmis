@@ -401,7 +401,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         ),
                                       ),
                                     );}else{
-                                      ToastHelper.showSnackBar(context,
+                                      ToastHelper.showToastMessage(
                                           "There is no Anganwadi available for this user");
                                     }
                                   },
