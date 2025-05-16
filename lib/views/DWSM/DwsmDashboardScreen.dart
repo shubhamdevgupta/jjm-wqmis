@@ -285,7 +285,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 15),
                     Container(
                       width: 500,
                       padding: const EdgeInsets.all(20),
@@ -307,25 +307,14 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "School",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: 'OpenSans',
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-
                           // Row for School section
                           Row(
                             children: [
                               Expanded(
                                 child: _buildInfoCard(
-                                  icon: Icons.school_rounded,
+                                  imagePath: 'assets/icons/school.png',
                                   iconColor: Colors.blue,
-                                  title: "Schools",
+                                  title: "Total\nSchools",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools ?? 0}',
                                   onTap: () {
@@ -347,9 +336,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: _buildInfoCard(
-                                  icon: Icons.local_activity,
+                                  imagePath: 'assets/icons/presentation.png',
                                   iconColor: Colors.deepOrange,
-                                  title: "Demonstrations",
+                                  title: "School FTK Demonstrations",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ?? 0}',
                                   onTap: () {
@@ -373,25 +362,15 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                           const SizedBox(height: 15),
 
-                          const Text(
-                            "Anganwadi",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: 'OpenSans',
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
 
                           // Row for Anganwadi section
                           Row(
                             children: [
                               Expanded(
                                 child: _buildInfoCard(
-                                  icon: Icons.child_care,
-                                  iconColor: Colors.teal,
-                                  title: "Anganwadi",
+                                  imagePath: 'assets/icons/anganbadi.png',
+                                  iconColor: Colors.green,
+                                  title: "Total\nAnganwadi",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs ?? 0}',
                                   onTap: () {
@@ -412,9 +391,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: _buildInfoCard(
-                                  icon: Icons.lightbulb_outline,
-                                  iconColor: Colors.purple,
-                                  title: "Demonstrations",
+                                  imagePath: 'assets/icons/presentation.png',
+                                  iconColor: Colors.red,
+                                  title: "Anganwadi FTK Demonstrations",
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration ?? 0}',
                                   onTap: () {
@@ -495,7 +474,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           )),
     );
   }
-
+/*
   Widget _buildInfoCard({
     required IconData icon,
     required Color iconColor,
@@ -554,6 +533,79 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   fontWeight: FontWeight.bold,
                   color: iconColor,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }*/
+
+
+  Widget _buildInfoCard({
+    required String imagePath,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+    required String value,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 135,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: iconColor.withOpacity(0.6), // 🔹 Colored border
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.12),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: iconColor.withOpacity(0.6), // 🔹 Colored border
+                  width: 1.2,
+                ),
+              ),
+              child: Image.asset(
+                imagePath,
+                width: 32,
+                height: 32,
+
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: iconColor,
               ),
             ),
           ],
