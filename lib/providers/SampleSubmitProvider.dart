@@ -40,6 +40,7 @@ class Samplesubprovider extends ChangeNotifier {
       IpAddress,
       sample_type_other,
       wtp_id,
+      istreated,
       test_selected,
       sample_submit_type) async {
     _isLoading = true;
@@ -68,6 +69,7 @@ class Samplesubprovider extends ChangeNotifier {
           IpAddress,
           sample_type_other,
           wtp_id,
+          istreated,
           test_selected,
           sample_submit_type);
       notifyListeners();

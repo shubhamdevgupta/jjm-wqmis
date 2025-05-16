@@ -55,6 +55,7 @@ class Masterprovider extends ChangeNotifier {
   List<Wtp> wtpList = [];
   String? selectedWtp;
 
+  int istreated=0;
 
   double? _currentLatitude;
   double? _currentLongitude;

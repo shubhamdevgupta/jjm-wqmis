@@ -1164,7 +1164,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     String roleId = _localStorage.getString(AppConstants.prefRoleId)!;
 
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
-      showSnackbar(context, "Please select at least one test.");
+      ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
     }
     print("---------${masterProvider.selectedWaterSource.toString()}");
@@ -1205,6 +1205,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       provider.deviceId,
       masterProvider.sampleTypeOther,
       int.parse(masterProvider.selectedWtp ?? '0'),
+      masterProvider.istreated,
       paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(","),
       "M",
     );
@@ -1284,13 +1285,4 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     }
   }
 
-  void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
 }

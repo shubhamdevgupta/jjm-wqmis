@@ -33,6 +33,7 @@ class Samplesubrepo {
       String IpAddress,
       String sample_type_other,
       int wtp_id,
+      int istreated,
       String test_selected,
       String sample_submit_type,
       ) async {
@@ -59,6 +60,7 @@ class Samplesubrepo {
       "IpAddress": IpAddress,
       "sample_type_other": sample_type_other,
       "wtp_id": wtp_id,
+      "istreated":istreated,
       "test_selected": test_selected,
       "sample_submit_type": sample_submit_type,
     });

@@ -481,6 +481,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             value: 5,
                             groupValue: masterProvider.selectedSubSource,
                             onChanged: (value) {
+                              masterProvider.istreated=0;
                               masterProvider.selectRadioOption(value!);
                             },
                           ),
@@ -497,6 +498,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                             value: 6,
                             groupValue: masterProvider.selectedSubSource,
                             onChanged: (value) {
+                              masterProvider.istreated=1;
                               masterProvider.selectRadioOption(value!);
                             },
                           ),
@@ -561,6 +563,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
+                          print("istreated----${masterProvider.istreated}");
                           if (validateWtpWaterFields(masterProvider)) {
                             //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
 

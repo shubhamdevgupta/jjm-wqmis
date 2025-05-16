@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
@@ -189,7 +190,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                 )),
             body: provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                : SingleChildScrollView(
+                : provider.baseStatus==0?Center(child: AppTextWidgets.errorText(provider.errorMsg)): SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
