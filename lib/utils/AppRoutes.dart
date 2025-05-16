@@ -15,6 +15,7 @@ import '../views/SubmitSampleScreen.dart';
 import '../views/auth/DashboardScreen.dart';
 import '../views/auth/LoginScreen.dart';
 import '../views/auth/SplashScreen.dart';
+import '../views/ftk/ftkDashboard.dart';
 import '../views/lab/AsPerLabView.dart';
 import '../views/lab/AsPerParameterView.dart';
 import '../views/lab/LabParameterScreen.dart';
