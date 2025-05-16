@@ -315,8 +315,8 @@ late DashboardProvider dashboardProvider;
                     ),
                     const SizedBox(height: 15),
                     Container(
-                      width: 500,
-                      padding: const EdgeInsets.all(20),
+
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFe0f7fa), Color(0xFFFFFFFF)],
@@ -690,8 +690,8 @@ late DashboardProvider dashboardProvider;
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 135,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
