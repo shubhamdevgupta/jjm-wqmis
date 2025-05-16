@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+import '../../utils/NetworkStatus.dart';
 import '../../utils/UpdateDialog.dart';
 import '../../utils/VersionUtils.dart';
 
@@ -93,7 +94,8 @@ late DashboardProvider dashboardProvider;
                     onPressed: () {
                       dashboardProvider.loadDashboardData();
                     },
-                  )
+                  ),
+                  NetworkStatusIcon(),
                 ],
               ),
             ],
