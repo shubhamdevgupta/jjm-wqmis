@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/dwsmProvider.dart';
 import '../../../utils/AppConstants.dart';
-import '../../../utils/AppStyles.dart';
 
 class Demonstrationscreen extends StatefulWidget {
   final int? type;
@@ -99,173 +98,188 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                 : provider.baseStatus == 0
                     ? Center(
                         child: AppTextWidgets.errorText(provider.errorMessage))
-                    :ListView.builder(
-                    itemCount: provider.villages.length,
-                    itemBuilder: (context, index) {
-                      final village = provider.villages[index];
+                    : ListView.builder(
+                        itemCount: provider.villages.length,
+                        itemBuilder: (context, index) {
+                          final village = provider.villages[index];
 
-                return Container(
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.shade100.withOpacity(0.4),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// 🔷 Top Row: Title + Remove
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          return Container(
+                            margin: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.shade100.withOpacity(0.4),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  /// 🔷 Top Row: Title + Remove
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      titleType == 'School'? Image.asset(
-                                        'assets/icons/school.png',
-                                        width: 32,
-                                        height: 32,
-
-                                      ):Image.asset(
-                              'assets/icons/anganbadi.png',
-                              width: 30,
-                              height: 32,
-
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                "$titleType Details",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'OpenSans',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Your logic here
-                              },
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: Colors.red.shade50,
-                                foregroundColor: Colors.red.shade700,
-                                padding: const EdgeInsets.all(2),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(color: Colors.red.shade200),
-                                ),
-                              ),
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.delete_outline, size: 24),
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(height: 30),
+                                      titleType == 'School'
+                                          ? Image.asset(
+                                              'assets/icons/school.png',
+                                              width: 32,
+                                              height: 32,
+                                            )
+                                          : Image.asset(
+                                              'assets/icons/anganbadi.png',
+                                              width: 30,
+                                              height: 32,
+                                            ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          "$titleType Details",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'OpenSans',
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                               /*       ElevatedButton(
+                                        onPressed: () {
+                                          // Your logic here
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: Colors.red.shade50,
+                                          foregroundColor: Colors.red.shade700,
+                                          padding: const EdgeInsets.all(2),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            side: BorderSide(
+                                                color: Colors.red.shade200),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: const [
+                                            Icon(Icons.delete_outline,
+                                                size: 24),
+                                          ],
+                                        ),
+                                      ),*/
+                                    ],
+                                  ),
+                                  const Divider(height: 30),
 
                                   /// 🔷 Location Path
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.05), // 🔹 Light red shade
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _iconCircle(Icons.location_on, Colors.red),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  _buildLocationPath([
-                                    village.stateName,
-                                    village.districtName,
-                                    village.blockName,
-                                    village.panchayatName,
-                                    village.villageName,
-                                  ]),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black87,
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withOpacity(0.05),
+                                      // 🔹 Light red shade
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        _iconCircle(
+                                            Icons.location_on, Colors.red),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            _buildLocationPath([
+                                              village.stateName,
+                                              village.districtName,
+                                              village.blockName,
+                                              village.panchayatName,
+                                              village.villageName,
+                                            ]),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'OpenSans',
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                                  // Category
                                   _infoRow(
                                       "Category",
                                       village.InstitutionCategory,
                                       Icons.category,
                                       Colors.orange),
 
-                                  const SizedBox(height: 12),
-
                                   /// 🔷 Info Rows
-                        _infoRow("$titleType Name", "$titleType", Icons.school, Colors.deepPurple),
-                        _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
-                        _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),
-                        _infoRow("Remark", village.remark, Icons.message, Colors.teal),
+                                  _infoRow("$titleType Name", "$titleType",
+                                      Icons.school, Colors.deepPurple),
+                                  _infoRow(
+                                      "Classification",
+                                      village.InstitutionSubCategory,
+                                      Icons.label,
+                                      Colors.green),
+                                  _infoRow("Remark", village.remark,
+                                      Icons.message, Colors.teal),
+                                  _infoRow("Date", village.datetime,
+                                      Icons.message, Colors.blueGrey),
 
-                        const Divider(height: 30),
+                                  const Divider(height: 30),
 
-                        /// 🔷 View Button
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              LoaderUtils.showCustomLoaderDialog(context);
-                              await provider.fetchDemonstrationList(
-                                int.parse(stateId!),
-                                int.parse(districtId!),
-                                "2025-2026",
-                                village.schoolId,
-                                widget.type!,
-                                onSuccess: (result) {
-                                  String base64String = result.photo.contains(',')
-                                      ? result.photo.split(',').last
-                                      : result.photo;
-                                  final imageBytes = base64Decode(base64String);
-                                  LoaderUtils.hideLoaderDialog(context);
-                                  showImage(imageBytes);
-                                },
-                              );
-                              if (!mounted) return;
-                            },
-                            icon: const Icon(Icons.remove_red_eye, size: 18),
-                            label: const Text("View"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                  /// 🔷 View Button
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        LoaderUtils.showCustomLoaderDialog(
+                                            context);
+                                        await provider.fetchDemonstrationList(
+                                          int.parse(stateId!),
+                                          int.parse(districtId!),
+                                          "2025-2026",
+                                          village.schoolId,
+                                          widget.type!,
+                                          onSuccess: (result) {
+                                            String base64String = result.photo
+                                                    .contains(',')
+                                                ? result.photo.split(',').last
+                                                : result.photo;
+                                            final imageBytes =
+                                                base64Decode(base64String);
+                                            LoaderUtils.hideLoaderDialog(
+                                                context);
+                                            showImage(imageBytes);
+                                          },
+                                        );
+                                        if (!mounted) return;
+                                      },
+                                      icon: const Icon(Icons.remove_red_eye,
+                                          size: 18),
+                                      label: const Text("View"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blueAccent,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-
-                    },
-            );
+                          );
+                        },
+                      );
           })),
     );
   }

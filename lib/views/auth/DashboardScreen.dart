@@ -1,5 +1,6 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
+import '../../utils/UpdateDialog.dart';
 import '../../utils/VersionUtils.dart';
 
 class Dashboardscreen extends StatefulWidget {

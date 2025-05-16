@@ -43,6 +43,7 @@ class Village {
   final String InstitutionCategory;
   final String InstitutionSubCategory;
   final String remark;
+  final String datetime;
 
   Village({
     required this.stateName,
@@ -60,7 +61,8 @@ class Village {
     required this.photo,
     required this.InstitutionCategory,
     required this.InstitutionSubCategory,
-    required this.remark
+    required this.remark,
+    required this.datetime
   });
 
   factory Village.fromJson(Map<String, dynamic> json) {
@@ -81,7 +83,7 @@ class Village {
       InstitutionCategory: json['InstitutionCategory'],
       InstitutionSubCategory: json['InstitutionSubCategory'],
       remark: json['Remark'],
-
+      datetime: json['createdon'],
     );
   }
 
@@ -103,6 +105,7 @@ class Village {
       'InstitutionCategory': InstitutionCategory,
       'InstitutionSubCategory': InstitutionSubCategory,
       'Remark': remark,
+      'createdon': datetime,
     };
   }
 }

@@ -373,10 +373,44 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                     ),
                                                   ),
                                                 ),
-
                                                 Visibility(
-                                                  visible: sample.testResult ==
-                                                      "Report Approved",
+                                                  visible: sample.currentStatus ==1,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                    ToastHelper.showToastMessage("Under Development");
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      elevation: 0,
+                                                      backgroundColor:
+                                                          Colors.red.shade50,
+                                                      foregroundColor:
+                                                          Colors.red.shade700,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        side: BorderSide(
+                                                            color: Colors
+                                                                .red.shade200),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      children: const [
+                                                        Icon(
+                                                            Icons
+                                                                .delete_outline,
+                                                            size: 24),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Visibility(
+                                                  visible: sample.currentStatus ==6,
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       Navigator.push(
