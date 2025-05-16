@@ -113,7 +113,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                     if (Navigator.of(context).canPop()) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pushReplacementNamed(context, '/savesample');
+                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSubmitSampleScreen);
                     }
                   },
                 ),

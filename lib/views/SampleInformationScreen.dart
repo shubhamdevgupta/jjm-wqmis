@@ -35,7 +35,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           // Navigate back to Dashboard when pressing back button
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/dashboard',
+            AppConstants.navigateToDashboardScreen,
             (route) => false, // Clears all previous routes
           );
           return false; // Prevents default back action
