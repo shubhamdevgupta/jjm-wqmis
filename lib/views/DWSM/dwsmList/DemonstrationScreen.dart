@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/dwsmProvider.dart';
 import '../../../utils/AppConstants.dart';
+import '../../../utils/AppStyles.dart';
 
 class Demonstrationscreen extends StatefulWidget {
   final int? type;
@@ -116,67 +117,95 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Heading
+                        /// 🔷 Top Row: Title + Remove
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             _iconCircle(Icons.location_city, Colors.blue),
                             const SizedBox(width: 10),
-                            Text(
-                              "$titleType Details",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'OpenSans',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(height: 30),
-                        const SizedBox(height: 12),
-
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _iconCircle(Icons.location_on, Colors.red),
-                            const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                _buildLocationPath([
-                                  village.stateName,
-                                  village.districtName,
-                                  village.blockName,
-                                  village.panchayatName,
-                                  village.villageName,
-                                ]),
+                                "$titleType Details",
                                 style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 18,
                                   fontFamily: 'OpenSans',
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
                                 ),
                               ),
                             ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Your logic here
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: Colors.red.shade50,
+                                foregroundColor: Colors.red.shade700,
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: Colors.red.shade200),
+                                ),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.delete_outline, size: 18),
+                                  SizedBox(width: 4),
+                                  Text("Remove", style: TextStyle(fontSize: 13)),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                        // School Name
-                        _infoRow("$titleType Name", "$titleType", Icons.school,
-                            Colors.deepPurple),
 
-                        // Category
-                        _infoRow("Category", village.InstitutionCategory,
-                            Icons.category, Colors.orange),
-
-                        // Classification
-                        _infoRow(
-                            "Classification",
-                            village.InstitutionSubCategory,
-                            Icons.label,
-                            Colors.green),
-
-                        _infoRow("Remark", village.remark, Icons.message,
-                            Colors.teal),
                         const Divider(height: 30),
+
+                        /// 🔷 Location Path
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.05), // 🔹 Light red shade
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _iconCircle(Icons.location_on, Colors.red),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  _buildLocationPath([
+                                    village.stateName,
+                                    village.districtName,
+                                    village.blockName,
+                                    village.panchayatName,
+                                    village.villageName,
+                                  ]),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'OpenSans',
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        const SizedBox(height: 12),
+
+                        /// 🔷 Info Rows
+                        _infoRow("$titleType Name", "$titleType", Icons.school, Colors.deepPurple),
+                        _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
+                        _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),
+                        _infoRow("Remark", village.remark, Icons.message, Colors.teal),
+
+                        const Divider(height: 30),
+
+                        /// 🔷 View Button
                         Align(
                           alignment: Alignment.bottomRight,
                           child: ElevatedButton.icon(
@@ -189,10 +218,9 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                 village.schoolId,
                                 widget.type!,
                                 onSuccess: (result) {
-                                  String base64String =
-                                      result.photo.contains(',')
-                                          ? result.photo.split(',').last
-                                          : result.photo;
+                                  String base64String = result.photo.contains(',')
+                                      ? result.photo.split(',').last
+                                      : result.photo;
                                   final imageBytes = base64Decode(base64String);
                                   LoaderUtils.hideLoaderDialog(context);
                                   showImage(imageBytes);
@@ -205,8 +233,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueAccent,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -217,7 +244,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                     ),
                   ),
                 );
-              },
+
+                    },
             );
           })),
     );
