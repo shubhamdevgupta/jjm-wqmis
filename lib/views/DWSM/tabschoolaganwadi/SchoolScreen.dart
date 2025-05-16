@@ -65,7 +65,7 @@ class _SchoolScreen extends State<SchoolScreen> {
 
                             case DataState.error:
                               return AppTextWidgets.errorText(
-                                  dwsmprovider.errorMsg);
+                                  dwsmprovider.errorMessage!);
                             case DataState.loaded:
                               return Column(
                                 children: [
@@ -435,11 +435,11 @@ class _SchoolScreen extends State<SchoolScreen> {
   Future<bool> validate(DwsmProvider dwsmprovider) async {
     await dwsmprovider.fetchDeviceId();
     if (dwsmprovider.selectedSchoolResult == null) {
-      dwsmprovider.errorMsg = "Please Select School first.";
+      dwsmprovider.errorMessage = "Please Select School first.";
       return false;
     }
     if (_cameraHelper.imageFile == null) {
-      dwsmprovider.errorMsg = "Please capture an image first.";
+      dwsmprovider.errorMessage = "Please capture an image first.";
       return false;
     }
     return true;
@@ -520,7 +520,7 @@ class _SchoolScreen extends State<SchoolScreen> {
         ),
       );
     } else {
-      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMsg);
+      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMessage);
     }
   }
 
@@ -833,7 +833,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                         showResponse(dwsmprovider);
                       });
                     } else {
-                      ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
+                      ToastHelper.showSnackBar(context, dwsmprovider.errorMessage);
                     }
                   },
                   child: Text(

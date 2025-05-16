@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authentication_provider.dart';
@@ -320,18 +321,23 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools ?? 0}',
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                          value: dwsmDashboardProvider,
-                                          child: const SchoolAWCScreen(
-                                            type: 10,
+                                    if (dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools >0) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeNotifierProvider.value(
+                                            value: dwsmDashboardProvider,
+                                            child: const SchoolAWCScreen(
+                                              type: 10,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      ToastHelper.showSnackBar(context,
+                                          "There is no school available for this user");
+                                    }
                                   },
                                 ),
                               ),
@@ -344,18 +350,26 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ?? 0}',
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                          value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(
-                                            type: 10,
+                                    if (dwsmDashboardProvider
+                                            .dwsmdashboardresponse!
+                                            .totalSchoolsDemonstration >
+                                        0) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeNotifierProvider.value(
+                                            value: dwsmDashboardProvider,
+                                            child: Demonstrationscreen(
+                                              type: 10,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      ToastHelper.showSnackBar(context,
+                                          "There is no demonstrated school");
+                                    }
                                   },
                                 ),
                               ),
@@ -363,7 +377,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                           ),
 
                           const SizedBox(height: 15),
-
 
                           // Row for Anganwadi section
                           Row(
@@ -376,6 +389,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs ?? 0}',
                                   onTap: () {
+                                    if(dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs>0){
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -386,7 +400,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                               const SchoolAWCScreen(type: 11),
                                         ),
                                       ),
-                                    );
+                                    );}else{
+                                      ToastHelper.showSnackBar(context,
+                                          "There is no Anganwadi available for this user");
+                                    }
                                   },
                                 ),
                               ),
@@ -399,18 +416,26 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   value:
                                       '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration ?? 0}',
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                          value: dwsmDashboardProvider,
-                                          child: Demonstrationscreen(
-                                            type: 11,
+                                    if (dwsmDashboardProvider
+                                            .dwsmdashboardresponse!
+                                            .totalAWCsDemonstration >
+                                        0) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeNotifierProvider.value(
+                                            value: dwsmDashboardProvider,
+                                            child: Demonstrationscreen(
+                                              type: 11,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      ToastHelper.showSnackBar(context,
+                                          "There is no demonstrated AWCs");
+                                    }
                                   },
                                 ),
                               ),
@@ -476,6 +501,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           )),
     );
   }
+
 /*
   Widget _buildInfoCard({
     required IconData icon,
@@ -543,7 +569,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     );
   }*/
 
-
   Widget _buildInfoCard({
     required String imagePath,
     required Color iconColor,
@@ -587,7 +612,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                 imagePath,
                 width: 32,
                 height: 32,
-
               ),
             ),
             const SizedBox(height: 10),
