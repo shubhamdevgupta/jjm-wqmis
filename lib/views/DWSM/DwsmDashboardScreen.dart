@@ -51,7 +51,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
+            image: AssetImage('assets/icons/wqmis_bg_neeraj.jpeg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -401,7 +401,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                         ),
                                       ),
                                     );}else{
-                                      ToastHelper.showSnackBar(context,
+                                      ToastHelper.showToastMessage(
                                           "There is no Anganwadi available for this user");
                                     }
                                   },
