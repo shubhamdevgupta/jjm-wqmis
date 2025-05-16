@@ -452,6 +452,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
+                  masterProvider.baseStatus==0?AppTextWidgets.errorText(masterProvider.errorMsg):
                   CustomDropdown(
                     value: masterProvider.selectedWtp,
                     items: masterProvider.wtpList.map((wtpData) {
@@ -472,44 +473,47 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Radio(
-                            value: 5,
-                            groupValue: masterProvider.selectedSubSource,
-                            onChanged: (value) {
-                              masterProvider.istreated=0;
-                              masterProvider.selectRadioOption(value!);
-                            },
-                          ),
-                          InkWell(
-                              onTap: () {
-                                masterProvider.selectRadioOption(5);
+                  Visibility(
+                    visible: masterProvider.baseStatus==1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Radio(
+                              value: 5,
+                              groupValue: masterProvider.selectedSubSource,
+                              onChanged: (value) {
+                                masterProvider.istreated=0;
+                                masterProvider.selectRadioOption(value!);
                               },
-                              child: const Text('Inlet of WTP'))
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: 6,
-                            groupValue: masterProvider.selectedSubSource,
-                            onChanged: (value) {
-                              masterProvider.istreated=1;
-                              masterProvider.selectRadioOption(value!);
-                            },
-                          ),
-                          InkWell(
-                              onTap: () {
-                                masterProvider.selectRadioOption(6);
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  masterProvider.selectRadioOption(5);
+                                },
+                                child: const Text('Inlet of WTP'))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Radio(
+                              value: 6,
+                              groupValue: masterProvider.selectedSubSource,
+                              onChanged: (value) {
+                                masterProvider.istreated=1;
+                                masterProvider.selectRadioOption(value!);
                               },
-                              child: const Text('Outlet of WTP'))
-                        ],
-                      ),
-                    ],
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  masterProvider.selectRadioOption(6);
+                                },
+                                child: const Text('Outlet of WTP'))
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
