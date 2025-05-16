@@ -187,115 +187,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                           ),
                                                         ],
                                                       ),
-                                                      SizedBox(height: 16),
-
-                                                      // Demonstration Info Section
-                                                      if (dwsmprovider
-                                                              .mDemonstrationId ==
-                                                          1) ...[
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors
-                                                                .orange.shade50,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            border: Border.all(
-                                                              color:
-                                                                  Colors.yellow,
-                                                              width: 1.5,
-                                                            ),
-                                                          ),
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      12,
-                                                                  vertical: 10),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              // Info Row
-                                                              Row(
-                                                                children: [
-                                                                  Icon(
-                                                                      Icons
-                                                                          .info_outline,
-                                                                      size: 20,
-                                                                      color: Colors
-                                                                          .orange),
-                                                                  SizedBox(
-                                                                      width: 8),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      "This Anganwadi has already been demonstrated successfully..",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontFamily:
-                                                                            'OpenSans',
-                                                                        color: Colors
-                                                                            .redAccent,
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 10),
-
-                                                              // Demonstration Date Row
-                                                              Row(
-                                                                children: [
-                                                                  Icon(
-                                                                      Icons
-                                                                          .date_range,
-                                                                      color: Colors
-                                                                          .redAccent,
-                                                                      size: 20),
-                                                                  SizedBox(
-                                                                      width: 6),
-                                                                  Text(
-                                                                    "Demonstration:",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontFamily:
-                                                                          'OpenSans',
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 6),
-                                                                  Text(
-                                                                    dwsmprovider
-                                                                            .selectedAnganwadiDate
-                                                                            ?.toString() ??
-                                                                        "",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontFamily:
-                                                                          'OpenSans',
-                                                                      color: Colors
-                                                                          .black87,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
                                                     ],
                                                   ),
                                                 ),
@@ -515,6 +406,11 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                   ? village!
                                                                       .remark
                                                                   : "",
+                                                              Icons.message,
+                                                              Colors.teal),
+                                                          _infoRow(
+                                                              "Date",
+                                                              dwsmprovider.selectedAnganwadiDate!,
                                                               Icons.message,
                                                               Colors.teal),
 

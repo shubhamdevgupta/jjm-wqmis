@@ -159,74 +159,11 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                   ),
                                                 ],
                                               ),
-
-                                              SizedBox(height: 10),
-
-                                              if (dwsmprovider.mDemonstrationId == 1) ...[
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.orange.shade50,
-                                                    borderRadius: BorderRadius.circular(12),
-                                                    border: Border.all(
-                                                      color: Colors.orange, // Border color
-                                                      width: 1.5,           // Border thickness
-                                                    ),
-                                                  ),
-
-                                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons.info_outline, size: 20, color: Colors.orange),
-                                                          SizedBox(width: 8),
-                                                          Expanded(
-                                                            child: Text(
-                                                              "This School has already been demonstrated successfully..",
-                                                              style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontFamily: 'OpenSans',
-                                                                color: Colors.redAccent,
-                                                                fontWeight: FontWeight.w500,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      SizedBox(height: 10),
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons.date_range, color: Colors.redAccent, size: 20),
-                                                          SizedBox(width: 6),
-                                                          Text(
-                                                            "Demonstration:",
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.w600,
-                                                              fontFamily: 'OpenSans',
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 6),
-                                                          Text(
-                                                            dwsmprovider.selectedSchoolDate?.toString() ?? "",
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.w500,
-                                                              fontFamily: 'OpenSans',
-                                                              color: Colors.black87,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
                                             ],
                                           ),
                                         ),
                                       ),
                                     )
-
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -411,8 +348,11 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                             ? village!.remark: "",
                                                         Icons.message,
                                                         Colors.teal),
-
-                                                    // Remark
+                                                    _infoRow(
+                                                        "Date",
+                                                        dwsmprovider.selectedSchoolDate!,
+                                                        Icons.message,
+                                                        Colors.teal),
 
                                                     const Divider(height: 30),
                                                     Align(
