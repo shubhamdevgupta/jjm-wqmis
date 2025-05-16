@@ -204,9 +204,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   masterProvider.setSelectedWTP("0");
                   masterProvider.fetchSourceInformation(
                     masterProvider.selectedVillage!,
-                    "0",
-                    "0",
+                    masterProvider.selectedHabitation!,
                     masterProvider.selectedWtsfilter!,
+                    "0",
                     masterProvider.selectedSubSource.toString(),
                     masterProvider.selectedWtp!,
                     masterProvider.selectedStateId!,
@@ -253,7 +253,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 }).toList(),
                 onChanged: (value) {
                   if (value != null && value != "0") {
-                    masterProvider.setSelectedWaterSourcefilter("");
                     masterProvider.setSelectedWaterSourcefilter(value);
 
                     print("6666666666666 $value");

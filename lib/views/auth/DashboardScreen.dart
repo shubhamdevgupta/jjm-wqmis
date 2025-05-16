@@ -148,6 +148,7 @@ late DashboardProvider dashboardProvider;
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
+
                   onTap: () async {
                     Navigator.pop(context);
                     await Future.delayed(Duration(milliseconds: 200));

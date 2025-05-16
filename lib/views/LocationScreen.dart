@@ -101,7 +101,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     'State *',
                     style: TextStyle(
                       fontSize: 16, fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -136,7 +136,12 @@ class _LocationscreenState extends State<Locationscreen> {
                               AppConstants.prefStateId), // Ensure this matches the selected value
 
                           child: Text(_localStorage.getString(AppConstants.prefStateName) ??
-                              'Unknown State'), // Display state name
+                              'Unknown State',
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontFamily: 'OpensSans',
+                                  fontWeight:
+                                  FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -334,10 +339,10 @@ class _LocationscreenState extends State<Locationscreen> {
                 child: ElevatedButton(
 
                   onPressed: () async {
-                    print("flagggggggggg ${ widget.flag}");
+
                     await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-                      print('Going to Sample List screen');
+                      print('flggg ${ widget.flag}..Going to Sample List screen');
 
                       Navigator.pushNamedAndRemoveUntil(
                         context,
@@ -348,7 +353,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();
                       masterProvider.clearsampleinfo();
-                      print('Going to Show information screen');
+                      print('flggg ${ widget.flag}.Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
                     } else {
