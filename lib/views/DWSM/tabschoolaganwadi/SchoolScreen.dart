@@ -563,7 +563,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   Navigator.pop(context); // Close dialog
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/dwsm_dashboard',
+                    AppConstants.navigateToDwsmDashboard,
                     (route) => false, // Clear back stack
                   );
                 },

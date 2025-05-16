@@ -1263,7 +1263,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                   Navigator.pop(context); // Close dialog
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/dashboard',
+                    AppConstants.navigateToDashboardScreen,
                     (route) => false, // Clear back stack
                   );
                   //    masterProvider.clearData();

@@ -724,7 +724,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   Navigator.pop(context); // Close dialog
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/dwsm_dashboard',
+                    AppConstants.navigateToDwsmDashboard,
                     (route) => false, // Clear back stack
                   );
                 },
