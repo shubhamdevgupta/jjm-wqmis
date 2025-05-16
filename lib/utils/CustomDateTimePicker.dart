@@ -92,37 +92,41 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black87,
-                fontFamily: 'OpenSans'
+              fontFamily: 'OpenSans',
             ),
           ),
           const SizedBox(height: 8),
-          InkWell(
-            onTap: () => _selectDateTime(context),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200], // Light grey background
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade400), // Light border
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.access_time, color: Colors.blueGrey),
-                  const SizedBox(width: 10),
-                  Text(
-                    _selectedDateTime,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87, fontFamily: 'OpenSans',
+          IgnorePointer( // 👈 disables taps inside
+            child: InkWell(
+              onTap: () => _selectDateTime(context), // This will be ignored
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade400),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.access_time, color: Colors.blueGrey),
+                    const SizedBox(width: 10),
+                    Text(
+                      _selectedDateTime,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black87,
+                        fontFamily: 'OpenSans',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+
   }
 }
