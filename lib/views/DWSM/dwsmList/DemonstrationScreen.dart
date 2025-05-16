@@ -121,7 +121,39 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            _iconCircle(Icons.location_city, Colors.blue),
+                            titleType == 'School'? Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.12),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.blue.withOpacity(0.6), // 🔹 Colored border
+                                  width: 1.2,
+                                ),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/school.png',
+                                width: 32,
+                                height: 32,
+
+                              ),
+                            ):Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.12),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.blue.withOpacity(0.6), // 🔹 Colored border
+                                  width: 1.2,
+                                ),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/anganbadi.png',
+                                width: 32,
+                                height: 32,
+
+                              ),
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
