@@ -346,7 +346,7 @@ class _LocationscreenState extends State<Locationscreen> {
 
                       Navigator.pushNamedAndRemoveUntil(
                         context,
-                        '/sampleList',
+                        AppConstants.navigateToSampleListScreen,
                         ModalRoute.withName('/dashboard'),
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );

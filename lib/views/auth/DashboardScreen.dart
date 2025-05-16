@@ -39,7 +39,7 @@ late DashboardProvider dashboardProvider;
 
     getToken();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-       dashboardProvider =
+      dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
@@ -148,22 +148,30 @@ late DashboardProvider dashboardProvider;
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.listOfSamples,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleListScreen,
-                        arguments: {
-                          'flag':
-                          AppConstants.totalPhysicalSubmitted,
-                          'flagFloating': ""
-                        });
+
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await Future.delayed(Duration(milliseconds: 200));
+                    showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        double screenHeight =
+                            MediaQuery.of(context).size.height;
+                        double screenwidth = MediaQuery.of(context).size.width;
+                        return AlertDialog(
+                          contentPadding: const EdgeInsets.all(10),
+                          content: Container(
+                            color: Colors.white,
+                            height: screenHeight * 0.8,
+                            width: screenwidth * 0.99,
+                            child: const Locationscreen(
+                              flag: AppConstants.openSampleInfoScreen,
+                              flagFloating: "",
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 ListTile(
@@ -305,7 +313,116 @@ late DashboardProvider dashboardProvider;
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Padding(
+                    Container(
+                      width: 500,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFe0f7fa), Color(0xFFFFFFFF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 12),
+
+                          // Row for School section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildInfoCard(
+                                  imagePath: 'assets/icons/medical-lab.png',
+                                  iconColor: Colors.blue,
+                                  title: AppConstants.totalSamplesSubmitted,
+                                  value:  '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                        AppConstants.navigateToSampleListScreen,
+                                        arguments: {
+                                          'flag':
+                                          AppConstants.totalSamplesSubmitted,
+                                          'flagFloating': ""
+                                        });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  imagePath: 'assets/icons/test.png',
+                                  iconColor: Colors.deepOrange,
+                                  title:  AppConstants.totalPhysicalSubmitted,
+                                  value:   '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                        AppConstants.navigateToSampleListScreen,
+                                        arguments: {
+                                          'flag':
+                                          AppConstants.totalPhysicalSubmitted,
+                                          'flagFloating': ""
+                                        });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // Row for Anganwadi section
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildInfoCard(
+                                  imagePath: 'assets/icons/blood_tube.png',
+                                  iconColor: Colors.green,
+                                  title: AppConstants.totalSampleTested,
+                                  value:   '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                        AppConstants.navigateToSampleListScreen,
+                                        arguments: {
+                                          'flag': AppConstants.totalSampleTested,
+                                          'flagFloating': ""
+                                        });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildInfoCard(
+                                  imagePath: 'assets/icons/search.png',
+                                  iconColor: Colors.purple,
+                                  title: "Know your sample detail",
+                                  value:
+                                  '',
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                        AppConstants.navigateToSampleListScreen,
+                                        arguments: {
+                                          'flag': AppConstants.totalSampleTested,
+                                          'flagFloating': ""
+                                        });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  /*  Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
@@ -372,7 +489,7 @@ late DashboardProvider dashboardProvider;
                                       });
                                 },
                               ),
-                              /*     _buildMenuCard(
+                                   _buildMenuCard(
                                   title: AppConstants.totalRetest,
                                   icon: Icons.refresh,
                                   gradientColors: [Colors.red, Colors.deepOrange],
@@ -381,13 +498,14 @@ late DashboardProvider dashboardProvider;
                                     // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
                                     ToastHelper.showSnackBar(context, "Admin can access this option only");
                                   },
-                                ),*/
+                                ),
                             ],
                           ),
                           SizedBox(
                             height: 15,
                           ),
-                      /*    Center(
+
+                          Center(
                             child: const Text(
                               "All figures are based on current year data.",
                               style: TextStyle(
@@ -397,17 +515,17 @@ late DashboardProvider dashboardProvider;
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
-                          ),*/
+                          ),
                         ],
                       ),
-                    ),
+                    ),*/
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                             showDialog<bool>(
+                            showDialog<bool>(
                               context: context,
                               builder: (BuildContext context) {
                                 double screenHeight =
@@ -560,6 +678,78 @@ late DashboardProvider dashboardProvider;
       ),
     );
   }
+  Widget _buildInfoCard({
+    required String imagePath,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+    required String value,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 135,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: iconColor.withOpacity(0.6), // 🔹 Colored border
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.12),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: iconColor.withOpacity(0.6), // 🔹 Colored border
+                  width: 1.2,
+                ),
+              ),
+              child: Image.asset(
+                imagePath,
+                width: 32,
+                height: 32,
+
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: iconColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
