@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -407,12 +408,13 @@ late DashboardProvider dashboardProvider;
                                   value:
                                   '',
                                   onTap: () {
-                                    Navigator.pushNamed(context,
+                                    ToastHelper.showSnackBar(context, "working on this.");
+                                 /*   Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
                                           'flag': AppConstants.totalSampleTested,
                                           'flagFloating': ""
-                                        });
+                                        });*/
                                   },
                                 ),
                               ),

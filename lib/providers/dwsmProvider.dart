@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../models/BaseResponse.dart';
 import '../models/DWSM/Ftk_response.dart';
@@ -10,18 +9,16 @@ import '../models/DWSM/SchoolinfoResponse.dart';
 import '../models/DashboardResponse/DwsmDashboardResponse.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
 import '../views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 
 class DwsmProvider extends ChangeNotifier {
   final DwsmRepository _dwsmRepository = DwsmRepository();
 
   bool _isLoading = true;
+
   bool get isLoading => _isLoading;
 
-
   List<Village> villages = [];
-  String errorMsg = '';
   int baseStatus = 101;
 
   List<DashboardSchoolModel> dashboardSchoolListModel = [];
@@ -48,12 +45,13 @@ class DwsmProvider extends ChangeNotifier {
   String? get deviceId => _deviceId;
 
   bool _showDemonstartion = false;
+
   bool get showDemonstartion => _showDemonstartion;
 
   String? ftkSubmitResponse;
   String? villagePhoto;
 
-  String? errorMessage;
+  String errorMessage='';
   BaseResponseModel<FTKResponse>? ftkResponse;
 
   Future<void> fetchDwsmDashboard(int userId) async {
@@ -75,7 +73,7 @@ class DwsmProvider extends ChangeNotifier {
       String fineYear, int schoolId, int demonstrationType,
       {Function(Village result)? onSuccess}) async {
     _isLoading = true;
-    villages=[];
+    villages = [];
     notifyListeners();
     try {
       final rawLIst = await _dwsmRepository.fetchDemonstrationList(
@@ -85,6 +83,7 @@ class DwsmProvider extends ChangeNotifier {
         schoolId: schoolId,
         demonstrationType: demonstrationType,
       );
+      baseStatus = rawLIst.status;
       if (rawLIst.status == 1) {
         if (schoolId != 0) {
           if (onSuccess != null) {
@@ -99,7 +98,7 @@ class DwsmProvider extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error in fetchDemonstrationList: $e');
-     // GlobalExceptionHandler.handleException(e as Exception);
+      // GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -109,7 +108,7 @@ class DwsmProvider extends ChangeNotifier {
   Future<void> fetchSchoolAwcInfo(int Stateid, int Districtid, int Blockid,
       int Gpid, int Villageid, int type) async {
     _isLoading = true;
-    dataState=DataState.loading;
+    dataState = DataState.loading;
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
           Stateid, Districtid, Blockid, Gpid, Villageid, type);
@@ -122,7 +121,7 @@ class DwsmProvider extends ChangeNotifier {
         }
         dataState = DataState.loaded;
       } else {
-        errorMsg = rawSchoolInfo.message;
+        errorMessage = rawSchoolInfo.message;
         dataState = DataState.error;
       }
       baseStatus = rawSchoolInfo.status;
@@ -134,7 +133,6 @@ class DwsmProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   Future<void> fetchDashboardSchoolList(
       int stateId, int districtId, int demonstrationType) async {
@@ -149,7 +147,7 @@ class DwsmProvider extends ChangeNotifier {
       if (rawSchoolInfo.status == 1) {
         dashboardSchoolListModel = rawSchoolInfo.result;
       } else {
-        errorMsg = rawSchoolInfo.message;
+        errorMessage = rawSchoolInfo.message;
       }
       baseStatus = rawSchoolInfo.status;
     } catch (e) {
@@ -192,7 +190,7 @@ class DwsmProvider extends ChangeNotifier {
       if (rawSchoolInfo.status == 1) {
         ftkSubmitResponse = rawSchoolInfo.message;
       } else {
-        errorMsg = rawSchoolInfo.message;
+        errorMessage = rawSchoolInfo.message;
       }
       onSuccess();
     } catch (e) {
@@ -210,13 +208,13 @@ class DwsmProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void showDemonstartionButton( bool value) {
+  void showDemonstartionButton(bool value) {
     _showDemonstartion = value;
     notifyListeners();
-
   }
-  void setSelectedSchool(String id, String name, int demonstrationId,String DemoDate) {
+
+  void setSelectedSchool(
+      String id, String name, int demonstrationId, String DemoDate) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
     selectedSchoolDate = DemoDate;
@@ -224,12 +222,13 @@ class DwsmProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedAnganwadi(String id, String name, int demonstrationId, String DemoDate) {
+  void setSelectedAnganwadi(
+      String id, String name, int demonstrationId, String DemoDate) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
     mDemonstrationId = demonstrationId;
     selectedAnganwadiDate = DemoDate;
-    schoolResultList=[];
+    schoolResultList = [];
     notifyListeners();
   }
 
@@ -237,7 +236,7 @@ class DwsmProvider extends ChangeNotifier {
     selectedSchoolResult = null;
     selectedSchoolName = 'N/A';
     selectedSchoolDate = 'N/A';
-    schoolResultList=[];
+    schoolResultList = [];
     notifyListeners();
   }
 
@@ -246,10 +245,11 @@ class DwsmProvider extends ChangeNotifier {
     selectedAnganwadiName = 'N/A';
     selectedAnganwadiDate = 'N/A';
     mDemonstrationId = 101;
-    anganwadiList=[];
+    anganwadiList = [];
     notifyListeners();
   }
-  void clearData(){
+
+  void clearData() {
     selectedAnganwadi = null;
     selectedAnganwadiName = 'N/A';
     selectedAnganwadiDate = 'N/A';
@@ -258,7 +258,7 @@ class DwsmProvider extends ChangeNotifier {
     selectedSchoolResult = null;
     selectedSchoolName = 'N/A';
     selectedSchoolDate = 'N/A';
-    schoolResultList=[];
+    schoolResultList = [];
     notifyListeners();
   }
 }

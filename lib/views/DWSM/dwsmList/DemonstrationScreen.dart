@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/dwsmProvider.dart';
@@ -72,7 +73,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
+                Navigator.pushReplacementNamed(
+                    context, AppConstants.navigateToDwsmDashboard);
               },
             ),
 
@@ -94,7 +96,10 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           body: Consumer<DwsmProvider>(builder: (context, provider, child) {
             return provider.isLoading
                 ? LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
-                : ListView.builder(
+                : provider.baseStatus == 0
+                    ? Center(
+                        child: AppTextWidgets.errorText(provider.errorMessage))
+                    :ListView.builder(
                     itemCount: provider.villages.length,
                     itemBuilder: (context, index) {
                       final village = provider.villages[index];
@@ -120,8 +125,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                         /// 🔷 Top Row: Title + Remove
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            titleType == 'School'? Container(
+                                    children: [
+                                      titleType == 'School'? Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: Colors.blue.withOpacity(0.12),
@@ -192,7 +197,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                         ),
                         const Divider(height: 30),
 
-                        /// 🔷 Location Path
+                                  /// 🔷 Location Path
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -225,10 +230,16 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                           ),
                         ),
 
+                                  // Category
+                                  _infoRow(
+                                      "Category",
+                                      village.InstitutionCategory,
+                                      Icons.category,
+                                      Colors.orange),
 
-                        const SizedBox(height: 12),
+                                  const SizedBox(height: 12),
 
-                        /// 🔷 Info Rows
+                                  /// 🔷 Info Rows
                         _infoRow("$titleType Name", "$titleType", Icons.school, Colors.deepPurple),
                         _infoRow("Category", village.InstitutionCategory, Icons.category, Colors.orange),
                         _infoRow("Classification", village.InstitutionSubCategory, Icons.label, Colors.green),

@@ -67,7 +67,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
                                   case DataState.error:
                                     return AppTextWidgets.errorText(
-                                        dwsmprovider.errorMsg);
+                                        dwsmprovider.errorMessage!);
 
                                   case DataState.loaded:
                                     return Column(
@@ -552,11 +552,11 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     await dwsmprovider.fetchDeviceId();
 
     if (dwsmprovider.selectedAnganwadi == null) {
-      dwsmprovider.errorMsg = "Please Select Anganwadi first.";
+      dwsmprovider.errorMessage = "Please Select Anganwadi first.";
       return false;
     }
     if (_cameraHelper.imageFile == null) {
-      dwsmprovider.errorMsg = "Please capture an image first.";
+      dwsmprovider.errorMessage = "Please capture an image first.";
       return false;
     }
     return true;
@@ -637,7 +637,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
         ),
       );
     } else {
-      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMsg);
+      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMessage!);
     }
   }
 
@@ -948,7 +948,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                         showResponse(dwsmprovider);
                       });
                     } else {
-                      ToastHelper.showSnackBar(context, dwsmprovider.errorMsg);
+                      ToastHelper.showSnackBar(context, dwsmprovider.errorMessage!);
                     }
                   },
                   child: Text(
