@@ -145,7 +145,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    print("tttttttttttttttttttttt ${masterProvider.schemes}");
     return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
       elevation: 5,
       shape: RoundedRectangleBorder(

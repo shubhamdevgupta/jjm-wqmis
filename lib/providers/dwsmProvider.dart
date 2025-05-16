@@ -58,6 +58,7 @@ class DwsmProvider extends ChangeNotifier {
 
   Future<void> fetchDwsmDashboard(int userId) async {
     _isLoading = true;
+    notifyListeners();
     try {
       final response = await _dwsmRepository.fetchDwsmDashboard(userId);
       _dwsmdashboardresponse = response;

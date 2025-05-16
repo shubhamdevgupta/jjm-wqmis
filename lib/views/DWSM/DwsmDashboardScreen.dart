@@ -83,8 +83,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   IconButton(
                     icon: const Icon(Icons.refresh, color: Colors.white),
                     // Cart icon
-                    onPressed: () {
-                      dashboardProvider.fetchDwsmDashboard(int.parse(userID));
+                    onPressed: () async {
+                      await dashboardProvider
+                          .fetchDwsmDashboard(int.parse(userID));
                     },
                   )
                 ],
@@ -146,7 +147,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                   leading: const Icon(Icons.list),
                   title: const Text(AppConstants.listOfDemonstration),
                   onTap: () {
-                           Navigator.pushReplacementNamed(
+                    Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToDemonstrationScreen);
                   },
                 ),
@@ -158,7 +159,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                      Navigator.pushReplacementNamed(
+                    Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToLoginScreen);
                   },
                 ),
@@ -167,7 +168,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           ),
           body: Consumer<DwsmProvider>(
             builder: (context, dwsmDashboardProvider, child) {
-              if (dwsmDashboardProvider.dwsmdashboardresponse == null) {
+              if (dwsmDashboardProvider.dwsmdashboardresponse == null ||
+                  dwsmDashboardProvider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               return SingleChildScrollView(
