@@ -160,7 +160,9 @@ late DashboardProvider dashboardProvider;
                     Navigator.pushNamed(
                         context, AppConstants.navigateToSampleListScreen,
                         arguments: {
-                          'flag': AppConstants.totalSamplesSubmitted,
+                          'flag':
+                          AppConstants.totalPhysicalSubmitted,
+                          'flagFloating': ""
                         });
                   },
                 ),
