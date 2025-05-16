@@ -73,6 +73,15 @@ class AppConstants {
   static const String addSchool= 'Select Village';
   static const String addSample= 'Add Sample';
 
+
+  ////////////////////////ftk Dashboard//////////
+  static const String ftkUser = 'FTK User';
+  static const String totalSamplesalreadytested = 'Total no. of samples tested';
+  static const String totalSamplestestedtoday = 'Total no. of sample tested by you today';
+  static const String totalSamplestestedtilldate = 'Total no. of samples tested by you till date';
+  static const String addftk= 'Add New Sample ';
+
+
   static const String selectedTest = 'Selected Test';
 
   static const String openSampleInfoScreen = "Sample List ";

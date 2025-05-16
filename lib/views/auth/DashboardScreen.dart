@@ -39,7 +39,7 @@ late DashboardProvider dashboardProvider;
 
     getToken();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-       dashboardProvider =
+      dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
@@ -148,20 +148,29 @@ late DashboardProvider dashboardProvider;
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.listOfSamples,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleListScreen,
-                        arguments: {
-                          'flag': AppConstants.totalSamplesSubmitted,
-                        });
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await Future.delayed(Duration(milliseconds: 200));
+                    showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        double screenHeight =
+                            MediaQuery.of(context).size.height;
+                        double screenwidth = MediaQuery.of(context).size.width;
+                        return AlertDialog(
+                          contentPadding: const EdgeInsets.all(10),
+                          content: Container(
+                            color: Colors.white,
+                            height: screenHeight * 0.8,
+                            width: screenwidth * 0.99,
+                            child: const Locationscreen(
+                              flag: AppConstants.openSampleInfoScreen,
+                              flagFloating: "",
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 ListTile(
@@ -494,6 +503,7 @@ late DashboardProvider dashboardProvider;
                           SizedBox(
                             height: 15,
                           ),
+
                           Center(
                             child: const Text(
                               "All figures are based on current year data.",
@@ -514,7 +524,7 @@ late DashboardProvider dashboardProvider;
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                             showDialog<bool>(
+                            showDialog<bool>(
                               context: context,
                               builder: (BuildContext context) {
                                 double screenHeight =

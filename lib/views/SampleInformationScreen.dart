@@ -35,7 +35,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           // Navigate back to Dashboard when pressing back button
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/dashboard',
+            AppConstants.navigateToDashboardScreen,
             (route) => false, // Clears all previous routes
           );
           return false; // Prevents default back action
@@ -145,7 +145,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    print("tttttttttttttttttttttt ${masterProvider.schemes}");
     return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
