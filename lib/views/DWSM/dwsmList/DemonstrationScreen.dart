@@ -118,7 +118,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -126,38 +126,16 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      titleType == 'School'? Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.12),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.blue.withOpacity(0.6), // 🔹 Colored border
-                                  width: 1.2,
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/icons/school.png',
-                                width: 32,
-                                height: 32,
+                                      titleType == 'School'? Image.asset(
+                                        'assets/icons/school.png',
+                                        width: 32,
+                                        height: 32,
 
-                              ),
-                            ):Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.blue.withOpacity(0.12),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.blue.withOpacity(0.6), // 🔹 Colored border
-                                  width: 1.2,
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/icons/anganbadi.png',
-                                width: 32,
-                                height: 32,
+                                      ):Image.asset(
+                              'assets/icons/anganbadi.png',
+                              width: 30,
+                              height: 32,
 
-                              ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -179,7 +157,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                 elevation: 0,
                                 backgroundColor: Colors.red.shade50,
                                 foregroundColor: Colors.red.shade700,
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                padding: const EdgeInsets.all(2),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   side: BorderSide(color: Colors.red.shade200),
@@ -187,9 +165,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                               ),
                               child: Row(
                                 children: const [
-                                  Icon(Icons.delete_outline, size: 18),
-                                  SizedBox(width: 4),
-                                  Text("Remove", style: TextStyle(fontSize: 13)),
+                                  Icon(Icons.delete_outline, size: 24),
+
                                 ],
                               ),
                             ),

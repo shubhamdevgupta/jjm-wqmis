@@ -290,8 +290,9 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     ),
                     const SizedBox(height: 15),
                     Container(
-                      width: 500,
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(
+                        MediaQuery.of(context).size.width < 400 ? 12 : 20,
+                      ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFe0f7fa), Color(0xFFFFFFFF)],
@@ -310,7 +311,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Row for School section
                           Row(
                             children: [
                               Expanded(
@@ -319,18 +319,15 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.blue,
                                   title: "Total\nSchools",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools ?? 0}',
+                                  '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchools ?? 0}',
                                   onTap: () {
-                                    if (dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools >0) {
+                                    if (dwsmDashboardProvider.dwsmdashboardresponse!.totalSchools > 0) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ChangeNotifierProvider.value(
+                                          builder: (context) => ChangeNotifierProvider.value(
                                             value: dwsmDashboardProvider,
-                                            child: const SchoolAWCScreen(
-                                              type: 10,
-                                            ),
+                                            child: const SchoolAWCScreen(type: 10),
                                           ),
                                         ),
                                       );
@@ -348,27 +345,24 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.deepOrange,
                                   title: "School FTK Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ?? 0}',
+                                  '${dwsmDashboardProvider.dwsmdashboardresponse?.totalSchoolsDemonstration ?? 0}',
                                   onTap: () {
                                     if (dwsmDashboardProvider
-                                            .dwsmdashboardresponse!
-                                            .totalSchoolsDemonstration >
+                                        .dwsmdashboardresponse!
+                                        .totalSchoolsDemonstration >
                                         0) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ChangeNotifierProvider.value(
+                                          builder: (context) => ChangeNotifierProvider.value(
                                             value: dwsmDashboardProvider,
-                                            child: Demonstrationscreen(
-                                              type: 10,
-                                            ),
+                                            child: Demonstrationscreen(type: 10),
                                           ),
                                         ),
                                       );
                                     } else {
-                                      ToastHelper.showSnackBar(context,
-                                          "There is no demonstrated school");
+                                      ToastHelper.showSnackBar(
+                                          context, "There is no demonstrated school");
                                     }
                                   },
                                 ),
@@ -378,7 +372,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
                           const SizedBox(height: 15),
 
-                          // Row for Anganwadi section
                           Row(
                             children: [
                               Expanded(
@@ -387,20 +380,19 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.green,
                                   title: "Total\nAnganwadi",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs ?? 0}',
+                                  '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCs ?? 0}',
                                   onTap: () {
-                                    if(dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs>0){
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChangeNotifierProvider.value(
-                                          value: dwsmDashboardProvider,
-                                          child:
-                                              const SchoolAWCScreen(type: 11),
+                                    if (dwsmDashboardProvider.dwsmdashboardresponse!.totalAWCs > 0) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChangeNotifierProvider.value(
+                                            value: dwsmDashboardProvider,
+                                            child: const SchoolAWCScreen(type: 11),
+                                          ),
                                         ),
-                                      ),
-                                    );}else{
+                                      );
+                                    } else {
                                       ToastHelper.showToastMessage(
                                           "There is no Anganwadi available for this user");
                                     }
@@ -414,27 +406,24 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   iconColor: Colors.red,
                                   title: "Anganwadi FTK Demonstrations",
                                   value:
-                                      '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration ?? 0}',
+                                  '${dwsmDashboardProvider.dwsmdashboardresponse?.totalAWCsDemonstration ?? 0}',
                                   onTap: () {
                                     if (dwsmDashboardProvider
-                                            .dwsmdashboardresponse!
-                                            .totalAWCsDemonstration >
+                                        .dwsmdashboardresponse!
+                                        .totalAWCsDemonstration >
                                         0) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ChangeNotifierProvider.value(
+                                          builder: (context) => ChangeNotifierProvider.value(
                                             value: dwsmDashboardProvider,
-                                            child: Demonstrationscreen(
-                                              type: 11,
-                                            ),
+                                            child: Demonstrationscreen(type: 11),
                                           ),
                                         ),
                                       );
                                     } else {
-                                      ToastHelper.showSnackBar(context,
-                                          "There is no demonstrated AWCs");
+                                      ToastHelper.showSnackBar(
+                                          context, "There is no demonstrated AWCs");
                                     }
                                   },
                                 ),
@@ -444,6 +433,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ],
                       ),
                     ),
+
                     const SizedBox(height: 30),
                     SizedBox(
                       width: double.infinity,
@@ -579,7 +569,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 135,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
         decoration: BoxDecoration(
           color: Colors.white,
