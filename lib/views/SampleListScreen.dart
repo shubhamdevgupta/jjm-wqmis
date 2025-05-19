@@ -263,7 +263,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                             child: TextField(
                               controller: searchController,
                               decoration: InputDecoration(
-                                hintText: 'Search...',
+                                hintText: 'Search by sample id',
                                 border: InputBorder.none,
                               ),
                             ),

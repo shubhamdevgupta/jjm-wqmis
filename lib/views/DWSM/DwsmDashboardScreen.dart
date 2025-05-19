@@ -28,6 +28,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   String stateId = '';
   String districtId = '';
   late DwsmProvider dashboardProvider;
+  late Masterprovider masterprovider;
 
   @override
   void initState() {
@@ -37,12 +38,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
+      masterprovider=Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
       //   masterProvider.clearData();
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
+      await masterprovider.fetchDistricts(stateId);
+      await masterprovider.fetchBlocks(stateId, districtId);
     });
   }
 
@@ -85,8 +85,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     icon: const Icon(Icons.refresh, color: Colors.white),
                     // Cart icon
                     onPressed: () async {
-                      await dashboardProvider
-                          .fetchDwsmDashboard(int.parse(userID));
+                      await    masterprovider.fetchLocation();
+                     // await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
                     },
                   )
                 ],
