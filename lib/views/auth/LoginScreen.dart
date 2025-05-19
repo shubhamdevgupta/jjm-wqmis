@@ -152,11 +152,9 @@ class _LoginpageState extends State<Loginscreen> {
                                               () {
                                             provider.fetchLocation();
                                             if(provider.loginResponse?.roleId==4){
-                                              Navigator.pushReplacementNamed(
-                                                  context, AppConstants.navigateToDashboardScreen);
+                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
                                             }else if(provider.loginResponse?.roleId==8){
-                                              Navigator.pushReplacementNamed(
-                                                  context, AppConstants.navigateToDwsmDashboard);
+                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
                                             }
                                           },
                                               (errorMessage) {

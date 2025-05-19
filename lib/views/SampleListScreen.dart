@@ -12,6 +12,7 @@ import '../providers/masterProvider.dart';
 import '../services/LocalStorageService.dart';
 import '../utils/Aesen.dart';
 import '../utils/AppStyles.dart';
+import '../utils/DeviceUtils.dart';
 import '../utils/Showerrormsg.dart';
 import 'LocationScreen.dart';
 
@@ -374,11 +375,18 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   ),
                                                 ),
                                                 Visibility(
-                                                  visible: sample.currentStatus ==1,
+                                                  visible:
+                                                      sample.currentStatus == 1,
                                                   child: ElevatedButton(
-                                                    onPressed: () {
-                                                    ToastHelper.showToastMessage("Under Development");
-                                                    },
+                                                    onPressed: () async {
+                                                      String deviceId =
+                                                          await DeviceInfoUtil.getUniqueDeviceId();
+                                                  provider.deleteSample(encryption.encryptText(sample.sId.toString()), encryption.encryptText(userId!),
+                                                      encryption.encryptText(deviceId),
+                                                          (response) {provider.deleteSampleFromList(index);},
+                                                          (error) {ToastHelper.showSnackBar(context,error);}
+                                                  );
+                                                      },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       elevation: 0,
@@ -410,7 +418,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   ),
                                                 ),
                                                 Visibility(
-                                                  visible: sample.currentStatus ==6,
+                                                  visible:
+                                                      sample.currentStatus == 6,
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       Navigator.push(
