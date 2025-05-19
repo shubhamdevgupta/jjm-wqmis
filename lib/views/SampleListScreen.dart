@@ -379,14 +379,19 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                       sample.currentStatus == 1,
                                                   child: ElevatedButton(
                                                     onPressed: () async {
-                                                      String deviceId =
-                                                          await DeviceInfoUtil.getUniqueDeviceId();
-                                                  provider.deleteSample(encryption.encryptText(sample.sId.toString()), encryption.encryptText(userId!),
-                                                      encryption.encryptText(deviceId),
-                                                          (response) {provider.deleteSampleFromList(index);},
-                                                          (error) {ToastHelper.showSnackBar(context,error);}
-                                                  );
-                                                      },
+                                                      String deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+                                                      provider.deleteSample(
+                                                          encryption.encryptText(sample.sId.toString()),
+                                                          encryption.encryptText(userId!),
+                                                          encryption.encryptText(deviceId),
+                                                          (response) {
+                                                        bool deleted = provider.deleteSampleFromList(index, sample.sId);
+                                                        deleted ? ToastHelper.showSuccessSnackBar(context, 'Sample deleted successfully')
+                                                            : ToastHelper.showSnackBar(context, 'Sample not found');
+                                                      }, (error) {
+                                                        ToastHelper.showSnackBar(context, error);
+                                                      });
+                                                    },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       elevation: 0,

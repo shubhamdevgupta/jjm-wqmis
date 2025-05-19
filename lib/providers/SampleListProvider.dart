@@ -71,8 +71,20 @@ class Samplelistprovider extends ChangeNotifier {
     }
   }
 
-  void deleteSampleFromList(int index) {
-    samples.removeAt(index);
-    notifyListeners();
+  bool deleteSampleFromList(int index, int targetSId) {
+
+    bool exists = samples.any((sample) => sample.sId == targetSId);
+    if (exists) {
+      samples.removeWhere((sample) => sample.sId == targetSId);
+      notifyListeners();
+      return true;
+    }
+    // samples.removeWhere((sample) => sample.sId == targetSId);
+    // samples.removeAt(index);
+    // notifyListeners();
+
+    return false;
+
+
   }
 }
