@@ -306,13 +306,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchemes(String villageId, String habitationId,
-      String districtid, String filter) async {
+  Future<void> fetchSchemes(int stateId, int districtid,int villageId, int habitationId,
+      int filter) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final mSchemes = await _masterRepository.fetchSchemes(
-          villageId, habitationId, districtid, filter);
+      final mSchemes = await _masterRepository.fetchSchemes(stateId,
+          districtid, villageId, habitationId, filter);
       baseStatus = mSchemes.status;
 
       if (baseStatus == 1) {

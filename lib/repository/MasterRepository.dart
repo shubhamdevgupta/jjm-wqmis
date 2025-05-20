@@ -98,13 +98,14 @@ class MasterRepository {
   }
 
   Future<BaseResponseModel<SchemeResponse>> fetchSchemes(
-      String villageId,
-      String habitationId,
-      String districtId,
-      String filter,
+      int stateId,
+      int districtId,
+      int villageId,
+      int habitationId,
+      int filter,
       ) async {
     try {
-      final response = await _apiService.get('/apimaster/getScheme?villageid=$villageId&habitationid=$habitationId&districtid=$districtId&filter=$filter',);
+      final response = await _apiService.get('/apimaster/getScheme?stateId=$stateId&districtid=$districtId&villageid=$villageId&habitationid=$habitationId&filter=$filter');
 
       return BaseResponseModel<SchemeResponse>.fromJson(response,(json)=> SchemeResponse.fromJson(json));
 

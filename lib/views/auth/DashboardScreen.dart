@@ -95,9 +95,9 @@ late DashboardProvider dashboardProvider;
                       dashboardProvider.loadDashboardData();
                     },
                   ),
-                  NetworkStatusIcon(),
                 ],
               ),
+              NetworkStatusIcon(),
             ],
             //elevation
             flexibleSpace: Container(

@@ -71,58 +71,77 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userId = _localStorage.getString("userId");
+      if (userId == null) return;
 
-      Masterprovider masterprovider =
-          Provider.of<Masterprovider>(context, listen: false);
-      Samplelistprovider sampleListProvider =
-          Provider.of<Samplelistprovider>(context, listen: false);
-      final args =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-      if (args != null) {
-        flag = args['flag'];
-        flagfloation = args['flagFloating'];
-        String district = args['dis'] ?? "0";
-        String block = args['block'] ?? "0";
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      final sampleListProvider = Provider.of<Samplelistprovider>(context, listen: false);
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
-        if ((flagfloation == AppConstants.totalSamplesSubmitted ||
-                flag == AppConstants.openSampleListScreen) &&
-            (flagfloation == AppConstants.totalPhysicalSubmitted ||
-                flag == AppConstants.openSampleListScreen) &&
-            (flag == AppConstants.openSampleListScreen ||
-                flagfloation == AppConstants.totalSampleTested)) {
-          if (flagfloation == AppConstants.totalSamplesSubmitted) {
-            C_STATUS = 1;
-          } else if (flagfloation == AppConstants.totalPhysicalSubmitted) {
-            C_STATUS = 2;
-          } else if (flagfloation == AppConstants.totalSampleTested) {
-            C_STATUS = 6;
-          }
-          sampleListProvider.fetchSampleList(
-              int.parse(userId!),
-              PAGE,
-              SEARCH,
-              C_STATUS,
-              SAMPLE_ID,
-              int.parse(masterprovider.selectedStateId ?? "0"),
-              int.parse(district),
-              int.parse(block),
-              int.parse(masterprovider.selectedGramPanchayat ?? "0"),
-              int.parse(masterprovider.selectedVillage ?? "0"));
-        } else if (flag == AppConstants.totalPhysicalSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
-          C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
-              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSampleTested ||
-            flag == AppConstants.openSampleListScreen) {
-          sampleListProvider.fetchSampleList(
-              int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSamplesSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
-          C_STATUS = 1;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
-              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
-        }
+      if (args == null) return;
+
+      flag = args['flag'];
+      flagfloation = args['flagFloating'];
+      final district = int.tryParse(args['dis'] ?? "0") ?? 0;
+      final block = int.tryParse(args['block'] ?? "0") ?? 0;
+
+      // Determine C_STATUS
+      if (flagfloation == AppConstants.totalSamplesSubmitted) {
+        C_STATUS = 1;
+      } else if (flagfloation == AppConstants.totalPhysicalSubmitted) {
+        C_STATUS = 2;
+      } else if (flagfloation == AppConstants.totalSampleTested) {
+        C_STATUS = 6;
+      }
+
+      final shouldUseDynamicParams = flag == AppConstants.openSampleListScreen ||
+          flagfloation == AppConstants.totalSamplesSubmitted ||
+          flagfloation == AppConstants.totalPhysicalSubmitted ||
+          flagfloation == AppConstants.totalSampleTested;
+
+      if (shouldUseDynamicParams) {
+        final stateId = int.tryParse(masterProvider.selectedStateId ?? "0") ?? 0;
+        final gpId = int.tryParse(masterProvider.selectedGramPanchayat ?? "0") ?? 0;
+        final villageId = int.tryParse(masterProvider.selectedVillage ?? "0") ?? 0;
+
+        sampleListProvider.fetchSampleList(
+          int.parse(userId!),
+          PAGE,
+          SEARCH,
+          C_STATUS,
+          SAMPLE_ID,
+          stateId,
+          district,
+          block,
+          gpId,
+          villageId,
+        );
+      } else if (flag == AppConstants.totalPhysicalSubmitted) {
+        sampleListProvider.fetchSampleList(
+          int.parse(userId!),
+          PAGE,
+          SEARCH,
+          2,
+          SAMPLE_ID,
+          0, 0, 0, 0, 0,
+        );
+      } else if (flag == AppConstants.totalSampleTested) {
+        sampleListProvider.fetchSampleList(
+          int.parse(userId!),
+          1,
+          "0",
+          6,
+          "0",
+          0, 0, 0, 0, 0,
+        );
+      } else if (flag == AppConstants.totalSamplesSubmitted) {
+        sampleListProvider.fetchSampleList(
+          int.parse(userId!),
+          PAGE,
+          SEARCH,
+          1,
+          SAMPLE_ID,
+          0, 0, 0, 0, 0,
+        );
       }
     });
   }
