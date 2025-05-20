@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 
-import '../repository/MasterRepository.dart';
 import '../utils/CustomException.dart';
 
 class BaseApiService {
@@ -27,21 +27,29 @@ class BaseApiService {
     log('POST_Request--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-    await _checkConnectivity();
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: body,
-    );
+    try {
+      await _checkConnectivity();
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
 
-    if (response.headers['content-type']?.contains(',') ?? false) {
-      response.headers['content-type'] = 'application/json; charset=utf-8';
+      if (response.headers['content-type']?.contains(',') ?? false) {
+        response.headers['content-type'] = 'application/json; charset=utf-8';
+      }
+
+      log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
+      log('Response Body: ${response.body}');
+
+      return _processResponse(response);
+    } on SocketException catch (e) {
+      log('SocketException: ${e.message}');
+      throw NetworkException('No internet connection');
+    } catch (e) {
+      log('Exception during GET request: $e');
+      throw ApiException('');
     }
-
-    log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
-    log('Response Body: ${response.body}');
-
-    return _processResponse(response);
   }
 
   Future<dynamic> get(String endpoint,
@@ -55,19 +63,27 @@ class BaseApiService {
 
     log('GET Request: URL: $url \n Headers: ${headers.toString()}');
 
-    await _checkConnectivity();
+    try {
+      await _checkConnectivity();
 
-    final response = await http.get(
-      url,
-      headers: headers,
-    );
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
 
-    if (response.headers['content-type']?.contains(',') ?? false) {
-      response.headers['content-type'] = 'application/json; charset=utf-8';
+      if (response.headers['content-type']?.contains(',') ?? false) {
+        response.headers['content-type'] = 'application/json; charset=utf-8';
+      }
+      log('Response: ${response.statusCode} : Body: ${response.body}');
+
+      return _processResponse(response);
+    } on SocketException catch (e) {
+      log('SocketException: ${e.message}');
+      throw NetworkException('No internet connection');
+    } catch (e) {
+      log('Exception during GET request: $e');
+      throw ApiException('API Error : $e');
     }
-    log('Response: ${response.statusCode} : Body: ${response.body}');
-
-    return _processResponse(response);
   }
 
   Future<void> _checkConnectivity() async {
@@ -84,23 +100,23 @@ class BaseApiService {
         return jsonDecode(response.body);
       case 400:
         throw ApiException(
-            'Bad Request: ${handleErrorResp(response.body, '')}');
+            'Bad Request ${handleErrorResp(response.body, '')}');
       case 404:
         throw ApiException('Page not found (404) ,Please contact to admin');
       case 401:
         throw ApiException(
-            'Unauthorized: ${handleErrorResp(response.body, '')}');
+            'Unauthorized ${handleErrorResp(response.body, '')}');
       case 500:
         throw ApiException(
             handleErrorResp(response.body, 'Internal Server Error'));
       case 502:
         throw ApiException(
-            'Bad Gateway: ${handleErrorResp(response.body, '')}');
+            'Bad Gateway ${handleErrorResp(response.body, '')}');
       case 408:
         throw ApiException('Request Timeout : Please Try after some time');
       default:
         throw ApiException(
-            'Unexpected error: ${response.statusCode} - ${handleErrorResp(response.body, '')}');
+            'Unexpected error ${response.statusCode} \n ${handleErrorResp(response.body, '')}');
     }
   }
 

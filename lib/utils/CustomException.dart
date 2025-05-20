@@ -12,7 +12,7 @@ class AppException implements Exception {
 
 class NetworkException extends AppException {
   NetworkException([String message = "No Internet Connection"])
-      : super(message, "Network Error: ");
+      : super(message, "");
 }
 
 class ApiException extends AppException {
