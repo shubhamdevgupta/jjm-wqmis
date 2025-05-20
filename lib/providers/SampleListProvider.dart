@@ -4,6 +4,7 @@ import '../models/SampleListResponse.dart';
 import '../repository/SampleListRepo.dart';
 import '../utils/DeviceUtils.dart';
 import '../utils/GlobalExceptionHandler.dart';
+import '../utils/LoaderUtils.dart';
 
 class Samplelistprovider extends ChangeNotifier {
   final SampleListRepo _repository = SampleListRepo();
@@ -48,8 +49,7 @@ class Samplelistprovider extends ChangeNotifier {
 
   Future<void> deleteSample(String encSid, String? userId, String deviceId, Function(String response) onSuccess,
       Function(String error) onError) async {
-    _isLoading = true;
-  //  notifyListeners();
+    notifyListeners();
     try {
 
       final response = await _repository.deleteSample(encSid, userId, deviceId);
@@ -62,11 +62,9 @@ class Samplelistprovider extends ChangeNotifier {
       } else {
         onError(response.message);
       }
-
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -79,7 +77,6 @@ class Samplelistprovider extends ChangeNotifier {
       notifyListeners();
       return true;
     }
-    // samples.removeWhere((sample) => sample.sId == targetSId);
     // samples.removeAt(index);
     // notifyListeners();
 

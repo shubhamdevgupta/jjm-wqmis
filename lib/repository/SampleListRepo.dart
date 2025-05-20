@@ -40,7 +40,7 @@ class SampleListRepo {
 
   Future<BaseResponseModel<dynamic>> deleteSample(String encryptedSid, String? userId, String deviceId) async {
     try {
-      final String urlEndpoint = '/APIMobile/remove_sample?s_id= $encryptedSid&userid=$userId&ip=$deviceId';
+      final String urlEndpoint = '/APIMobile/remove_sample?s_id=$encryptedSid&userid=$userId&ip=$deviceId';
 
       final response = await _apiService.get(urlEndpoint);
 

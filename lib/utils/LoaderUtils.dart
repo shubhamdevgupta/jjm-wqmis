@@ -72,4 +72,49 @@ class LoaderUtils {
       Navigator.of(context, rootNavigator: true).pop();
     }
   }
+
+  //////////////////////////////////////////////////////////////
+
+  /// Hides the loading dialog.
+  static void hide(BuildContext context) {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  /// Shows a loading dialog with an optional custom message.
+  static void showLoadingWithMessage(
+      BuildContext context, {
+        String message = 'Loading...',
+      }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black45, // semi-transparent background
+      builder: (_) => Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          width: 200,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+
+  }
+
+
 }
