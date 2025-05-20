@@ -254,9 +254,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 onChanged: (value) {
                   if (value != null && value != "0") {
                     masterProvider.setSelectedWaterSourcefilter(value);
-
-                    print("6666666666666 $value");
-                    masterProvider.fetchSchemes(masterProvider.selectedVillage!, "0", "0", value);
+                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value);
                   }
                 },
                 appBarTitle: "Select Location",
