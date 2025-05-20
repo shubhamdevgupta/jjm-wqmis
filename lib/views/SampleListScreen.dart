@@ -388,8 +388,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                           (response) {
                                                             LoaderUtils.hideLoaderDialog(context);
                                                         bool deleted = provider.deleteSampleFromList(index, sample.sId);
-                                                        deleted ? ToastHelper.showSuccessSnackBar(context, 'Sample deleted successfully')
-                                                            : ToastHelper.showSnackBar(context, 'Sample not found');
+                                                        deleted ? ToastHelper.showSuccessSnackBar(context, provider.errorMsg)
+                                                            : ToastHelper.showSnackBar(context, provider.errorMsg);
                                                       }, (error) {
                                                         LoaderUtils.hideLoaderDialog(context);
                                                         ToastHelper.showSnackBar(context, error);
