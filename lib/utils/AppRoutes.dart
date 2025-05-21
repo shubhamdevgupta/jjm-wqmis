@@ -16,6 +16,7 @@ import '../views/auth/DashboardScreen.dart';
 import '../views/auth/LoginScreen.dart';
 import '../views/auth/SplashScreen.dart';
 import '../views/ftk/ftkDashboard.dart';
+import '../views/ftk/ftkSampleScreen.dart';
 import '../views/lab/AsPerLabView.dart';
 import '../views/lab/AsPerParameterView.dart';
 import '../views/lab/LabParameterScreen.dart';
@@ -49,6 +50,11 @@ class AppRoutes {
       AppConstants.navigateToParameterView: (context) => Asperparameterview(),
       AppConstants.navigateToLabParam: (context) => Labparameterscreen(),
       AppConstants.navigateToWTPLab: (context) => Wtplabscreen(),
+
+
+      //ftk
+      AppConstants.navigateToFtkSampleScreen: (context) => ftksamplescreen(),
+      AppConstants.navigateToFtkDashboard: (context) => ftkDashboard(),
 
       //webview
       AppConstants.navigateToTestReport: (context) => TestReport(

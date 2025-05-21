@@ -57,6 +57,9 @@ class _SplashScreenState extends State<SplashScreen> {
       } else if (roleId == "8") {
         Navigator.pushReplacementNamed(
             context, AppConstants.navigateToDwsmDashboard);
+      } else if (roleId == "7") {
+        Navigator.pushReplacementNamed(
+            context, AppConstants.navigateToFtkDashboard);
       }
     } else {
       Navigator.pushReplacementNamed(
