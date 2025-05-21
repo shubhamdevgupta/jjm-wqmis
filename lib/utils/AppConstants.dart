@@ -52,6 +52,10 @@ class AppConstants {
   static const String navigateToSampleListScreen = '/sampleList';
   static const String navigateToSubmitSampleScreen = '/sampleSubmit';
 
+  //ftk
+  static const String navigateToFtkSampleScreen = '/ftksampleScreen';
+  static const String navigateToFtkDashboard = '/ftkDashboard';
+
 
 
 //////////////////////////////////////////////////////////////////////////

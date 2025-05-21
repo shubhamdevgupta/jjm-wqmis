@@ -155,6 +155,8 @@ class _LoginpageState extends State<Loginscreen> {
                                               Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
                                             }else if(provider.loginResponse?.roleId==8){
                                               Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
+                                            }else if(provider.loginResponse?.roleId==7){
+                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToFtkDashboard);
                                             }
                                           },
                                               (errorMessage) {

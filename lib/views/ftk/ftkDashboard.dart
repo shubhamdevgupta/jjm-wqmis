@@ -145,11 +145,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                     style: AppStyles.style16NormalBlack,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
-                        context, AppConstants.navigateToSampleListScreen,
-                        arguments: {
-                          'flag': AppConstants.totalSamplesSubmitted,
-                        });
+
                   },
                 ),
                 ListTile(
@@ -473,27 +469,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            final result = await showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                double screenHeight =
-                                    MediaQuery.of(context).size.height;
-                                double screenwidth =
-                                    MediaQuery.of(context).size.width;
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(10),
-                                  content: Container(
-                                    color: Colors.white,
-                                    height: screenHeight * 0.8,
-                                    width: screenwidth * 0.99,
-                                    child: const Locationscreen(
-                                      flag: AppConstants.openSampleInfoScreen,
-                                      flagFloating: "",
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+
+                            Navigator.pushReplacementNamed(context, AppConstants.navigateToFtkSampleScreen);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0468B1),
