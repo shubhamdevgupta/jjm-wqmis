@@ -1,16 +1,16 @@
-class FtkUpdateResponse {
+class DemonstrationResponse {
   final int status;
   final String message;
   final dynamic result; // Can be `null` or another type depending on future responses
 
-  FtkUpdateResponse({
+  DemonstrationResponse({
     required this.status,
     required this.message,
     this.result,
   });
 
-  factory FtkUpdateResponse.fromJson(Map<String, dynamic> json) {
-    return FtkUpdateResponse(
+  factory DemonstrationResponse.fromJson(Map<String, dynamic> json) {
+    return DemonstrationResponse(
       status: json['Status'] as int,
       message: json['Message'] as String,
       result: json['Result'],
