@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
-import 'package:jjm_wqmis/models/DWSM/FtkResponse.dart';
+import 'package:jjm_wqmis/models/DWSM/DemonstrationResponse.dart';
 
 import '../models/DWSM/DashBoardSchoolModel.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
@@ -75,7 +75,7 @@ class DwsmRepository{
   //https://ejalshakti.gov.in/WQMIS/API/APIMobile/GetSchoolAWCsListDetails
 
 
-  Future<FtkUpdateResponse> submitFtk( int userId,
+  Future<DemonstrationResponse> submitDemonstration( int userId,
        int schoolId,
        int stateId,
        String photoBase64,
@@ -98,7 +98,7 @@ class DwsmRepository{
           "IPAddress": ipAddress,
         }),
       );
-      return FtkUpdateResponse.fromJson(response);
+      return DemonstrationResponse.fromJson(response);
 
     } catch (e) {
       debugPrint('Error in fetchDemonstartionList: $e');

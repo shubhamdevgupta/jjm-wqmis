@@ -1,8 +1,8 @@
 class LoginResponse {
   final String? token;
-  final String? loginid;
+  final String? loginId;
   final String? password;
-  final String? adpassword;
+  final String? adPassword;
   final int? regId;
   final int? roleId;
   final String? mobileNumber;
@@ -17,49 +17,56 @@ class LoginResponse {
   final int? gramPanchayatId;
   final int? villageId;
   final int? pincode;
-  final String? isChngPwd;
+  final String? isChangePwd;
   final int? status;
   final String? msg;
   final String? lang;
   final int? agencyId;
   final bool? isUpdateProfile;
   final dynamic agencyListData;
+  final String? districtName;
+  final String? blockName;
+  final String? panchayatName;
+  final String? villageName;
 
   LoginResponse({
-    this.token,
-    this.loginid,
-    this.password,
-    this.adpassword,
-    this.regId,
-    this.roleId,
-    this.mobileNumber,
-    this.name,
-    this.emailId,
+    required this.token,
+    required this.loginId,
+    required this.password,
+    required this.adPassword,
+    required this.regId,
+    required this.roleId,
+    required this.mobileNumber,
+    required this.name,
+    required this.emailId,
     this.sha512,
     this.txtSaltedHash,
-    this.stateName,
-    this.stateId,
-    this.districtId,
-    this.blockId,
-    this.gramPanchayatId,
-    this.villageId,
-    this.pincode,
-    this.isChngPwd,
-    this.status,
+    required this.stateName,
+    required this.stateId,
+    required this.districtId,
+    required this.blockId,
+    required this.gramPanchayatId,
+    required this.villageId,
+    required this.pincode,
+    required this.isChangePwd,
+    required this.status,
     this.msg,
     this.lang,
-    this.agencyId,
-    this.isUpdateProfile,
+    required this.agencyId,
+    required this.isUpdateProfile,
     this.agencyListData,
+    required this.districtName,
+    required this.blockName,
+    required this.panchayatName,
+    required this.villageName,
   });
 
-  /// Factory method to create an instance from JSON
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       token: json['Token'],
-      loginid: json['loginid'],
+      loginId: json['loginid'],
       password: json['password'],
-      adpassword: json['adpassword'],
+      adPassword: json['adpassword'],
       regId: json['reg_id'],
       roleId: json['role_id'],
       mobileNumber: json['MobileNumber'],
@@ -74,23 +81,26 @@ class LoginResponse {
       gramPanchayatId: json['GramPanchayatId'],
       villageId: json['VillageId'],
       pincode: json['Pincode'],
-      isChngPwd: json['isChngPwd'],
+      isChangePwd: json['isChngPwd'],
       status: json['status'],
       msg: json['msg'],
       lang: json['lang'],
       agencyId: json['AgencyId'],
       isUpdateProfile: json['isupdateprofile'],
       agencyListData: json['AgencyListData'],
+      districtName: json['DistrictName'],
+      blockName: json['BlockName'],
+      panchayatName: json['PanchayatName'],
+      villageName: json['VillageName'],
     );
   }
 
-  /// Method to convert the model instance to JSON
   Map<String, dynamic> toJson() {
     return {
       'Token': token,
-      'loginid': loginid,
+      'loginid': loginId,
       'password': password,
-      'adpassword': adpassword,
+      'adpassword': adPassword,
       'reg_id': regId,
       'role_id': roleId,
       'MobileNumber': mobileNumber,
@@ -105,13 +115,17 @@ class LoginResponse {
       'GramPanchayatId': gramPanchayatId,
       'VillageId': villageId,
       'Pincode': pincode,
-      'isChngPwd': isChngPwd,
+      'isChngPwd': isChangePwd,
       'status': status,
       'msg': msg,
       'lang': lang,
       'AgencyId': agencyId,
       'isupdateprofile': isUpdateProfile,
       'AgencyListData': agencyListData,
+      'DistrictName': districtName,
+      'BlockName': blockName,
+      'PanchayatName': panchayatName,
+      'VillageName': villageName,
     };
   }
 }

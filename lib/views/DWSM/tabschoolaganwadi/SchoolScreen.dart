@@ -820,7 +820,7 @@ class _SchoolScreen extends State<SchoolScreen> {
               child: ElevatedButton(
                   onPressed: () async {
                     if (await validate(dwsmprovider)) {
-                      await dwsmprovider.submitFtkData(
+                      await dwsmprovider.submitDemonstration(
                           int.parse(userId),
                           int.parse(dwsmprovider.selectedSchoolResult!),
                           int.parse(stateId),

@@ -935,7 +935,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               child: ElevatedButton(
                   onPressed: () async {
                     if (await validate(dwsmprovider)) {
-                      await dwsmprovider.submitFtkData(
+                      await dwsmprovider.submitDemonstration(
                           int.parse(userId),
                           int.parse(dwsmprovider.selectedAnganwadi!),
                           int.parse(stateId),
