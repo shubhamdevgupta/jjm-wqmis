@@ -1,16 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/providers/dashboardProvider.dart';
-import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
 import '../../utils/AppStyles.dart';
-import '../../utils/VersionUtils.dart';
+import '../../utils/UserSessionManager.dart';
 
 class ftkDashboard extends StatefulWidget {
   const ftkDashboard({super.key});
@@ -20,37 +15,14 @@ class ftkDashboard extends StatefulWidget {
 }
 
 class _ftkDashboard extends State<ftkDashboard> {
-  final LocalStorageService _localStorage = LocalStorageService();
-
-  String stateName = '';
-  String districtId = '';
-  String userName = '';
-  String mobile = '';
-  String stateId = '';
-  final encryption = AesEncryption();
+  final session = UserSessionManager();
 
   @override
   void initState() {
     super.initState();
-    var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
-
-    getToken();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final dashboardProvider =
-      Provider.of<DashboardProvider>(context, listen: false);
-      final masterProvider =
-      Provider.of<Masterprovider>(context, listen: false);
-
-      await dashboardProvider.loadDashboardData();
-      print("dashboard ${dashboardProvider.isLoading}");
-      print("master provider  data${masterProvider.isLoading}");
-
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
-    });
+    session.init();
+    print('username---->> ${session.userName}');
+    print('mobile---->> ${session.mobile}');
   }
 
   @override
@@ -113,7 +85,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                         style: AppStyles.appBarTitle,
                       ),
                       Text(
-                        stateName, // Provide a fallback value if null
+                        session.stateName, // Provide a fallback value if null
                         style: AppStyles.setTextStyle(
                             16, FontWeight.normal, Colors.white70),
                       ),
@@ -144,9 +116,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                     AppConstants.listOfSamples,
                     style: AppStyles.style16NormalBlack,
                   ),
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
@@ -166,347 +136,326 @@ class _ftkDashboard extends State<ftkDashboard> {
               ],
             ),
           ),
-          body: Consumer<DashboardProvider>(
-            builder: (context, dashboardProvider, child) {
-              if (dashboardProvider.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      // Profile Picture
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.shade300,
+                              Colors.blue.shade800
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(2),
+                        // Border-like effect
+                        child: CircleAvatar(
+                          radius: 32,
+                          backgroundColor: Colors.grey[100],
+                          backgroundImage:
+                              const AssetImage('assets/icons/user.png'),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      // User Info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Welcome Text
+                            Text(
+                              '${AppConstants.welcome},',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'OpenSans',
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                            Text(
+                              session.userName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'OpenSans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+
+                            const SizedBox(height: 4),
+
+                            // Department and Phone
+                            Row(
+                              children: [
+                                const Icon(Icons.account_balance_sharp,
+                                    size: 18, color: Colors.teal),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'FTK User',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'OpenSans',
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            Row(
+                              children: [
+                                const Icon(Icons.phone_android,
+                                    size: 18, color: Colors.teal),
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Text(
+                                    session.mobile,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'OpenSans',
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.grey.withOpacity(0.15),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Profile Picture
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue.shade300,
-                                  Colors.blue.shade800
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            padding: const EdgeInsets.all(2),
-                            // Border-like effect
-                            child: CircleAvatar(
-                              radius: 32,
-                              backgroundColor: Colors.grey[100],
-                              backgroundImage:
-                              const AssetImage('assets/icons/user.png'),
+                          const Text(
+                            "Location Details",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
                           ),
-                          const SizedBox(width: 16),
-
-                          // User Info
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Welcome Text
-                                Text(
-                                  '${AppConstants.welcome},',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'OpenSans',
-                                    color: Colors.grey.shade700,
-                                  ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: buildLocationTile(
+                                  icon: Icons.location_city,
+                                  label: "District",
+                                  value: "Jaipur",
+                                  color: Colors.blue,
                                 ),
-                                Text(
-                                  userName,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: buildLocationTile(
+                                  icon: Icons.map,
+                                  label: "Block",
+                                  value: "Sanganer",
+                                  color: Colors.green,
                                 ),
-
-                                const SizedBox(height: 4),
-
-                                // Department and Phone
-                                Row(
-                                  children: [
-                                    const Icon(Icons.account_balance_sharp,
-                                        size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      'FTK User',
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'OpenSans',
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: buildLocationTile(
+                                  icon: Icons.groups,
+                                  label: "GP",
+                                  value: "Mansarovar",
+                                  color: Colors.orange,
                                 ),
-
-                                const SizedBox(height: 6),
-
-                                Row(
-                                  children: [
-                                    const Icon(Icons.phone_android,
-                                        size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
-                                    Flexible(
-                                      child: Text(
-                                        mobile,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'OpenSans',
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: buildLocationTile(
+                                  icon: Icons.home,
+                                  label: "Village",
+                                  value: "Pratap Nagar",
+                                  color: Colors.purple,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 🔹 Metric Card
-
-
-
-
-                        // 🔸 Location White Card
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.15),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Location Details",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.location_city,
-                                      label: "District",
-                                      value: "Jaipur",
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.map,
-                                      label: "Block",
-                                      value: "Sanganer",
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.groups,
-                                      label: "GP",
-                                      value: "Mansarovar",
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.home,
-                                      label: "Village",
-                                      value: "Pratap Nagar",
-                                      color: Colors.purple,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppConstants.navigateToSampleListScreen,
-                              arguments: {
-                                'flag': AppConstants.totalSamplesSubmitted,
-                                'flagFloating': "",
-                              },
-                            );
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppConstants.navigateToSampleListScreen,
+                          arguments: {
+                            'flag': AppConstants.totalSamplesSubmitted,
+                            'flagFloating': "",
                           },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Colors.lightGreen, Colors.green],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.lightGreen, Colors.green],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blueAccent.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.15),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white24),
                               ),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.blueAccent.withOpacity(0.2),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.15),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white24),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/icons/medical-lab.png',
-                                    width: 22,
-                                    height: 22,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        AppConstants.totalSamplesalreadytested,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '425', // 🔹 Static value
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        const Text(
-                          "This figure are based on current year data.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-
-
-
-
-
-                    const SizedBox(height: 20),
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-
-                            Navigator.pushReplacementNamed(context, AppConstants.navigateToFtkSampleScreen);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0468B1),
-                            textStyle: const TextStyle(fontSize: 16),
-                            minimumSize: const Size(300, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  8), // ← removes rounding
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add,
+                              child: Image.asset(
+                                'assets/icons/medical-lab.png',
+                                width: 22,
+                                height: 22,
                                 color: Colors.white,
-                                size: 18,
                               ),
-                              SizedBox(width: 8),
-                              Text(
-                                AppConstants.addftk,
-                                style: AppStyles.textStyle,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppConstants.totalSamplesalreadytested,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '425', // 🔹 Static value
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      "This figure are based on current year data.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13.5,
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
                   ],
                 ),
-              );
-            },
+                const SizedBox(height: 20),
+                Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Navigator.pushReplacementNamed(
+                            context, AppConstants.navigateToFtkSampleScreen);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0468B1),
+                        textStyle: const TextStyle(fontSize: 16),
+                        minimumSize: const Size(300, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(8), // ← removes rounding
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            AppConstants.addftk,
+                            style: AppStyles.textStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           )),
     );
   }
-
 
   Widget buildLocationTile({
     required IconData icon,
@@ -556,18 +505,4 @@ class _ftkDashboard extends State<ftkDashboard> {
       ),
     );
   }
-
-
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
-    userName = _localStorage.getString(AppConstants.prefName) ?? '';
-    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
-    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    print("token-------------- $token ----state naem$stateName");
-    return token;
-  }
 }
-
-

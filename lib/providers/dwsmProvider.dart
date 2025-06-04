@@ -3,8 +3,6 @@ import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
-import '../models/BaseResponse.dart';
-import '../models/DWSM/Ftk_response.dart';
 import '../models/DWSM/SchoolinfoResponse.dart';
 import '../models/DashboardResponse/DwsmDashboardResponse.dart';
 import '../utils/DeviceUtils.dart';
@@ -52,7 +50,6 @@ class DwsmProvider extends ChangeNotifier {
   String? villagePhoto;
 
   String errorMessage='';
-  BaseResponseModel<FTKResponse>? ftkResponse;
 
   Future<void> fetchDwsmDashboard(int userId) async {
     _isLoading = true;
@@ -160,7 +157,7 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> submitFtkData(
+  Future<void> submitDemonstration(
     int userId,
     int schoolId,
     int stateId,
@@ -176,7 +173,7 @@ class DwsmProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rawSchoolInfo = await _dwsmRepository.submitFtk(
+      final rawSchoolInfo = await _dwsmRepository.submitDemonstration(
           userId,
           schoolId,
           stateId,
