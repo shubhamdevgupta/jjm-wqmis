@@ -166,6 +166,7 @@ class _SearchDialogState extends State<SearchDialog> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             if (Navigator.of(context).canPop()) {
