@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'Appcolor.dart';
 
@@ -53,5 +54,9 @@ class Utilityclass{
         );
       },
     );
+  }
+  static copyToClipBoard(String text, BuildContext context){
+    Clipboard.setData(ClipboardData(text: text ));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('SampleId Copied to clipboard')));
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/Utilityclass.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -1240,13 +1242,23 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
               ),
             ],
           ),
-          content: Text(
-            provider.sampleresponse?.message ??
-                'Operation completed successfully!',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
+          content: GestureDetector(
+            onDoubleTap: () {
+              Utilityclass.copyToClipBoard(provider.sampleresponse!.sampleId,context);
+            },
+            onLongPress: (){
+              Utilityclass.copyToClipBoard(provider.sampleresponse!.sampleId,context);
+            },
+            child: Text(
+              provider.sampleresponse?.message ??
+                  'Operation completed successfully!',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+              //  decoration: TextDecoration.underline,
+
+              ),
             ),
           ),
           actions: [
