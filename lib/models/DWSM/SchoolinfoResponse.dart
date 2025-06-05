@@ -2,7 +2,6 @@
 //
 //     final schoolinfoResponse = schoolinfoResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 SchoolinfoResponse schoolinfoResponseFromJson(String str) => SchoolinfoResponse.fromJson(json.decode(str));

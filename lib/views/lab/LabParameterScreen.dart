@@ -3,13 +3,15 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppConstants.dart';
-import '../../utils/AppStyles.dart';
-import 'AsPerLabView.dart';
-import 'AsPerParameterView.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
+import 'package:jjm_wqmis/views/lab/AsPerParameterView.dart';
 
 class Labparameterscreen extends StatefulWidget {
+  const Labparameterscreen({super.key});
+
   @override
   _LabParameterScreen createState() => _LabParameterScreen();
 }
@@ -151,7 +153,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
           const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'OpenSans',),
           unselectedLabelStyle: const TextStyle(fontSize: 14, fontFamily: 'OpenSans'),
           indicator: BoxDecoration(
-            color: Color(0xFF5FAFE5), // Light blue indicator
+            color: const Color(0xFF5FAFE5), // Light blue indicator
             borderRadius: BorderRadius.circular(8),
           ),
           indicatorSize: TabBarIndicatorSize.tab,
@@ -159,9 +161,9 @@ class _LabParameterScreen extends State<Labparameterscreen>
           const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         ),
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.blueAccent,
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [
                 Color(0xFF096DA8), // Dark blue
                 Color(0xFF3C8DBC), // jjm blue color
@@ -182,7 +184,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
           ),
           TabBarView(
             controller: mTabController,
-            children: [
+            children: const [
               AsPerLabTabView(),
               Asperparameterview(),
             ],

@@ -1,10 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
-import '../models/DashboardResponse/DashboardResponse.dart';
-import '../repository/AuthenticaitonRepository.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/AppConstants.dart';
-import '../utils/LocationUtils.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DashboardResponse.dart';
+import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class DashboardProvider extends ChangeNotifier{
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();

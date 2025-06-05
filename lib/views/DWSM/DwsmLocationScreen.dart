@@ -4,12 +4,14 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/dwsmProvider.dart';
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 
 class DwsmLocation extends StatefulWidget {
+  const DwsmLocation({super.key});
+
   @override
   State<DwsmLocation> createState() => _DwsmLocation();
 }
@@ -91,18 +93,18 @@ class _DwsmLocation extends State<DwsmLocation> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       child: Container(
         color: Colors.white,
         child: Padding(
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'State',
                     style: TextStyle(
                         fontSize: 16,
@@ -111,7 +113,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         fontFamily: 'OpenSans'),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
                       value: _localStorage.getString(AppConstants.prefStateId),
                       // Ensure this matches the DropdownMenuItem value
@@ -119,23 +121,23 @@ class _DwsmLocation extends State<DwsmLocation> {
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.blueAccent,
                           fontFamily: 'OpenSans',
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
 
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
@@ -146,7 +148,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                               _localStorage
                                       .getString(AppConstants.prefStateName) ??
                                   'Unknown State',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
@@ -156,7 +158,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       onChanged: null,
                       // Disable selection (non-editable)
                       isExpanded: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                         fontSize: 16,
@@ -167,12 +169,12 @@ class _DwsmLocation extends State<DwsmLocation> {
                   ),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               //district data here--------------
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'District',
                     style: TextStyle(
                         fontSize: 16,
@@ -181,7 +183,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         fontFamily: 'OpenSans'),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
                       value: districtId,
                       // Ensure this matches the DropdownMenuItem value
@@ -189,23 +191,23 @@ class _DwsmLocation extends State<DwsmLocation> {
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.blueAccent,
                           fontFamily: 'OpenSans',
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
 
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
@@ -216,7 +218,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                               _localStorage
                                       .getString(AppConstants.prefDistName) ??
                                   'Unknown State',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
@@ -226,7 +228,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       onChanged: null,
                       // Disable selection (non-editable)
                       isExpanded: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                         fontSize: 16,
@@ -237,7 +239,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               //block data here--------------
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +268,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   ),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
 
               /// grampanchayat data here -----------------------
               CustomDropdown(
@@ -290,7 +292,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 },
                 appBarTitle: "Select Gram Panchayat",
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ///// village data heree ----------
               CustomDropdown(
                 title: "Village *",
@@ -318,7 +320,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 },
                 appBarTitle: "Select Village",
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ///// habitation  data heree ----------
               CustomDropdown(
                 title: "Habitation *",
@@ -338,7 +340,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 },
                 appBarTitle: "Select Habitation",
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -348,9 +350,9 @@ class _DwsmLocation extends State<DwsmLocation> {
                         context, AppConstants.navigateToTabSchoolAganwadi);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF096DA8),
+                    backgroundColor: const Color(0xFF096DA8),
                     padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+                        const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

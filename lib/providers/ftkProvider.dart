@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
 
-import '../models/FTK/FtkParameterResponse.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Ftkprovider extends ChangeNotifier {
   final FtkRepository _ftkRepository = FtkRepository();

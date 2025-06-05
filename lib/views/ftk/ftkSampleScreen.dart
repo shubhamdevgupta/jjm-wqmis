@@ -5,12 +5,10 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/VersionUtils.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class ftksamplescreen extends StatefulWidget {
   const ftksamplescreen({super.key});
@@ -493,7 +491,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: onTap,
-                icon: Icon(Icons.add, size: 18, color: Colors.white),
+                icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: const Text(
                   "Add Sample",
                   style: TextStyle(color: Colors.white),

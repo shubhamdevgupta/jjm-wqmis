@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/SampleResponse.dart';
-import '../repository/SampleSubRepo.dart';
-import '../utils/DeviceUtils.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/repository/SampleSubRepo.dart';
+import 'package:jjm_wqmis/utils/DeviceUtils.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();
@@ -18,60 +18,60 @@ class Samplesubprovider extends ChangeNotifier {
   String? get deviceId => _deviceId;
 
   Future<void> sampleSubmit(
-      Lab_id,
-      Reg_Id,
+      labId,
+      regId,
       roldId,
-      sample_collection_time,
+      sampleCollectionTime,
       cat,
-      sample_source_location,
+      sampleSourceLocation,
       StateId,
-      source_district,
-      source_block,
-      source_gp,
-      source_village,
-      source_habitation,
-      source_filter,
+      sourceDistrict,
+      sourceBlock,
+      sourceGp,
+      sourceVillage,
+      sourceHabitation,
+      sourceFilter,
       SchemeId,
-      Other_Source_location,
+      otherSourceLocation,
       SourceName,
       latitude,
       longitude,
-      sample_remark,
+      sampleRemark,
       IpAddress,
-      sample_type_other,
-      wtp_id,
+      sampleTypeOther,
+      wtpId,
       istreated,
-      test_selected,
-      sample_submit_type) async {
+      testSelected,
+      sampleSubmitType) async {
     _isLoading = true;
     notifyListeners();
     try {
       sampleresponse = await _samplesubrepo.sampleSubmit(
-          Lab_id,
-          Reg_Id,
+          labId,
+          regId,
           roldId,
-          sample_collection_time,
+          sampleCollectionTime,
           cat,
-          sample_source_location,
+          sampleSourceLocation,
           StateId,
-          source_district,
-          source_block,
-          source_gp,
-          source_village,
-          source_habitation,
-          source_filter,
+          sourceDistrict,
+          sourceBlock,
+          sourceGp,
+          sourceVillage,
+          sourceHabitation,
+          sourceFilter,
           SchemeId,
-          Other_Source_location,
+          otherSourceLocation,
           SourceName,
           latitude,
           longitude,
-          sample_remark,
+          sampleRemark,
           IpAddress,
-          sample_type_other,
-          wtp_id,
+          sampleTypeOther,
+          wtpId,
           istreated,
-          test_selected,
-          sample_submit_type);
+          testSelected,
+          sampleSubmitType);
       notifyListeners();
       if (sampleresponse!.status ==1) {
         isSubmitData = true;

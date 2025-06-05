@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'AppConstants.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class UserSessionManager {
   static final UserSessionManager _instance = UserSessionManager._internal();

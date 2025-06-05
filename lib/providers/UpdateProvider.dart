@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import '../models/UpdateResponse.dart';
-import '../repository/AppUpdateRepo.dart';
+import 'package:jjm_wqmis/models/UpdateResponse.dart';
+import 'package:jjm_wqmis/repository/AppUpdateRepo.dart';
 
 class UpdateViewModel extends ChangeNotifier {
   final Appupdaterepo _repo = Appupdaterepo();

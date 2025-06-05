@@ -6,13 +6,15 @@ import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/ParameterProvider.dart';
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppConstants.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 
 class Wtplabscreen extends StatefulWidget {
+  const Wtplabscreen({super.key});
+
   @override
   _WtpLabScreen createState() => _WtpLabScreen();
 }
@@ -128,7 +130,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                             color: Colors.white),
                         // Cart icon
                         onPressed: () {
-                          if (provider.cart!.isNotEmpty)
+                          if (provider.cart!.isNotEmpty) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -141,13 +143,14 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                         value: provider),
                                     // Pass parameterProvider if needed
                                   ],
-                                  child: SubmitSampleScreen(),
+                                  child: const SubmitSampleScreen(),
                                 ),
                               ),
                             );
-                          else
+                          } else {
                             ToastHelper.showErrorSnackBar(
                                 context, "Please Select Test");
+                          }
                         },
                       ),
                       if (provider.cart!
@@ -176,9 +179,9 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                   ),
                 ],
                 flexibleSpace: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.blueAccent,
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [
                         Color(0xFF096DA8), // Dark blue
                         Color(0xFF3C8DBC), // jjm blue color
@@ -214,7 +217,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                             },
                             appBarTitle: "Wtp Lab",
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Visibility(
@@ -224,7 +227,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              margin: EdgeInsets.all(5),
+                              margin: const EdgeInsets.all(5),
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -244,7 +247,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                         DropdownMenuItem(
                                             value: 1,
                                             child: Text('All Parameter')),
-                                        const DropdownMenuItem(
+                                        DropdownMenuItem(
                                             value: 2,
                                             child: Text('Chemical Parameter')),
                                         DropdownMenuItem(
@@ -272,7 +275,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Visibility(
@@ -284,7 +287,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                margin: EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
                                 color: Colors.white,
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -361,7 +364,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                                             }
                                                           },
                                                         ),
-                                                        SizedBox(width: 10),
+                                                        const SizedBox(width: 10),
                                                         SizedBox(
                                                           width: 150,
                                                           child: Text(
@@ -369,7 +372,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 fontSize: 14),
                                                           ),
                                                         ),
@@ -385,7 +388,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                                     },
                                                     child: Text(
                                                       param.deptRate.toString(),
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 14),
                                                     ),
                                                   ),
@@ -398,7 +401,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                       const SizedBox(height: 18),
                                       Text(
                                         'Selected Param: ${provider.cart!.length}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),

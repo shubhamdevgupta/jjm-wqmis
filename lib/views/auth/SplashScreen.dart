@@ -3,11 +3,13 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/UpdateProvider.dart';
-import '../../services/LocalStorageService.dart';
-import '../../utils/UpdateDialog.dart';
+import 'package:jjm_wqmis/providers/UpdateProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -44,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToNextScreen() async {
-    await Future.delayed(Duration(seconds: 1)); // Optional splash delay
+    await Future.delayed(const Duration(seconds: 1)); // Optional splash delay
 
     final authProvider =
         Provider.of<AuthenticationProvider>(context, listen: false);
@@ -73,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/icons/wqmis_splash.jpg'),
             fit: BoxFit.cover,

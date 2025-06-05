@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'ftkParameterScreen.dart';
+import 'package:jjm_wqmis/views/ftk/ftkParameterScreen.dart';
 
 class FtkParameterListScreen extends StatefulWidget {
   const FtkParameterListScreen({super.key});

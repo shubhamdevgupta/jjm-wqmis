@@ -8,13 +8,13 @@ class UpdateCustomSearchableDropdown extends StatefulWidget {
   final Function(String?) onChanged;
 
   const UpdateCustomSearchableDropdown({
-    Key? key,
+    super.key,
     this.selectedValue,
     required this.items,
     required this.hint,
     required this.appBarTitle,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<UpdateCustomSearchableDropdown> createState() => _UpdateCustomSearchableDropdownState();
@@ -121,11 +121,10 @@ class _SearchDialog extends StatefulWidget {
   final String appBarTitle;
 
   const _SearchDialog({
-    Key? key,
     required this.items,
     required this.onItemSelected,
     required this.appBarTitle,
-  }) : super(key: key);
+  });
 
   @override
   State<_SearchDialog> createState() => _SearchDialogState();

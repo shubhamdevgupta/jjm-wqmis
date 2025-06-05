@@ -1,4 +1,4 @@
-import '../services/BaseApiService.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
 
 class BaseRepository {
   final BaseApiService apiService = BaseApiService();

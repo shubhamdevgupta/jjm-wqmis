@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/ErrorProvider.dart';
-import '../utils/AppConstants.dart';
-import '../utils/AppStyles.dart';
+import 'package:jjm_wqmis/providers/ErrorProvider.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class ExceptionScreen extends StatelessWidget {
   final String errorMessage;
 
-  const ExceptionScreen({Key? key, required this.errorMessage}) : super(key: key);
+  const ExceptionScreen({super.key, required this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class ExceptionScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                "$errorMessage",
+                errorMessage,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 18, color: Colors.black87, fontFamily: 'OpenSans',),
               ),

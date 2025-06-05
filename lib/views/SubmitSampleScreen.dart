@@ -5,14 +5,14 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/SampleSubmitProvider.dart';
-import '../providers/masterProvider.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/AppStyles.dart';
-import '../utils/CurrentLocation.dart';
-import '../utils/CustomDropdown.dart';
-import '../utils/LoaderUtils.dart';
-import '../utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
   const SubmitSampleScreen({super.key});
@@ -28,13 +28,13 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
 
-  TextStyle _headerTextStyle() => TextStyle(
+  TextStyle _headerTextStyle() => const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
         fontFamily: 'OpenSans',
       );
 
-  TextStyle _rowTextStyle() => TextStyle(
+  TextStyle _rowTextStyle() => const TextStyle(
         fontSize: 14,
         fontFamily: 'OpenSans',
       );
@@ -86,9 +86,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                     },
                   ),
                   flexibleSpace: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.blueAccent,
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         colors: [
                           Color(0xFF096DA8), // Dark blue color
                           Color(0xFF3C8DBC), // jjm blue color
@@ -146,13 +146,13 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       child:
                                                           paramProvider
                                                                   .cart!.isEmpty
-                                                              ? Center(
+                                                              ? const Center(
                                                                   child: Text(
                                                                       "No tests selected"), // Show message if no items
                                                                 )
                                                               : Container(
                                                                   constraints:
-                                                                      BoxConstraints(
+                                                                      const BoxConstraints(
                                                                     minHeight:
                                                                         0,
                                                                     // Allow shrinking when few items
@@ -177,7 +177,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                         child:
                                                                             DataTable(
                                                                           headingRowColor:
-                                                                              MaterialStateProperty.all(Colors.blue),
+                                                                              WidgetStateProperty.all(Colors.blue),
                                                                           columnSpacing:
                                                                               MediaQuery.of(context).size.width * 0.02,
                                                                           columns: [
@@ -242,7 +242,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                                 ),
                                                                                 DataCell(
                                                                                   IconButton(
-                                                                                    icon: Icon(
+                                                                                    icon: const Icon(
                                                                                       Icons.delete,
                                                                                       color: Colors.red,
                                                                                     ),
@@ -270,7 +270,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                 ),
                                                     ),
 
-                                                    Divider(),
+                                                    const Divider(),
 
                                                     Padding(
                                                       padding: const EdgeInsets
@@ -282,17 +282,17 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             MainAxisAlignment
                                                                 .end,
                                                         children: [
-                                                          Text("Total Price",
+                                                          const Text("Total Price",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .green,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
-                                                          SizedBox(width: 20),
+                                                          const SizedBox(width: 20),
                                                           Text(
                                                               "₹ ${paramProvider.calculateTotal()} /-",
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   color: Colors
                                                                       .green,
                                                                   fontWeight:
@@ -325,7 +325,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       filled: true,
                                                       fillColor: Colors.white,
                                                       contentPadding:
-                                                          EdgeInsets.symmetric(
+                                                          const EdgeInsets.symmetric(
                                                               vertical: 14,
                                                               horizontal: 16),
                                                       // Better padding
@@ -345,7 +345,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(12),
-                                                        borderSide: BorderSide(
+                                                        borderSide: const BorderSide(
                                                             color: Colors
                                                                 .blueAccent,
                                                             width:
@@ -361,7 +361,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           remarkController.text
                                                                   .isNotEmpty
                                                               ? IconButton(
-                                                                  icon: Icon(
+                                                                  icon: const Icon(
                                                                       Icons
                                                                           .clear,
                                                                       color: Colors
@@ -381,7 +381,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 10,
                                               ),
                                               paramProvider.baseStatus == 0
@@ -419,7 +419,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                   .start,
                                                           children: [
                                                             // Section 1: Lab Incharge Details
-                                                            Text(
+                                                            const Text(
                                                               "Lab Incharge Details",
                                                               style: TextStyle(
                                                                 fontSize: 18,
@@ -436,21 +436,21 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     .grey
                                                                     .shade300),
                                                             // Divider for separation
-                                                            SizedBox(height: 8),
+                                                            const SizedBox(height: 8),
 
                                                             Row(
                                                               children: [
-                                                                Icon(
+                                                                const Icon(
                                                                     Icons
                                                                         .person,
                                                                     color: Colors
                                                                         .blueAccent),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                     width: 8),
                                                                 Expanded(
                                                                   child: Text(
                                                                     'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontSize:
                                                                             16,
                                                                         fontWeight:
@@ -459,22 +459,22 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                                 height: 10),
 
                                                             Row(
                                                               children: [
-                                                                Icon(
+                                                                const Icon(
                                                                     Icons
                                                                         .business,
                                                                     color: Colors
                                                                         .green),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                     width: 8),
                                                                 Expanded(
                                                                   child: Text(
                                                                     'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontSize:
                                                                             16,
                                                                         fontWeight:
@@ -483,22 +483,22 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                                 height: 10),
 
                                                             Row(
                                                               children: [
-                                                                Icon(
+                                                                const Icon(
                                                                     Icons
                                                                         .location_on,
                                                                     color: Colors
                                                                         .redAccent),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                     width: 8),
                                                                 Expanded(
                                                                   child: Text(
                                                                     'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontSize:
                                                                             16,
                                                                         fontWeight:
@@ -545,7 +545,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
+                                                        const Text(
                                                           "Geo Location of Sample Taken:",
                                                           style: TextStyle(
                                                             fontSize: 16,
@@ -575,11 +575,11 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     .black87,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "${lat}",
+                                                              "$lat",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -591,7 +591,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             ),
                                                           ],
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           height: 10,
                                                         ),
                                                         Row(
@@ -610,11 +610,11 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     .black87,
                                                               ),
                                                             ),
-                                                            SizedBox(
+                                                            const SizedBox(
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "${lng}",
+                                                              "$lng",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -645,7 +645,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   ? Text(
                                                       paramProvider.errorMsg ??
                                                           '',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -748,7 +748,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       Colors
                                                                           .white,
                                                                   contentPadding:
-                                                                      EdgeInsets.symmetric(
+                                                                      const EdgeInsets.symmetric(
                                                                           vertical:
                                                                               14,
                                                                           horizontal:
@@ -772,7 +772,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             12),
-                                                                    borderSide: BorderSide(
+                                                                    borderSide: const BorderSide(
                                                                         color: Colors
                                                                             .blueAccent,
                                                                         width:
@@ -790,7 +790,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                           .text
                                                                           .isNotEmpty
                                                                       ? IconButton(
-                                                                          icon: Icon(
+                                                                          icon: const Icon(
                                                                               Icons.clear,
                                                                               color: Colors.grey),
                                                                           onPressed:
@@ -823,7 +823,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       .circular(
                                                                           12),
                                                             ),
-                                                            margin: EdgeInsets
+                                                            margin: const EdgeInsets
                                                                 .symmetric(
                                                                     horizontal:
                                                                         10,
@@ -832,7 +832,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             color: Colors.white,
                                                             child: Padding(
                                                               padding:
-                                                                  EdgeInsets
+                                                                  const EdgeInsets
                                                                       .all(15),
                                                               child: Column(
                                                                 crossAxisAlignment:
@@ -840,7 +840,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                         .start,
                                                                 children: [
                                                                   // Section 1: Lab Incharge Details
-                                                                  Text(
+                                                                  const Text(
                                                                     "Lab Incharge Details",
                                                                     style:
                                                                         TextStyle(
@@ -860,75 +860,75 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                           .grey
                                                                           .shade300),
                                                                   // Divider for separation
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       height:
                                                                           8),
 
                                                                   Row(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                           Icons
                                                                               .person,
                                                                           color:
                                                                               Colors.blueAccent),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               8),
                                                                       Expanded(
                                                                         child:
                                                                             Text(
                                                                           'Name: ${paramProvider.labIncharge?.name ?? "N/A"}',
-                                                                          style: TextStyle(
+                                                                          style: const TextStyle(
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w600),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       height:
                                                                           10),
 
                                                                   Row(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                           Icons
                                                                               .business,
                                                                           color:
                                                                               Colors.green),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               8),
                                                                       Expanded(
                                                                         child:
                                                                             Text(
                                                                           'Lab Name: ${paramProvider.labIncharge?.labName ?? "N/A"}',
-                                                                          style: TextStyle(
+                                                                          style: const TextStyle(
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w600),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       height:
                                                                           10),
 
                                                                   Row(
                                                                     children: [
-                                                                      Icon(
+                                                                      const Icon(
                                                                           Icons
                                                                               .location_on,
                                                                           color:
                                                                               Colors.redAccent),
-                                                                      SizedBox(
+                                                                      const SizedBox(
                                                                           width:
                                                                               8),
                                                                       Expanded(
                                                                         child:
                                                                             Text(
                                                                           'Address: ${paramProvider.labIncharge?.address ?? "N/A"}',
-                                                                          style: TextStyle(
+                                                                          style: const TextStyle(
                                                                               fontSize: 16,
                                                                               fontWeight: FontWeight.w600),
                                                                         ),
@@ -986,7 +986,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       CrossAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    const Text(
                                                                       "Geo Location of Sample Taken:",
                                                                       style:
                                                                           TextStyle(
@@ -1021,12 +1021,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                                 Colors.black87,
                                                                           ),
                                                                         ),
-                                                                        SizedBox(
+                                                                        const SizedBox(
                                                                           width:
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "${lat}",
+                                                                          "$lat",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1038,7 +1038,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       height:
                                                                           10,
                                                                     ),
@@ -1059,12 +1059,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                                 Colors.black87,
                                                                           ),
                                                                         ),
-                                                                        SizedBox(
+                                                                        const SizedBox(
                                                                           width:
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "${lng}",
+                                                                          "$lng",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1109,7 +1109,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 paramProvider.baseStatus != 0,
                             // Show only when status is true
                             child: Padding(
-                              padding: EdgeInsets.only(right: 14, left: 14),
+                              padding: const EdgeInsets.only(right: 14, left: 14),
                               child: SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
@@ -1117,14 +1117,14 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                       validateAndSubmit(context, provider,
                                           masterProvider, paramProvider);
                                     },
-                                    child: Text(
+                                    style: AppStyles.buttonStylePrimary(),
+                                    child: const Text(
                                       AppConstants.submitSample,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
-                                    ),
-                                    style: AppStyles.buttonStylePrimary()),
+                                    )),
                               ),
                             ),
                           ),
@@ -1138,14 +1138,14 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                   validateAndSubmit(context, provider,
                                       masterProvider, paramProvider);
                                 },
-                                child: Text(
+                                style: AppStyles.buttonStylePrimary(),
+                                child: const Text(
                                   AppConstants.submitSample,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
-                                ),
-                                style: AppStyles.buttonStylePrimary()),
+                                )),
                           ),
                         ],
                       ),

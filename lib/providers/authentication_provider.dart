@@ -4,14 +4,13 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 
-import '../models/LoginResponse.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/CurrentLocation.dart';
-import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
+import 'package:jjm_wqmis/models/LoginResponse.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/LocationUtils.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();

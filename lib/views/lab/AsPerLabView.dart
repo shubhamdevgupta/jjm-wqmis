@@ -4,13 +4,15 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/LabInchargeResponse/AllLabResponse.dart';
-import '../../providers/masterProvider.dart';
-import '../../services/LocalStorageService.dart';
-import '../../utils/CustomSearchableDropdown.dart';
-import '../../utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/CustomSearchableDropdown.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 
 class AsPerLabTabView extends StatefulWidget {
+  const AsPerLabTabView({super.key});
+
   @override
   _AsPerLabTabView createState() => _AsPerLabTabView();
 }
@@ -111,8 +113,9 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                             ).text,
                             items: provider.labList.map((lab) => lab.text ?? '').toList(),
                             onChanged: (selectedLabText) {
-                              if (selectedLabText == null)
+                              if (selectedLabText == null) {
                                 return; // Handle null case
+                              }
 
                               final selectedLab = provider.labList.firstWhere(
                                     (lab) => lab.text == selectedLabText,
@@ -144,7 +147,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              margin: EdgeInsets.all(5),
+                              margin: const EdgeInsets.all(5),
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -201,7 +204,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                margin: EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
                                 color: Colors.white,
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
@@ -259,13 +262,13 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                             }
                                                           },
                                                         ),
-                                                        SizedBox(width: 10),
+                                                        const SizedBox(width: 10),
                                                         SizedBox(
                                                           width: 150,
                                                           child: Text(
                                                             param.parameterName,
                                                             overflow: TextOverflow.ellipsis,
-                                                            style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                                                            style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
                                                           ),
                                                         ),
                                                       ],
@@ -279,7 +282,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                     },
                                                     child: Text(
                                                       param.deptRate.toString(),
-                                                      style: TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                                                      style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
                                                     ),
                                                   ),
                                                 ),
@@ -291,7 +294,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                       const SizedBox(height: 20),
                                       Text(
                                         'Selected Param: ${provider.cart!.length}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),

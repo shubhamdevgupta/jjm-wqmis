@@ -7,18 +7,20 @@ import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/DWSM/DwsmDashboard.dart';
-import '../../../providers/dwsmProvider.dart';
-import '../../../services/LocalStorageService.dart';
-import '../../../utils/AppStyles.dart';
-import '../../../utils/Camera.dart';
-import '../../../utils/CurrentLocation.dart';
-import '../../../utils/CustomDropdown.dart';
-import '../../../utils/LoaderUtils.dart';
-import '../../../utils/toast_helper.dart';
-import 'TabSchoolAganwadi.dart';
+import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/Camera.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 
 class SchoolScreen extends StatefulWidget {
+  const SchoolScreen({super.key});
+
   @override
   _SchoolScreen createState() => _SchoolScreen();
 }
@@ -34,6 +36,7 @@ class _SchoolScreen extends State<SchoolScreen> {
   Village? village;
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
+  @override
   void initState() {
     super.initState();
     userId = _localStorage.getString(AppConstants.prefUserId)!;
@@ -65,7 +68,7 @@ class _SchoolScreen extends State<SchoolScreen> {
 
                             case DataState.error:
                               return AppTextWidgets.errorText(
-                                  dwsmprovider.errorMessage!);
+                                  dwsmprovider.errorMessage);
                             case DataState.loaded:
                               return Column(
                                 children: [
@@ -133,7 +136,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                             BoxShadow(
                                               color: Colors.grey.withOpacity(0.1),
                                               blurRadius: 8,
-                                              offset: Offset(0, 4),
+                                              offset: const Offset(0, 4),
                                             ),
                                           ],
                                         ),
@@ -144,12 +147,12 @@ class _SchoolScreen extends State<SchoolScreen> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Icon(Icons.school_rounded, color: Colors.green, size: 24),
-                                                  SizedBox(width: 10),
+                                                  const Icon(Icons.school_rounded, color: Colors.green, size: 24),
+                                                  const SizedBox(width: 10),
                                                   Expanded(
                                                     child: Text(
                                                       dwsmprovider.selectedSchoolName ?? "N/A",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         fontSize: 17,
                                                         fontFamily: 'OpenSans',
                                                         fontWeight: FontWeight.w600,
@@ -165,7 +168,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                       ),
                                     )
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   dwsmprovider.mDemonstrationId == 1
@@ -187,15 +190,6 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                               true);
                                                     });
                                                   },
-                                                  child: Text(
-                                                    "New Demonstration",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: 'OpenSans',
-                                                        color: Colors.white),
-                                                  ),
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         Appcolor.buttonBgColor,
@@ -207,6 +201,15 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                               12),
                                                     ),
                                                   ),
+                                                  child: const Text(
+                                                    "New Demonstration",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: 'OpenSans',
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -217,7 +220,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                     dwsmprovider
                                                         .showDemonstartion,
                                                 child: showForm(dwsmprovider)),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Container(
@@ -251,10 +254,10 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                             Colors.blue),
                                                         const SizedBox(
                                                             width: 10),
-                                                        Text(
+                                                        const Text(
                                                           "Demonstrated Details",
                                                           style:
-                                                              const TextStyle(
+                                                              TextStyle(
                                                             fontSize: 18,
                                                             fontFamily:
                                                                 'OpenSans',
@@ -587,7 +590,7 @@ class _SchoolScreen extends State<SchoolScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Anganwadi Image"),
+          title: const Text("Anganwadi Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.memory(imageBytes, fit: BoxFit.contain),
@@ -622,7 +625,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
@@ -631,7 +634,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 1.5),
+                        const BorderSide(color: Colors.blueAccent, width: 1.5),
                   ),
                   hintText: "Enter your remarks",
                   hintStyle: TextStyle(
@@ -640,7 +643,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                       color: Colors.grey.shade600),
                   suffixIcon: remarkController.text.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear, color: Colors.grey),
+                          icon: const Icon(Icons.clear, color: Colors.grey),
                           onPressed: () {
                             remarkController.clear();
                           },
@@ -652,7 +655,7 @@ class _SchoolScreen extends State<SchoolScreen> {
               ),
             ),
           ),
-          SizedBox(height: 5,),
+          const SizedBox(height: 5,),
           Card(
             child: Container(
               decoration: BoxDecoration(
@@ -662,7 +665,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
                     blurRadius: 6,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -697,12 +700,12 @@ class _SchoolScreen extends State<SchoolScreen> {
                                   BoxShadow(
                                     color: Colors.blueGrey.withOpacity(0.2),
                                     blurRadius: 8,
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
                               padding: const EdgeInsets.all(24),
-                              child: Icon(Icons.camera_alt,
+                              child: const Icon(Icons.camera_alt,
                                   size: 40, color: Colors.blue),
                             ),
                           )
@@ -723,7 +726,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 top: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white),
+                                  icon: const Icon(Icons.close, color: Colors.white),
                                   onPressed: () {
                                     _cameraHelper.removeImage();
                                     setState(() {});
@@ -734,7 +737,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                           ),
                   ),
 
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -751,7 +754,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.1),
                       blurRadius: 6,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -770,15 +773,15 @@ class _SchoolScreen extends State<SchoolScreen> {
                       ),
                     ),
                     Divider(thickness: 1, color: Colors.grey.shade300),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     // Row for Latitude and Longitude
                     Column(
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.location_on,
+                            const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
-                            SizedBox(width: 5,),
+                            const SizedBox(width: 5,),
                             Text(
                               'Latitude: ${lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
@@ -790,12 +793,12 @@ class _SchoolScreen extends State<SchoolScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Row(
                           children: [
-                            Icon(Icons.location_on,
+                            const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
-                            SizedBox(width: 5,),
+                            const SizedBox(width: 5,),
                             Text(
                               'Longitude: ${lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
@@ -836,15 +839,15 @@ class _SchoolScreen extends State<SchoolScreen> {
                       ToastHelper.showSnackBar(context, dwsmprovider.errorMessage);
                     }
                   },
-                  child: Text(
+                  style: AppStyles.buttonStylePrimary(),
+                  child: const Text(
                     AppConstants.submitSample,
                     style: TextStyle(
                         fontSize: 16,
                         fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
-                  ),
-                  style: AppStyles.buttonStylePrimary()),
+                  )),
             ),
           ),
         ],

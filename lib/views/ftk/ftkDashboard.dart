@@ -4,8 +4,8 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/AppStyles.dart';
-import '../../utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 
 class ftkDashboard extends StatefulWidget {
   const ftkDashboard({super.key});
@@ -209,14 +209,14 @@ class _ftkDashboard extends State<ftkDashboard> {
                             const SizedBox(height: 4),
 
                             // Department and Phone
-                            Row(
+                            const Row(
                               children: [
-                                const Icon(Icons.account_balance_sharp,
+                                Icon(Icons.account_balance_sharp,
                                     size: 18, color: Colors.teal),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6),
                                 Text(
                                   'FTK User',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'OpenSans',
                                       color: Colors.black87,
@@ -373,22 +373,22 @@ class _ftkDashboard extends State<ftkDashboard> {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            Expanded(
+                            const Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     AppConstants.totalSamplesalreadytested,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     '425', // 🔹 Static value
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 20,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

@@ -1,68 +1,67 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/SampleResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Samplesubrepo {
   final BaseApiService _apiService = BaseApiService();
 
   Future<Sampleresponse> sampleSubmit(
-      int Lab_id,
-      int Reg_Id,
-      int role_id,
-      String sample_collection_time,
+      int labId,
+      int regId,
+      int roleId,
+      String sampleCollectionTime,
       int cat,
-      int sample_source_location,
+      int sampleSourceLocation,
       int StateId,
-      int source_district,
-      int source_block,
-      int source_gp,
-      int source_village,
-      int source_habitation,
-      int source_filter,
+      int sourceDistrict,
+      int sourceBlock,
+      int sourceGp,
+      int sourceVillage,
+      int sourceHabitation,
+      int sourceFilter,
       int SchemeId,
-      String Other_Source_location,
+      String otherSourceLocation,
       String SourceName,
       String latitude,
       String longitude,
-      String sample_remark,
+      String sampleRemark,
       String IpAddress,
-      String sample_type_other,
-      int wtp_id,
+      String sampleTypeOther,
+      int wtpId,
       int istreated,
-      String test_selected,
-      String sample_submit_type,
+      String testSelected,
+      String sampleSubmitType,
       ) async {
     final requestData = jsonEncode({
-      "Lab_id": Lab_id,
-      "Reg_Id": Reg_Id,
-      "role_id": role_id,
-      "sample_collection_time": sample_collection_time,
+      "Lab_id": labId,
+      "Reg_Id": regId,
+      "role_id": roleId,
+      "sample_collection_time": sampleCollectionTime,
       "cat": cat,
-      "sample_source_location": sample_source_location,
+      "sample_source_location": sampleSourceLocation,
       "StateId": StateId,
-      "source_district": source_district,
-      "source_block": source_block,
-      "source_gp": source_gp,
-      "source_village": source_village,
-      "source_habitation": source_habitation,
-      "source_filter": source_filter,
+      "source_district": sourceDistrict,
+      "source_block": sourceBlock,
+      "source_gp": sourceGp,
+      "source_village": sourceVillage,
+      "source_habitation": sourceHabitation,
+      "source_filter": sourceFilter,
       "SchemeId": SchemeId,
-      "Other_Source_location": Other_Source_location,
+      "Other_Source_location": otherSourceLocation,
       "SourceName": SourceName,
       "latitude": latitude,
       "longitude": longitude,
-      "sample_remark": sample_remark,
+      "sample_remark": sampleRemark,
       "IpAddress": IpAddress,
-      "sample_type_other": sample_type_other,
-      "wtp_id": wtp_id,
+      "sample_type_other": sampleTypeOther,
+      "wtp_id": wtpId,
       "istreated":istreated,
-      "test_selected": test_selected,
-      "sample_submit_type": sample_submit_type,
+      "test_selected": testSelected,
+      "sample_submit_type": sampleSubmitType,
     });
 
     debugPrint("Sample Submit Request: $requestData");

@@ -7,8 +7,8 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmProvider.dart';
-import '../../../utils/AppConstants.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class Demonstrationscreen extends StatefulWidget {
   final int? type;
@@ -20,7 +20,7 @@ class Demonstrationscreen extends StatefulWidget {
 }
 
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
-  LocalStorageService _localStorageService = LocalStorageService();
+  final LocalStorageService _localStorageService = LocalStorageService();
   String? stateId;
   String? districtId;
   String? titleType = "";

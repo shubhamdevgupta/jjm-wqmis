@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
   static void showUpdateDialog(BuildContext context, Updateresponse updateInfo) {
-    final Color iconColor = Colors.blueAccent; // Or any color you prefer
+    const Color iconColor = Colors.blueAccent; // Or any color you prefer
     showDialog(
       context: context,
       barrierDismissible: false,

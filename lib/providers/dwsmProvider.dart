@@ -3,11 +3,11 @@ import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
-import '../models/DWSM/SchoolinfoResponse.dart';
-import '../models/DashboardResponse/DwsmDashboardResponse.dart';
-import '../utils/DeviceUtils.dart';
-import '../utils/GlobalExceptionHandler.dart';
-import '../views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
+import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
+import 'package:jjm_wqmis/utils/DeviceUtils.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 
 class DwsmProvider extends ChangeNotifier {
   final DwsmRepository _dwsmRepository = DwsmRepository();

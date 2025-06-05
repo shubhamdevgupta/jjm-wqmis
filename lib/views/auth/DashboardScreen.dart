@@ -1,6 +1,5 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
@@ -10,10 +9,8 @@ import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/UpdateDialog.dart';
-import '../../utils/VersionUtils.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -154,7 +151,7 @@ late DashboardProvider dashboardProvider;
 
                   onTap: () async {
                     Navigator.pop(context);
-                    await Future.delayed(Duration(milliseconds: 200));
+                    await Future.delayed(const Duration(milliseconds: 200));
                     showDialog<bool>(
                       context: context,
                       builder: (BuildContext context) {
@@ -273,14 +270,14 @@ late DashboardProvider dashboardProvider;
                                 const SizedBox(height: 4),
 
                                 // Department and Phone
-                                Row(
+                                const Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
+                                    Icon(Icons.account_balance_sharp,
                                         size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
+                                    SizedBox(width: 6),
                                     Text(
                                       'Departmental User',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
                                           color: Colors.black87,
@@ -609,7 +606,7 @@ late DashboardProvider dashboardProvider;
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
-              offset: Offset(2, 4),
+              offset: const Offset(2, 4),
             ),
           ],
         ),
@@ -618,8 +615,8 @@ late DashboardProvider dashboardProvider;
             Align(
               alignment: Alignment.topRight,
               child: Container(
-                padding: EdgeInsets.all(8), // Slightly increased for spacing
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8), // Slightly increased for spacing
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: [

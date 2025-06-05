@@ -35,7 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => Samplelistprovider()),
         ChangeNotifierProvider(create: (context) => DwsmProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

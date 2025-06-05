@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../models/UpdateResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/UpdateResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
 
 class Appupdaterepo extends ChangeNotifier {
   final BaseApiService _apiService = BaseApiService();

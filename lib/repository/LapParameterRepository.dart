@@ -4,13 +4,11 @@ import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 
-import '../models/DWSM/SchoolinfoResponse.dart';
-import '../models/LabInchargeResponse/AllLabResponse.dart';
-import '../models/LabInchargeResponse/ParameterResponse.dart';
-import '../models/Wtp/WtpLabResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/CustomException.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();
@@ -22,7 +20,7 @@ class Lapparameterrepository {
 
       return BaseResponseModel<Alllabresponse>.fromJson(response,(json)=> Alllabresponse.fromJson(json));
 
-    } catch (e, stackTrace) {
+    } catch (e) {
       log('Error in fetchAllLab: $e');
       GlobalExceptionHandler.handleException(e as Exception); // Removed the 'as Exception' cast
       rethrow;
@@ -30,9 +28,9 @@ class Lapparameterrepository {
   }
 
   Future<BaseResponseModel<Parameterresponse>> fetchAllParameter(String labid,
-      String stateid, String sid, String reg_id, String parameteetype) async {
+      String stateid, String sid, String regId, String parameteetype) async {
     try {
-      final response = await _apiService.get('/apimaster/GetTestList?labid=$labid&stateid=$stateid&sid=$sid&reg_id=$reg_id&parameteetype=$parameteetype');
+      final response = await _apiService.get('/apimaster/GetTestList?labid=$labid&stateid=$stateid&sid=$sid&reg_id=$regId&parameteetype=$parameteetype');
 
       return BaseResponseModel<Parameterresponse>.fromJson(response,(json)=> Parameterresponse.fromJson(json));
 

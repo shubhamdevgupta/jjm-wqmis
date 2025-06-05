@@ -6,17 +6,15 @@ import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/DWSM/SchoolinfoResponse.dart';
+import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 
-import '../models/Wtp/WtpLabResponse.dart';
+import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 
-import '../utils/AppConstants.dart';
-import '../utils/LocationUtils.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
-import '../models/LabInchargeResponse/AllLabResponse.dart';
-import '../models/LabInchargeResponse/ParameterResponse.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
 
 class ParameterProvider with ChangeNotifier {
   final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
@@ -87,7 +85,7 @@ class ParameterProvider with ChangeNotifier {
       } else {
         errorMsg = rawLabList.message;
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       log('Error in fetching lab list provider: $e');
     } finally {
       _isLoading = false;
@@ -96,11 +94,11 @@ class ParameterProvider with ChangeNotifier {
   }
 
   Future<void> fetchAllParameter(String labid, String stateid, String sid,
-      String reg_id, String parameteetype) async {
+      String regId, String parameteetype) async {
     _isLoading = true;
     try {
       final rawParameterList = await _lapparameterrepository.fetchAllParameter(
-          labid, stateid, sid, reg_id, parameteetype);
+          labid, stateid, sid, regId, parameteetype);
       if (rawParameterList.status == 1) {
         parameterList = rawParameterList.result;
       } else {

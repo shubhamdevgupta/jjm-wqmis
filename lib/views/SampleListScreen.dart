@@ -7,16 +7,18 @@ import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/webView/testReport.dart';
 import 'package:provider/provider.dart';
 
-import '../models/SampleListResponse.dart';
-import '../providers/masterProvider.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/Aesen.dart';
-import '../utils/AppStyles.dart';
-import '../utils/DeviceUtils.dart';
-import '../utils/Showerrormsg.dart';
-import 'LocationScreen.dart';
+import 'package:jjm_wqmis/models/SampleListResponse.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/Aesen.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/DeviceUtils.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/views/LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
+  const SampleListScreen({super.key});
+
   @override
   _SampleListScreenState createState() => _SampleListScreenState();
 }
@@ -43,7 +45,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select Year'),
+          title: const Text('Select Year'),
           content: SizedBox(
             width: 300,
             height: 300,
@@ -172,7 +174,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 } else {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => Dashboardscreen()),
+                    MaterialPageRoute(builder: (context) => const Dashboardscreen()),
                     (route) => false,
                   );
                 }
@@ -209,7 +211,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 builder: (BuildContext context) {
                   double screenHeight = MediaQuery.of(context).size.height;
                   return AlertDialog(
-                    contentPadding: EdgeInsets.all(10),
+                    contentPadding: const EdgeInsets.all(10),
                     content: Container(
                       color: Colors.white,
                       height: screenHeight * 0.8,
@@ -223,8 +225,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                 },
               );
             },
-            backgroundColor: Color(0xFF0468B1),
-            shape: CircleBorder(),
+            backgroundColor: const Color(0xFF0468B1),
+            shape: const CircleBorder(),
             elevation: 4,
             child: const Padding(
               padding: EdgeInsets.all(16),
@@ -239,7 +241,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
             builder: (context, provider, child) {
               return Column(
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Search Bar
                   Padding(
@@ -248,7 +250,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                       children: [
                         Expanded(
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: Colors.grey.shade300),
@@ -263,14 +265,14 @@ class _SampleListScreenState extends State<SampleListScreen> {
                             ),
                             child: TextField(
                               controller: searchController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Search...',
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         ElevatedButton(
                           style: AppStyles.buttonStylePrimary(
                               backgroundColor: const Color(0xFF0468B1),
@@ -328,7 +330,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                         color: Colors.white,
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(12),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -343,7 +345,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   backgroundColor: Colors.blue,
                                                   child: Text(
                                                     "${index + 1}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                       fontFamily: 'OpenSans',
                                                       fontWeight:
@@ -354,7 +356,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 //SizedBox(width: 10),
 
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets.symmetric(
                                                     horizontal: 10,
                                                     vertical: 5,
                                                   ),
@@ -366,7 +368,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                   ),
                                                   child: Text(
                                                     "ID: ${sample.sampleId ?? 'N/A'}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                       fontFamily: 'OpenSans',
                                                       fontWeight:
@@ -415,8 +417,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                                 .red.shade200),
                                                       ),
                                                     ),
-                                                    child: Row(
-                                                      children: const [
+                                                    child: const Row(
+                                                      children: [
                                                         Icon(
                                                             Icons
                                                                 .delete_outline,
@@ -440,7 +442,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                         ),
                                                       );
                                                     },
-                                                    child: CircleAvatar(
+                                                    child: const CircleAvatar(
                                                       backgroundColor:
                                                           Colors.brown,
                                                       child: Icon(
@@ -452,20 +454,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 10),
+                                            const SizedBox(height: 10),
 
-                                            Divider(),
+                                            const Divider(),
 
                                             // Lab Name
                                             Row(
                                               children: [
-                                                Icon(Icons.business,
+                                                const Icon(Icons.business,
                                                     color: Colors.blue),
-                                                SizedBox(width: 5),
+                                                const SizedBox(width: 5),
                                                 Expanded(
                                                   child: Text(
                                                     sample.labName ?? 'N/A',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 14,
                                                       fontFamily: 'OpenSans',
                                                       fontWeight:
@@ -475,14 +477,14 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 8),
+                                            const SizedBox(height: 8),
 
                                             // Location
                                             Row(
                                               children: [
-                                                Icon(Icons.location_on,
+                                                const Icon(Icons.location_on,
                                                     color: Colors.blue),
-                                                SizedBox(width: 5),
+                                                const SizedBox(width: 5),
                                                 Expanded(
                                                   child: Text(
                                                     "${sample.villageName ?? 'N/A'}, "
@@ -498,20 +500,20 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 8),
+                                            const SizedBox(height: 8),
 
-                                            Divider(),
+                                            const Divider(),
 
                                             // Test Result
                                             Row(
                                               children: [
-                                                Icon(Icons.category,
+                                                const Icon(Icons.category,
                                                     color: Colors.blue),
-                                                SizedBox(width: 5),
+                                                const SizedBox(width: 5),
                                                 Expanded(
                                                   child: Row(
                                                     children: [
-                                                      Text(
+                                                      const Text(
                                                         "Test Result: ",
                                                         style: TextStyle(
                                                           fontSize: 14,
@@ -522,7 +524,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                         ),
                                                       ),
                                                       Container(
-                                                        padding: EdgeInsets
+                                                        padding: const EdgeInsets
                                                             .symmetric(
                                                           horizontal: 10,
                                                           vertical: 4,
@@ -572,16 +574,16 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 8),
+                                            const SizedBox(height: 8),
 
-                                            Divider(),
+                                            const Divider(),
 
                                             // Date of Submission
                                             Row(
                                               children: [
-                                                Icon(Icons.calendar_today,
+                                                const Icon(Icons.calendar_today,
                                                     color: Colors.blue),
-                                                SizedBox(width: 5),
+                                                const SizedBox(width: 5),
                                                 Text(
                                                   "Date of Submission: ${sample.sampleCollectionTime ?? 'N/A'}",
                                                   style: TextStyle(

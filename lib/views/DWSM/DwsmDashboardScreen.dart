@@ -6,11 +6,11 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/authentication_provider.dart';
-import '../../services/LocalStorageService.dart';
-import 'DwsmLocationScreen.dart';
-import 'dwsmList/DemonstrationScreen.dart';
-import 'dwsmList/SchoolAwcScreen.dart';
+import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/views/DWSM/DwsmLocationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/dwsmList/DemonstrationScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/dwsmList/SchoolAwcScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
   const Dwsdashboardscreen({super.key});
@@ -247,14 +247,14 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                 const SizedBox(height: 8),
 
                                 // Department and Phone
-                                Row(
+                                const Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
+                                    Icon(Icons.account_balance_sharp,
                                         size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
+                                    SizedBox(width: 6),
                                     Text(
                                       'DWSM User',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
                                           color: Colors.black87,
@@ -364,7 +364,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                               ChangeNotifierProvider.value(
                                             value: dwsmDashboardProvider,
                                             child:
-                                                Demonstrationscreen(type: 10),
+                                                const Demonstrationscreen(type: 10),
                                           ),
                                         ),
                                       );
@@ -429,7 +429,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                               ChangeNotifierProvider.value(
                                             value: dwsmDashboardProvider,
                                             child:
-                                                Demonstrationscreen(type: 11),
+                                                const Demonstrationscreen(type: 11),
                                           ),
                                         ),
                                       );
@@ -462,7 +462,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenHeight * 0.4,
-                                  child: DwsmLocation(), // Your widget
+                                  child: const DwsmLocation(), // Your widget
                                 ),
                               );
                             },
