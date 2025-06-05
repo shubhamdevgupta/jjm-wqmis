@@ -80,7 +80,6 @@ class Samplesubprovider extends ChangeNotifier {
         errorMsg = sampleresponse!.message;
       }
     } catch (e) {
-      print("unhandeled exception-----$e");
       GlobalExceptionHandler.handleException(e as Exception);
       sampleresponse = null;
     } finally {

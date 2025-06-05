@@ -111,8 +111,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                             int.parse(selectedId),
                                             10, onSuccess: (result) {
                                           village = result;
-                                          print(
-                                              "SSS_SS>>> ${village?.districtId} ${village?.districtName}");
+
                                         });
 
                                         dwsmprovider

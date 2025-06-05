@@ -6,10 +6,8 @@ class VersionUtils {
   static Future<String?> getNativeAppVersion() async {
     try {
       final String version = await _channel.invokeMethod('getVersionName');
-      print('version--------- $version');
       return version;
     } on PlatformException catch (e) {
-      print("Failed to get app version: '${e.message}'.");
       return null;
     }
   }

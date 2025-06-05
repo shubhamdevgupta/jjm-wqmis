@@ -33,9 +33,7 @@ late DashboardProvider dashboardProvider;
   void initState() {
     super.initState();
     var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
     var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
 
     getToken();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -45,8 +43,7 @@ late DashboardProvider dashboardProvider;
           Provider.of<Masterprovider>(context, listen: false);
 
       await dashboardProvider.loadDashboardData();
-      print("dashboard ${dashboardProvider.isLoading}");
-      print("master provider  data${masterProvider.isLoading}");
+
 
       await masterProvider.fetchDistricts(stateId);
       await masterProvider.fetchBlocks(stateId, districtId);
@@ -759,7 +756,6 @@ late DashboardProvider dashboardProvider;
     mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    print("token-------------- $token ----state naem$stateName");
     return token;
   }
 }

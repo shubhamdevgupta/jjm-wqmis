@@ -21,8 +21,7 @@ class _ftkDashboard extends State<ftkDashboard> {
   void initState() {
     super.initState();
     session.init();
-    print('username---->> ${session.userName}');
-    print('mobile---->> ${session.mobile}');
+
   }
 
   @override

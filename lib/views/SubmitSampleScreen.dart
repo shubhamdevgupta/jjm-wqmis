@@ -1167,11 +1167,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
     }
-    print("---------${masterProvider.selectedWaterSource.toString()}");
     await masterProvider.fetchLocation();
     await provider.fetchDeviceId();
     //TODO lab is null here
-    print("00000000 ${paramProvider.selectedLab.toString()}");
     int parsedSource =
         int.tryParse(masterProvider.selectedWaterSource?.toString() ?? '') ?? 0;
 

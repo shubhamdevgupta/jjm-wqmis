@@ -45,7 +45,6 @@ class DwsmRepository{
     try {
       final response = await _apiService.get(
           'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
-      print("RRRRR_----$response");
       return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -63,7 +62,6 @@ class DwsmRepository{
           "DemonstrationType": demonstrationType,
         }));
 
-      print("DEMO----$response");
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

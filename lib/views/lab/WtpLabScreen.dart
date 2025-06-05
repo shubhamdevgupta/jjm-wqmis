@@ -50,7 +50,6 @@ class _WtpLabScreen extends State<Wtplabscreen> {
               children: [
                 FloatingActionButton(
                   onPressed: () async {
-                    print('selected labb   ${provider.selectedLab}');
                     provider.isLab = true;
                     provider.isParam = false;
                     if (provider.cart!.isNotEmpty) {
@@ -355,8 +354,6 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                                           value: isSelected,
                                                           onChanged:
                                                               (bool? value) {
-                                                            print(
-                                                                'the selected value labview------- $value');
                                                             if (value != null) {
                                                               provider
                                                                   .toggleCart(

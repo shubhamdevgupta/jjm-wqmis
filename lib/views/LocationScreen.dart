@@ -342,7 +342,6 @@ class _LocationscreenState extends State<Locationscreen> {
 
                     await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-                      print('flggg ${ widget.flag}..Going to Sample List screen');
 
                       Navigator.pushNamedAndRemoveUntil(
                         context,
@@ -353,7 +352,6 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();
                       masterProvider.clearsampleinfo();
-                      print('flggg ${ widget.flag}.Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
                     } else {

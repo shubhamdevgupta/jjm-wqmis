@@ -648,7 +648,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
     userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
     districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    print("token-------------- $token ----state naem$stateName");
     return token;
   }
 }

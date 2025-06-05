@@ -7,7 +7,6 @@ import 'package:jjm_wqmis/utils/CustomException.dart';
 
 class GlobalExceptionHandler {
   static void handleException(Exception e) {
-    print("exception is $e");
     if (navigatorKey.currentContext == null) {
       debugPrint("Navigator key context is null, cannot show error.");
       return;

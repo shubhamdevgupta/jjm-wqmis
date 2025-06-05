@@ -28,16 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _checkForUpdateAndNavigate() async {
     bool isAvailable = await _updateViewModel.checkForUpdate();
-    print('Update available: $isAvailable');
 
     if (isAvailable && mounted) {
       final updateInfo = await _updateViewModel.getUpdateInfo();
 
       if (updateInfo != null) {
-        print(
-            "Dialog will show with: ${updateInfo.apkUrl}, ${updateInfo.whatsNew}");
 
-        // Show dialog and stop further navigation until user interacts
         DialogUtils.showUpdateDialog(context, updateInfo);
         return;
       }

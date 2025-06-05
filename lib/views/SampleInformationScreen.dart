@@ -567,7 +567,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          print("istreated----${masterProvider.istreated}");
                           if (validateWtpWaterFields(masterProvider)) {
                             //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
 
@@ -956,7 +955,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      print('Selected Water Source: $value');
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
@@ -1080,7 +1078,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateSourceofScheme(Masterprovider masterProvider) {
-    print("9999999999   ${masterProvider.selectedWaterSource}");
     if (masterProvider.selectedScheme == null ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";

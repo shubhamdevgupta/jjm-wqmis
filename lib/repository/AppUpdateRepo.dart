@@ -24,7 +24,6 @@ class Appupdaterepo extends ChangeNotifier {
 
       return Updateresponse.fromJson(jsonData);
     } catch (e) {
-    print("update not working there");
       rethrow;
     }
   }
@@ -34,10 +33,6 @@ class Appupdaterepo extends ChangeNotifier {
     try {
       final updateInfo = await fetchUpdateInfo();
       final currentVersion = await getCurrentAppVersion();
-
-      print("currentVersion: $currentVersion");
-      print("latestVersion: ${updateInfo.version}");
-
       return _compareVersions(updateInfo.version, currentVersion);
     } catch (_) {
       return false;

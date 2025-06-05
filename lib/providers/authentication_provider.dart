@@ -147,7 +147,6 @@ class AuthenticationProvider extends ChangeNotifier {
 
   String encryptPassword(String password, String salt) {
     String hash1 = sha512Base64(trim(password));
-    print(hash1);
     String hash2 = sha512Base64(salt + hash1);
     return hash2;
   }
@@ -164,7 +163,6 @@ class AuthenticationProvider extends ChangeNotifier {
     int max = 15;
     randomOne = Random().nextInt(max);
     randomTwo = Random().nextInt(max);
-    print("calling the captch $randomOne  $randomTwo");
     captchResult = randomOne + randomTwo;
     notifyListeners();
     return captchResult;

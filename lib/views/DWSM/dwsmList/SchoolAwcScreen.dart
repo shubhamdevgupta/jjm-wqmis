@@ -34,7 +34,6 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
           Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
           int.parse(stateId!), int.parse(districtId!), widget.type!);
-      print('responsssssssss ${dashboardProvider.dashboardSchoolListModel}');
     });
 
     super.initState();
@@ -285,7 +284,6 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
         },
       );
     } catch (e) {
-      print("Error: $e");
     }
   }
 }

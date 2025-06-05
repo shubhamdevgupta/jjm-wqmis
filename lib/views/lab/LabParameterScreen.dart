@@ -71,7 +71,6 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllParameters() {
-    print('register usedId $regId');
     paramProvider.fetchAllParameter(
       "0",
       masterProvider.selectedStateId ?? "0",

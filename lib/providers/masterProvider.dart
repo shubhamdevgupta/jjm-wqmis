@@ -99,7 +99,6 @@ class Masterprovider extends ChangeNotifier {
   final LocalStorageService localStorage = LocalStorageService();
 
   Future<void> fetchStates() async {
-    print('Calling the state function...');
     _isLoading = true;
     notifyListeners();
     try {
@@ -119,7 +118,6 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchDistricts(String stateId) async {
-    print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
     _isLoading = true;
     notifyListeners();

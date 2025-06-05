@@ -115,8 +115,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       int.parse(selectedId),
                                                       11, onSuccess: (result) {
                                                 village = result;
-                                                print(
-                                                    "SSS_SS>>> ${village?.districtId} ${village?.districtName}");
+
                                               });
 
                                               dwsmprovider
@@ -210,15 +209,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       width: double.infinity,
                                                       child: ElevatedButton(
                                                         onPressed: () async {
-                                                          print(
-                                                              "pppppppppppp before ${dwsmprovider.showDemonstartion}");
 
                                                           dwsmprovider
                                                               .showDemonstartionButton(
                                                                   true);
-
-                                                          print(
-                                                              "pppppppppppp after ${dwsmprovider.showDemonstartion}");
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(

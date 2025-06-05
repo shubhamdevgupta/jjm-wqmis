@@ -225,7 +225,6 @@ class ParameterProvider with ChangeNotifier {
   }
 
   void removeFromCart(Parameterresponse param) {
-    print("delted value---$param");
     cart!.remove(param);
     notifyListeners(); // Notify UI to update
   }

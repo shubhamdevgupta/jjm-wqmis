@@ -136,7 +136,6 @@ class DwsmProvider extends ChangeNotifier {
     _isLoading = true;
 
     notifyListeners();
-    print('loading startt.............................');
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchDashboardSchoolList(
           stateId, districtId, demonstrationType);
@@ -151,7 +150,6 @@ class DwsmProvider extends ChangeNotifier {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {
-      print('loading stoppeddd.............................');
       _isLoading = false;
       notifyListeners();
     }

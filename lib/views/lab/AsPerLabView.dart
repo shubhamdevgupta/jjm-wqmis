@@ -47,7 +47,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                 children: [
                   FloatingActionButton(
                     onPressed: () async{
-                      print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
                         provider.fetchLabIncharge(int.parse(provider.selectedLab!));
                         provider.isLab=true;
@@ -256,7 +255,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                                         Checkbox(
                                                           value: isSelected,
                                                           onChanged: (bool? value) {
-                                                            print('the selected value labview------- $value');
                                                             if (value != null) {
                                                               provider.toggleCart(param);
                                                             }

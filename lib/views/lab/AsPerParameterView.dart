@@ -42,7 +42,6 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                     onPressed: () async {
                       provider.selectedLab = '';
                       provider.labList.clear();
-                      print('selected labb   ${provider.selectedLab}');
                       if (provider.cart!.isNotEmpty) {
                         var paramterId = provider.cart!
                             .sublist(0, provider.cart!.length)
