@@ -206,7 +206,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Location Details",
+                                "Village Details",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
