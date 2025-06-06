@@ -155,9 +155,7 @@ class Samplesubprovider extends ChangeNotifier {
       // ✅ Now GPS is ON and permission is granted
       LocationData locationData = await location.getLocation();
 
-
-        _latitude = locationData.latitude;
-        _longitude = locationData.longitude;
+      setLocation(locationData.latitude, locationData.longitude);
       _isLoading=false;
       print("Lat: $_latitude, Lng: $_longitude");
 

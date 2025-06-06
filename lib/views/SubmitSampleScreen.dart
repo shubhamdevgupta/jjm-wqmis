@@ -48,12 +48,25 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
+
+      if (CurrentLocation.latitude != null && CurrentLocation.longitude != null &&
+          (sampleSubProvider.lat == null || sampleSubProvider.lng == null)) {
+        sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude,);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
 
-    sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude);
 
     return ChangeNotifierProvider(
         create: (_) => Samplesubprovider(),
