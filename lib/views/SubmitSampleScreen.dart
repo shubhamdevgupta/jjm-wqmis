@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/LocationUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -1168,6 +1169,15 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       return;
     }
     await masterProvider.fetchLocation();
+    if (lat == null || lng == null) {
+      ToastHelper.showSnackBar(
+        context,
+        "Please enable location permission to proceed.",
+      );
+
+      //LocationUtils.showLocationDisabledDialog(context); // Show dialog
+      return; // Stop execution
+    }
     await provider.fetchDeviceId();
     //TODO lab is null here
     int parsedSource =
@@ -1197,8 +1207,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.sampleTypeOther,
-      lat.toString(),
-      lng.toString(),
+      lat!,
+      lng!,
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
