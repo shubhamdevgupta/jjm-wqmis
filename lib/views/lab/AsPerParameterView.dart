@@ -42,12 +42,12 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                     onPressed: () async {
                       provider.selectedLab = '';
                       provider.labList.clear();
-                      masterProvider.fetchLocation();
+                      await  masterProvider.fetchLocation();
                       if (provider.cart!.isNotEmpty) {
                         var paramterId = provider.cart!
                             .sublist(0, provider.cart!.length)
                             .join(",");
-                        provider.fetchParamLabs(
+                       await provider.fetchParamLabs(
                             masterProvider.selectedStateId!, paramterId);
                         provider.isParam = true;
                         Navigator.push(
