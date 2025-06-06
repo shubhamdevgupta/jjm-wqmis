@@ -30,6 +30,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final ScrollController _scrollController = ScrollController();
 
   late bool serviceEnabled;
+
   TextStyle _headerTextStyle() => const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
@@ -55,9 +56,11 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
 
-      if (CurrentLocation.latitude != null && CurrentLocation.longitude != null &&
-          (sampleSubProvider.lat == null || sampleSubProvider.lng == null)) {
+      if (CurrentLocation.latitude != null && CurrentLocation.longitude != null) {
         sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude,);
+      }
+      if (sampleSubProvider.lat == null || sampleSubProvider.lng == null) {
+        sampleSubProvider.checkAndPromptLocation(context);
       }
     });
   }
@@ -67,10 +70,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
+    return Consumer<Samplesubprovider>(
+        builder: (context, provider, child) {
+          print("Rebuilding UI with lat: ${provider.lat} :Long ${provider.lng}");
 
-    return ChangeNotifierProvider(
-        create: (_) => Samplesubprovider(),
-        child: Consumer<Samplesubprovider>(builder: (context, provider, child) {
           return Scrollbar(
             thumbVisibility: true,
             controller: _scrollController,
@@ -300,14 +303,16 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             MainAxisAlignment
                                                                 .end,
                                                         children: [
-                                                          const Text("Total Price",
+                                                          const Text(
+                                                              "Total Price",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .green,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
-                                                          const SizedBox(width: 20),
+                                                          const SizedBox(
+                                                              width: 20),
                                                           Text(
                                                               "₹ ${paramProvider.calculateTotal()} /-",
                                                               style: const TextStyle(
@@ -343,7 +348,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       filled: true,
                                                       fillColor: Colors.white,
                                                       contentPadding:
-                                                          const EdgeInsets.symmetric(
+                                                          const EdgeInsets
+                                                              .symmetric(
                                                               vertical: 14,
                                                               horizontal: 16),
                                                       // Better padding
@@ -363,11 +369,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(12),
-                                                        borderSide: const BorderSide(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                            width:
-                                                                1.5), // Focus highlight
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .blueAccent,
+                                                                width:
+                                                                    1.5), // Focus highlight
                                                       ),
                                                       hintText:
                                                           "Enter your remarks",
@@ -454,7 +461,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     .grey
                                                                     .shade300),
                                                             // Divider for separation
-                                                            const SizedBox(height: 8),
+                                                            const SizedBox(
+                                                                height: 8),
 
                                                             Row(
                                                               children: [
@@ -765,12 +773,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                   fillColor:
                                                                       Colors
                                                                           .white,
-                                                                  contentPadding:
-                                                                      const EdgeInsets.symmetric(
-                                                                          vertical:
-                                                                              14,
-                                                                          horizontal:
-                                                                              16),
+                                                                  contentPadding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          14,
+                                                                      horizontal:
+                                                                          16),
                                                                   // Better padding
                                                                   border:
                                                                       OutlineInputBorder(
@@ -841,8 +849,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       .circular(
                                                                           12),
                                                             ),
-                                                            margin: const EdgeInsets
-                                                                .symmetric(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         10,
                                                                     vertical:
@@ -1127,7 +1136,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 paramProvider.baseStatus != 0,
                             // Show only when status is true
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 14, left: 14),
+                              padding:
+                                  const EdgeInsets.only(right: 14, left: 14),
                               child: SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
@@ -1170,7 +1180,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
               ),
             ),
           );
-        }));
+        });
   }
 
   Future<void> validateAndSubmit(
@@ -1311,8 +1321,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     }
   }
 
-
- /* Future<void> checkAndPromptLocation(BuildContext context) async {
+/* Future<void> checkAndPromptLocation(BuildContext context) async {
 
 
     final status = await Permission.location.request();
@@ -1366,7 +1375,4 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       await openAppSettings();
     }
   }*/
-
-
-
 }
