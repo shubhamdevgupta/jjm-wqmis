@@ -1161,7 +1161,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       Samplesubprovider provider,
       Masterprovider masterProvider,
       ParameterProvider paramProvider) async {
-    String userId = _localStorage.getString(AppConstants.prefUserId)!;
+    String userId = _localStorage.getString(AppConstants.prefRegId)!;
     String roleId = _localStorage.getString(AppConstants.prefRoleId)!;
 
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {

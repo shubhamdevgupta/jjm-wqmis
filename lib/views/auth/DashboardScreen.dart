@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
@@ -20,22 +21,16 @@ class Dashboardscreen extends StatefulWidget {
 }
 
 class _DashboardscreenState extends State<Dashboardscreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
-  String stateName = '';
-  String districtId = '';
-  String userName = '';
-  String mobile = '';
-  String stateId = '';
   final encryption = AesEncryption();
 late DashboardProvider dashboardProvider;
   @override
   void initState() {
     super.initState();
-    var enc = encryption.encryptText("Beneficiaryname");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-
-    getToken();
+   // var enc = encryption.encryptText("Beneficiaryname");
+    //var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
+    session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
@@ -45,8 +40,8 @@ late DashboardProvider dashboardProvider;
       await dashboardProvider.loadDashboardData();
 
 
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
+      await masterProvider.fetchDistricts(session.stateId.toString());
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
     });
   }
 
@@ -122,7 +117,7 @@ late DashboardProvider dashboardProvider;
                         style: AppStyles.appBarTitle,
                       ),
                       Text(
-                        stateName, // Provide a fallback value if null
+                        session.stateName, // Provide a fallback value if null
                         style: AppStyles.setTextStyle(
                             16, FontWeight.normal, Colors.white70),
                       ),
@@ -161,7 +156,7 @@ late DashboardProvider dashboardProvider;
                             color: Colors.white,
                             height: screenHeight * 0.8,
                             width: screenwidth * 0.99,
-                            child: const Locationscreen(
+                            child:  Locationscreen(
                               flag: AppConstants.openSampleInfoScreen,
                               flagFloating: "",
                             ),
@@ -255,7 +250,7 @@ late DashboardProvider dashboardProvider;
                                   ),
                                 ),
                                 Text(
-                                  userName,
+                                  session.userName,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'OpenSans',
@@ -292,7 +287,7 @@ late DashboardProvider dashboardProvider;
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
-                                        mobile,
+                                        session.mobile,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
@@ -536,7 +531,7 @@ late DashboardProvider dashboardProvider;
                                     color: Colors.white,
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
-                                    child: const Locationscreen(
+                                    child:  Locationscreen(
                                       flag: AppConstants.openSampleInfoScreen,
                                       flagFloating: "",
                                     ),
@@ -749,13 +744,4 @@ late DashboardProvider dashboardProvider;
   }
 
 
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
-    userName = _localStorage.getString(AppConstants.prefName) ?? '';
-    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
-    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    return token;
-  }
 }

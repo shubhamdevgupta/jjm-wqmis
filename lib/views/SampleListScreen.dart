@@ -612,7 +612,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
   String getToken() {
     String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    userId = _localStorage.getString(AppConstants.prefUserId) ?? '';
+    userId = _localStorage.getString(AppConstants.prefRegId) ?? '';
     return token;
   }
 }

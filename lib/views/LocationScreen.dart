@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -15,21 +16,20 @@ class Locationscreen extends StatefulWidget {
   final String flag;
   final String flagFloating; // Declare flag parameter
 
-  const Locationscreen({super.key, required this.flag , required this.flagFloating });
+   Locationscreen({super.key, required this.flag , required this.flagFloating });
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
 }
 
 class _LocationscreenState extends State<Locationscreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String districtId = '';
+  final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
   @override
   void initState() {
     super.initState();
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -109,8 +109,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
 
-                      value: _localStorage.getString(
-                          AppConstants.prefStateId), // Ensure this matches the DropdownMenuItem value
+                      value: session.stateId.toString(), // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled:
                             true, // Grey background to indicate it's non-editable
@@ -132,11 +131,9 @@ class _LocationscreenState extends State<Locationscreen> {
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: _localStorage.getString(
-                              AppConstants.prefStateId), // Ensure this matches the selected value
+                          value: session.stateId.toString(), // Ensure this matches the selected value
 
-                          child: Text(_localStorage.getString(AppConstants.prefStateName) ??
-                              'Unknown State',
+                          child: Text(session.stateName ,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
@@ -173,7 +170,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: districtId,
+                      value: session.districtId.toString(),
                       // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled: true,
@@ -199,13 +196,11 @@ class _LocationscreenState extends State<Locationscreen> {
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: districtId,
+                          value: session.districtId.toString(),
                           // Ensure this matches the selected value
 
                           child: Text(
-                              _localStorage
-                                  .getString(AppConstants.prefDistName) ??
-                                  'Unknown State',
+                              session.stateName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',

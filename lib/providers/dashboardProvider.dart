@@ -18,7 +18,7 @@ class DashboardProvider extends ChangeNotifier{
     _isLoading = true;
     notifyListeners();
     String roleId=_localStorage.getString(AppConstants.prefRoleId) ?? '';
-    String userId=_localStorage.getString(AppConstants.prefUserId) ?? '';
+    String userId=_localStorage.getString(AppConstants.prefRegId) ?? '';
     String stateId=_localStorage.getString(AppConstants.prefStateId) ?? '';
     try {
       dashboardData = await _authRepository.fetchDashboardData(int.parse(roleId), int.parse(userId), int.parse(stateId));

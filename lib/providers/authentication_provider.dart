@@ -73,15 +73,23 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
-        _localStorage.saveString(AppConstants.prefUserId, _loginResponse!.regId.toString());
         _localStorage.saveString(AppConstants.prefRoleId, _loginResponse!.roleId.toString());
         _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
         _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
-        _localStorage.saveString(AppConstants.prefStateId, _loginResponse!.stateId.toString());
-        _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
-       // _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.districtId.toString());
-        _localStorage.saveString(AppConstants.prefDistrictId, _loginResponse!.districtId.toString());
+
         _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
+
+        _localStorage.saveInt(AppConstants.prefStateId, _loginResponse!.stateId!);
+        _localStorage.saveInt(AppConstants.prefDistrictId, _loginResponse!.districtId!);
+        _localStorage.saveInt(AppConstants.prefBlockId, _loginResponse!.blockId!);
+        _localStorage.saveInt(AppConstants.prefPanchayatId, _loginResponse!.gramPanchayatId!);
+        _localStorage.saveInt(AppConstants.prefVillageId, _loginResponse!.villageId!);
+
+        _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
+        _localStorage.saveString(AppConstants.prefDistName, _loginResponse!.districtName.toString());
+        _localStorage.saveString(AppConstants.prefBlockName, _loginResponse!.blockName.toString());
+        _localStorage.saveString(AppConstants.prefGramPanchayatName, _loginResponse!.panchayatName.toString());
+        _localStorage.saveString(AppConstants.prefVillageName, _loginResponse!.villageName.toString());
 
         notifyListeners();
         onSuccess();
