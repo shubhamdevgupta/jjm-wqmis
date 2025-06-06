@@ -55,6 +55,7 @@ class AuthenticationProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     _isLoggedIn = false;
     await _localStorage.remove(AppConstants.prefIsLoggedIn);
+    await _localStorage.clearAll();
     notifyListeners();
   }
 

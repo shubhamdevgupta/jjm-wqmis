@@ -56,4 +56,36 @@ class UserSessionManager {
   // Optional: helper getters
   String getToken() => token;
   int getUserId() => int.tryParse(_prefs?.getString(AppConstants.prefRegId) ?? '0') ?? 0;
+  Future<void> clearPref() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    await _prefs!.remove(AppConstants.prefRegId);
+    await _prefs!.remove(AppConstants.prefRoleId);
+    await _prefs!.remove(AppConstants.prefStateId);
+    await _prefs!.remove(AppConstants.prefDistrictId);
+    await _prefs!.remove(AppConstants.prefBlockId);
+    await _prefs!.remove(AppConstants.prefPanchayatId);
+    await _prefs!.remove(AppConstants.prefVillageId);
+    await _prefs!.clear(); // Optionally clear all
+  }
+  Future<void> sanitizePrefs() async {
+    _prefs ??= await SharedPreferences.getInstance();
+
+    // Check for corrupt data and remove it
+    if (_prefs!.get(AppConstants.prefRegId) is String) {
+      await _prefs!.remove(AppConstants.prefRegId);
+    }
+
+    if (_prefs!.get(AppConstants.prefRoleId) is String) {
+      await _prefs!.remove(AppConstants.prefRoleId);
+    }
+
+    if (_prefs!.get(AppConstants.prefStateId) is String) {
+      await _prefs!.remove(AppConstants.prefStateId);
+    }
+    if (_prefs!.get(AppConstants.prefDistrictId) is String) {
+      await _prefs!.remove(AppConstants.prefDistrictId);
+    }
+
+  }
+
 }

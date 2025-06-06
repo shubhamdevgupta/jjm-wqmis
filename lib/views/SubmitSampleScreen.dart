@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/LocationUtils.dart';
-import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:provider/provider.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
   const SubmitSampleScreen({super.key});
@@ -32,6 +28,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final lng = CurrentLocation.longitude;
 
   late bool serviceEnabled;
+
   TextStyle _headerTextStyle() => const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
@@ -48,24 +45,30 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
+      final sampleSubProvider =
+          Provider.of<Samplesubprovider>(context, listen: false);
 
-      if (CurrentLocation.latitude != null && CurrentLocation.longitude != null &&
+      if (CurrentLocation.latitude != null &&
+          CurrentLocation.longitude != null &&
           (sampleSubProvider.lat == null || sampleSubProvider.lng == null)) {
-        sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude,);
+        sampleSubProvider.setLocation(
+          CurrentLocation.latitude,
+          CurrentLocation.longitude,
+        );
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
 
     return ChangeNotifierProvider(
         create: (_) => Samplesubprovider(),
@@ -299,14 +302,16 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             MainAxisAlignment
                                                                 .end,
                                                         children: [
-                                                          const Text("Total Price",
+                                                          const Text(
+                                                              "Total Price",
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .green,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold)),
-                                                          const SizedBox(width: 20),
+                                                          const SizedBox(
+                                                              width: 20),
                                                           Text(
                                                               "₹ ${paramProvider.calculateTotal()} /-",
                                                               style: const TextStyle(
@@ -342,7 +347,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       filled: true,
                                                       fillColor: Colors.white,
                                                       contentPadding:
-                                                          const EdgeInsets.symmetric(
+                                                          const EdgeInsets
+                                                              .symmetric(
                                                               vertical: 14,
                                                               horizontal: 16),
                                                       // Better padding
@@ -362,11 +368,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(12),
-                                                        borderSide: const BorderSide(
-                                                            color: Colors
-                                                                .blueAccent,
-                                                            width:
-                                                                1.5), // Focus highlight
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Colors
+                                                                    .blueAccent,
+                                                                width:
+                                                                    1.5), // Focus highlight
                                                       ),
                                                       hintText:
                                                           "Enter your remarks",
@@ -764,12 +771,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                   fillColor:
                                                                       Colors
                                                                           .white,
-                                                                  contentPadding:
-                                                                      const EdgeInsets.symmetric(
-                                                                          vertical:
-                                                                              14,
-                                                                          horizontal:
-                                                                              16),
+                                                                  contentPadding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          14,
+                                                                      horizontal:
+                                                                          16),
                                                                   // Better padding
                                                                   border:
                                                                       OutlineInputBorder(
@@ -1126,7 +1133,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 paramProvider.baseStatus != 0,
                             // Show only when status is true
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 14, left: 14),
+                              padding:
+                                  const EdgeInsets.only(right: 14, left: 14),
                               child: SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton(
@@ -1177,8 +1185,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       Samplesubprovider provider,
       Masterprovider masterProvider,
       ParameterProvider paramProvider) async {
-
-
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
@@ -1308,63 +1314,5 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);
     }
   }
-
-
- /* Future<void> checkAndPromptLocation(BuildContext context) async {
-
-
-    final status = await Permission.location.request();
-
-    if (status.isGranted) {
-      Location location = Location();
-
-      // Check if GPS is enabled
-      bool serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          // Show dialog if user still refuses
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: const Text("Enable Location"),
-              content: const Text("GPS is required to fetch location."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancel"),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await openAppSettings();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Open Settings"),
-                ),
-              ],
-            ),
-          );
-          return;
-        }
-      }
-
-      // ✅ Now GPS is ON and permission is granted
-      LocationData locationData = await location.getLocation();
-
-
-      setState(() {
-        lat = locationData.latitude;
-        lng = locationData.longitude;
-      });
-
-      print("Lat: $lat, Lng: $lng");
-      // ✅ You can now use this lat/lng however needed
-    } else {
-      // Permission denied
-      await openAppSettings();
-    }
-  }*/
-
-
 
 }

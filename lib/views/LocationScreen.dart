@@ -199,7 +199,7 @@ class _LocationscreenState extends State<Locationscreen> {
                           // Ensure this matches the selected value
 
                           child: Text(
-                              session.stateName,
+                              session.districtName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',

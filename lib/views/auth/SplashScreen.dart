@@ -22,12 +22,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     // _checkForUpdateAndNavigate();
-      _navigateToNextScreen();
-       session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await session.sanitizePrefs();  // await clear
+      await session.init();       // await init after clearing
+      await _checkForUpdateAndNavigate(); // navigate after setup
     });
   }
+
 
   Future<void> _checkForUpdateAndNavigate() async {
     bool isAvailable = await _updateViewModel.checkForUpdate();
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final roleId = session.roleId;
     await authProvider.checkLoginStatus();
+
     if (authProvider.isLoggedIn) {
       if (roleId == 4) {
         Navigator.pushReplacementNamed(
