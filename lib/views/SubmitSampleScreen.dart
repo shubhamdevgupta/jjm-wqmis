@@ -4,6 +4,8 @@ import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
@@ -26,9 +28,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final TextEditingController remarkController = TextEditingController();
   final LocalStorageService _localStorage = LocalStorageService();
   final ScrollController _scrollController = ScrollController();
-  final lat = CurrentLocation.latitude;
-  final lng = CurrentLocation.longitude;
 
+  late bool serviceEnabled;
   TextStyle _headerTextStyle() => const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
@@ -50,6 +51,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+    final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
+
+    sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude);
 
     return ChangeNotifierProvider(
         create: (_) => Samplesubprovider(),
@@ -580,7 +584,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "$lat",
+                                                              "${provider.lat}",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -615,7 +619,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               width: 16,
                                                             ),
                                                             Text(
-                                                              "$lng",
+                                                              "${provider.lng}",
                                                               // Display placeholder text if null
                                                               style: TextStyle(
                                                                 fontSize: 14,
@@ -1027,7 +1031,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "$lat",
+                                                                          "${provider.lat}",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1065,7 +1069,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                               16,
                                                                         ),
                                                                         Text(
-                                                                          "$lng",
+                                                                          "${provider.lng}",
                                                                           // Display placeholder text if null
                                                                           style:
                                                                               TextStyle(
@@ -1169,14 +1173,15 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       return;
     }
     await masterProvider.fetchLocation();
-    if (lat == null || lng == null) {
-      ToastHelper.showSnackBar(
-        context,
-        "Please enable location permission to proceed.",
-      );
 
-      //LocationUtils.showLocationDisabledDialog(context); // Show dialog
-      return; // Stop execution
+    if (provider.lat == null || provider.lng == null) {
+      await provider.checkAndPromptLocation(context);
+
+      if (provider.lat == null || provider.lng == null) {
+        // User cancelled or GPS still off
+        ToastHelper.showSnackBar(context, "Location is required to proceed.");
+        return;
+      }
     }
     await provider.fetchDeviceId();
     //TODO lab is null here
@@ -1207,8 +1212,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.sampleTypeOther,
-      lat!,
-      lng!,
+      provider.lat!.toString(),
+      provider.lng!.toString(),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
@@ -1292,5 +1297,63 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);
     }
   }
+
+
+ /* Future<void> checkAndPromptLocation(BuildContext context) async {
+
+
+    final status = await Permission.location.request();
+
+    if (status.isGranted) {
+      Location location = Location();
+
+      // Check if GPS is enabled
+      bool serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          // Show dialog if user still refuses
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text("Enable Location"),
+              content: const Text("GPS is required to fetch location."),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await openAppSettings();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Open Settings"),
+                ),
+              ],
+            ),
+          );
+          return;
+        }
+      }
+
+      // ✅ Now GPS is ON and permission is granted
+      LocationData locationData = await location.getLocation();
+
+
+      setState(() {
+        lat = locationData.latitude;
+        lng = locationData.longitude;
+      });
+
+      print("Lat: $lat, Lng: $lng");
+      // ✅ You can now use this lat/lng however needed
+    } else {
+      // Permission denied
+      await openAppSettings();
+    }
+  }*/
+
+
 
 }
