@@ -130,17 +130,11 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = rawDistricts.message;
       }
-        for (int i = 0; i < districts.length; i++) {
-          if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
-              districts[i].jjmDistrictId) {
-            localStorage.saveString(
-                AppConstants.prefDistName, districts[i].districtName);
-            setSelectedDistrict(districts[i].jjmDistrictId);
-          }
-        }
 
-    } catch (e) {
+
+    } catch (e,stackTrace) {
       debugPrint('Error in fetching districts: master provider $e');
+      debugPrint('Error in fetching districts: master provider $stackTrace');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load districts.";
     } finally {
@@ -150,6 +144,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
+    setSelectedDistrict(districtId);
+
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
       notifyListeners();

@@ -10,7 +10,6 @@ import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
@@ -37,7 +36,7 @@ late DashboardProvider dashboardProvider;
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
 
-      await dashboardProvider.loadDashboardData();
+      await dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
 
 
       await masterProvider.fetchDistricts(session.stateId.toString());
@@ -80,7 +79,7 @@ late DashboardProvider dashboardProvider;
                         color: Colors.white),
                     // Cart icon
                     onPressed: () {
-                      dashboardProvider.loadDashboardData();
+                      dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
                     },
                   )
                 ],

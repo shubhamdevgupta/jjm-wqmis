@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/UpdateProvider.dart';
@@ -15,14 +16,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final LocalStorageService localStorage = LocalStorageService();
+  final session = UserSessionManager();
   final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkForUpdateAndNavigate();
+     // _checkForUpdateAndNavigate();
+      _navigateToNextScreen();
+       session.init();
     });
   }
 
@@ -44,18 +47,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 1)); // Optional splash delay
 
-    final authProvider =
-        Provider.of<AuthenticationProvider>(context, listen: false);
-    final roleId = localStorage.getString(AppConstants.prefRoleId);
+    final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final roleId = session.roleId;
     await authProvider.checkLoginStatus();
     if (authProvider.isLoggedIn) {
-      if (roleId == "4") {
+      if (roleId == 4) {
         Navigator.pushReplacementNamed(
             context, AppConstants.navigateToDashboardScreen);
-      } else if (roleId == "8") {
+      } else if (roleId == 8) {
         Navigator.pushReplacementNamed(
             context, AppConstants.navigateToDwsmDashboard);
-      } else if (roleId == "7") {
+      } else if (roleId == 7) {
         Navigator.pushReplacementNamed(
             context, AppConstants.navigateToFtkDashboard);
       }

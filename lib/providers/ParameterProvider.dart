@@ -5,7 +5,6 @@ import 'package:jjm_wqmis/models/LabInchargeResponse/LabInchargeResponse.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/LapParameterRepository.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 
@@ -15,11 +14,12 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 
 class ParameterProvider with ChangeNotifier {
   final Lapparameterrepository _lapparameterrepository = Lapparameterrepository();
 
-  LocalStorageService localStorage = LocalStorageService();
+  final session = UserSessionManager();
   bool _isLoading = true;
   bool get isLoading => _isLoading;
   List<Parameterresponse> parameterList = [];
@@ -282,7 +282,7 @@ class ParameterProvider with ChangeNotifier {
       value,
       masterPr.selectedStateId ?? "0",
       "0",
-      localStorage.getString(AppConstants.prefRegId).toString(),
+      session.regId.toString(),
       "0",
     );
   }

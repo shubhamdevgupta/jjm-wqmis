@@ -8,7 +8,6 @@ import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmLocationScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/dwsmList/DemonstrationScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/dwsmList/SchoolAwcScreen.dart';
@@ -33,7 +32,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-      await dashboardProvider.fetchDwsmDashboard(int.parse(session.regId));
+      await dashboardProvider.fetchDwsmDashboard(session.regId);
       //   masterProvider.clearData();
       await masterProvider.fetchDistricts(session.stateId.toString());
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
@@ -81,7 +80,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     // Cart icon
                     onPressed: () async {
                       await dashboardProvider
-                          .fetchDwsmDashboard(int.parse(session.regId));
+                          .fetchDwsmDashboard(session.regId);
                     },
                   )
                 ],

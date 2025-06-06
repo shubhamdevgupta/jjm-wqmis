@@ -3,12 +3,12 @@ import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
@@ -24,8 +24,8 @@ class SubmitSampleScreen extends StatefulWidget {
 
 class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final TextEditingController remarkController = TextEditingController();
-  final LocalStorageService _localStorage = LocalStorageService();
   final ScrollController _scrollController = ScrollController();
+  final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
 
@@ -45,7 +45,11 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-
+@override
+  void initState() {
+    super.initState();
+    session.init();
+  }
   @override
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
@@ -1161,8 +1165,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       Samplesubprovider provider,
       Masterprovider masterProvider,
       ParameterProvider paramProvider) async {
-    String userId = _localStorage.getString(AppConstants.prefRegId)!;
-    String roleId = _localStorage.getString(AppConstants.prefRoleId)!;
+
 
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
@@ -1192,8 +1195,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
 
     await provider.sampleSubmit(
       selecteTypeId,
-      int.parse(userId),
-      int.parse(roleId),
+      session.regId,
+      session.roleId,
       masterProvider.selectedDatetime,
       int.parse(masterProvider.selectedSubSource.toString()),
       parsedSource,

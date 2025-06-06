@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/Camera.dart';
@@ -26,10 +26,8 @@ class AnganwadiScreen extends StatefulWidget {
 }
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String userId = '';
-  String stateId = '';
-  String districtId = '';
+  final session = UserSessionManager();
+
   Village? village;
 
   final CameraHelper _cameraHelper = CameraHelper();
@@ -40,9 +38,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   @override
   void initState() {
     super.initState();
-    userId = _localStorage.getString(AppConstants.prefRegId)!;
-    stateId = _localStorage.getString(AppConstants.prefStateId)!;
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -109,8 +105,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                 1) {
                                               dwsmprovider
                                                   .fetchDemonstrationList(
-                                                      int.parse(stateId),
-                                                      int.parse(districtId),
+                                                      session.stateId,
+                                                      session.districtId,
                                                       "2025-2026",
                                                       int.parse(selectedId),
                                                       11, onSuccess: (result) {
@@ -932,9 +928,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   onPressed: () async {
                     if (await validate(dwsmprovider)) {
                       await dwsmprovider.submitDemonstration(
-                          int.parse(userId),
+                          session.regId,
                           int.parse(dwsmprovider.selectedAnganwadi!),
-                          int.parse(stateId),
+                          session.stateId,
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,

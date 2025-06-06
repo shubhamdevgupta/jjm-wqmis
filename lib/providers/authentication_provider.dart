@@ -73,11 +73,11 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
-        _localStorage.saveString(AppConstants.prefRoleId, _loginResponse!.roleId.toString());
         _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
         _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
 
-        _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
+        _localStorage.saveInt(AppConstants.prefRegId, _loginResponse!.regId!);
+        _localStorage.saveInt(AppConstants.prefRoleId, _loginResponse!.roleId!);
 
         _localStorage.saveInt(AppConstants.prefStateId, _loginResponse!.stateId!);
         _localStorage.saveInt(AppConstants.prefDistrictId, _loginResponse!.districtId!);

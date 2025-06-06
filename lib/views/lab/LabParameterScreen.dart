@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
@@ -21,15 +21,12 @@ class _LabParameterScreen extends State<Labparameterscreen>
   late TabController mTabController;
   late ParameterProvider paramProvider;
   late Masterprovider masterProvider;
-  late var regId;
-  final LocalStorageService _localStorage = LocalStorageService();
-
+  final session = UserSessionManager();
   @override
   void initState() {
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
-    regId= _localStorage.getString(AppConstants.prefRegId) ?? "0";
-
+    session.init();
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
@@ -59,7 +56,6 @@ class _LabParameterScreen extends State<Labparameterscreen>
   }
 
   void fetchAllLabs() {
-    regId = _localStorage.getString(AppConstants.prefRegId) ?? "0";
     paramProvider.fetchAllLabs(
       masterProvider.selectedStateId!,
       masterProvider.selectedDistrictId!,
@@ -75,7 +71,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
       "0",
       masterProvider.selectedStateId ?? "0",
       "0",
-      regId,
+      session.regId.toString(),
       "1",
     );
   }

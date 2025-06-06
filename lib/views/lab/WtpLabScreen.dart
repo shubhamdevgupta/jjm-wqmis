@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
@@ -21,11 +21,12 @@ class Wtplabscreen extends StatefulWidget {
 
 class _WtpLabScreen extends State<Wtplabscreen> {
   late Masterprovider masterProvider;
-  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
   @override
   void initState() {
     super.initState();
+    session.init();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final paramProvider =
@@ -262,9 +263,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                                           provider.selectedWtpLab!,
                                           masterProvider.selectedStateId!,
                                           "0",
-                                          _localStorage
-                                              .getString(AppConstants.prefRegId)
-                                              .toString(),
+                                          session.regId.toString(),
                                           value.toString(),
                                         );
                                       },
