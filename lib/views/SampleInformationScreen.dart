@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +24,19 @@ class Sampleinformationscreen extends StatefulWidget {
 }
 
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
+  final session = UserSessionManager();
+
   final TextEditingController householdController = TextEditingController();
   final TextEditingController handpumpSourceController =
       TextEditingController();
   final TextEditingController handpumpLocationController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    session.init();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -93,7 +101,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
+                                  child:  Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
                                 ),
                               );
                             },

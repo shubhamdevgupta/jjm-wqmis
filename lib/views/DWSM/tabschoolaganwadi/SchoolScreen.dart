@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
@@ -26,10 +27,7 @@ class SchoolScreen extends StatefulWidget {
 }
 
 class _SchoolScreen extends State<SchoolScreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String userId = '';
-  String stateId = '';
-  String districtId = '';
+final session = UserSessionManager();
   final CameraHelper _cameraHelper = CameraHelper();
 
   TextEditingController remarkController = TextEditingController();
@@ -39,9 +37,7 @@ class _SchoolScreen extends State<SchoolScreen> {
   @override
   void initState() {
     super.initState();
-    userId = _localStorage.getString(AppConstants.prefUserId)!;
-    stateId = _localStorage.getString(AppConstants.prefStateId)!;
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -105,8 +101,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                                           .showDemonstartionButton(false);
                                       if (dwsmprovider.mDemonstrationId == 1) {
                                         dwsmprovider.fetchDemonstrationList(
-                                            int.parse(stateId),
-                                            int.parse(districtId),
+                                            session.stateId,
+                                            session.districtId,
                                             "2025-2026",
                                             int.parse(selectedId),
                                             10, onSuccess: (result) {
@@ -823,9 +819,9 @@ class _SchoolScreen extends State<SchoolScreen> {
                   onPressed: () async {
                     if (await validate(dwsmprovider)) {
                       await dwsmprovider.submitDemonstration(
-                          int.parse(userId),
+                          session.regId,
                           int.parse(dwsmprovider.selectedSchoolResult!),
-                          int.parse(stateId),
+                          session.stateId,
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,

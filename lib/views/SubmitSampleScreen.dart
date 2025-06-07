@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/ParamLabResponse.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
-import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/utils/LocationUtils.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:provider/provider.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
   const SubmitSampleScreen({super.key});
@@ -26,8 +22,10 @@ class SubmitSampleScreen extends StatefulWidget {
 
 class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   final TextEditingController remarkController = TextEditingController();
-  final LocalStorageService _localStorage = LocalStorageService();
   final ScrollController _scrollController = ScrollController();
+  final session = UserSessionManager();
+  final lat = CurrentLocation.latitude;
+  final lng = CurrentLocation.longitude;
 
   late bool serviceEnabled;
 
@@ -50,14 +48,14 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
+    session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final sampleSubProvider = Provider.of<Samplesubprovider>(context, listen: false);
-
+      final sampleSubProvider =
+          Provider.of<Samplesubprovider>(context, listen: false);
       if (CurrentLocation.latitude != null && CurrentLocation.longitude != null) {
         sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude,);
+
       }
       if (sampleSubProvider.lat == null || sampleSubProvider.lng == null) {
         sampleSubProvider.checkAndPromptLocation(context);
@@ -1188,9 +1186,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       Samplesubprovider provider,
       Masterprovider masterProvider,
       ParameterProvider paramProvider) async {
-    String userId = _localStorage.getString(AppConstants.prefUserId)!;
-    String roleId = _localStorage.getString(AppConstants.prefRoleId)!;
-
     if (paramProvider.cart == null || paramProvider.cart!.isEmpty) {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
@@ -1220,8 +1215,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
 
     await provider.sampleSubmit(
       selecteTypeId,
-      int.parse(userId),
-      int.parse(roleId),
+      session.regId,
+      session.roleId,
       masterProvider.selectedDatetime,
       int.parse(masterProvider.selectedSubSource.toString()),
       parsedSource,
@@ -1320,59 +1315,4 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);
     }
   }
-
-/* Future<void> checkAndPromptLocation(BuildContext context) async {
-
-
-    final status = await Permission.location.request();
-
-    if (status.isGranted) {
-      Location location = Location();
-
-      // Check if GPS is enabled
-      bool serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) {
-          // Show dialog if user still refuses
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: const Text("Enable Location"),
-              content: const Text("GPS is required to fetch location."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancel"),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await openAppSettings();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Open Settings"),
-                ),
-              ],
-            ),
-          );
-          return;
-        }
-      }
-
-      // ✅ Now GPS is ON and permission is granted
-      LocationData locationData = await location.getLocation();
-
-
-      setState(() {
-        lat = locationData.latitude;
-        lng = locationData.longitude;
-      });
-
-      print("Lat: $lat, Lng: $lng");
-      // ✅ You can now use this lat/lng however needed
-    } else {
-      // Permission denied
-      await openAppSettings();
-    }
-  }*/
 }

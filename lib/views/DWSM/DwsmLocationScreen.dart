@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 
@@ -17,13 +17,12 @@ class DwsmLocation extends StatefulWidget {
 }
 
 class _DwsmLocation extends State<DwsmLocation> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String districtId = '';
+  final session = UserSessionManager();
 
   @override
   void initState() {
     super.initState();
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -115,7 +114,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: _localStorage.getString(AppConstants.prefStateId),
+                      value: session.stateId.toString(),
                       // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled: true,
@@ -142,12 +141,10 @@ class _DwsmLocation extends State<DwsmLocation> {
                       items: [
                         DropdownMenuItem<String>(
                           value:
-                              _localStorage.getString(AppConstants.prefStateId),
+                              session.stateId.toString(),
                           // Ensure this matches the selected value
                           child: Text(
-                              _localStorage
-                                      .getString(AppConstants.prefStateName) ??
-                                  'Unknown State',
+                              session.stateName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
@@ -185,7 +182,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: districtId,
+                      value: session.districtId.toString(),
                       // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled: true,
@@ -211,13 +208,11 @@ class _DwsmLocation extends State<DwsmLocation> {
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: districtId,
+                          value: session.districtId.toString(),
                           // Ensure this matches the selected value
 
                           child: Text(
-                              _localStorage
-                                      .getString(AppConstants.prefDistName) ??
-                                  'Unknown State',
+                             session.districtName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
@@ -261,7 +256,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       masterProvider.setSelectedBlock(value);
                       if (value != null) {
                         masterProvider.fetchGramPanchayat(
-                            masterProvider.selectedStateId!, districtId, value);
+                            masterProvider.selectedStateId!, session.districtId.toString(), value);
                       }
                     },
                     appBarTitle: "Select Block",
@@ -287,7 +282,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   masterProvider.setSelectedGrampanchayat(value);
                   if (value != null) {
                     masterProvider.fetchVillage(masterProvider.selectedStateId!,
-                        districtId, masterProvider.selectedBlockId!, value);
+                        session.districtId.toString(), masterProvider.selectedBlockId!, value);
                   }
                 },
                 appBarTitle: "Select Gram Panchayat",
@@ -311,7 +306,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   if (value != null) {
                     masterProvider.fetchHabitations(
                         masterProvider.selectedStateId!,
-                        districtId,
+                        session.districtId.toString(),
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value);

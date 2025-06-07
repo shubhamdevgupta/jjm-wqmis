@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/webView/testReport.dart';
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
@@ -24,8 +24,9 @@ class SampleListScreen extends StatefulWidget {
 }
 
 class _SampleListScreenState extends State<SampleListScreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String? userId = '';
+
+  final session = UserSessionManager();
+
   bool isLoading = false;
   List<Map<String, dynamic>> filteredList = [];
   TextEditingController searchController = TextEditingController();
@@ -70,10 +71,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
   @override
   void initState() {
     super.initState();
-    getToken();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      userId = _localStorage.getString("userId");
 
       Masterprovider masterprovider =
           Provider.of<Masterprovider>(context, listen: false);
@@ -101,7 +100,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
             C_STATUS = 6;
           }
           sampleListProvider.fetchSampleList(
-              int.parse(userId!),
+              session.regId,
               PAGE,
               SEARCH,
               C_STATUS,
@@ -114,16 +113,16 @@ class _SampleListScreenState extends State<SampleListScreen> {
         } else if (flag == AppConstants.totalPhysicalSubmitted ||
             flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH,
               C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSampleTested ||
             flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(
-              int.parse(userId!), 1, "0", 6, "0", 0, 0, 0, 0, 0);
+              session.regId, 1, "0", 6, "0", 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSamplesSubmitted ||
             flag == AppConstants.openSampleListScreen) {
           C_STATUS = 1;
-          sampleListProvider.fetchSampleList(int.parse(userId!), PAGE, SEARCH,
+          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH,
               C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         }
       }
@@ -282,7 +281,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                               verticalPadding: 14),
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
-                              provider.fetchSampleList(int.parse(userId!), 1,
+                              provider.fetchSampleList(session.regId, 1,
                                   "", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
                               ToastHelper.showErrorSnackBar(
@@ -384,7 +383,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                       String deviceId = await DeviceInfoUtil.getUniqueDeviceId();
                                                       provider.deleteSample(
                                                           encryption.encryptText(sample.sId.toString()),
-                                                          encryption.encryptText(userId!),
+                                                          encryption.encryptText(session.regId.toString()),
                                                           encryption.encryptText(deviceId),
                                                           (response) {
                                                             LoaderUtils.hideLoaderDialog(context);
@@ -610,11 +609,6 @@ class _SampleListScreenState extends State<SampleListScreen> {
     );
   }
 
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    userId = _localStorage.getString(AppConstants.prefUserId) ?? '';
-    return token;
-  }
 }
 
 enum SampleType {

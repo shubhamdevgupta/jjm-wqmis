@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/views/DWSM/DwsmLocationScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/dwsmList/DemonstrationScreen.dart';
 import 'package:jjm_wqmis/views/DWSM/dwsmList/SchoolAwcScreen.dart';
@@ -20,29 +20,22 @@ class Dwsdashboardscreen extends StatefulWidget {
 }
 
 class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String stateName = '';
-  String userName = '';
-  String userID = '';
-  String mobile = '';
-  String stateId = '';
-  String districtId = '';
+  final session = UserSessionManager();
   late DwsmProvider dashboardProvider;
 
   @override
   void initState() {
     super.initState();
-
-    getToken();
+    session.init();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-      await dashboardProvider.fetchDwsmDashboard(int.parse(userID));
+      await dashboardProvider.fetchDwsmDashboard(session.regId);
       //   masterProvider.clearData();
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
+      await masterProvider.fetchDistricts(session.stateId.toString());
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
     });
   }
 
@@ -87,7 +80,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                     // Cart icon
                     onPressed: () async {
                       await dashboardProvider
-                          .fetchDwsmDashboard(int.parse(userID));
+                          .fetchDwsmDashboard(session.regId);
                     },
                   )
                 ],
@@ -128,7 +121,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         ),
                       ),
                       Text(
-                        stateName, // Provide a fallback value if null
+                        session.stateName, // Provide a fallback value if null
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 16,
@@ -235,7 +228,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                   ),
                                 ),
                                 Text(
-                                  userName,
+                                  session.userName,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'OpenSans',
@@ -272,7 +265,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
-                                        mobile,
+                                        session.mobile,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
@@ -503,72 +496,6 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     );
   }
 
-/*
-  Widget _buildInfoCard({
-    required IconData icon,
-    required Color iconColor,
-    required String title,
-    required VoidCallback onTap,
-    required String value,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 135,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.07),
-              blurRadius: 8,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: iconColor, size: 30),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                fontFamily: 'OpenSans',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                value.toString(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }*/
 
   Widget _buildInfoCard({
     required String imagePath,
@@ -640,14 +567,4 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     );
   }
 
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
-    userName = _localStorage.getString(AppConstants.prefName) ?? '';
-    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
-    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    userID = _localStorage.getString(AppConstants.prefRegId) ?? '';
-    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    return token;
-  }
 }

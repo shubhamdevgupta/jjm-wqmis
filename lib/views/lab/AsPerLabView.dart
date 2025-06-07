@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CustomSearchableDropdown.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 
@@ -19,7 +19,7 @@ class AsPerLabTabView extends StatefulWidget {
 
 class _AsPerLabTabView extends State<AsPerLabTabView> {
   late Masterprovider masterProvider;
-  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
   @override
   void initState() {
@@ -29,6 +29,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
       Provider.of<ParameterProvider>(context, listen: false).isLab=true;
       Provider.of<ParameterProvider>(context, listen: false).isParam=false;
     });
+    session.init();
   }
 
   @override
@@ -130,7 +131,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                   selectedLab.value!,
                                   masterProvider.selectedStateId ?? "0",
                                   "0",
-                                  _localStorage.getString(AppConstants.prefRegId).toString(),
+                                  session.regId.toString(),
                                   "0",
                                 );
                               }
@@ -181,7 +182,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                                           provider.selectedLab!,
                                           masterProvider.selectedStateId!,
                                           "0",
-                                          _localStorage.getString(AppConstants.prefRegId).toString(),
+                                          session.regId.toString(),
                                           value.toString(),
                                         );
                                       },
