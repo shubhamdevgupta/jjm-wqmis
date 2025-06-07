@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmProvider.dart';
-import '../../../utils/AppConstants.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class Demonstrationscreen extends StatefulWidget {
   final int? type;
@@ -20,20 +20,16 @@ class Demonstrationscreen extends StatefulWidget {
 }
 
 class _DemonstrationscreenState extends State<Demonstrationscreen> {
-  LocalStorageService _localStorageService = LocalStorageService();
-  String? stateId;
-  String? districtId;
+  final session= UserSessionManager();
   String? titleType = "";
 
   @override
   void initState() {
-    stateId = _localStorageService.getString(AppConstants.prefStateId);
-    districtId = _localStorageService.getString(AppConstants.prefDistrictId);
-
+      session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<DwsmProvider>(context, listen: false).fetchDemonstrationList(
-          int.parse(stateId!),
-          int.parse(districtId!),
+          session.stateId,
+          session.districtId,
           "2025-2026",
           0,
           widget.type!);
@@ -240,8 +236,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                         LoaderUtils.showCustomLoaderDialog(
                                             context);
                                         await provider.fetchDemonstrationList(
-                                          int.parse(stateId!),
-                                          int.parse(districtId!),
+                                          session.stateId,
+                                          session.districtId,
                                           "2025-2026",
                                           village.schoolId,
                                           widget.type!,

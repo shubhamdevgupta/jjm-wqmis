@@ -1,19 +1,16 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/UpdateDialog.dart';
-import '../../utils/VersionUtils.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -23,36 +20,27 @@ class Dashboardscreen extends StatefulWidget {
 }
 
 class _DashboardscreenState extends State<Dashboardscreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
+  final session = UserSessionManager();
 
-  String stateName = '';
-  String districtId = '';
-  String userName = '';
-  String mobile = '';
-  String stateId = '';
   final encryption = AesEncryption();
 late DashboardProvider dashboardProvider;
   @override
   void initState() {
     super.initState();
-    var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
-
-    getToken();
+   // var enc = encryption.encryptText("Beneficiaryname");
+    //var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
+    session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider =
           Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
 
-      await dashboardProvider.loadDashboardData();
-      print("dashboard ${dashboardProvider.isLoading}");
-      print("master provider  data${masterProvider.isLoading}");
+      await dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
 
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
+
+      await masterProvider.fetchDistricts(session.stateId.toString());
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
     });
   }
 
@@ -91,7 +79,7 @@ late DashboardProvider dashboardProvider;
                         color: Colors.white),
                     // Cart icon
                     onPressed: () {
-                      dashboardProvider.loadDashboardData();
+                      dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
                     },
                   )
                 ],
@@ -128,7 +116,7 @@ late DashboardProvider dashboardProvider;
                         style: AppStyles.appBarTitle,
                       ),
                       Text(
-                        stateName, // Provide a fallback value if null
+                        session.stateName, // Provide a fallback value if null
                         style: AppStyles.setTextStyle(
                             16, FontWeight.normal, Colors.white70),
                       ),
@@ -154,7 +142,7 @@ late DashboardProvider dashboardProvider;
 
                   onTap: () async {
                     Navigator.pop(context);
-                    await Future.delayed(Duration(milliseconds: 200));
+                    await Future.delayed(const Duration(milliseconds: 200));
                     showDialog<bool>(
                       context: context,
                       builder: (BuildContext context) {
@@ -167,7 +155,7 @@ late DashboardProvider dashboardProvider;
                             color: Colors.white,
                             height: screenHeight * 0.8,
                             width: screenwidth * 0.99,
-                            child: const Locationscreen(
+                            child:  Locationscreen(
                               flag: AppConstants.openSampleInfoScreen,
                               flagFloating: "",
                             ),
@@ -261,7 +249,7 @@ late DashboardProvider dashboardProvider;
                                   ),
                                 ),
                                 Text(
-                                  userName,
+                                  session.userName,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     fontFamily: 'OpenSans',
@@ -273,14 +261,14 @@ late DashboardProvider dashboardProvider;
                                 const SizedBox(height: 4),
 
                                 // Department and Phone
-                                Row(
+                                const Row(
                                   children: [
-                                    const Icon(Icons.account_balance_sharp,
+                                    Icon(Icons.account_balance_sharp,
                                         size: 18, color: Colors.teal),
-                                    const SizedBox(width: 6),
+                                    SizedBox(width: 6),
                                     Text(
                                       'Departmental User',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
                                           color: Colors.black87,
@@ -298,7 +286,7 @@ late DashboardProvider dashboardProvider;
                                     const SizedBox(width: 6),
                                     Flexible(
                                       child: Text(
-                                        mobile,
+                                        session.mobile,
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'OpenSans',
@@ -542,7 +530,7 @@ late DashboardProvider dashboardProvider;
                                     color: Colors.white,
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
-                                    child: const Locationscreen(
+                                    child:  Locationscreen(
                                       flag: AppConstants.openSampleInfoScreen,
                                       flagFloating: "",
                                     ),
@@ -609,7 +597,7 @@ late DashboardProvider dashboardProvider;
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
-              offset: Offset(2, 4),
+              offset: const Offset(2, 4),
             ),
           ],
         ),
@@ -618,8 +606,8 @@ late DashboardProvider dashboardProvider;
             Align(
               alignment: Alignment.topRight,
               child: Container(
-                padding: EdgeInsets.all(8), // Slightly increased for spacing
-                decoration: BoxDecoration(
+                padding: const EdgeInsets.all(8), // Slightly increased for spacing
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                   boxShadow: [
@@ -755,14 +743,4 @@ late DashboardProvider dashboardProvider;
   }
 
 
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
-    userName = _localStorage.getString(AppConstants.prefName) ?? '';
-    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
-    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    print("token-------------- $token ----state naem$stateName");
-    return token;
-  }
 }

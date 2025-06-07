@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../views/lab/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 class CustomSearchableDropdown extends StatefulWidget {
   final String? value;
@@ -8,12 +8,12 @@ class CustomSearchableDropdown extends StatefulWidget {
   final ValueChanged<String?>? onChanged;
 
   const CustomSearchableDropdown({
-    Key? key,
+    super.key,
     required this.value,
     required this.items,
     required this.title,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _CustomSearchableDropdownState createState() => _CustomSearchableDropdownState();
@@ -133,11 +133,11 @@ class SearchDialog extends StatefulWidget {
   final String title;
 
   const SearchDialog({
-    Key? key,
+    super.key,
     required this.items,
     required this.onItemSelected,
     this.title = "Select",
-  }) : super(key: key);
+  });
 
   @override
   _SearchDialogState createState() => _SearchDialogState();
@@ -174,7 +174,7 @@ class _SearchDialogState extends State<SearchDialog> {
             } else {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => Labparameterscreen()),
+                MaterialPageRoute(builder: (context) => const Labparameterscreen()),
                     (route) => false,
               );
             }

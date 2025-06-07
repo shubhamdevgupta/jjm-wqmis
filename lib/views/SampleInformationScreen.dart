@@ -5,28 +5,38 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/AppStyles.dart';
-import '../utils/CustomDropdown.dart';
-import '../utils/Showerrormsg.dart';
-import 'LocationScreen.dart';
-import 'lab/LabParameterScreen.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 class Sampleinformationscreen extends StatefulWidget {
+  const Sampleinformationscreen({super.key});
+
   @override
   _Sampleinformationscreen createState() => _Sampleinformationscreen();
 }
 
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
+  final session = UserSessionManager();
+
   final TextEditingController householdController = TextEditingController();
   final TextEditingController handpumpSourceController =
       TextEditingController();
   final TextEditingController handpumpLocationController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    session.init();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -91,7 +101,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child: const Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
+                                  child:  Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
                                 ),
                               );
                             },
@@ -123,14 +133,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 return masterProvider.isLoading
                     ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
                     :Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         //card for state district selection
                         buildSampleTaken(masterProvider),
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
                         // card for location of source from where sample taken
@@ -151,14 +161,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         borderRadius: BorderRadius.circular(
             12),
       ),
-      margin: EdgeInsets.all(5),
+      margin: const EdgeInsets.all(5),
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               "Select Scheme",
               style: TextStyle(
                 fontSize: 16, fontFamily: 'OpenSans',
@@ -175,7 +185,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               color: Colors.grey,
               thickness: 1,
             ),
-            SizedBox(height: 4), // Space between title and dropdown
+            const SizedBox(height: 4), // Space between title and dropdown
             CustomDropdown(
               value: masterProvider.selectedScheme,
               items: masterProvider.schemes.map((scheme) {
@@ -223,7 +233,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
     return Padding(
-      padding: EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +274,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           ),
           buildSchemeDropDown(masterProvider),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // First Visibility Widget with Border
 
           buildSourceofScheme(masterProvider),
@@ -288,15 +298,15 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             color: Colors.white,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
               ),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               // Inner padding
-              margin: EdgeInsets.only(top: 12),
+              margin: const EdgeInsets.only(top: 12),
               // Spacing from the previous widget
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,7 +355,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Visibility(
@@ -357,7 +367,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               borderRadius: BorderRadius.circular(
                   12), // Slightly increased border radius for a smooth look
             ),
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             // Margin to ensure spacing around the card
             color: Colors.white,
             child: Padding(
@@ -387,13 +397,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                           },
                         ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Center(
@@ -407,7 +417,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               MaterialPageRoute(
                                 builder: (context) => ChangeNotifierProvider.value(
                                   value: masterProvider,
-                                  child: Labparameterscreen(),
+                                  child: const Labparameterscreen(),
                                 ),
                               ),
                             );
@@ -468,7 +478,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       masterProvider.setSelectedWTP(value);
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Visibility(
@@ -526,7 +536,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -559,13 +569,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Center(
                       child: ElevatedButton(
                         onPressed: () async {
-                          print("istreated----${masterProvider.istreated}");
                           if (validateWtpWaterFields(masterProvider)) {
                             //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
 
@@ -575,7 +584,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                   builder: (context) =>
                                       ChangeNotifierProvider.value(
                                         value: masterProvider,
-                                        child: Wtplabscreen(),
+                                        child: const Wtplabscreen(),
                                       )),
                             );
                           } else {
@@ -611,7 +620,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             borderRadius: BorderRadius.circular(
                 12), // Slightly increased border radius for a smooth look
           ),
-          margin: EdgeInsets.all(5),
+          margin: const EdgeInsets.all(5),
           // Margin to ensure spacing around the card
           color: Colors.white,
           child: Padding(
@@ -639,13 +648,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               .setSelectedWaterSourceInformation(value);
                         },
                       ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomDateTimePicker(onDateTimeSelected: (value) {
                   masterProvider.setSelectedDateTime(value);
                 }),
-                SizedBox(
+                const SizedBox(
                   height: 18,
                 ),
                 Center(
@@ -658,7 +667,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
                                     value: masterProvider,
-                                    child: Labparameterscreen(),
+                                    child: const Labparameterscreen(),
                                   )),
                         );
                       } else {
@@ -692,9 +701,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             color: Colors.white,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               // Inner padding
-              margin: EdgeInsets.only(top: 12),
+              margin: const EdgeInsets.only(top: 12),
               // Spacing from the first container
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -766,7 +775,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 18,
                     ),
                   ],
@@ -822,7 +831,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Visibility(
@@ -840,7 +849,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider.value(
                                 value: masterProvider,
-                                child: Labparameterscreen(),
+                                child: const Labparameterscreen(),
                               )),
                     );
                   } else {
@@ -873,9 +882,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
             color: Colors.white,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               // Inner padding
-              margin: EdgeInsets.only(top: 12),
+              margin: const EdgeInsets.only(top: 12),
               // Spacing from the first container
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -917,7 +926,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Visibility(
@@ -936,7 +945,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                  CustomDropdown(
+                masterProvider.baseStatus==0?AppTextWidgets.errorText(masterProvider.errorMsg):   CustomDropdown(
                     title: "Select Govt. Handpump *",
                     value: masterProvider.waterSource.any((item) =>
                             item.locationId ==
@@ -954,14 +963,13 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       );
                     }).toList(),
                     onChanged: (value) {
-                      print('Selected Water Source: $value');
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Center(
@@ -981,7 +989,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 builder: (context) =>
                                     ChangeNotifierProvider.value(
                                       value: masterProvider,
-                                      child: Labparameterscreen(),
+                                      child: const Labparameterscreen(),
                                     )),
                           );
                         } else {
@@ -1032,7 +1040,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Center(
@@ -1054,7 +1062,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 builder: (context) =>
                                     ChangeNotifierProvider.value(
                                       value: masterProvider,
-                                      child: Labparameterscreen(),
+                                      child: const Labparameterscreen(),
                                     )),
                           );
                         } else {
@@ -1078,7 +1086,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateSourceofScheme(Masterprovider masterProvider) {
-    print("9999999999   ${masterProvider.selectedWaterSource}");
     if (masterProvider.selectedScheme == null ||
         masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";

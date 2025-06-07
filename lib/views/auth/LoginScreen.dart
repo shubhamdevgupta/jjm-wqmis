@@ -7,10 +7,12 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 // Login Page
 class Loginscreen extends StatefulWidget {
+  const Loginscreen({super.key});
+
   @override
   _LoginpageState createState() => _LoginpageState();
 }
@@ -20,6 +22,7 @@ class _LoginpageState extends State<Loginscreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController captchaController = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (_) => AuthenticationProvider(),
@@ -27,7 +30,7 @@ class _LoginpageState extends State<Loginscreen> {
             builder: (context, provider, child) {
           return Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(40.0),
+              preferredSize: const Size.fromHeight(40.0),
               child: AppBar(
                 automaticallyImplyLeading: false,
                 centerTitle: true,
@@ -41,7 +44,7 @@ class _LoginpageState extends State<Loginscreen> {
             body: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/icons/header_bg.png'),
                     fit: BoxFit.fill,
@@ -58,14 +61,14 @@ class _LoginpageState extends State<Loginscreen> {
                           padding: const EdgeInsets.only(left: 20, top: 10),
                           child: buildHeader(),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Card(
                           elevation: 6,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           color: Colors.white,
-                          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                           child: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Column(
@@ -82,7 +85,7 @@ class _LoginpageState extends State<Loginscreen> {
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
 
                                 buildFormLabel('Password'),
                                 buildTextFormField(
@@ -100,7 +103,7 @@ class _LoginpageState extends State<Loginscreen> {
                                     onPressed: provider.togglePasswordVisibility,
                                   ),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
 
                                 buildFormLabel('Security Check'),
                                 Row(
@@ -110,27 +113,27 @@ class _LoginpageState extends State<Loginscreen> {
                                         height: 50,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          color: Color(0xFFF1F3F4),
+                                          color: const Color(0xFFF1F3F4),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Text(
                                           '${provider.randomOne} + ${provider.randomTwo} = ?',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'OpenSans',),
+                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'OpenSans',),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     InkWell(
                                       onTap: provider.generateCaptcha,
                                       borderRadius: BorderRadius.circular(30),
                                       child: CircleAvatar(
                                         backgroundColor: Colors.blue.shade50,
-                                        child: Icon(Icons.refresh, color: Colors.blue),
+                                        child: const Icon(Icons.refresh, color: Colors.blue),
                                       ),
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
 
                                 buildTextFormField(
                                   controller: captchaController,
@@ -138,7 +141,7 @@ class _LoginpageState extends State<Loginscreen> {
                                   icon: Icons.verified_user,
                                   keyboardType: TextInputType.number,
                                 ),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
 
                                 SizedBox(
                                   width: double.infinity,
@@ -174,9 +177,9 @@ class _LoginpageState extends State<Loginscreen> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(14)),
                                       elevation: 4,
-                                      padding: EdgeInsets.symmetric(vertical: 14),
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       'LOGIN',
                                       style: TextStyle(
                                         color:Colors.white,
@@ -186,7 +189,7 @@ class _LoginpageState extends State<Loginscreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 15),
+                                const SizedBox(height: 15),
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Image.asset("assets/icons/nicone.png", height: 40),
@@ -235,14 +238,14 @@ class _LoginpageState extends State<Loginscreen> {
           width: 55,
           height: 65,
         ),
-        SizedBox(width: 12), // Adjusted spacing for a balanced layout
+        const SizedBox(width: 12), // Adjusted spacing for a balanced layout
 
         // Title & Subtitle
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Jal Jeevan Mission',
                 style: TextStyle(
                   fontSize: 18, // Slightly reduced for better balance
@@ -252,7 +255,7 @@ class _LoginpageState extends State<Loginscreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis, // Prevents text overflow
               ),
-              SizedBox(height: 3), // Minor spacing for readability
+              const SizedBox(height: 3), // Minor spacing for readability
               Text(
                 'Water Quality Management Information System',
                 style: TextStyle(
@@ -263,7 +266,7 @@ class _LoginpageState extends State<Loginscreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 '(JJM-WQMIS)',
                 style: TextStyle(
@@ -285,7 +288,7 @@ class _LoginpageState extends State<Loginscreen> {
       padding: const EdgeInsets.only(bottom: 6),
       child: Text(
         text,
-        style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -308,9 +311,9 @@ class _LoginpageState extends State<Loginscreen> {
         prefixIcon: Icon(icon, color: Colors.blueGrey),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: Color(0xFFF5F7FA),
+        fillColor: const Color(0xFFF5F7FA),
         hintText: hint,
-        contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),

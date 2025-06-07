@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/masterProvider.dart';
-import '../../utils/LoaderUtils.dart';
-import '../SubmitSampleScreen.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 
 class Asperparameterview extends StatefulWidget {
+  const Asperparameterview({super.key});
+
   @override
   State<Asperparameterview> createState() => _AsperparameterviewState();
 }
@@ -40,12 +42,12 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                     onPressed: () async {
                       provider.selectedLab = '';
                       provider.labList.clear();
-                      print('selected labb   ${provider.selectedLab}');
+                      await  masterProvider.fetchLocation();
                       if (provider.cart!.isNotEmpty) {
                         var paramterId = provider.cart!
                             .sublist(0, provider.cart!.length)
                             .join(",");
-                        provider.fetchParamLabs(
+                       await provider.fetchParamLabs(
                             masterProvider.selectedStateId!, paramterId);
                         provider.isParam = true;
                         Navigator.push(
@@ -108,7 +110,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            margin: EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(5),
                             color: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -170,14 +172,14 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                                         }
                                                       },
                                                     ),
-                                                    SizedBox(width: 10),
+                                                    const SizedBox(width: 10),
                                                     SizedBox(
                                                       width: 150,
                                                       child: Text(
                                                         param.parameterName,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontFamily:
                                                                 'OpenSans',
                                                             fontSize: 14),
@@ -194,7 +196,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                                 },
                                                 child: Text(
                                                   param.deptRate.toString(),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'OpenSans',
                                                   ),
@@ -209,7 +211,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                                   const SizedBox(height: 20),
                                   Text(
                                     'Selected Param: ${provider.cart!.length}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,

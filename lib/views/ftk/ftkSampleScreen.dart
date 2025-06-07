@@ -1,16 +1,10 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
-import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
-
-import '../../services/LocalStorageService.dart';
-import '../../utils/AppStyles.dart';
-import '../../utils/VersionUtils.dart';
 
 class ftksamplescreen extends StatefulWidget {
   const ftksamplescreen({super.key});
@@ -20,363 +14,231 @@ class ftksamplescreen extends StatefulWidget {
 }
 
 class _ftksamplescreen extends State<ftksamplescreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-
-  String stateName = '';
-  String districtId = '';
-  String userName = '';
-  String mobile = '';
-  String stateId = '';
-  final encryption = AesEncryption();
+  final session = UserSessionManager();
 
   @override
   void initState() {
     super.initState();
-    var enc = encryption.encryptText("Beneficiaryname");
-    print("Aesen-----> $enc");
-    var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    print("Aesen-----> $dep");
-
-    getToken();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final dashboardProvider =
-      Provider.of<DashboardProvider>(context, listen: false);
-      final masterProvider =
-      Provider.of<Masterprovider>(context, listen: false);
-
-      await dashboardProvider.loadDashboardData();
-      print("dashboard ${dashboardProvider.isLoading}");
-      print("master provider  data${masterProvider.isLoading}");
-
-      await masterProvider.fetchDistricts(stateId);
-      await masterProvider.fetchBlocks(stateId, districtId);
-    });
+    session.init();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
-      ),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            // Removes the default back button
-            centerTitle: true,
-            title: Text(
-              AppConstants.appTitle,
-              style: AppStyles.appBarTitle,
-            ),
-            leading: Builder(
-              builder: (context) {
-                return IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.white),
-                  // Drawer icon
+    return WillPopScope(
+      onWillPop: () async {
+        // Navigate back to Dashboard when pressing back button
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppConstants.navigateToFtkDashboard,
+          (route) => false, // Clears all previous routes
+        );
+        return false; // Prevents default back action
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/icons/header_bg.png'),
+              fit: BoxFit.cover),
+        ),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              // Removes the default back button
+              centerTitle: true,
+              title: Text(
+                AppConstants.appTitle,
+                style: AppStyles.appBarTitle,
+              ),
+              leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
-                    Scaffold.of(context)
-                        .openDrawer(); // Open the Navigation Drawer
-                  },
-                );
-              },
-            ),
-            //elevation
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF096DA8), // Dark blue color
-                    Color(0xFF3C8DBC), // Green color
-                  ],
-                  begin: Alignment.topCenter, // Start at the top center
-                  end: Alignment.bottomCenter, // End at the bottom center
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.pop(context);
+                    }
+                  }),
+              //elevation
+              flexibleSpace: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF096DA8), // Dark blue color
+                      Color(0xFF3C8DBC), // Green color
+                    ],
+                    begin: Alignment.topCenter, // Start at the top center
+                    end: Alignment.bottomCenter, // End at the bottom center
+                  ),
                 ),
               ),
+              elevation: 5,
             ),
-            elevation: 5,
-          ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                  ),
+            body: Consumer<DashboardProvider>(
+              builder: (context, dashboardProvider, child) {
+                if (dashboardProvider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(12.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        AppConstants.ftkUser,
-                        style: AppStyles.appBarTitle,
-                      ),
-                      Text(
-                        stateName, // Provide a fallback value if null
-                        style: AppStyles.setTextStyle(
-                            16, FontWeight.normal, Colors.white70),
+                      const SizedBox(height: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.15),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Village Details",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: buildLocationTile(
+                                        icon: Icons.location_city,
+                                        label: "District",
+                                        value: session.districtName,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: buildLocationTile(
+                                        icon: Icons.map,
+                                        label: "Block",
+                                        value: session.blockName,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: buildLocationTile(
+                                        icon: Icons.groups,
+                                        label: "GP",
+                                        value: session.panchayatName,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: buildLocationTile(
+                                        icon: Icons.home,
+                                        label: "Village",
+                                        value: session.villageName,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          /*    CustomDropdown(
+                            title: "Habitation *",
+                            value: masterProvider.selectedHabitation,
+                            items: masterProvider.habitationId.map((habitation) {
+                              return DropdownMenuItem<String>(
+                                value: habitation.habitationId.toString(),
+                                child: Text(
+                                  habitation.habitationName,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              masterProvider.setSelectedHabitation(value);
+                            },
+                            appBarTitle: "Select Habitation",
+                          ),*/
+
+                          Column(
+                            children: [
+                              buildSampleCard(
+                                title: "Water Supply Schemes",
+                                count: "425",
+                                color: Colors.green,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppConstants.navigateToSampleListScreen,
+                                    arguments: {
+                                      'flag':
+                                          AppConstants.totalSamplesSubmitted,
+                                      'flagFloating': "",
+                                    },
+                                  );
+                                },
+                              ),
+                              buildSampleCard(
+                                title: "Delivery Points",
+                                count: "425",
+                                color: Colors.blue,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppConstants.navigateToSampleListScreen,
+                                    arguments: {
+                                      'flag':
+                                          AppConstants.totalSamplesSubmitted,
+                                      'flagFloating': "",
+                                    },
+                                  );
+                                },
+                              ),
+                              buildSampleCard(
+                                title: "Other Sourcs including private",
+                                count: "425",
+                                color: Colors.deepOrange,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppConstants.navigateToSampleListScreen,
+                                    arguments: {
+                                      'flag':
+                                          AppConstants.totalSamplesSubmitted,
+                                      'flagFloating': "",
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.dashboard),
-                  title: Text(
-                    AppConstants.dashboard,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.totalSamplesalreadytested,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: const Icon(Icons.list),
-                  title: Text(
-                    AppConstants.listOfSamples,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () {
-
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: Text(
-                    AppConstants.logout,
-                    style: AppStyles.style16NormalBlack,
-                  ),
-                  onTap: () async {
-                    final authProvider = Provider.of<AuthenticationProvider>(
-                        context,
-                        listen: false);
-                    await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToLoginScreen);
-                  },
-                ),
-              ],
-            ),
-          ),
-          body: Consumer<DashboardProvider>(
-            builder: (context, dashboardProvider, child) {
-              if (dashboardProvider.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    const SizedBox(height: 20),
-
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 🔹 Metric Card
-
-
-
-
-                        // 🔸 Location White Card
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.15),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Village Details",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.location_city,
-                                      label: "District",
-                                      value: "Jaipur",
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.map,
-                                      label: "Block",
-                                      value: "Sanganer",
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.groups,
-                                      label: "GP",
-                                      value: "Mansarovar",
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: buildLocationTile(
-                                      icon: Icons.home,
-                                      label: "Village",
-                                      value: "Pratap Nagar",
-                                      color: Colors.purple,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            buildSampleCard(
-                              title: "Total no. Source of Schemes",
-                              count: "425",
-                              color: Colors.green,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppConstants.navigateToSampleListScreen,
-                                  arguments: {
-                                    'flag': AppConstants.totalSamplesSubmitted,
-                                    'flagFloating': "",
-                                  },
-                                );
-                              },
-                            ),
-                            buildSampleCard(
-                              title: "Storage Structure",
-                              count: "425",
-                              color: Colors.blue,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppConstants.navigateToSampleListScreen,
-                                  arguments: {
-                                    'flag': AppConstants.totalSamplesSubmitted,
-                                    'flagFloating': "",
-                                  },
-                                );
-                              },
-                            ),
-                            buildSampleCard(
-                              title: "Households/School/AWCs",
-                              count: "425",
-                              color: Colors.deepOrange,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppConstants.navigateToSampleListScreen,
-                                  arguments: {
-                                    'flag': AppConstants.totalSamplesSubmitted,
-                                    'flagFloating': "",
-                                  },
-                                );
-                              },
-                            ),
-                            buildSampleCard(
-                              title: "Handpumps and other private sources",
-                              count: "425",
-                              color: Colors.purple,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppConstants.navigateToSampleListScreen,
-                                  arguments: {
-                                    'flag': AppConstants.totalSamplesSubmitted,
-                                    'flagFloating': "",
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-
-
-
-
-
-                    const SizedBox(height: 20),
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-
-                            Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF0468B1),
-                            textStyle: const TextStyle(fontSize: 16),
-                            minimumSize: const Size(300, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  8), // ← removes rounding
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                AppConstants.addftk,
-                                style: AppStyles.textStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            },
-          )),
+                );
+              },
+            )),
+      ),
     );
   }
-
 
   Widget buildLocationTile({
     required IconData icon,
@@ -426,6 +288,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
       ),
     );
   }
+
   Widget buildSampleCard({
     required String title,
     required String count,
@@ -464,7 +327,6 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                     'assets/icons/medical-lab.png',
                     width: 22,
                     height: 22,
-
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -493,14 +355,15 @@ class _ftksamplescreen extends State<ftksamplescreen> {
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: onTap,
-                icon: Icon(Icons.add, size: 18, color: Colors.white),
+                icon: const Icon(Icons.add, size: 18, color: Colors.white),
                 label: const Text(
                   "Add Sample",
                   style: TextStyle(color: Colors.white),
                 ),
                 style: TextButton.styleFrom(
                   backgroundColor: color,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   minimumSize: const Size(10, 10),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
@@ -515,20 +378,4 @@ class _ftksamplescreen extends State<ftksamplescreen> {
       ),
     );
   }
-
-
-
-
-  String getToken() {
-    String? token = _localStorage.getString(AppConstants.prefToken) ?? '';
-    stateName = _localStorage.getString(AppConstants.prefStateName) ?? '';
-    userName = _localStorage.getString(AppConstants.prefName) ?? '';
-    mobile = _localStorage.getString(AppConstants.prefMobile) ?? '';
-    stateId = _localStorage.getString(AppConstants.prefStateId) ?? '';
-    districtId = _localStorage.getString(AppConstants.prefDistrictId) ?? '';
-    print("token-------------- $token ----state naem$stateName");
-    return token;
-  }
 }
-
-

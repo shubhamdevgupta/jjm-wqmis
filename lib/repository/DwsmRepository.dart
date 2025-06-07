@@ -5,11 +5,11 @@ import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/models/DWSM/DemonstrationResponse.dart';
 
-import '../models/DWSM/DashBoardSchoolModel.dart';
-import '../models/DWSM/SchoolinfoResponse.dart';
-import '../models/DashboardResponse/DwsmDashboardResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
+import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
+import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();
@@ -45,7 +45,6 @@ class DwsmRepository{
     try {
       final response = await _apiService.get(
           'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
-      print("RRRRR_----${response}");
       return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -63,7 +62,6 @@ class DwsmRepository{
           "DemonstrationType": demonstrationType,
         }));
 
-      print("DEMO----${response}");
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../models/UpdateResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/UpdateResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
 
 class Appupdaterepo extends ChangeNotifier {
   final BaseApiService _apiService = BaseApiService();
@@ -25,7 +24,6 @@ class Appupdaterepo extends ChangeNotifier {
 
       return Updateresponse.fromJson(jsonData);
     } catch (e) {
-    print("update not working there");
       rethrow;
     }
   }
@@ -35,10 +33,6 @@ class Appupdaterepo extends ChangeNotifier {
     try {
       final updateInfo = await fetchUpdateInfo();
       final currentVersion = await getCurrentAppVersion();
-
-      print("currentVersion: $currentVersion");
-      print("latestVersion: ${updateInfo.version}");
-
       return _compareVersions(updateInfo.version, currentVersion);
     } catch (_) {
       return false;

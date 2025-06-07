@@ -6,7 +6,7 @@ class Loader {
       height: height,
       color: color,
       alignment: Alignment.center,
-      child: CircularProgressIndicator(color: Color.fromRGBO(3, 60, 207, 0.9),),
+      child: const CircularProgressIndicator(color: Color.fromRGBO(3, 60, 207, 0.9),),
     );
   }
 }

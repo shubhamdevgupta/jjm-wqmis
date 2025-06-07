@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmProvider.dart';
-import '../../../utils/AppConstants.dart';
-import 'AnganwadiScreen.dart';
-import 'SchoolScreen.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/AnganwadiScreen.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/SchoolScreen.dart';
 
 class Tabschoolaganwadi extends StatefulWidget {
+  const Tabschoolaganwadi({super.key});
+
   @override
   _TabSchoolAganwadi createState() => _TabSchoolAganwadi();
 }
@@ -131,7 +133,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
                 const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             unselectedLabelStyle: const TextStyle(fontSize: 14),
             indicator: BoxDecoration(
-              color: Color(0xFF5FAFE5), // Light blue indicator
+              color: const Color(0xFF5FAFE5), // Light blue indicator
               borderRadius: BorderRadius.circular(8),
             ),
             indicatorSize: TabBarIndicatorSize.tab,
@@ -139,9 +141,9 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           ),
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.blueAccent,
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [
                   Color(0xFF096DA8), // Dark blue
                   Color(0xFF3C8DBC), // jjm blue color
@@ -158,7 +160,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
               height: constraints.maxHeight - 45,
               child: TabBarView(
                 controller: mTabController,
-                children: [
+                children: const [
                   SchoolScreen(),
                   AnganwadiScreen(),
                 ],

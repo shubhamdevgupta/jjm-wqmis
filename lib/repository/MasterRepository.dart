@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
@@ -10,13 +9,12 @@ import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceFilterResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/ValidateVillage.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 
-import '../models/LgdResponse.dart';
-import '../models/MasterApiResponse/BlockResponse.dart';
-import '../models/MasterApiResponse/HabitationResponse.dart';
-import '../services/BaseApiService.dart';
-import '../utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/models/LgdResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
+import 'package:jjm_wqmis/services/BaseApiService.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();

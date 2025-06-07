@@ -12,14 +12,14 @@ import 'package:jjm_wqmis/models/MasterApiResponse/WaterSourceResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WTPListResponse.dart';
 import 'package:jjm_wqmis/repository/MasterRepository.dart';
 
-import '../models/LgdResponse.dart';
-import '../models/MasterApiResponse/BlockResponse.dart';
-import '../models/ValidateVillage.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/AppConstants.dart';
-import '../utils/CurrentLocation.dart';
-import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
+import 'package:jjm_wqmis/models/LgdResponse.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
+import 'package:jjm_wqmis/models/ValidateVillage.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/LocationUtils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -99,7 +99,6 @@ class Masterprovider extends ChangeNotifier {
   final LocalStorageService localStorage = LocalStorageService();
 
   Future<void> fetchStates() async {
-    print('Calling the state function...');
     _isLoading = true;
     notifyListeners();
     try {
@@ -119,7 +118,6 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchDistricts(String stateId) async {
-    print('Fetching districts for state: $stateId');
     setSelectedState(stateId);
     _isLoading = true;
     notifyListeners();
@@ -132,17 +130,11 @@ class Masterprovider extends ChangeNotifier {
       } else {
         errorMsg = rawDistricts.message;
       }
-        for (int i = 0; i < districts.length; i++) {
-          if (localStorage.getString(AppConstants.prefDistrictId).toString() ==
-              districts[i].jjmDistrictId) {
-            localStorage.saveString(
-                AppConstants.prefDistName, districts[i].districtName);
-            setSelectedDistrict(districts[i].jjmDistrictId);
-          }
-        }
 
-    } catch (e) {
+
+    } catch (e,stackTrace) {
       debugPrint('Error in fetching districts: master provider $e');
+      debugPrint('Error in fetching districts: master provider $stackTrace');
       GlobalExceptionHandler.handleException(e as Exception);
       errorMsg = "Failed to load districts.";
     } finally {
@@ -152,6 +144,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId) async {
+    setSelectedDistrict(districtId);
+
     if (stateId.isEmpty || districtId.isEmpty) {
       errorMsg = "Please select both State and District.";
       notifyListeners();
@@ -202,8 +196,8 @@ class Masterprovider extends ChangeNotifier {
         gramPanchayat = rawGPs.result;
 
         // ✅ Auto-select if only one Gram Panchayat is available
-        if (gramPanchayat != null && gramPanchayat!.length == 1) {
-          final singleGP = gramPanchayat!.first;
+        if (gramPanchayat.length == 1) {
+          final singleGP = gramPanchayat.first;
           setSelectedGrampanchayat(singleGP.jjmPanchayatId);
         }
       } else {
@@ -242,8 +236,8 @@ class Masterprovider extends ChangeNotifier {
       if (rawVillages.status == 1) {
         village = rawVillages.result;
 
-        if (village != null && village!.length == 1) {
-          final singleVillage = village!.first;
+        if (village.length == 1) {
+          final singleVillage = village.first;
           setSelectedVillage(singleVillage.jjmVillageId);
 
           /// ✅ Automatically trigger habitation fetch
@@ -289,8 +283,8 @@ class Masterprovider extends ChangeNotifier {
         habitationId = rawHabitations.result;
 
         // ✅ Auto-select habitation if only one is present
-        if (habitationId != null && habitationId!.length == 1) {
-          final singleHabitation = habitationId!.first;
+        if (habitationId.length == 1) {
+          final singleHabitation = habitationId.first;
           setSelectedHabitation(singleHabitation.habitationId);
         }
       } else {

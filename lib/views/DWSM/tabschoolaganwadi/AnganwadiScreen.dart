@@ -5,29 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmProvider.dart';
-import '../../../services/LocalStorageService.dart';
-import '../../../utils/AppStyles.dart';
-import '../../../utils/Appcolor.dart';
-import '../../../utils/Camera.dart';
-import '../../../utils/CurrentLocation.dart';
-import '../../../utils/CustomDropdown.dart';
-import '../../../utils/LoaderUtils.dart';
-import '../../../utils/toast_helper.dart';
-import 'TabSchoolAganwadi.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/Appcolor.dart';
+import 'package:jjm_wqmis/utils/Camera.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/TabSchoolAganwadi.dart';
 
 class AnganwadiScreen extends StatefulWidget {
+  const AnganwadiScreen({super.key});
+
   @override
   _AnganwadiScreen createState() => _AnganwadiScreen();
 }
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String userId = '';
-  String stateId = '';
-  String districtId = '';
+  final session = UserSessionManager();
+
   Village? village;
 
   final CameraHelper _cameraHelper = CameraHelper();
@@ -38,9 +38,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   @override
   void initState() {
     super.initState();
-    userId = _localStorage.getString(AppConstants.prefUserId)!;
-    stateId = _localStorage.getString(AppConstants.prefStateId)!;
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -67,7 +65,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
                                   case DataState.error:
                                     return AppTextWidgets.errorText(
-                                        dwsmprovider.errorMessage!);
+                                        dwsmprovider.errorMessage);
 
                                   case DataState.loaded:
                                     return Column(
@@ -107,14 +105,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                 1) {
                                               dwsmprovider
                                                   .fetchDemonstrationList(
-                                                      int.parse(stateId),
-                                                      int.parse(districtId),
+                                                      session.stateId,
+                                                      session.districtId,
                                                       "2025-2026",
                                                       int.parse(selectedId),
                                                       11, onSuccess: (result) {
                                                 village = result;
-                                                print(
-                                                    "SSS_SS>>> ${village?.districtId} ${village?.districtName}");
+
                                               });
 
                                               dwsmprovider
@@ -146,7 +143,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       color: Colors.grey
                                                           .withOpacity(0.1),
                                                       blurRadius: 6,
-                                                      offset: Offset(0, 2),
+                                                      offset: const Offset(0, 2),
                                                     ),
                                                   ],
                                                 ),
@@ -161,19 +158,19 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       // Header Row
                                                       Row(
                                                         children: [
-                                                          Icon(
+                                                          const Icon(
                                                               Icons
                                                                   .school_rounded,
                                                               color:
                                                                   Colors.green,
                                                               size: 24),
-                                                          SizedBox(width: 10),
+                                                          const SizedBox(width: 10),
                                                           Expanded(
                                                             child: Text(
                                                               dwsmprovider
                                                                       .selectedAnganwadiName ??
                                                                   "N/A",
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                 fontSize: 17,
                                                                 fontFamily:
                                                                     'OpenSans',
@@ -192,7 +189,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                 ),
                                               ),
                                             )),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         dwsmprovider.mDemonstrationId == 1
@@ -208,28 +205,11 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       width: double.infinity,
                                                       child: ElevatedButton(
                                                         onPressed: () async {
-                                                          print(
-                                                              "pppppppppppp before ${dwsmprovider.showDemonstartion}");
 
                                                           dwsmprovider
                                                               .showDemonstartionButton(
                                                                   true);
-
-                                                          print(
-                                                              "pppppppppppp after ${dwsmprovider.showDemonstartion}");
                                                         },
-                                                        child: Text(
-                                                          "New Demonstration",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily:
-                                                                  'OpenSans',
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                           backgroundColor:
@@ -245,6 +225,18 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                         12),
                                                           ),
                                                         ),
+                                                        child: const Text(
+                                                          "New Demonstration",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'OpenSans',
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -257,7 +249,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                     child:
                                                         showForm(dwsmprovider),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 5,
                                                   ),
                                                   Container(
@@ -298,10 +290,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                   Colors.blue),
                                                               const SizedBox(
                                                                   width: 10),
-                                                              Text(
+                                                              const Text(
                                                                 "Demonstrated Details",
                                                                 style:
-                                                                    const TextStyle(
+                                                                    TextStyle(
                                                                   fontSize: 18,
                                                                   fontFamily:
                                                                       'OpenSans',
@@ -637,7 +629,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
         ),
       );
     } else {
-      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMessage!);
+      ToastHelper.showErrorSnackBar(context, dwsmprovider.errorMessage);
     }
   }
 
@@ -704,7 +696,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Anganwadi Image"),
+          title: const Text("Anganwadi Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.memory(imageBytes, fit: BoxFit.contain),
@@ -739,7 +731,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
@@ -748,7 +740,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 1.5),
+                        const BorderSide(color: Colors.blueAccent, width: 1.5),
                   ),
                   hintText: "Enter your remarks",
                   hintStyle: TextStyle(
@@ -757,7 +749,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       color: Colors.grey.shade600),
                   suffixIcon: remarkController.text.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear, color: Colors.grey),
+                          icon: const Icon(Icons.clear, color: Colors.grey),
                           onPressed: () {
                             remarkController.clear();
                           },
@@ -769,7 +761,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Card(
@@ -781,7 +773,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.1),
                     blurRadius: 6,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -815,12 +807,12 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                   BoxShadow(
                                     color: Colors.blueGrey.withOpacity(0.2),
                                     blurRadius: 8,
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
                               padding: const EdgeInsets.all(24),
-                              child: Icon(Icons.camera_alt,
+                              child: const Icon(Icons.camera_alt,
                                   size: 40, color: Colors.blue),
                             ),
                           )
@@ -841,7 +833,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                 top: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: Icon(Icons.close, color: Colors.white),
+                                  icon: const Icon(Icons.close, color: Colors.white),
                                   onPressed: () {
                                     _cameraHelper.removeImage();
                                     setState(() {});
@@ -851,7 +843,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             ],
                           ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -868,7 +860,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.1),
                       blurRadius: 6,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -887,13 +879,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       ),
                     ),
                     Divider(thickness: 1, color: Colors.grey.shade300),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     // Row for Latitude and Longitude
                     Column(
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.location_on,
+                            const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
                               'Latitude: ${lat?.toStringAsFixed(5)}',
@@ -906,10 +898,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Row(
                           children: [
-                            Icon(Icons.location_on,
+                            const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
                               'Longitude: ${lng?.toStringAsFixed(5)}',
@@ -936,9 +928,9 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                   onPressed: () async {
                     if (await validate(dwsmprovider)) {
                       await dwsmprovider.submitDemonstration(
-                          int.parse(userId),
+                          session.regId,
                           int.parse(dwsmprovider.selectedAnganwadi!),
-                          int.parse(stateId),
+                          session.stateId,
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
@@ -948,18 +940,18 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                         showResponse(dwsmprovider);
                       });
                     } else {
-                      ToastHelper.showSnackBar(context, dwsmprovider.errorMessage!);
+                      ToastHelper.showSnackBar(context, dwsmprovider.errorMessage);
                     }
                   },
-                  child: Text(
+                  style: AppStyles.buttonStylePrimary(),
+                  child: const Text(
                     AppConstants.submitSample,
                     style: TextStyle(
                         fontSize: 16,
                         fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
-                  ),
-                  style: AppStyles.buttonStylePrimary()),
+                  )),
             ),
           ),
         ],

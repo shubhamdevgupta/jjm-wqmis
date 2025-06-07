@@ -2,34 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/ParameterProvider.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/AppStyles.dart';
-import '../utils/CurrentLocation.dart';
-import '../utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
   final String flag;
   final String flagFloating; // Declare flag parameter
 
-  const Locationscreen({super.key, required this.flag , required this.flagFloating });
+   Locationscreen({super.key, required this.flag , required this.flagFloating });
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
 }
 
 class _LocationscreenState extends State<Locationscreen> {
-  final LocalStorageService _localStorage = LocalStorageService();
-  String districtId = '';
+  final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
   @override
   void initState() {
     super.initState();
-    districtId = _localStorage.getString(AppConstants.prefDistrictId)!;
+    session.init();
   }
 
   @override
@@ -86,18 +85,18 @@ class _LocationscreenState extends State<Locationscreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       child: Container(
         color: Colors.white,
         child: Padding(
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'State *',
                     style: TextStyle(
                       fontSize: 16, fontFamily: 'OpenSans',
@@ -106,38 +105,35 @@ class _LocationscreenState extends State<Locationscreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
 
-                      value: _localStorage.getString(
-                          AppConstants.prefStateId), // Ensure this matches the DropdownMenuItem value
+                      value: session.stateId.toString(), // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled:
                             true, // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
+                        labelStyle: const TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
 
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: _localStorage.getString(
-                              AppConstants.prefStateId), // Ensure this matches the selected value
+                          value: session.stateId.toString(), // Ensure this matches the selected value
 
-                          child: Text(_localStorage.getString(AppConstants.prefStateName) ??
-                              'Unknown State',
-                              style: TextStyle(
+                          child: Text(session.stateName ,
+                              style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
@@ -147,7 +143,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       onChanged: null,
                       // Disable selection (non-editable)
                       isExpanded: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black, fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
@@ -157,12 +153,12 @@ class _LocationscreenState extends State<Locationscreen> {
                   ),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               //district data here--------------
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'District',
                     style: TextStyle(
                         fontSize: 16,
@@ -171,42 +167,40 @@ class _LocationscreenState extends State<Locationscreen> {
                         fontFamily: 'OpenSans'),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-                      value: districtId,
+                      value: session.districtId.toString(),
                       // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
                         filled: true,
                         // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.blueAccent,
                           fontFamily: 'OpenSans',
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey, width: 2),
+                          borderSide: const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
 
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
                         contentPadding:
-                        EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: districtId,
+                          value: session.districtId.toString(),
                           // Ensure this matches the selected value
 
                           child: Text(
-                              _localStorage
-                                  .getString(AppConstants.prefDistName) ??
-                                  'Unknown State',
-                              style: TextStyle(
+                              session.districtName,
+                              style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
@@ -216,7 +210,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       onChanged: null,
                       // Disable selection (non-editable)
                       isExpanded: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'OpenSans',
                         fontSize: 16,
@@ -227,7 +221,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               //block data here--------------
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +253,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   ),
                 ],
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
 
               /// grampanchayat data here -----------------------
               CustomDropdown(
@@ -287,7 +281,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 appBarTitle: "Select Gram Panchayat",
 
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ///// village data heree ----------
               CustomDropdown(
                 title: "Village *",
@@ -314,7 +308,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 },
                 appBarTitle: "Select Village",
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               ///// habitation  data heree ----------
               CustomDropdown(
                 title: "Habitation ",
@@ -333,7 +327,7 @@ class _LocationscreenState extends State<Locationscreen> {
                   masterProvider.setSelectedHabitation(value);
                 },
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -342,7 +336,6 @@ class _LocationscreenState extends State<Locationscreen> {
 
                     await masterProvider.fetchLocation();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-                      print('flggg ${ widget.flag}..Going to Sample List screen');
 
                       Navigator.pushNamedAndRemoveUntil(
                         context,
@@ -353,7 +346,6 @@ class _LocationscreenState extends State<Locationscreen> {
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList();
                       masterProvider.clearsampleinfo();
-                      print('flggg ${ widget.flag}.Going to Show information screen');
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
                     } else {
@@ -379,8 +371,8 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF096DA8),
-                    padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+                    backgroundColor: const Color(0xFF096DA8),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
 
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

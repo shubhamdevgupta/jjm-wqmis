@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/dwsmProvider.dart';
-import '../../../utils/AppConstants.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class SchoolAWCScreen extends StatefulWidget {
   final int? type;
@@ -18,23 +19,19 @@ class SchoolAWCScreen extends StatefulWidget {
 }
 
 class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
-  final LocalStorageService _localStorageService = LocalStorageService();
-  String? stateId;
-  String? districtId;
+  final session = UserSessionManager();
+
   String? titleName = "";
 
   @override
   void initState() {
-    stateId = _localStorageService.getString(AppConstants.prefStateId);
-    districtId = _localStorageService.getString(AppConstants.prefDistrictId);
-    // districtId = _localStorageService.getString(AppConstants.prefDistrictId);
+      session.init();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final dashboardProvider =
           Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
-          int.parse(stateId!), int.parse(districtId!), widget.type!);
-      print('responsssssssss ${dashboardProvider.dashboardSchoolListModel}');
+          session.stateId, session.districtId, widget.type!);
     });
 
     super.initState();
@@ -61,7 +58,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
             centerTitle: true,
             title: Text(
               "$titleName List",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
@@ -285,7 +282,6 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
         },
       );
     } catch (e) {
-      print("Error: $e");
     }
   }
 }

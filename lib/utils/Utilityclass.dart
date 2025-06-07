@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Appcolor.dart';
+import 'package:jjm_wqmis/utils/Appcolor.dart';
 
 class Utilityclass{
   static showInternetDialog(BuildContext context) {
@@ -10,7 +10,7 @@ class Utilityclass{
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-          title: Container(
+          title: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 40,
               child: const Text(
@@ -40,10 +40,10 @@ class Utilityclass{
                     backgroundColor: Appcolor.COLOR_PRIMARY,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5))),
-                child: Container(
+                child: const SizedBox(
 
                     width: 100,
-                    child: const Center(child: Text('Close'))),
+                    child: Center(child: Text('Close'))),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

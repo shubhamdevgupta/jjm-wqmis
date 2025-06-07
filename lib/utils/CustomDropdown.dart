@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'AppStyles.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class CustomDropdown extends StatefulWidget {
   final String? value;
@@ -11,14 +11,14 @@ class CustomDropdown extends StatefulWidget {
   final bool showSearchBar;
 
   const CustomDropdown({
-    Key? key,
+    super.key,
     required this.value,
     required this.items,
     required this.title,
     required this.onChanged,
     this.appBarTitle,
     this.showSearchBar = true,
-  }) : super(key: key);
+  });
 
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
@@ -75,7 +75,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
     if (selectedValue != null && selectedValue!.isNotEmpty) {
       final matchedItem = widget.items.firstWhere(
             (item) => item.value == selectedValue,
-        orElse: () => DropdownMenuItem(value: '', child: const Text('')),
+        orElse: () => const DropdownMenuItem(value: '', child: Text('')),
       );
       label = (matchedItem.child as Text).data ?? "--Select--";
     }
@@ -154,12 +154,11 @@ class _SearchDialog extends StatefulWidget {
   final bool showSearchBar;
 
   const _SearchDialog({
-    Key? key,
     required this.items,
     required this.onItemSelected,
     this.appBarTitle,
     this.showSearchBar = true,
-  }) : super(key: key);
+  });
 
   @override
   __SearchDialogState createState() => __SearchDialogState();
@@ -189,7 +188,7 @@ class __SearchDialogState extends State<_SearchDialog> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.appBarTitle ?? "Select Item", style: TextStyle(
+        title: Text(widget.appBarTitle ?? "Select Item", style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color:

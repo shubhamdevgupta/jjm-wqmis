@@ -4,14 +4,13 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 
-import '../models/LoginResponse.dart';
-import '../services/LocalStorageService.dart';
-import '../utils/CurrentLocation.dart';
-import '../utils/GlobalExceptionHandler.dart';
-import '../utils/LocationUtils.dart';
+import 'package:jjm_wqmis/models/LoginResponse.dart';
+import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/LocationUtils.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
@@ -56,6 +55,7 @@ class AuthenticationProvider extends ChangeNotifier {
   Future<void> logoutUser() async {
     _isLoggedIn = false;
     await _localStorage.remove(AppConstants.prefIsLoggedIn);
+    await _localStorage.clearAll();
     notifyListeners();
   }
 
@@ -74,15 +74,23 @@ class AuthenticationProvider extends ChangeNotifier {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
         _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
-        _localStorage.saveString(AppConstants.prefUserId, _loginResponse!.regId.toString());
-        _localStorage.saveString(AppConstants.prefRoleId, _loginResponse!.roleId.toString());
         _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
         _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
-        _localStorage.saveString(AppConstants.prefStateId, _loginResponse!.stateId.toString());
+
+        _localStorage.saveInt(AppConstants.prefRegId, _loginResponse!.regId!);
+        _localStorage.saveInt(AppConstants.prefRoleId, _loginResponse!.roleId!);
+
+        _localStorage.saveInt(AppConstants.prefStateId, _loginResponse!.stateId!);
+        _localStorage.saveInt(AppConstants.prefDistrictId, _loginResponse!.districtId!);
+        _localStorage.saveInt(AppConstants.prefBlockId, _loginResponse!.blockId!);
+        _localStorage.saveInt(AppConstants.prefPanchayatId, _loginResponse!.gramPanchayatId!);
+        _localStorage.saveInt(AppConstants.prefVillageId, _loginResponse!.villageId!);
+
         _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
-       // _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.districtId.toString());
-        _localStorage.saveString(AppConstants.prefDistrictId, _loginResponse!.districtId.toString());
-        _localStorage.saveString(AppConstants.prefRegId, _loginResponse!.regId.toString());
+        _localStorage.saveString(AppConstants.prefDistName, _loginResponse!.districtName.toString());
+        _localStorage.saveString(AppConstants.prefBlockName, _loginResponse!.blockName.toString());
+        _localStorage.saveString(AppConstants.prefGramPanchayatName, _loginResponse!.panchayatName.toString());
+        _localStorage.saveString(AppConstants.prefVillageName, _loginResponse!.villageName.toString());
 
         notifyListeners();
         onSuccess();
@@ -148,7 +156,6 @@ class AuthenticationProvider extends ChangeNotifier {
 
   String encryptPassword(String password, String salt) {
     String hash1 = sha512Base64(trim(password));
-    print(hash1);
     String hash2 = sha512Base64(salt + hash1);
     return hash2;
   }
@@ -165,7 +172,6 @@ class AuthenticationProvider extends ChangeNotifier {
     int max = 15;
     randomOne = Random().nextInt(max);
     randomTwo = Random().nextInt(max);
-    print("calling the captch $randomOne  $randomTwo");
     captchResult = randomOne + randomTwo;
     notifyListeners();
     return captchResult;

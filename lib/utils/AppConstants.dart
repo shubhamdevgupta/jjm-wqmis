@@ -6,14 +6,22 @@ class AppConstants {
 
   static const String prefIsLoggedIn = 'isLoggedIn';
   static const String prefToken = 'token';
-  static const String prefUserId = 'userId';
   static const String prefRoleId = 'roleId';
   static const String prefName = 'name';
   static const String prefMobile = 'mobile';
-  static const String prefStateId = 'stateId';
+
+  static const String prefStateId = 'prefStateId';
+  static const String prefDistrictId = 'prefDistrictId';
+  static const String prefBlockId = 'prefBlockId';
+  static const String prefPanchayatId= 'prefPanchayatId';
+  static const String prefVillageId = 'prefVillageId';
+
   static const String prefStateName = 'stateName';
   static const String prefDistName = 'prefDistName';
-  static const String prefDistrictId = 'districtID';
+  static const String prefBlockName = 'prefBlockName';
+  static const String prefGramPanchayatName = 'prefGramPanchayatName';
+  static const String prefVillageName = 'prefVillageName';
+
   static const String prefRegId = 'reg_id';
 
   /////////////////////   Routes literals  //////////////////////////////////
