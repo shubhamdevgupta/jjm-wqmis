@@ -53,14 +53,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final sampleSubProvider =
           Provider.of<Samplesubprovider>(context, listen: false);
+      if (CurrentLocation.latitude != null && CurrentLocation.longitude != null) {
+        sampleSubProvider.setLocation(CurrentLocation.latitude, CurrentLocation.longitude,);
 
-      if (CurrentLocation.latitude != null &&
-          CurrentLocation.longitude != null &&
-          (sampleSubProvider.lat == null || sampleSubProvider.lng == null)) {
-        sampleSubProvider.setLocation(
-          CurrentLocation.latitude,
-          CurrentLocation.longitude,
-        );
+      }
+      if (sampleSubProvider.lat == null || sampleSubProvider.lng == null) {
+        sampleSubProvider.checkAndPromptLocation(context);
       }
     });
   }
@@ -70,9 +68,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
-    return ChangeNotifierProvider(
-        create: (_) => Samplesubprovider(),
-        child: Consumer<Samplesubprovider>(builder: (context, provider, child) {
+    return Consumer<Samplesubprovider>(
+        builder: (context, provider, child) {
+          print("Rebuilding UI with lat: ${provider.lat} :Long ${provider.lng}");
+
           return Scrollbar(
             thumbVisibility: true,
             controller: _scrollController,
@@ -460,7 +459,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                     .grey
                                                                     .shade300),
                                                             // Divider for separation
-                                                            const SizedBox(height: 8),
+                                                            const SizedBox(
+                                                                height: 8),
 
                                                             Row(
                                                               children: [
@@ -847,8 +847,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       .circular(
                                                                           12),
                                                             ),
-                                                            margin: const EdgeInsets
-                                                                .symmetric(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .symmetric(
                                                                     horizontal:
                                                                         10,
                                                                     vertical:
@@ -1177,7 +1178,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
               ),
             ),
           );
-        }));
+        });
   }
 
   Future<void> validateAndSubmit(
@@ -1314,5 +1315,4 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);
     }
   }
-
 }
