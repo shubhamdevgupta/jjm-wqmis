@@ -34,6 +34,9 @@ class FtkParameter {
   final String permissibleLimit;
   final String valueTypeValue;
 
+  int? selectedValue; // ✅ <-- Add this mutable property
+
+
   FtkParameter({
     required this.parameterId,
     required this.parameterName,
@@ -41,6 +44,8 @@ class FtkParameter {
     required this.acceptableLimit,
     required this.permissibleLimit,
     required this.valueTypeValue,
+    this.selectedValue = 2, // ✅ include in constructor (optional)
+
   });
 
   factory FtkParameter.fromJson(Map<String, dynamic> json) {
@@ -51,6 +56,7 @@ class FtkParameter {
       acceptableLimit: json['Acceptablelimit'],
       permissibleLimit: json['Permissiblelimit']?.trim() ?? '',
       valueTypeValue: json['value_type_value'] ?? '',
+      selectedValue: 2, // ✅ initially null
     );
   }
 

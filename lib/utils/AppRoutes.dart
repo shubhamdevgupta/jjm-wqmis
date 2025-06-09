@@ -16,6 +16,7 @@ import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/ftk/ftkDashboard.dart';
+import 'package:jjm_wqmis/views/ftk/ftkParameterList.dart';
 import 'package:jjm_wqmis/views/ftk/ftkSampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/ftk/ftkSampleScreen.dart';
 import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';

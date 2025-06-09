@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:jjm_wqmis/repository/FtkRepository.dart';
-
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
+import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/repository/FtkRepository.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Ftkprovider extends ChangeNotifier {
@@ -11,12 +11,20 @@ class Ftkprovider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  int selectedParam = 0;
   List<FtkParameter> ftkParameterList = [];
   String errorMessage = '';
   int baseStatus = 101;
+  int? selectedValue; // Add this if not already present
+
+  bool isSubmitData = false;
+  Sampleresponse? sampleresponse;
+  String errorMsg = '';
 
   Future<void> fetchParameterList(
-      int stateId, int districtId,) async {
+    int stateId,
+    int districtId,
+  ) async {
     _isLoading = true;
 
     notifyListeners();
@@ -33,6 +41,95 @@ class Ftkprovider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
       GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void setSelectedParamForIndex(int index, int selectedValue) {
+    ftkParameterList[index].selectedValue = selectedValue;
+    notifyListeners();
+  }
+
+  List<Map<String, dynamic>> getSelectedParameters() {
+    return ftkParameterList
+        .where((param) => param.selectedValue != null)
+        .map((param) => {
+              'parameterId': param.parameterId,
+              'selectedValue': param.selectedValue
+            })
+        .toList();
+  }
+
+  Future<void> saveFtkData(
+      mobileNumber,
+      regId,
+      roldId,
+      sampleCollectionTime,
+      sampleTestingTime,
+      sourceId,
+      sourceLocation,
+      state,
+      district,
+      block,
+      gramPanchayat,
+      village,
+      habitation,
+      address,
+      sampleRemark,
+      waterSourceFilter,
+      schemeId,
+      otherSouceLocation,
+      sourceName,
+      latitude,
+      longitude,
+      IpAddress,
+      sampleTypeOther,
+      isTreadted,
+      parameteId,
+      paramSaferange) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      sampleresponse = await _ftkRepository.saveFtkData(
+          mobileNumber,
+          regId,
+          roldId,
+          sampleCollectionTime,
+          sampleTestingTime,
+          sourceId,
+          sourceLocation,
+          state,
+          district,
+          block,
+          gramPanchayat,
+          village,
+          habitation,
+          address,
+          sampleRemark,
+          waterSourceFilter,
+          schemeId,
+          otherSouceLocation,
+          sourceName,
+          latitude,
+          longitude,
+          IpAddress,
+          sampleTypeOther,
+          isTreadted,
+          parameteId,
+          paramSaferange);
+      notifyListeners();
+      if (sampleresponse!.status == 1) {
+        isSubmitData = true;
+        notifyListeners();
+      } else {
+        errorMsg = sampleresponse!.message;
+      }
+    } catch (e, stackTrace) {
+      print("Caught error: $e :: $stackTrace");
+      GlobalExceptionHandler.handleException(e as Exception);
+      sampleresponse = null;
     } finally {
       _isLoading = false;
       notifyListeners();

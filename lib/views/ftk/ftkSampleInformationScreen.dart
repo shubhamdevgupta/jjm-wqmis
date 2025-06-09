@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/ftk/ftkParameterList.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -134,12 +135,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         const SizedBox(
                           height: 12,
                         ),
-
-                     /* if(sourceId=="2")
-                        buildSchemeDropDown(masterProvider),*/
-
-
-                        // card for location of source from where sample taken
                       ],
                     ),
                   ),
@@ -374,7 +369,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               MaterialPageRoute(
                                 builder: (context) => ChangeNotifierProvider.value(
                                   value: masterProvider,
-                                  child: const Labparameterscreen(),
+                                  child: const FtkParameterListScreen(),
                                 ),
                               ),
                             );
@@ -458,7 +453,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               builder: (context) =>
                                   ChangeNotifierProvider.value(
                                     value: masterProvider,
-                                    child: const Labparameterscreen(),
+                                    child: const FtkParameterListScreen(),
                                   )),
                         );
                       } else {
@@ -639,7 +634,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       MaterialPageRoute(
                           builder: (context) => ChangeNotifierProvider.value(
                                 value: masterProvider,
-                                child: const Labparameterscreen(),
+                                child: const FtkParameterListScreen(),
                               )),
                     );
                   } else {
@@ -777,7 +772,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                                 builder: (context) =>
                                     ChangeNotifierProvider.value(
                                       value: masterProvider,
-                                      child: const Labparameterscreen(),
+                                      child: const FtkParameterListScreen(),
                                     )),
                           );
                         } else {
@@ -850,7 +845,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                                 builder: (context) =>
                                     ChangeNotifierProvider.value(
                                       value: masterProvider,
-                                      child: const Labparameterscreen(),
+                                      child: const FtkParameterListScreen(),
                                     )),
                           );
                         } else {
