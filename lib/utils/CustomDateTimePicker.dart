@@ -4,7 +4,10 @@ import 'package:intl/intl.dart';
 class CustomDateTimePicker extends StatefulWidget {
   final Function(String) onDateTimeSelected;
 
-  const CustomDateTimePicker({super.key, required this.onDateTimeSelected});
+  final String? textTitle;
+
+
+  const CustomDateTimePicker({super.key, required this.onDateTimeSelected, this.textTitle="Date & Time of Sample Collection *"});
 
   @override
   _CustomDateTimePickerState createState() => _CustomDateTimePickerState();
@@ -12,6 +15,7 @@ class CustomDateTimePicker extends StatefulWidget {
 
 class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
   String _selectedDateTime = "";
+  String textTitle = "";
 
   @override
   void initState() {
@@ -85,9 +89,9 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Date & Time of Sample Collection *',
-            style: TextStyle(
+           Text(
+            textTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black87,

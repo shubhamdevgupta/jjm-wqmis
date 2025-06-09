@@ -239,6 +239,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           buildEsrWater(masterProvider),
           buildHouseholdWater(masterProvider),
           buildHandpumpWater(masterProvider),
+          buildTimeAddressRemarks(masterProvider),
         ],
       ),
     );
@@ -359,10 +360,11 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
-                  }),
+                  },textTitle: "Date & Time of Sample Collection *",),
                   const SizedBox(
                     height: 20,
                   ),
+
                   Center(
                     child: SizedBox(
                       width: double.infinity, // Full width of the parent
@@ -444,7 +446,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 ),
                 CustomDateTimePicker(onDateTimeSelected: (value) {
                   masterProvider.setSelectedDateTime(value);
-                }),
+                },textTitle: "Date & Time of Sample Collection *",),
                 const SizedBox(
                   height: 18,
                 ),
@@ -564,7 +566,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
-                    }),
+                    },textTitle: "Date & Time of Sample Collection *",),
                     const SizedBox(
                       height: 18,
                     ),
@@ -615,7 +617,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
                       masterProvider.setSelectedDateTime(value);
-                    })
+                    },textTitle: "Date & Time of Sample Collection *",)
                   ],
                 ),
               ),
@@ -756,7 +758,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
-                  }),
+                  },textTitle: "Date & Time of Sample Collection *",),
                   const SizedBox(
                     height: 10,
                   ),
@@ -827,7 +829,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
                     masterProvider.setSelectedDateTime(value);
-                  }),
+                  },textTitle: "Date & Time of Sample Collection *",),
                   const SizedBox(
                     height: 10,
                   ),
@@ -1019,4 +1021,46 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
     return true;
   }
+
+
+  Widget buildTimeAddressRemarks(Masterprovider masterProvider) {
+    return Column(
+      children: [
+        Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                12), // Slightly increased border radius for a smooth look
+          ),
+          margin: const EdgeInsets.all(5),
+          // Margin to ensure spacing around the card
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // Align text to the left
+              children: [
+                CustomDateTimePicker(onDateTimeSelected: (value) {
+                  masterProvider.setSelectedDateTime(value);
+                },textTitle: "Date & Time of Sample Collection *",),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                CustomDateTimePicker(onDateTimeSelected: (value) {
+                  masterProvider.setSelectedDateTime(value);
+                },textTitle: "Date & Time of Sample tested *",),
+                const SizedBox(
+                  height: 20,
+                ),
+
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 }
