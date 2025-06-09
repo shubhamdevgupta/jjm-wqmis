@@ -70,9 +70,6 @@ class DwsmRepository{
   }
 
 
-  //https://ejalshakti.gov.in/WQMIS/API/APIMobile/GetSchoolAWCsListDetails
-
-
   Future<DemonstrationResponse> submitDemonstration( int userId,
        int schoolId,
        int stateId,
