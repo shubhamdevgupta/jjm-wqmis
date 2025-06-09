@@ -94,6 +94,8 @@ class AppConstants {
   static const String addftk= 'Add New Sample ';
 
 
+  static const String navigateToftkSampleInfoScreen = '/ftksampleinfoScreen';
+
   static const String selectedTest = 'Selected Test';
 
   static const String openSampleInfoScreen = "Sample List ";

@@ -21,14 +21,14 @@ class _ftksamplescreen extends State<ftksamplescreen> {
   @override
   void initState() {
     super.initState();
-    session.init();
-    final masterProvider =
-    Provider.of<Masterprovider>(context, listen: false);
-    masterProvider.fetchWatersourcefilterList();
-    masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),
-        session.blockId.toString(),
-        session.panchayatId.toString(), session.villageId.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      session.init();
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      masterProvider.fetchWatersourcefilterList();
+      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),session.blockId.toString(),session.panchayatId.toString(), session.villageId.toString());
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,11 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                                 onTap: () {
                                   Navigator.pushNamed(
                                     context,
-                                    AppConstants.navigateToSampleListScreen,
+                                    AppConstants.navigateToftkSampleInfoScreen,
+                                    arguments:  {
+                                      'sourceId': source.id,
+                                      'habitationId': masterProvider.selectedHabitation
+                                    }, // 👈 Pass the ID here
                                   );
                                 },
                               );
