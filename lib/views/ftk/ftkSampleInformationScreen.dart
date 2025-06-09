@@ -480,8 +480,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "3" &&
-          (masterProvider.selectedScheme?.isNotEmpty ?? false),
+      visible: sourceId == "3" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         children: [
           Card(
@@ -664,8 +663,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "4" &&
-              (masterProvider.selectedScheme?.isNotEmpty ?? false),
+          visible: sourceId == "4" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -721,8 +719,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 7 &&
-              masterProvider.selectedWtsfilter == "4",
+          visible: masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -801,7 +798,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible: masterProvider.selectedHandpumpPrivate == 8 &&
-              masterProvider.selectedWtsfilter == "4",
+              sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
