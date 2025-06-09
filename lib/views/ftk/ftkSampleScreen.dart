@@ -199,7 +199,8 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                                     AppConstants.navigateToftkSampleInfoScreen,
                                     arguments:  {
                                       'sourceId': source.id,
-                                      'habitationId': masterProvider.selectedHabitation
+                                      'habitationId': masterProvider.selectedHabitation,
+                                      'sourceType': source.sourceType,
                                     }, // 👈 Pass the ID here
                                   );
                                 },

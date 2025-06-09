@@ -32,6 +32,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   final TextEditingController handpumpLocationController = TextEditingController();
   String? sourceId; // 👈 Store the ID here
   String? habitationId;
+  String? sourceType;
 
   @override
   void initState() {
@@ -50,6 +51,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     if (args != null && args is Map) {
       sourceId = args['sourceId'];
       habitationId = args['habitationId'];
+      sourceType = args['sourceType'];
 
       debugPrint("sourceId: $sourceId");
       debugPrint("habitationId: $habitationId");
@@ -222,13 +224,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(sourceType!),
           buildSchemeDropDown(masterProvider),
-
-          const SizedBox(height: 10),
-          // First Visibility Widget with Border
-
           buildSourceofScheme(masterProvider),
-          buildWtpWater(masterProvider),
           buildEsrWater(masterProvider),
           buildHouseholdWater(masterProvider),
           buildHandpumpWater(masterProvider),
@@ -393,172 +391,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     );
   }
 
-  //TODO do it after the api change
-  Widget buildWtpWater(Masterprovider masterProvider) {
-    return Visibility(
-      visible: masterProvider.selectedWtsfilter == "5" &&
-          (masterProvider.selectedScheme?.isNotEmpty ?? false),
-      child: Column(
-        children: [
-          Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  masterProvider.baseStatus==0?AppTextWidgets.errorText(masterProvider.errorMsg):
-                  CustomDropdown(
-                    value: masterProvider.selectedWtp,
-                    items: masterProvider.wtpList.map((wtpData) {
-                      return DropdownMenuItem<String>(
-                        value: wtpData.wtpId,
-                        child: Text(
-                          wtpData.wtpName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      );
-                    }).toList(),
-                    title: "Select water treatment plant (WTP)",
-                    onChanged: (value) {
-                      masterProvider.setSelectedWTP(value);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Visibility(
-                    visible: masterProvider.baseStatus==1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Radio(
-                              value: 5,
-                              groupValue: masterProvider.selectedSubSource,
-                              onChanged: (value) {
-                                masterProvider.istreated=0;
-                                masterProvider.selectRadioOption(value!);
-                              },
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  masterProvider.selectRadioOption(5);
-                                },
-                                child: const Text('Inlet of WTP'))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Radio(
-                              value: 6,
-                              groupValue: masterProvider.selectedSubSource,
-                              onChanged: (value) {
-                                masterProvider.istreated=1;
-                                masterProvider.selectRadioOption(value!);
-                              },
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  masterProvider.selectRadioOption(6);
-                                },
-                                child: const Text('Outlet of WTP'))
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Visibility(
-            visible: masterProvider.selectedSubSource != null &&
-                masterProvider.selectedWtsfilter == "5",
-            child: Card(
-              elevation: 5,
-              // Increased elevation for a more modern shadow effect
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              margin: const EdgeInsets.all(5),
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // Align text to the left
-                  children: [
-                    Visibility(
-                      visible: masterProvider.selectedSubSource == 5,
-                      child: CustomDropdown(
-                        title: "Select Water Source *",
-                        value: masterProvider.selectedWaterSource,
-                        items: masterProvider.waterSource
-                            .map((waterSource) {
-                          return DropdownMenuItem<String>(
-                            value: waterSource.locationId,
-                            child: Text(
-                              waterSource.locationName,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          masterProvider
-                              .setSelectedWaterSourceInformation(value);
-                        },
-                      ),
-                    ),
-                    CustomDateTimePicker(onDateTimeSelected: (value) {
-                      masterProvider.setSelectedDateTime(value);
-                    }),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (validateWtpWaterFields(masterProvider)) {
-                            //    paramProvider.fetchWTPLab(masterProvider.selectedStateId!, masterProvider.selectedWtp!);
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider.value(
-                                        value: masterProvider,
-                                        child: const Wtplabscreen(),
-                                      )),
-                            );
-                          } else {
-                            ToastHelper.showToastMessage(
-                                masterProvider.errorMsg);
-                          }
-                        },
-                        style: AppStyles.buttonStylePrimary(),
-                        child: const Text(
-                          'Next',
-                          style: AppStyles.textStyle,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-        ],
-      ),
-    );
-  }
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
