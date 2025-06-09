@@ -403,7 +403,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () async {
+                        onPressed: ()  {
+                          print('----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
                           Navigator.pushReplacementNamed(
                               context, AppConstants.navigateToFtkSampleScreen);
                         },

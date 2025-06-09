@@ -1,8 +1,10 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +21,14 @@ class _ftksamplescreen extends State<ftksamplescreen> {
   @override
   void initState() {
     super.initState();
-    session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      session.init();
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      masterProvider.fetchWatersourcefilterList();
+      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),session.blockId.toString(),session.panchayatId.toString(), session.villageId.toString());
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +80,9 @@ class _ftksamplescreen extends State<ftksamplescreen> {
               ),
               elevation: 5,
             ),
-            body: Consumer<DashboardProvider>(
-              builder: (context, dashboardProvider, child) {
-                if (dashboardProvider.isLoading) {
+            body: Consumer<Masterprovider>(
+              builder: (context, masterProvider, child) {
+                if (masterProvider.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 return SingleChildScrollView(
@@ -158,7 +166,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                             ),
                           ),
 
-                          /*    CustomDropdown(
+                          CustomDropdown(
                             title: "Habitation *",
                             value: masterProvider.selectedHabitation,
                             items: masterProvider.habitationId.map((habitation) {
@@ -175,60 +183,30 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                               masterProvider.setSelectedHabitation(value);
                             },
                             appBarTitle: "Select Habitation",
-                          ),*/
+                          ),
 
                           Column(
-                            children: [
-                              buildSampleCard(
-                                title: "Water Supply Schemes",
-                                count: "425",
-                                color: Colors.green,
+                            children: masterProvider.wtsFilterList
+                                .where((source) => source.id != "5") // 👈 filter out ID 5
+                                .map((source) {
+                              return buildSampleCard(
+                                title: source.sourceType,
+                                color: Colors.primaries[
+                                masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
                                   Navigator.pushNamed(
                                     context,
-                                    AppConstants.navigateToSampleListScreen,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                      'flagFloating': "",
-                                    },
+                                    AppConstants.navigateToftkSampleInfoScreen,
+                                    arguments:  {
+                                      'sourceId': source.id,
+                                      'habitationId': masterProvider.selectedHabitation,
+                                      'sourceType': source.sourceType,
+                                    }, // 👈 Pass the ID here
                                   );
                                 },
-                              ),
-                              buildSampleCard(
-                                title: "Delivery Points",
-                                count: "425",
-                                color: Colors.blue,
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppConstants.navigateToSampleListScreen,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                      'flagFloating': "",
-                                    },
-                                  );
-                                },
-                              ),
-                              buildSampleCard(
-                                title: "Other Sourcs including private",
-                                count: "425",
-                                color: Colors.deepOrange,
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppConstants.navigateToSampleListScreen,
-                                    arguments: {
-                                      'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                      'flagFloating': "",
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
+                              );
+                            }).toList(),
+                          )
                         ],
                       ),
                     ],
@@ -291,7 +269,6 @@ class _ftksamplescreen extends State<ftksamplescreen> {
 
   Widget buildSampleCard({
     required String title,
-    required String count,
     required VoidCallback onTap,
     required Color color,
   }) {
@@ -340,14 +317,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                     ),
                   ),
                 ),
-                Text(
-                  count,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
+
               ],
             ),
             const SizedBox(height: 12),

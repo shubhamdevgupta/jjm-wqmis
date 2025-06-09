@@ -16,6 +16,7 @@ import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/ftk/ftkDashboard.dart';
+import 'package:jjm_wqmis/views/ftk/ftkSampleInformationScreen.dart';
 import 'package:jjm_wqmis/views/ftk/ftkSampleScreen.dart';
 import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
 import 'package:jjm_wqmis/views/lab/AsPerParameterView.dart';
@@ -70,6 +71,7 @@ class AppRoutes {
       AppConstants.navigateToSampleListScreen: (context) => const SampleListScreen(),
       AppConstants.navigateToSubmitSampleScreen: (context) =>
           const SubmitSampleScreen(),
+      AppConstants.navigateToftkSampleInfoScreen: (context) => const ftkSampleInformationScreen(),
     };
   }
 }
