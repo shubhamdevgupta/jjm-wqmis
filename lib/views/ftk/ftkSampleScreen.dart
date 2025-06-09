@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 class ftksamplescreen extends StatefulWidget {
@@ -195,15 +196,22 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                                 color: Colors.primaries[
                                 masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppConstants.navigateToftkSampleInfoScreen,
-                                    arguments:  {
-                                      'sourceId': source.id,
-                                      'habitationId': masterProvider.selectedHabitation,
-                                      'sourceType': source.sourceType,
-                                    }, // 👈 Pass the ID here
-                                  );
+
+                                  if(masterProvider.selectedHabitation!= null){
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppConstants.navigateToftkSampleInfoScreen,
+                                      arguments:  {
+                                        'sourceId': source.id,
+                                        'habitationId': masterProvider.selectedHabitation,
+                                        'sourceType': source.sourceType,
+                                      }, // 👈 Pass the ID here
+                                    );
+
+                                  }else {
+                                    ToastHelper.showErrorSnackBar(context, "Please select a habitation before proceeding.");
+                                  }
+
                                 },
                               );
                             }).toList(),

@@ -199,18 +199,18 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               showSearchBar: false,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
-                if (masterProvider.selectedWtsfilter == "5") {
+                if (sourceId == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
                     value!, // <-- use directly here
                   );
-                } else if (masterProvider.selectedWtsfilter == "6") {
+                } else if (sourceId == "6") {
                   masterProvider.setSelectedSubSource(0);
                   masterProvider.setSelectedWTP("0");
                   masterProvider.fetchSourceInformation(
                     masterProvider.selectedVillage!,
                     masterProvider.selectedHabitation!,
-                    masterProvider.selectedWtsfilter!,
+                    sourceId.toString(),
                     "0",
                     masterProvider.selectedSubSource.toString(),
                     masterProvider.selectedWtp!,
