@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
@@ -49,9 +50,10 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 1)); // Optional splash delay
 
     final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final masterProvider = Provider.of<Masterprovider>(context, listen: false);
     final roleId = session.roleId;
     await authProvider.checkLoginStatus();
-
+    masterProvider.clearData();
     if (authProvider.isLoggedIn) {
       if (roleId == 4) {
         Navigator.pushReplacementNamed(

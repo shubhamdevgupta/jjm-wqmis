@@ -637,9 +637,8 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-/*  void clearData() {
+  void clearData() {
     states.clear();
-    isLoading = false;
     selectedStateId = null;
 
     districts.clear();
@@ -666,6 +665,11 @@ class Masterprovider extends ChangeNotifier {
     wtpList.clear();
     selectedWtp = null;
 
+    istreated = 0;
+
+    _currentLatitude = null;
+    _currentLongitude = null;
+
     wtsFilterList.clear();
     selectedWtsfilter = null;
 
@@ -673,8 +677,21 @@ class Masterprovider extends ChangeNotifier {
 
     _validateVillageResponse = null;
 
+    baseStatus = 0;
+    _selectedSubSource = null;
+    _selectedHouseHoldType = null;
+    _selectedHandpumpPrivate = null;
+    _selectedDatetime = '';
+
+    errorMsg = '';
+    otherSourceLocation = '';
+    sampleTypeOther = '';
+
+    _isLoading = false;
+
     notifyListeners();
-  }*/
+  }
+
 
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {
