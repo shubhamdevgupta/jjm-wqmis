@@ -23,6 +23,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
+
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.fetchWatersourcefilterList();
       masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),session.blockId.toString(),session.panchayatId.toString(), session.villageId.toString());
