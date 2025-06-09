@@ -1054,7 +1054,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-
               ],
             ),
           ),
