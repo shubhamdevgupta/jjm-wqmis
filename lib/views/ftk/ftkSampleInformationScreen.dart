@@ -40,6 +40,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      masterProvider.setSelectedVillageOnly(session.villageId.toString());
+      masterProvider.setSelectedWaterSourcefilterOnly('2');
+      masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
     });  }
 
@@ -127,9 +130,15 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       children: [
                         //card for state district selection
                         buildSampleTaken(masterProvider),
+
                         const SizedBox(
                           height: 12,
                         ),
+
+                     /* if(sourceId=="2")
+                        buildSchemeDropDown(masterProvider),*/
+
+
                         // card for location of source from where sample taken
                       ],
                     ),
@@ -238,8 +247,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
-        Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" &&
+        Visibility(  // TODO : please verify-- masterProvider.selectedWtsfilter  replaced with sourceId
+          visible: sourceId == "2" &&
               (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5,
@@ -308,7 +317,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible: masterProvider.selectedSubSource != null &&
-              masterProvider.selectedWtsfilter == "2",
+              sourceId == "2",
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -394,7 +403,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
-        visible: masterProvider.selectedWtsfilter == "6" &&
+        visible: sourceId == "6" &&
             (masterProvider.selectedScheme?.isNotEmpty ?? false),
         child: Card(
           elevation: 5,

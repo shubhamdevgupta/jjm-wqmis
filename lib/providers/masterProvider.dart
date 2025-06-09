@@ -522,6 +522,11 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
+  void setSelectedWaterSourcefilterOnly(String? value) {
+    selectedWtsfilter = value;
+    notifyListeners(); // Notify listeners to rebuild the widget
+  }
+
   void setSelectedHouseHold(int? value) {
     _selectedHouseHoldType = value;
     notifyListeners();
@@ -565,6 +570,11 @@ class Masterprovider extends ChangeNotifier {
     selectedScheme = null;
     schemes.clear();
     habitationId.clear();
+    notifyListeners();
+  }
+
+  void setSelectedVillageOnly(String? village) {
+    selectedVillage = village;
     notifyListeners();
   }
 
@@ -620,6 +630,10 @@ class Masterprovider extends ChangeNotifier {
     gramPanchayat.clear();
     village.clear();
     habitationId.clear();
+    notifyListeners();
+  }
+  void setSelectedStateOnly(String? stateId) {
+    selectedStateId = stateId;
     notifyListeners();
   }
 
