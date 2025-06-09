@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
@@ -176,8 +177,12 @@ late DashboardProvider dashboardProvider;
                         context,
                         listen: false);
                     await authProvider.logoutUser();
-                    Navigator.pushReplacementNamed(
-                        context, AppConstants.navigateToLoginScreen);
+                    await AppResetService.fullReset(context);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppConstants.navigateToLoginScreen,
+                          (route) => false,
+                    );
                   },
                 ),
               ],

@@ -65,6 +65,7 @@ class UserSessionManager {
     await _prefs!.remove(AppConstants.prefBlockId);
     await _prefs!.remove(AppConstants.prefPanchayatId);
     await _prefs!.remove(AppConstants.prefVillageId);
+    await _prefs!.remove(AppConstants.prefName);
     await _prefs!.clear(); // Optionally clear all
   }
   Future<void> sanitizePrefs() async {
