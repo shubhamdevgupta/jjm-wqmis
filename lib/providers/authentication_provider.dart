@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/main.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 
@@ -11,11 +13,13 @@ import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:provider/provider.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
-
+  final session = UserSessionManager();
   AuthenticationProvider() {
     generateCaptcha();
   }
@@ -54,8 +58,10 @@ class AuthenticationProvider extends ChangeNotifier {
 
   Future<void> logoutUser() async {
     _isLoggedIn = false;
-    await _localStorage.remove(AppConstants.prefIsLoggedIn);
+
+    // Clear SharedPreferences
     await _localStorage.clearAll();
+    await session.clearPref();
     notifyListeners();
   }
 

@@ -522,6 +522,11 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
+  void setSelectedWaterSourcefilterOnly(String? value) {
+    selectedWtsfilter = value;
+    notifyListeners(); // Notify listeners to rebuild the widget
+  }
+
   void setSelectedHouseHold(int? value) {
     _selectedHouseHoldType = value;
     notifyListeners();
@@ -565,6 +570,11 @@ class Masterprovider extends ChangeNotifier {
     selectedScheme = null;
     schemes.clear();
     habitationId.clear();
+    notifyListeners();
+  }
+
+  void setSelectedVillageOnly(String? village) {
+    selectedVillage = village;
     notifyListeners();
   }
 
@@ -622,10 +632,13 @@ class Masterprovider extends ChangeNotifier {
     habitationId.clear();
     notifyListeners();
   }
+  void setSelectedStateOnly(String? stateId) {
+    selectedStateId = stateId;
+    notifyListeners();
+  }
 
-/*  void clearData() {
+  void clearData() {
     states.clear();
-    isLoading = false;
     selectedStateId = null;
 
     districts.clear();
@@ -652,6 +665,11 @@ class Masterprovider extends ChangeNotifier {
     wtpList.clear();
     selectedWtp = null;
 
+    istreated = 0;
+
+    _currentLatitude = null;
+    _currentLongitude = null;
+
     wtsFilterList.clear();
     selectedWtsfilter = null;
 
@@ -659,8 +677,21 @@ class Masterprovider extends ChangeNotifier {
 
     _validateVillageResponse = null;
 
+    baseStatus = 0;
+    _selectedSubSource = null;
+    _selectedHouseHoldType = null;
+    _selectedHandpumpPrivate = null;
+    _selectedDatetime = '';
+
+    errorMsg = '';
+    otherSourceLocation = '';
+    sampleTypeOther = '';
+
+    _isLoading = false;
+
     notifyListeners();
-  }*/
+  }
+
 
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {

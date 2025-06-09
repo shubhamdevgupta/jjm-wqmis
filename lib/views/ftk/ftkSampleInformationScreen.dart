@@ -40,6 +40,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      masterProvider.setSelectedVillageOnly(session.villageId.toString());
+      masterProvider.setSelectedWaterSourcefilterOnly('2');
+      masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
     });  }
 
@@ -127,9 +130,15 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       children: [
                         //card for state district selection
                         buildSampleTaken(masterProvider),
+
                         const SizedBox(
                           height: 12,
                         ),
+
+                     /* if(sourceId=="2")
+                        buildSchemeDropDown(masterProvider),*/
+
+
                         // card for location of source from where sample taken
                       ],
                     ),
@@ -190,18 +199,18 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               showSearchBar: false,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
-                if (masterProvider.selectedWtsfilter == "5") {
+                if (sourceId == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
                     value!, // <-- use directly here
                   );
-                } else if (masterProvider.selectedWtsfilter == "6") {
+                } else if (sourceId == "6") {
                   masterProvider.setSelectedSubSource(0);
                   masterProvider.setSelectedWTP("0");
                   masterProvider.fetchSourceInformation(
                     masterProvider.selectedVillage!,
                     masterProvider.selectedHabitation!,
-                    masterProvider.selectedWtsfilter!,
+                    sourceId.toString(),
                     "0",
                     masterProvider.selectedSubSource.toString(),
                     masterProvider.selectedWtp!,
@@ -238,8 +247,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
-        Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" &&
+        Visibility(  // TODO : please verify-- masterProvider.selectedWtsfilter  replaced with sourceId
+          visible: sourceId == "2" &&
               (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5,
@@ -308,7 +317,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible: masterProvider.selectedSubSource != null &&
-              masterProvider.selectedWtsfilter == "2",
+              sourceId == "2",
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -394,7 +403,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
-        visible: masterProvider.selectedWtsfilter == "6" &&
+        visible: sourceId == "6" &&
             (masterProvider.selectedScheme?.isNotEmpty ?? false),
         child: Card(
           elevation: 5,
@@ -471,8 +480,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "3" &&
-          (masterProvider.selectedScheme?.isNotEmpty ?? false),
+      visible: sourceId == "3" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         children: [
           Card(
@@ -655,8 +663,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "4" &&
-              (masterProvider.selectedScheme?.isNotEmpty ?? false),
+          visible: sourceId == "4" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -712,8 +719,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 7 &&
-              masterProvider.selectedWtsfilter == "4",
+          visible: masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -792,7 +798,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible: masterProvider.selectedHandpumpPrivate == 8 &&
-              masterProvider.selectedWtsfilter == "4",
+              sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(

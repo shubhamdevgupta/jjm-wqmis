@@ -1,6 +1,7 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
@@ -110,8 +111,13 @@ class _ftkDashboard extends State<ftkDashboard> {
                       context,
                       listen: false);
                   await authProvider.logoutUser();
-                  Navigator.pushReplacementNamed(
-                      context, AppConstants.navigateToLoginScreen);
+                  await AppResetService.fullReset(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppConstants.navigateToLoginScreen,
+                        (route) => false,
+                  );
+
                 },
               ),
             ],
