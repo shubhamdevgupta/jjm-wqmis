@@ -234,7 +234,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           buildEsrWater(masterProvider),
           buildHouseholdWater(masterProvider),
           buildHandpumpWater(masterProvider),
-          buildTimeAddressRemarks(masterProvider),
+
         ],
       ),
     );
@@ -312,8 +312,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedSubSource != null &&
-              sourceId == "2",
+          visible: masterProvider.selectedSubSource != null && sourceId == "2",
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -353,11 +352,10 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {
-                    masterProvider.setSelectedDateTime(value);
-                  },textTitle: "Date & Time of Sample Collection *",),
+
+                  buildTimeAddressRemarks(masterProvider),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
 
                   Center(
@@ -439,11 +437,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                CustomDateTimePicker(onDateTimeSelected: (value) {
-                  masterProvider.setSelectedDateTime(value);
-                },textTitle: "Date & Time of Sample Collection *",),
+                buildTimeAddressRemarks(masterProvider),
                 const SizedBox(
-                  height: 18,
+                  height: 15,
                 ),
                 Center(
                   child: ElevatedButton(
@@ -559,12 +555,37 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       controller: householdController,
                       isRequired: true,
                     ),
-                    CustomDateTimePicker(onDateTimeSelected: (value) {
-                      masterProvider.setSelectedDateTime(value);
-                    },textTitle: "Date & Time of Sample Collection *",),
+                buildTimeAddressRemarks(masterProvider),
                     const SizedBox(
                       height: 18,
                     ),
+
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (validateHouseholdWaterFields(
+                              masterProvider, householdController)) {
+                            masterProvider.otherSourceLocation =
+                                householdController.text;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChangeNotifierProvider.value(
+                                    value: masterProvider,
+                                    child: const FtkParameterListScreen(),
+                                  )),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -610,9 +631,37 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                                   .setSelectedWaterSourceInformation(value);
                             },
                           ),
-                    CustomDateTimePicker(onDateTimeSelected: (value) {
-                      masterProvider.setSelectedDateTime(value);
-                    },textTitle: "Date & Time of Sample Collection *",)
+                    buildTimeAddressRemarks(masterProvider),
+
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (validateHouseholdWaterFields(
+                              masterProvider, householdController)) {
+                            masterProvider.otherSourceLocation =
+                                householdController.text;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChangeNotifierProvider.value(
+                                    value: masterProvider,
+                                    child: const FtkParameterListScreen(),
+                                  )),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -621,36 +670,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           const SizedBox(
             height: 10,
           ),
-          Visibility(
-            visible: masterProvider.selectedHousehold == 3 ||
-                masterProvider.selectedHousehold == 4,
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (validateHouseholdWaterFields(
-                      masterProvider, householdController)) {
-                    masterProvider.otherSourceLocation =
-                        householdController.text;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChangeNotifierProvider.value(
-                                value: masterProvider,
-                                child: const FtkParameterListScreen(),
-                              )),
-                    );
-                  } else {
-                    ToastHelper.showToastMessage(masterProvider.errorMsg);
-                  }
-                },
-                style: AppStyles.buttonStylePrimary(),
-                child: const Text(
-                  'Next',
-                  style: AppStyles.textStyle,
-                ),
-              ),
-            ),
-          )
+
         ],
       ),
     );
@@ -751,9 +771,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {
-                    masterProvider.setSelectedDateTime(value);
-                  },textTitle: "Date & Time of Sample Collection *",),
+                  buildTimeAddressRemarks(masterProvider),
                   const SizedBox(
                     height: 10,
                   ),
@@ -822,9 +840,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     controller: handpumpLocationController,
                     isRequired: true,
                   ),
-                  CustomDateTimePicker(onDateTimeSelected: (value) {
-                    masterProvider.setSelectedDateTime(value);
-                  },textTitle: "Date & Time of Sample Collection *",),
+                  buildTimeAddressRemarks(masterProvider),
                   const SizedBox(
                     height: 10,
                   ),
@@ -1021,37 +1037,150 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildTimeAddressRemarks(Masterprovider masterProvider) {
     return Column(
       children: [
-        Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-                12), // Slightly increased border radius for a smooth look
-          ),
-          margin: const EdgeInsets.all(5),
-          // Margin to ensure spacing around the card
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // Align text to the left
-              children: [
-                CustomDateTimePicker(onDateTimeSelected: (value) {
-                  masterProvider.setSelectedDateTime(value);
-                },textTitle: "Date & Time of Sample Collection *",),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                CustomDateTimePicker(onDateTimeSelected: (value) {
-                  masterProvider.setSelectedDateTime(value);
-                },textTitle: "Date & Time of Sample tested *",),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // Align text to the left
+          children: [
+            CustomDateTimePicker(onDateTimeSelected: (value) {
+              masterProvider.setSelectedDateTime(value);
+            },textTitle: "Date & Time of Sample Collection *",),
+            const SizedBox(
+              height: 10,
             ),
-          ),
+
+            CustomDateTimePicker(onDateTimeSelected: (value) {
+              masterProvider.setSelectedDateTime(value);
+            },textTitle: "Date & Time of Sample tested *",),
+            const SizedBox(
+              height: 10,
+            ),
+
+            TextFormField(
+              maxLines: 1,
+              // Allows multiline input
+              decoration:
+              InputDecoration(
+                filled: true,
+                fillColor:
+                Colors
+                    .white,
+                contentPadding: const EdgeInsets
+                    .symmetric(
+                    vertical:
+                    14,
+                    horizontal:
+                    16),
+                // Better padding
+                border:
+                OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(
+                      12),
+                  // Smoother rounded edges
+                  borderSide: BorderSide(
+                      color: Colors
+                          .grey
+                          .shade300,
+                      width:
+                      1),
+                ),
+                focusedBorder:
+                OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(
+                      12),
+                  borderSide: const BorderSide(
+                      color: Colors
+                          .blueAccent,
+                      width:
+                      1.5), // Focus highlight
+                ),
+                hintText:
+                "Enter your Address",
+                hintStyle: TextStyle(
+                    fontSize:
+                    16,
+                    color: Colors
+                        .grey
+                        .shade600),
+
+              ),
+              keyboardType:
+              TextInputType
+                  .multiline,
+              textInputAction:
+              TextInputAction
+                  .newline, // Allows new line input
+            ),
+
+            SizedBox(
+              height: 14,
+            ),
+
+
+            SizedBox(
+              width: double
+                  .infinity,
+              child:
+              TextFormField(
+                maxLines: 2,
+                // Allows multiline input
+                decoration:
+                InputDecoration(
+                  filled: true,
+                  fillColor:
+                  Colors
+                      .white,
+                  contentPadding: const EdgeInsets
+                      .symmetric(
+                      vertical:
+                      14,
+                      horizontal:
+                      16),
+                  // Better padding
+                  border:
+                  OutlineInputBorder(
+                    borderRadius:
+                    BorderRadius.circular(
+                        12),
+                    // Smoother rounded edges
+                    borderSide: BorderSide(
+                        color: Colors
+                            .grey
+                            .shade300,
+                        width:
+                        1),
+                  ),
+                  focusedBorder:
+                  OutlineInputBorder(
+                    borderRadius:
+                    BorderRadius.circular(
+                        12),
+                    borderSide: const BorderSide(
+                        color: Colors
+                            .blueAccent,
+                        width:
+                        1.5), // Focus highlight
+                  ),
+                  hintText:
+                  "Enter your remarks",
+                  hintStyle: TextStyle(
+                      fontSize:
+                      16,
+                      color: Colors
+                          .grey
+                          .shade600),
+
+                ),
+                keyboardType:
+                TextInputType
+                    .multiline,
+                textInputAction:
+                TextInputAction
+                    .newline, // Allows new line input
+              ),
+            ),
+          ],
         ),
       ],
     );
