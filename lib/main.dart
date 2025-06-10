@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppRoutes.dart';
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DashboardProvider()),
         ChangeNotifierProvider(create: (context) => Samplelistprovider()),
         ChangeNotifierProvider(create: (context) => DwsmProvider()),
+        ChangeNotifierProvider(create: (context) => Ftkprovider()),
       ],
       child: const MyApp(),
     ),

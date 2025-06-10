@@ -75,7 +75,7 @@ class WaterQualityParameterCard extends StatelessWidget {
                   children: [
                     _buildRadioOption(1, "Yes", Colors.black),
                     _buildRadioOption(0, "No", Colors.black),
-                    _buildRadioOption(-1, "Not tested", Colors.black),
+                    _buildRadioOption(2, "Not tested", Colors.black),
                   ],
                 );
               },

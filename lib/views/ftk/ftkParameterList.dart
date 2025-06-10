@@ -1,57 +1,59 @@
 import 'package:flutter/material.dart';
-
+import 'package:jjm_wqmis/providers/ftkProvider.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/views/ftk/ftkParameterScreen.dart';
+import 'package:provider/provider.dart';
 
 class FtkParameterListScreen extends StatefulWidget {
   const FtkParameterListScreen({super.key});
 
   @override
-  State<FtkParameterListScreen> createState() =>
-      _FtkParameterListScreenState();
+  State<FtkParameterListScreen> createState() => _FtkParameterListScreenState();
 }
 
 class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
-  final List<Map<String, String>> _staticParameters = [
-    {
-      "name": "Free Residual Chlorine",
-      "info": "Unit: mg/l | Acceptable: 0.2 | Permissible: 1",
-    },
-    {
-      "name": "pH",
-      "info": "Acceptable: 6.5–8.5 | Permissible: No Relaxation",
-    },
-    {
-      "name": "Turbidity",
-      "info": "Unit: NTU | Acceptable: 1 | Permissible: 5",
-    },
-  ];
-
-  late List<int?> _selectedValues;
-
+  final session = UserSessionManager();
+  
   @override
   void initState() {
     super.initState();
-    _selectedValues = List.filled(_staticParameters.length, null);
+    final ftkProvider = Provider.of<Ftkprovider>(context, listen: false);
+    ftkProvider.fetchParameterList(session.stateId, session.districtId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Water Quality Parameters")),
-      body: ListView.builder(
-        itemCount: _staticParameters.length,
-        itemBuilder: (context, index) {
-          final param = _staticParameters[index];
-          return WaterQualityParameterCard(
-            index: index,
-            parameterName: param['name'] ?? 'Unknown',
-            measurementInfo: param['info'] ?? '',
-            selectedValue: _selectedValues[index],
-            onChanged: (val) {
-              setState(() {
-                _selectedValues[index] = val;
-              });
-            },
+      body: Consumer<Ftkprovider>(
+        builder: (context, ftkProvider, child) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: ftkProvider.ftkParameterList.length,
+                  itemBuilder: (context, index) {
+                    final param = ftkProvider.ftkParameterList[index];
+                    return WaterQualityParameterCard(
+                      index: index,
+                      parameterName: param.parameterName,
+                      measurementInfo:
+                      '${param.acceptableLimit} ${param.measurementUnit} ${param.permissibleLimit}',
+                      selectedValue: param.selectedValue, // ✅ pull from model
+                      onChanged: (val) {
+                        ftkProvider.setSelectedParamForIndex(index, val!); // ✅ set in model
+                      },
+                    );
+                  },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                    print('--->> ${ftkProvider.getSelectedParameters()}');
+                },
+                child: const Text('Save Data'),
+              )
+            ],
           );
         },
       ),
