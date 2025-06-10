@@ -100,7 +100,6 @@ class Ftkprovider extends ChangeNotifier {
       longitude,
       IpAddress,
       sampleTypeOther,
-      isTreadted,
       parameteId,
       paramSaferange) async {
     _isLoading = true;
@@ -130,7 +129,6 @@ class Ftkprovider extends ChangeNotifier {
           longitude,
           IpAddress,
           sampleTypeOther,
-          isTreadted,
           parameteId,
           paramSaferange);
       notifyListeners();

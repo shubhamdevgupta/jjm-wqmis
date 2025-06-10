@@ -186,7 +186,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                             },
                             appBarTitle: "Select Habitation",
                           ),
-
+                          SizedBox(height: 10,),
                           Column(
                             children: masterProvider.wtsFilterList
                                 .where((source) => source.id != "5") // 👈 filter out ID 5

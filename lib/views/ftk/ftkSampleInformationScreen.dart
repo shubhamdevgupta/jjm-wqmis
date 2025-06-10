@@ -42,11 +42,10 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       session.init();
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
-      print('----..... ${masterProvider.selectedWtsfilter}');
-      masterProvider.setSelectedWaterSourcefilterOnly('2');
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
-    });  }
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -345,8 +344,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            masterProvider
-                                .setSelectedWaterSourceInformation(value);
+                            final selectedWaterSource = masterProvider.waterSource.firstWhere(
+                                  (source) => source.locationId == value,
+                              orElse: () => masterProvider.waterSource.first, // Handle the case where no match is found (optional)
+                            );
+                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
+                            masterProvider.setSelectedWaterSourceInformation(value);
                           },
                         ),
 
@@ -1126,6 +1129,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               child:
               TextFormField(
                 maxLines: 2,
+                controller: masterProvider.ftkRemarkController,
                 // Allows multiline input
                 decoration:
                 InputDecoration(
