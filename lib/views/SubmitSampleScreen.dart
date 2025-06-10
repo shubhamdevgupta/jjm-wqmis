@@ -1229,7 +1229,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedWtsfilter.toString()),
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
-      masterProvider.sampleTypeOther,
+      masterProvider.selectedWaterSource,
       provider.lat!.toString(),
       provider.lng!.toString(),
       remarkController.text,

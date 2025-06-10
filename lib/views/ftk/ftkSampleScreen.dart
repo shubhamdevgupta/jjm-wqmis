@@ -196,7 +196,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                                 color: Colors.primaries[
                                 masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
-
+                                  masterProvider.setSelectedWaterSourcefilter(source.id);
                                   if(masterProvider.selectedHabitation!= null){
                                     Navigator.pushNamed(
                                       context,

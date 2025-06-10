@@ -42,6 +42,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       session.init();
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
+      print('----..... ${masterProvider.selectedWtsfilter}');
       masterProvider.setSelectedWaterSourcefilterOnly('2');
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
@@ -1057,6 +1058,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
             TextFormField(
               maxLines: 1,
+              controller: masterProvider.addressController,
               // Allows multiline input
               decoration:
               InputDecoration(

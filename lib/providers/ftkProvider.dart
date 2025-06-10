@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
+import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Ftkprovider extends ChangeNotifier {
@@ -21,10 +22,17 @@ class Ftkprovider extends ChangeNotifier {
   Sampleresponse? sampleresponse;
   String errorMsg = '';
 
-  Future<void> fetchParameterList(
-    int stateId,
-    int districtId,
-  ) async {
+
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
+  }
+
+  Future<void> fetchParameterList(int stateId, int districtId,) async {
     _isLoading = true;
 
     notifyListeners();
@@ -52,15 +60,21 @@ class Ftkprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> getSelectedParameters() {
+  String getSelectedParameterIds() {
     return ftkParameterList
-        .where((param) => param.selectedValue != null)
-        .map((param) => {
-              'parameterId': param.parameterId,
-              'selectedValue': param.selectedValue
-            })
-        .toList();
+        .where((param) => param.selectedValue != null && param.selectedValue != 2)
+        .map((param) => param.parameterId.toString())
+        .join(',');
   }
+
+  String getSelectedParameterValues() {
+    return ftkParameterList
+        .where((param) => param.selectedValue != null && param.selectedValue != 2)
+        .map((param) => param.selectedValue.toString())
+        .join(',');
+  }
+
+
 
   Future<void> saveFtkData(
       mobileNumber,

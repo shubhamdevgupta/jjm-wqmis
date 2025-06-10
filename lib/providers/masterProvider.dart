@@ -93,6 +93,15 @@ class Masterprovider extends ChangeNotifier {
 
   String? get selectedDatetime => _selectedDatetime;
 
+  String? _selectedDatetimeSampleCollection = "";
+
+  String? get selectedDatetimeSampleCollection => _selectedDatetimeSampleCollection;
+
+  String? _selectedDatetimeSampleTested = "";
+
+  String? get selectedDatetimeSampleTested => _selectedDatetimeSampleTested;
+
+  TextEditingController addressController = TextEditingController();
   String errorMsg = '';
   String otherSourceLocation = '';
   String sampleTypeOther = '';
@@ -508,6 +517,8 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
+    _selectedDatetimeSampleCollection = value;
+    _selectedDatetimeSampleTested = value;
     notifyListeners();
   }
 
