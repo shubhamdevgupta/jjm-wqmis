@@ -20,8 +20,7 @@ class SampleListRepo {
       int gpid,
       int villageid) async {
     try {
-      final String endpoint =
-          '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId&stateid=$stateid&districtid=$districtid&blockid=$blockid&gpid=$gpid&villageid=$villageid';
+      final String endpoint = '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId&stateid=$stateid&districtid=$districtid&blockid=$blockid&gpid=$gpid&villageid=$villageid';
 
       final response = await _apiService.get(endpoint);
 

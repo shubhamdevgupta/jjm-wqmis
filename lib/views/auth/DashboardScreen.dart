@@ -399,17 +399,15 @@ late DashboardProvider dashboardProvider;
                                 child: _buildInfoCard(
                                   imagePath: 'assets/icons/search.png',
                                   iconColor: Colors.purple,
-                                  title: "Know your sample detail",
-                                  value:
-                                  '',
+                                  title: AppConstants.knowyoursampledetail,
+                                  value: '',
                                   onTap: () {
-                                    ToastHelper.showSnackBar(context, "working on this.");
-                                 /*   Navigator.pushNamed(context,
+                                    Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
                                           'flag': AppConstants.totalSampleTested,
                                           'flagFloating': ""
-                                        });*/
+                                        });
                                   },
                                 ),
                               ),

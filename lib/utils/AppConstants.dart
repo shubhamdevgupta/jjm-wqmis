@@ -79,6 +79,7 @@ class AppConstants {
   static const String dwsm_dashboardOverview = 'DWSM Dashboard';
   static const String welcome = 'Welcome';
   static const String totalSamplesSubmitted = 'New Samples Registered';
+  static const String  knowyoursampledetail =  "Know your sample detail";
   static const String totalPhysicalSubmitted = 'Physically Received Samples';
   static const String totalSampleTested = 'Total Samples Tested';
   static const String totalRetest = 'Total Retest';
