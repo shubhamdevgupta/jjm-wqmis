@@ -64,6 +64,7 @@ class AppConstants {
   //ftk
   static const String navigateToFtkSampleScreen = '/ftksampleScreen';
   static const String navigateToFtkDashboard = '/ftkDashboard';
+  static const String navigateToFtkSampleListScreen = '/ftkSampleListScreen';
 
 
 

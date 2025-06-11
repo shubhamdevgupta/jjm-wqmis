@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
@@ -90,4 +91,24 @@ class FtkRepository {
       rethrow;
     }
   }
+
+  Future<BaseResponseModel<FtkSample>> fetchFtkSample(
+      int regId,
+      int villageid,
+      int SampleId,
+      ) async {
+    try {
+      final String endpoint =
+          '/apimobile/ftksampleList?reg_id=$regId&villageid=$villageid&SampleId$SampleId';
+
+      final response = await _apiService.get(endpoint);
+
+      return BaseResponseModel<FtkSample>.fromJson(
+          response, (json) => FtkSample.fromJson(json));
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
 }

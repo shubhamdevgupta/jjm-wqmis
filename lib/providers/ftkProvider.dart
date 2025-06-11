@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
@@ -25,6 +26,9 @@ class Ftkprovider extends ChangeNotifier {
 
   String? _deviceId;
   String? get deviceId => _deviceId;
+
+  List<FtkSample> ftkSample = []; // Correctly storing List<Sample>
+
 
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
@@ -147,4 +151,28 @@ class Ftkprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> fetchftkSampleList(
+      int regId,
+      int villageid,
+      int sampleId
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _ftkRepository.fetchFtkSample(regId,villageid,sampleId);
+      ftkSample = response.result;
+      baseStatus = response.status;
+      errorMsg = response.message;
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+
 }
