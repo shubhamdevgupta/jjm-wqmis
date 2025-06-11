@@ -86,12 +86,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
         String district = args['dis'] ?? "0";
         String block = args['block'] ?? "0";
 
-        if ((flagfloation == AppConstants.totalSamplesSubmitted ||
-                flag == AppConstants.openSampleListScreen) &&
-            (flagfloation == AppConstants.totalPhysicalSubmitted ||
-                flag == AppConstants.openSampleListScreen) &&
-            (flag == AppConstants.openSampleListScreen ||
-                flagfloation == AppConstants.totalSampleTested)) {
+        if ((flagfloation == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen) && (flagfloation == AppConstants.totalPhysicalSubmitted || flag == AppConstants.openSampleListScreen) && (flag == AppConstants.openSampleListScreen || flagfloation == AppConstants.totalSampleTested)) {
           if (flagfloation == AppConstants.totalSamplesSubmitted) {
             C_STATUS = 1;
           } else if (flagfloation == AppConstants.totalPhysicalSubmitted) {
@@ -119,11 +114,12 @@ class _SampleListScreenState extends State<SampleListScreen> {
             flag == AppConstants.openSampleListScreen) {
           sampleListProvider.fetchSampleList(
               session.regId, 1, "0", 6, "0", 0, 0, 0, 0, 0);
-        } else if (flag == AppConstants.totalSamplesSubmitted ||
-            flag == AppConstants.openSampleListScreen) {
-          C_STATUS = 1;
-          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH,
-              C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        } else if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen)
+        {C_STATUS = 1;
+          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        }else if (flag == AppConstants.knowyoursampledetail || flag == AppConstants.openSampleListScreen)
+        {C_STATUS = 0;
+          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         }
       }
     });
@@ -377,53 +373,66 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 Visibility(
                                                   visible:
                                                       sample.currentStatus == 1,
-                                                  child: ElevatedButton(
+                                                  child:ElevatedButton(
                                                     onPressed: () async {
-                                                      LoaderUtils.showLoadingWithMessage(context, message: 'Deleting sample...');
-                                                      String deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-                                                      provider.deleteSample(
+                                                      bool? confirmDelete = await showDialog<bool>(
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: const Text('Confirm Delete'),
+                                                            content: const Text('Are you sure you want to delete this sample?'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () => Navigator.of(context).pop(false),
+                                                                child: const Text('Cancel'),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () => Navigator.of(context).pop(true),
+                                                                child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+
+                                                      if (confirmDelete == true) {
+                                                        LoaderUtils.showLoadingWithMessage(context, message: 'Deleting sample...');
+                                                        String deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+                                                        provider.deleteSample(
                                                           encryption.encryptText(sample.sId.toString()),
                                                           encryption.encryptText(session.regId.toString()),
                                                           encryption.encryptText(deviceId),
-                                                          (response) {
+                                                              (response) {
                                                             LoaderUtils.hideLoaderDialog(context);
-                                                        bool deleted = provider.deleteSampleFromList(index, sample.sId);
-                                                        deleted ? ToastHelper.showSuccessSnackBar(context, provider.errorMsg)
-                                                            : ToastHelper.showSnackBar(context, provider.errorMsg);
-                                                      }, (error) {
-                                                        LoaderUtils.hideLoaderDialog(context);
-                                                        ToastHelper.showSnackBar(context, error);
-                                                      });
+                                                            bool deleted = provider.deleteSampleFromList(index, sample.sId);
+                                                            deleted
+                                                                ? ToastHelper.showSuccessSnackBar(context, provider.errorMsg)
+                                                                : ToastHelper.showSnackBar(context, provider.errorMsg);
+                                                          },
+                                                              (error) {
+                                                            LoaderUtils.hideLoaderDialog(context);
+                                                            ToastHelper.showSnackBar(context, error);
+                                                          },
+                                                        );
+                                                      }
                                                     },
-
                                                     style: ElevatedButton.styleFrom(
                                                       elevation: 0,
-                                                      backgroundColor:
-                                                          Colors.red.shade50,
-                                                      foregroundColor:
-                                                          Colors.red.shade700,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              2),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        side: BorderSide(
-                                                            color: Colors
-                                                                .red.shade200),
+                                                      backgroundColor: Colors.red.shade50,
+                                                      foregroundColor: Colors.red.shade700,
+                                                      padding: const EdgeInsets.all(2),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        side: BorderSide(color: Colors.red.shade200),
                                                       ),
                                                     ),
                                                     child: const Row(
                                                       children: [
-                                                        Icon(
-                                                            Icons
-                                                                .delete_outline,
-                                                            size: 24),
+                                                        Icon(Icons.delete_outline, size: 24),
                                                       ],
                                                     ),
                                                   ),
+
                                                 ),
                                                 Visibility(
                                                   visible:
