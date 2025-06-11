@@ -7,15 +7,13 @@ import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/ftk/ftkParameterList.dart';
+import 'package:jjm_wqmis/views/ftk/fktSubmitSample.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 class ftkSampleInformationScreen extends StatefulWidget {
   const ftkSampleInformationScreen({super.key});
@@ -32,7 +30,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       TextEditingController();
   final TextEditingController handpumpLocationController = TextEditingController();
   String? sourceId; // 👈 Store the ID here
-  String? habitationId;
   String? sourceType;
 
   @override
@@ -42,10 +39,13 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       session.init();
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
-      masterProvider.setSelectedWaterSourcefilterOnly('2');
       masterProvider.setSelectedStateOnly(session.stateId.toString());
-      masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
-    });  }
+      masterProvider.setSelectedHabitation('0');
+      masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),masterProvider.selectedHabitation!,sourceId.toString());
+      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),
+          session.blockId.toString(), session.panchayatId.toString(), session.villageId.toString());
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -54,11 +54,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map) {
       sourceId = args['sourceId'];
-      habitationId = args['habitationId'];
       sourceType = args['sourceType'];
 
       debugPrint("sourceId: $sourceId");
-      debugPrint("habitationId: $habitationId");
     }
   }
   @override
@@ -243,7 +241,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
-        Visibility(  // TODO : please verify-- masterProvider.selectedWtsfilter  replaced with sourceId
+        Visibility(
           visible: sourceId == "2" &&
               (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
@@ -344,8 +342,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            masterProvider
-                                .setSelectedWaterSourceInformation(value);
+                            final selectedWaterSource = masterProvider.waterSource.firstWhere(
+                                  (source) => source.locationId == value,
+                              orElse: () => masterProvider.waterSource.first, // Handle the case where no match is found (optional)
+                            );
+                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
+                            masterProvider.setSelectedWaterSourceInformation(value);
                           },
                         ),
 
@@ -528,6 +530,27 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 ],
               ),
             ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          CustomDropdown(
+            title: "Habitation *",
+            value: masterProvider.selectedHabitation,
+            items: masterProvider.habitationId.map((habitation) {
+              return DropdownMenuItem<String>(
+                value: habitation.habitationId.toString(),
+                child: Text(
+                  habitation.habitationName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              masterProvider.setSelectedHabitation(value);
+            },
+            appBarTitle: "Select Habitation",
           ),
           const SizedBox(
             height: 10,
@@ -1057,6 +1080,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
             TextFormField(
               maxLines: 1,
+              controller: masterProvider.addressController,
               // Allows multiline input
               decoration:
               InputDecoration(
@@ -1124,6 +1148,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               child:
               TextFormField(
                 maxLines: 2,
+                controller: masterProvider.ftkRemarkController,
                 // Allows multiline input
                 decoration:
                 InputDecoration(

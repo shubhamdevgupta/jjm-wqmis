@@ -82,6 +82,7 @@ class AuthenticationProvider extends ChangeNotifier {
         _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
         _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
         _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
+        _localStorage.saveString(AppConstants.prefLoginID, _loginResponse!.loginId!);
 
         _localStorage.saveInt(AppConstants.prefRegId, _loginResponse!.regId!);
         _localStorage.saveInt(AppConstants.prefRoleId, _loginResponse!.roleId!);

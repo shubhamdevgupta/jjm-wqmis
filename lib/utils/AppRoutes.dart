@@ -16,9 +16,10 @@ import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
 import 'package:jjm_wqmis/views/auth/LoginScreen.dart';
 import 'package:jjm_wqmis/views/auth/SplashScreen.dart';
 import 'package:jjm_wqmis/views/ftk/ftkDashboard.dart';
-import 'package:jjm_wqmis/views/ftk/ftkParameterList.dart';
+import 'package:jjm_wqmis/views/ftk/fktSubmitSample.dart';
 import 'package:jjm_wqmis/views/ftk/ftkSampleInformationScreen.dart';
-import 'package:jjm_wqmis/views/ftk/ftkSampleScreen.dart';
+import 'package:jjm_wqmis/views/ftk/ftkMenuDashboardScreen.dart';
+import 'package:jjm_wqmis/views/ftk/ftkSampleListScreen.dart';
 import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
 import 'package:jjm_wqmis/views/lab/AsPerParameterView.dart';
 import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
@@ -55,9 +56,9 @@ class AppRoutes {
 
 
       //ftk
-      AppConstants.navigateToFtkSampleScreen: (context) => const ftksamplescreen(),
+      AppConstants.navigateToFtkSampleScreen: (context) => const Ftkmenudashboardscreen(),
       AppConstants.navigateToFtkDashboard: (context) => const ftkDashboard(),
-
+      AppConstants.navigateToFtkSampleListScreen:(context)=> const ftkSampleListScreen(),
       //webview
       AppConstants.navigateToTestReport: (context) => const TestReport(
             url: '',

@@ -24,7 +24,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   final session = UserSessionManager();
 
   final encryption = AesEncryption();
-late DashboardProvider dashboardProvider;
   @override
   void initState() {
     super.initState();
@@ -32,16 +31,12 @@ late DashboardProvider dashboardProvider;
     //var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
     session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      dashboardProvider =
-          Provider.of<DashboardProvider>(context, listen: false);
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-
-      await dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
-
-
       await masterProvider.fetchDistricts(session.stateId.toString());
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
+      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
+
     });
   }
 
@@ -80,7 +75,7 @@ late DashboardProvider dashboardProvider;
                         color: Colors.white),
                     // Cart icon
                     onPressed: () {
-                      dashboardProvider.loadDashboardData(session.roleId,session.regId,session.stateId);
+                 //     Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
                     },
                   )
                 ],

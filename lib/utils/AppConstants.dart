@@ -9,6 +9,7 @@ class AppConstants {
   static const String prefRoleId = 'roleId';
   static const String prefName = 'name';
   static const String prefMobile = 'mobile';
+  static const String prefLoginID = 'loginId';
 
   static const String prefStateId = 'prefStateId';
   static const String prefDistrictId = 'prefDistrictId';
@@ -63,6 +64,7 @@ class AppConstants {
   //ftk
   static const String navigateToFtkSampleScreen = '/ftksampleScreen';
   static const String navigateToFtkDashboard = '/ftkDashboard';
+  static const String navigateToFtkSampleListScreen = '/ftkSampleListScreen';
 
 
 

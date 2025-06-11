@@ -14,6 +14,7 @@ class UserSessionManager {
   String token = '';
   String userName = '';
   String mobile = '';
+  String loginId = '';
   int regId = 0;
   int roleId = 0;
 
@@ -34,6 +35,7 @@ class UserSessionManager {
     token = _prefs?.getString(AppConstants.prefToken) ?? '';
     userName = _prefs?.getString(AppConstants.prefName) ?? '';
     mobile = _prefs?.getString(AppConstants.prefMobile) ?? '';
+    loginId = _prefs?.getString(AppConstants.prefLoginID) ?? '';
 
     regId = _prefs?.getInt(AppConstants.prefRegId) ?? 0;
     roleId = _prefs?.getInt(AppConstants.prefRoleId) ?? 0;
@@ -66,6 +68,7 @@ class UserSessionManager {
     await _prefs!.remove(AppConstants.prefPanchayatId);
     await _prefs!.remove(AppConstants.prefVillageId);
     await _prefs!.remove(AppConstants.prefName);
+    await _prefs!.remove(AppConstants.prefLoginID);
     await _prefs!.clear(); // Optionally clear all
   }
   Future<void> sanitizePrefs() async {
