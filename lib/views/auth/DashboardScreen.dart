@@ -522,7 +522,7 @@ late DashboardProvider dashboardProvider;
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            showDialog<bool>(
+                    /*        showDialog<bool>(
                               context: context,
                               builder: (BuildContext context) {
                                 double screenHeight =
@@ -542,6 +542,13 @@ late DashboardProvider dashboardProvider;
                                   ),
                                 );
                               },
+                            );*/
+
+
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              AppConstants.navigateToLocationScreen,
+                                  (route) => false, // Clears all previous routes
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -675,6 +682,10 @@ late DashboardProvider dashboardProvider;
       ),
     );
   }
+
+
+
+
   Widget _buildInfoCard({
     required String imagePath,
     required Color iconColor,

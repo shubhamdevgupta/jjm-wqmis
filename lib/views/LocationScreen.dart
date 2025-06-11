@@ -37,45 +37,47 @@ class _LocationscreenState extends State<Locationscreen> {
     final paramProvider = Provider.of<ParameterProvider>(
         context, listen: true);
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              // Removes the default back button
-              centerTitle: true,
-              title: Text(
-                'Choose Location',
-                style: AppStyles.appBarTitle,
-              ),
+        home: Container(
+          child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                // Removes the default back button
+                centerTitle: true,
+                title: Text(
+                  'Choose Location',
+                  style: AppStyles.appBarTitle,
+                ),
 
-              //elevation
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  // Background color for the container
-                  borderRadius: BorderRadius.circular(8),
-                  // Rounded corners
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF096DA8), // Dark blue color
-                      Color(0xFF3C8DBC), // jjm blue color
-                    ],
-                    begin: Alignment.topCenter, // Start at the top center
-                    end: Alignment.bottomCenter, // End at the bottom center
+                //elevation
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    // Background color for the container
+                    borderRadius: BorderRadius.circular(8),
+                    // Rounded corners
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF096DA8), // Dark blue color
+                        Color(0xFF3C8DBC), // jjm blue color
+                      ],
+                      begin: Alignment.topCenter, // Start at the top center
+                      end: Alignment.bottomCenter, // End at the bottom center
+                    ),
                   ),
                 ),
+                elevation: 5,
               ),
-              elevation: 5,
-            ),
-            body: Consumer<Masterprovider>(
-                builder: (context, masterProvider, child) {
-              return masterProvider.isLoading
-                      ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                      :SingleChildScrollView(
-                      child: Column(
-                    children: [buildStateVillage(masterProvider,paramProvider)],
-                  ));
+              body: Consumer<Masterprovider>(
+                  builder: (context, masterProvider, child) {
+                return masterProvider.isLoading
+                        ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
+                        :SingleChildScrollView(
+                        child: Column(
+                      children: [buildStateVillage(masterProvider,paramProvider)],
+                    ));
 
-            })));
+              })),
+        ));
 
   }
 
@@ -93,6 +95,135 @@ class _LocationscreenState extends State<Locationscreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.15),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Village Details",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Row 1: State & District
+                      Row(
+                        children: [
+                          Expanded(
+                            child: buildLocationTile(
+                              icon: Icons.location_city,
+                              label: "State",
+                              value: session.stateName ?? "Select",
+                              color: Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: buildLocationTile(
+                              icon: Icons.location_city,
+                              label: "District",
+                              value: session.districtName ?? "Select",
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Row 2: Block & Gram Panchayat
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                showBlockDropdown(context, masterProvider);
+                              },
+                              child: buildLocationTile(
+                                icon: Icons.map,
+                                label: "Block",
+                                value: masterProvider.selectedBlockId ?? "Select",
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                showGramPanchayatDropdown(context, masterProvider);
+                              },
+                              child: buildLocationTile(
+                                icon: Icons.location_city,
+                                label: "Gram Panchayat",
+                                value: masterProvider.selectedGramPanchayat ?? "Select",
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Row 3: Village & Habitation
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                showVillageDropdown(context, masterProvider);
+                              },
+                              child: buildLocationTile(
+                                icon: Icons.home,
+                                label: "Village",
+                                value: masterProvider.selectedVillage ?? "Select",
+                                color: Colors.purple,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                showHabitationDropdown(context, masterProvider);
+                              },
+                              child: buildLocationTile(
+                                icon: Icons.home_work,
+                                label: "Habitation",
+                                value: masterProvider.selectedHabitation ?? "Select",
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+
+
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -221,112 +352,9 @@ class _LocationscreenState extends State<Locationscreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
-              //block data here--------------
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomDropdown(
-                    value: masterProvider.selectedBlockId,
-                    items: masterProvider.blocks.map((block) {
-                      return DropdownMenuItem<String>(
-                        value: block.jjmBlockId,
-                        child: Text(
-                          block.blockName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      );
-                    }).toList(),
-                    title: "Block *",
-                    onChanged: (value) {
-                      masterProvider.setSelectedBlock(value);
-                      if (value != null&&value.isNotEmpty) {
-                        masterProvider.fetchGramPanchayat(
-                            masterProvider.selectedStateId!,
-                            masterProvider.selectedDistrictId!,
-                            value);
-                      }
-                    },
-                    appBarTitle: "Select block",
 
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
 
-              /// grampanchayat data here -----------------------
-              CustomDropdown(
-                title: "GP *",
-                value: masterProvider.selectedGramPanchayat,
-                items: masterProvider.gramPanchayat.map((gramPanchayat) {
-                  return DropdownMenuItem<String>(
-                      value: gramPanchayat.jjmPanchayatId,
-                      child: Text(
-                        gramPanchayat.panchayatName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ));
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedGrampanchayat(value);
-                  if (value != null && value.isNotEmpty) {
-                    masterProvider.fetchVillage(
-                        masterProvider.selectedStateId!,
-                        masterProvider.selectedDistrictId!,
-                        masterProvider.selectedBlockId!,
-                        value);
-                  }
-                },
-                appBarTitle: "Select Gram Panchayat",
 
-              ),
-              const SizedBox(height: 12),
-              ///// village data heree ----------
-              CustomDropdown(
-                title: "Village *",
-                value: masterProvider.selectedVillage,
-                items: masterProvider.village.map((village) {
-                  return DropdownMenuItem<String>(
-                      value: village.jjmVillageId.toString(),
-                      child: Text(
-                        village.villageName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ));
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedVillage(value);
-                  if (value != null && value.isNotEmpty) {
-                    masterProvider.fetchHabitations(
-                        masterProvider.selectedStateId!,
-                        masterProvider.selectedDistrictId!,
-                        masterProvider.selectedBlockId!,
-                        masterProvider.selectedGramPanchayat!,
-                        value);
-                  }
-                },
-                appBarTitle: "Select Village",
-              ),
-              const SizedBox(height: 12),
-              ///// habitation  data heree ----------
-              CustomDropdown(
-                title: "Habitation ",
-                value: masterProvider.selectedHabitation,
-                items: masterProvider.habitationId.map((habitation) {
-                  return DropdownMenuItem<String>(
-                    value: habitation.habitationId.toString(),
-                    child: Text(
-                      habitation.habitationName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedHabitation(value);
-                },
-              ),
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
@@ -388,6 +416,256 @@ class _LocationscreenState extends State<Locationscreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+
+
+  void showHabitationDropdown(BuildContext context, Masterprovider masterProvider) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: CustomDropdown(
+                title: "Habitation ",
+                value: masterProvider.selectedHabitation,
+                items: masterProvider.habitationId.map((habitation) {
+                  return DropdownMenuItem<String>(
+                    value: habitation.habitationId.toString(),
+                    child: Text(
+                      habitation.habitationName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedHabitation(value);
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                appBarTitle: "Select Habitation",
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  void showVillageDropdown(BuildContext context, Masterprovider masterProvider) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: CustomDropdown(
+                title: "Village *",
+                value: masterProvider.selectedVillage,
+                items: masterProvider.village.map((village) {
+                  return DropdownMenuItem<String>(
+                    value: village.jjmVillageId.toString(),
+                    child: Text(
+                      village.villageName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedVillage(value);
+                  if (value != null && value.isNotEmpty) {
+                    masterProvider.fetchHabitations(
+                      masterProvider.selectedStateId!,
+                      masterProvider.selectedDistrictId!,
+                      masterProvider.selectedBlockId!,
+                      masterProvider.selectedGramPanchayat!,
+                      value,
+                    );
+                  }
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                appBarTitle: "Select Village",
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showBlockDropdown(BuildContext context, Masterprovider masterProvider) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: CustomDropdown(
+                title: "Block *",
+                value: masterProvider.selectedBlockId,
+                items: masterProvider.blocks.map((block) {
+                  return DropdownMenuItem<String>(
+                    value: block.jjmBlockId,
+                    child: Text(
+                      block.blockName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedBlock(value);
+                  if (value != null && value.isNotEmpty) {
+                    masterProvider.fetchGramPanchayat(
+                      masterProvider.selectedStateId!,
+                      masterProvider.selectedDistrictId!,
+                      value,
+                    );
+                  }
+                  Navigator.pop(context); // Close the bottom sheet
+                },
+                appBarTitle: "Select Block",
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  void showGramPanchayatDropdown(
+      BuildContext context,
+      Masterprovider masterProvider,
+      ) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: CustomDropdown(
+                title: "Gram Panchayat *",
+                value: masterProvider.selectedGramPanchayat,
+                items: masterProvider.gramPanchayat.map((gramPanchayat) {
+                  return DropdownMenuItem<String>(
+                    value: gramPanchayat.jjmPanchayatId,
+                    child: Text(
+                      gramPanchayat.panchayatName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  masterProvider.setSelectedGrampanchayat(value);
+                  if (value != null && value.isNotEmpty) {
+                    masterProvider.fetchVillage(
+                      masterProvider.selectedStateId!,
+                      masterProvider.selectedDistrictId!,
+                      masterProvider.selectedBlockId!,
+                      value,
+                    );
+                  }
+                  Navigator.pop(context); // Close bottom sheet
+                },
+                appBarTitle: "Select Gram Panchayat",
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget buildLocationTile({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: color.withOpacity(0.2),
+            radius: 16,
+            child: Icon(icon, size: 16, color: color),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
