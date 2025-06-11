@@ -165,6 +165,7 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                           ),
                                           GestureDetector(
                                               onTap: () {
+                                                print('without encypt-->>  ${sample.sId}');
                                                 print('encypt-->>  ${encryption.encryptText(sample.sId.toString())}');
                                                 Navigator.push(
                                                   context,

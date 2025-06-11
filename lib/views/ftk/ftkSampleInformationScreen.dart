@@ -30,7 +30,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       TextEditingController();
   final TextEditingController handpumpLocationController = TextEditingController();
   String? sourceId; // 👈 Store the ID here
-  String? habitationId;
   String? sourceType;
 
   @override
@@ -41,7 +40,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
       masterProvider.setSelectedStateOnly(session.stateId.toString());
-      masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),habitationId.toString(),sourceId.toString());
+      masterProvider.setSelectedHabitation('0');
+      masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),masterProvider.selectedHabitation!,sourceId.toString());
     });
   }
 
@@ -52,11 +52,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map) {
       sourceId = args['sourceId'];
-      habitationId = args['habitationId'];
       sourceType = args['sourceType'];
 
       debugPrint("sourceId: $sourceId");
-      debugPrint("habitationId: $habitationId");
     }
   }
   @override

@@ -27,7 +27,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
 
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.fetchWatersourcefilterList();
-      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),session.blockId.toString(),session.panchayatId.toString(), session.villageId.toString());
     });
   }
 
@@ -168,25 +167,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                             ),
                           ),
 
-                          CustomDropdown(
-                            title: "Habitation *",
-                            value: masterProvider.selectedHabitation,
-                            items: masterProvider.habitationId.map((habitation) {
-                              return DropdownMenuItem<String>(
-                                value: habitation.habitationId.toString(),
-                                child: Text(
-                                  habitation.habitationName,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              masterProvider.setSelectedHabitation(value);
-                            },
-                            appBarTitle: "Select Habitation",
-                          ),
-                          SizedBox(height: 10,),
                           Column(
                             children: masterProvider.wtsFilterList
                                 .where((source) => source.id != "5") // 👈 filter out ID 5
@@ -196,21 +176,14 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                 color: Colors.primaries[masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
                                   masterProvider.setSelectedWaterSourcefilter(source.id);
-                                  if(masterProvider.selectedHabitation!= null){
                                     Navigator.pushNamed(
                                       context,
                                       AppConstants.navigateToftkSampleInfoScreen,
                                       arguments:  {
                                         'sourceId': source.id,
-                                        'habitationId': masterProvider.selectedHabitation,
                                         'sourceType': source.sourceType,
                                       }, // 👈 Pass the ID here
                                     );
-
-                                  }else {
-                                    ToastHelper.showErrorSnackBar(context, "Please select a habitation before proceeding.");
-                                  }
-
                                 },
                               );
                             }).toList(),
