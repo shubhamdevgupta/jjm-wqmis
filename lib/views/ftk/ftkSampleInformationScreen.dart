@@ -42,6 +42,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.setSelectedHabitation('0');
       masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),masterProvider.selectedHabitation!,sourceId.toString());
+      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),
+          session.blockId.toString(), session.panchayatId.toString(), session.villageId.toString());
     });
   }
 
@@ -239,7 +241,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
-        Visibility(  // TODO : please verify-- masterProvider.selectedWtsfilter  replaced with sourceId
+        Visibility(
           visible: sourceId == "2" &&
               (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
@@ -528,6 +530,27 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 ],
               ),
             ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          CustomDropdown(
+            title: "Habitation *",
+            value: masterProvider.selectedHabitation,
+            items: masterProvider.habitationId.map((habitation) {
+              return DropdownMenuItem<String>(
+                value: habitation.habitationId.toString(),
+                child: Text(
+                  habitation.habitationName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              masterProvider.setSelectedHabitation(value);
+            },
+            appBarTitle: "Select Habitation",
           ),
           const SizedBox(
             height: 10,
