@@ -7,15 +7,13 @@ import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/ftk/ftkParameterList.dart';
+import 'package:jjm_wqmis/views/ftk/fktSubmitSample.dart';
 import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
-import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
 
 class ftkSampleInformationScreen extends StatefulWidget {
   const ftkSampleInformationScreen({super.key});

@@ -9,14 +9,14 @@ import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-class ftksamplescreen extends StatefulWidget {
-  const ftksamplescreen({super.key});
+class Ftkmenudashboardscreen extends StatefulWidget {
+  const Ftkmenudashboardscreen({super.key});
 
   @override
-  State<ftksamplescreen> createState() => _ftksamplescreen();
+  State<Ftkmenudashboardscreen> createState() => _ftkMenuDashboardScreen();
 }
 
-class _ftksamplescreen extends State<ftksamplescreen> {
+class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
 
   @override
@@ -193,8 +193,7 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                                 .map((source) {
                               return buildSampleCard(
                                 title: source.sourceType,
-                                color: Colors.primaries[
-                                masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
+                                color: Colors.primaries[masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
                                   masterProvider.setSelectedWaterSourcefilter(source.id);
                                   if(masterProvider.selectedHabitation!= null){

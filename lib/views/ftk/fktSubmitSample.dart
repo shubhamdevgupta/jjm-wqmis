@@ -3,7 +3,7 @@ import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/ftk/ftkParameterScreen.dart';
+import 'package:jjm_wqmis/utils/ftkParameterScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/AppConstants.dart';
