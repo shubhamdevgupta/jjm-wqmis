@@ -51,6 +51,7 @@ class Masterprovider extends ChangeNotifier {
 
   List<WaterSourceResponse> waterSource = [];
   String? selectedWaterSource;
+  String? selectedWaterSourceName;
 
   List<Wtp> wtpList = [];
   String? selectedWtp;
@@ -93,6 +94,16 @@ class Masterprovider extends ChangeNotifier {
 
   String? get selectedDatetime => _selectedDatetime;
 
+  String? _selectedDatetimeSampleCollection = "";
+
+  String? get selectedDatetimeSampleCollection => _selectedDatetimeSampleCollection;
+
+  String? _selectedDatetimeSampleTested = "";
+
+  String? get selectedDatetimeSampleTested => _selectedDatetimeSampleTested;
+
+  TextEditingController addressController = TextEditingController();
+  TextEditingController ftkRemarkController = TextEditingController();
   String errorMsg = '';
   String otherSourceLocation = '';
   String sampleTypeOther = '';
@@ -508,6 +519,8 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedDateTime(String? value) {
     _selectedDatetime = value;
+    _selectedDatetimeSampleCollection = value;
+    _selectedDatetimeSampleTested = value;
     notifyListeners();
   }
 
@@ -544,6 +557,10 @@ class Masterprovider extends ChangeNotifier {
 
   void setSelectedWaterSourceInformation(String? value) {
     selectedWaterSource = value;
+    notifyListeners(); // Notify listeners to rebuild the widget
+  }
+  void setSelectedWaterSourceInformationName(String? value) {
+    selectedWaterSourceName = value;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 

@@ -320,11 +320,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            AppConstants.navigateToSampleListScreen,
-                            arguments: {
-                              'flag': AppConstants.totalSamplesSubmitted,
-                              'flagFloating': "",
-                            },
+                            AppConstants.navigateToFtkSampleListScreen,
                           );
                         },
                         child: Container(

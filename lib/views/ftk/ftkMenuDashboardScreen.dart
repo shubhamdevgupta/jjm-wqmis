@@ -9,14 +9,14 @@ import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
-class ftksamplescreen extends StatefulWidget {
-  const ftksamplescreen({super.key});
+class Ftkmenudashboardscreen extends StatefulWidget {
+  const Ftkmenudashboardscreen({super.key});
 
   @override
-  State<ftksamplescreen> createState() => _ftksamplescreen();
+  State<Ftkmenudashboardscreen> createState() => _ftkMenuDashboardScreen();
 }
 
-class _ftksamplescreen extends State<ftksamplescreen> {
+class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
 
   @override
@@ -27,7 +27,6 @@ class _ftksamplescreen extends State<ftksamplescreen> {
 
       final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       masterProvider.fetchWatersourcefilterList();
-      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),session.blockId.toString(),session.panchayatId.toString(), session.villageId.toString());
     });
   }
 
@@ -168,50 +167,23 @@ class _ftksamplescreen extends State<ftksamplescreen> {
                             ),
                           ),
 
-                          CustomDropdown(
-                            title: "Habitation *",
-                            value: masterProvider.selectedHabitation,
-                            items: masterProvider.habitationId.map((habitation) {
-                              return DropdownMenuItem<String>(
-                                value: habitation.habitationId.toString(),
-                                child: Text(
-                                  habitation.habitationName,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              masterProvider.setSelectedHabitation(value);
-                            },
-                            appBarTitle: "Select Habitation",
-                          ),
-
                           Column(
                             children: masterProvider.wtsFilterList
                                 .where((source) => source.id != "5") // 👈 filter out ID 5
                                 .map((source) {
                               return buildSampleCard(
                                 title: source.sourceType,
-                                color: Colors.primaries[
-                                masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
+                                color: Colors.primaries[masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
                                 onTap: () {
-
-                                  if(masterProvider.selectedHabitation!= null){
+                                  masterProvider.setSelectedWaterSourcefilter(source.id);
                                     Navigator.pushNamed(
                                       context,
                                       AppConstants.navigateToftkSampleInfoScreen,
                                       arguments:  {
                                         'sourceId': source.id,
-                                        'habitationId': masterProvider.selectedHabitation,
                                         'sourceType': source.sourceType,
                                       }, // 👈 Pass the ID here
                                     );
-
-                                  }else {
-                                    ToastHelper.showErrorSnackBar(context, "Please select a habitation before proceeding.");
-                                  }
-
                                 },
                               );
                             }).toList(),

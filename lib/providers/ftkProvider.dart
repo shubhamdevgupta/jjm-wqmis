@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
+import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
 class Ftkprovider extends ChangeNotifier {
@@ -21,10 +23,20 @@ class Ftkprovider extends ChangeNotifier {
   Sampleresponse? sampleresponse;
   String errorMsg = '';
 
-  Future<void> fetchParameterList(
-    int stateId,
-    int districtId,
-  ) async {
+
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+
+  List<FtkSample> ftkSample = []; // Correctly storing List<Sample>
+
+
+  Future<void> fetchDeviceId() async {
+    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
+    debugPrint('Device ID: $_deviceId');
+    notifyListeners();
+  }
+
+  Future<void> fetchParameterList(int stateId, int districtId,) async {
     _isLoading = true;
 
     notifyListeners();
@@ -52,15 +64,21 @@ class Ftkprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> getSelectedParameters() {
+  String getSelectedParameterIds() {
     return ftkParameterList
-        .where((param) => param.selectedValue != null)
-        .map((param) => {
-              'parameterId': param.parameterId,
-              'selectedValue': param.selectedValue
-            })
-        .toList();
+        .where((param) => param.selectedValue != null && param.selectedValue != 2)
+        .map((param) => param.parameterId.toString())
+        .join(',');
   }
+
+  String getSelectedParameterValues() {
+    return ftkParameterList
+        .where((param) => param.selectedValue != null && param.selectedValue != 2)
+        .map((param) => param.selectedValue.toString())
+        .join(',');
+  }
+
+
 
   Future<void> saveFtkData(
       mobileNumber,
@@ -86,7 +104,6 @@ class Ftkprovider extends ChangeNotifier {
       longitude,
       IpAddress,
       sampleTypeOther,
-      isTreadted,
       parameteId,
       paramSaferange) async {
     _isLoading = true;
@@ -116,7 +133,6 @@ class Ftkprovider extends ChangeNotifier {
           longitude,
           IpAddress,
           sampleTypeOther,
-          isTreadted,
           parameteId,
           paramSaferange);
       notifyListeners();
@@ -135,4 +151,28 @@ class Ftkprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> fetchftkSampleList(
+      int regId,
+      int villageid,
+      int sampleId
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _ftkRepository.fetchFtkSample(regId,villageid,sampleId);
+      ftkSample = response.result;
+      baseStatus = response.status;
+      errorMsg = response.message;
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+
 }

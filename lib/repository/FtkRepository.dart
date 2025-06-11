@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/SampleResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
@@ -24,20 +25,39 @@ class FtkRepository {
     }
   }
 
-  Future<Sampleresponse> saveFtkData(String mobileNumber,int regId,int roleId,
-      String sampleCollectionTime,String sampleTestingTime,int sourceId, int sourceLocation,
-      int state,int district,int block, int gramPanchayat,int village, int habitation,
-      String address, String sampleRemark, int waterSourceFilter,int schemeId,String otherSouceLocation,
-      String sourceName, String latitude,String longitude, String IpAddress, String sampleTypeOther,
-      int isTreadted, String parameteId,String paramSaferange
-      ) async {
+  Future<Sampleresponse> saveFtkData(
+      String mobileNumber,
+      int regId,
+      int roleId,
+      String sampleCollectionTime,
+      String sampleTestingTime,
+      int sourceId,
+      int sourceLocation,
+      int state,
+      int district,
+      int block,
+      int gramPanchayat,
+      int village,
+      int habitation,
+      String address,
+      String sampleRemark,
+      int waterSourceFilter,
+      int schemeId,
+      String otherSouceLocation,
+      String sourceName,
+      String latitude,
+      String longitude,
+      String IpAddress,
+      String sampleTypeOther,
+      String parameteId,
+      String paramSaferange) async {
     final requestData = jsonEncode({
       "loginid": mobileNumber,
       "Reg_Id": regId,
       "role_id": roleId,
       "sample_collection_time": sampleCollectionTime,
       "sample_testing_time": sampleTestingTime,
-      "source_id": sourceId,
+      "cat": sourceId,
       "sample_source_location": sourceLocation,
       "source_state": state,
       "source_district": district,
@@ -45,8 +65,8 @@ class FtkRepository {
       "source_gp": gramPanchayat,
       "source_village": village,
       "source_habitation": habitation,
-      "address":address,
-      "sample_remark": sampleRemark,
+      "address": address,
+      "remarks": sampleRemark,
       "source_filter": waterSourceFilter,
       "SchemeId": schemeId,
       "Other_Source_location": otherSouceLocation,
@@ -55,7 +75,6 @@ class FtkRepository {
       "source_longitude": longitude,
       "IpAddress": IpAddress,
       "sample_type_other": sampleTypeOther,
-      "istreated":isTreadted,
       "test_selected": parameteId,
       "saferangeid": paramSaferange
     });
@@ -63,9 +82,29 @@ class FtkRepository {
     debugPrint("Sample Submit Request: $requestData");
 
     try {
-      final response = await _apiService.post('APIMobile/add_ftk_data', body: requestData);
+      final response =
+          await _apiService.post('APIMobile/add_ftk_data', body: requestData);
 
       return Sampleresponse.fromJson(response);
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+  Future<BaseResponseModel<FtkSample>> fetchFtkSample(
+      int regId,
+      int villageid,
+      int SampleId,
+      ) async {
+    try {
+      final String endpoint =
+          '/apimobile/ftksampleList?reg_id=$regId&villageid=$villageid&SampleId$SampleId';
+
+      final response = await _apiService.get(endpoint);
+
+      return BaseResponseModel<FtkSample>.fromJson(
+          response, (json) => FtkSample.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
