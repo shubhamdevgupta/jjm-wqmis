@@ -59,13 +59,19 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                 AppConstants.appTitle,
                 style: AppStyles.appBarTitle,
               ),
+
+
               leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    if (Navigator.of(context).canPop()) {
-                      Navigator.pop(context);
-                    }
-                  }),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pushReplacementNamed(
+                        context, AppConstants.navigateToFtkDashboard);
+                  }
+                },
+              ),
               //elevation
               flexibleSpace: Container(
                 decoration: const BoxDecoration(
@@ -102,7 +108,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.15),
+                                  color: Colors.grey.withOpacity(0.1),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -114,14 +120,25 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                 const Text(
                                   "Village Details",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
+
+                                // ✅ First Row: State + District
                                 Row(
                                   children: [
+                                    Expanded(
+                                      child: buildLocationTile(
+                                        icon: Icons.flag,
+                                        label: "State",
+                                        value: session.stateName,
+                                        color: Colors.teal,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
                                     Expanded(
                                       child: buildLocationTile(
                                         icon: Icons.location_city,
@@ -130,7 +147,13 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                         color: Colors.blue,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+
+                                // ✅ Second Row: Block + GP
+                                Row(
+                                  children: [
                                     Expanded(
                                       child: buildLocationTile(
                                         icon: Icons.map,
@@ -139,11 +162,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                         color: Colors.green,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
+                                    const SizedBox(width: 12),
                                     Expanded(
                                       child: buildLocationTile(
                                         icon: Icons.groups,
@@ -152,7 +171,13 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                         color: Colors.orange,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+
+                                // ✅ Third Row: Village (can add more if needed)
+                                Row(
+                                  children: [
                                     Expanded(
                                       child: buildLocationTile(
                                         icon: Icons.home,
@@ -313,9 +338,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                 ),
                 style: TextButton.styleFrom(
                   backgroundColor: color,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  minimumSize: const Size(10, 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  minimumSize: const Size(25, 40),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
                   shape: RoundedRectangleBorder(

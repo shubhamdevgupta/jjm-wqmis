@@ -100,9 +100,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     }
                   },
                 ),
-                title: Text(
-                  'Ftk Collection form',
-                  style: AppStyles.appBarTitle,
+                title: Text('Ftk Collection form', style: AppStyles.appBarTitle,
                 ),
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(
@@ -146,10 +144,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
     return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
       elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
       margin: const EdgeInsets.all(5),
       color: Colors.white,
       child: Padding(

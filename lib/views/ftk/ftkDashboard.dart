@@ -251,7 +251,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.15),
+                              color: Colors.grey.withOpacity(0.1),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -263,14 +263,25 @@ class _ftkDashboard extends State<ftkDashboard> {
                             const Text(
                               "Village Details",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
                             ),
                             const SizedBox(height: 16),
+
+                            // ✅ First Row: State + District
                             Row(
                               children: [
+                                Expanded(
+                                  child: buildLocationTile(
+                                    icon: Icons.flag,
+                                    label: "State",
+                                    value: session.stateName,
+                                    color: Colors.teal,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: buildLocationTile(
                                     icon: Icons.location_city,
@@ -279,7 +290,13 @@ class _ftkDashboard extends State<ftkDashboard> {
                                     color: Colors.blue,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+
+                            // ✅ Second Row: Block + GP
+                            Row(
+                              children: [
                                 Expanded(
                                   child: buildLocationTile(
                                     icon: Icons.map,
@@ -288,11 +305,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                     color: Colors.green,
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
+                                const SizedBox(width: 12),
                                 Expanded(
                                   child: buildLocationTile(
                                     icon: Icons.groups,
@@ -301,7 +314,13 @@ class _ftkDashboard extends State<ftkDashboard> {
                                     color: Colors.orange,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+
+                            // ✅ Third Row: Village (can add more if needed)
+                            Row(
+                              children: [
                                 Expanded(
                                   child: buildLocationTile(
                                     icon: Icons.home,
@@ -315,6 +334,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                           ],
                         ),
                       ),
+
                       const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () {
