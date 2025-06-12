@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDashboardResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
-import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
@@ -21,6 +22,7 @@ class Ftkprovider extends ChangeNotifier {
 
   bool isSubmitData = false;
   Sampleresponse? sampleresponse;
+  FtkDashboardResponse? ftkDashboardResponse;
   String errorMsg = '';
 
 
@@ -163,6 +165,25 @@ class Ftkprovider extends ChangeNotifier {
     try {
       final response = await _ftkRepository.fetchFtkSample(regId,villageid,sampleId);
       ftkSample = response.result;
+      baseStatus = response.status;
+      errorMsg = response.message;
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchFtkDashboardData(
+      int regId,
+      int villageid,
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await _ftkRepository.fetchFtkDashboardData(regId,villageid);
       baseStatus = response.status;
       errorMsg = response.message;
     } catch (e) {

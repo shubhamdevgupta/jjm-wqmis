@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 

@@ -1,6 +1,7 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
@@ -16,11 +17,13 @@ class ftkDashboard extends StatefulWidget {
 
 class _ftkDashboard extends State<ftkDashboard> {
   final session = UserSessionManager();
-
   @override
   void initState() {
     super.initState();
-    session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+       session.init();
+      Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId,session.villageId);
+    });
   }
 
   @override
@@ -115,9 +118,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     AppConstants.navigateToLoginScreen,
-                        (route) => false,
+                    (route) => false,
                   );
-
                 },
               ),
             ],
@@ -334,7 +336,6 @@ class _ftkDashboard extends State<ftkDashboard> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () {
@@ -378,7 +379,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -391,8 +392,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                                       ),
                                     ),
                                     SizedBox(height: 4),
-                                    Text(
-                                      '425', // 🔹 Static value
+                                    //fix thi
+                                    Text('${ftkprovider.ftkDashboardResponse?.totalSampleTested}', // 🔹 Static value
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,
@@ -425,8 +426,9 @@ class _ftkDashboard extends State<ftkDashboard> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: ()  {
-                          print('----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
+                        onPressed: () {
+                          print(
+                              '----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
                           Navigator.pushReplacementNamed(
                               context, AppConstants.navigateToFtkSampleScreen);
                         },
