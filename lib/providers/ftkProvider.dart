@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDashboardResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
-import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
@@ -21,6 +22,7 @@ class Ftkprovider extends ChangeNotifier {
 
   bool isSubmitData = false;
   Sampleresponse? sampleresponse;
+  FtkDashboardResponse? ftkDashboardResponse;
   String errorMsg = '';
 
 
@@ -172,6 +174,44 @@ class Ftkprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> fetchFtkDashboardData(
+      int regId,
+      int villageid,
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+       ftkDashboardResponse = await _ftkRepository.fetchFtkDashboardData(regId,villageid);
+       print("totalSampleTested prov ${ftkDashboardResponse?.totalSampleTested}");
+      baseStatus = ftkDashboardResponse!.status;
+      errorMsg = ftkDashboardResponse!.message;
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+ // [log] Response: 200 : Body: {"Status":1,"Message":"List of Water Source","Result":[{"Id":2,"SourceType":"Sources of Schemes \r\n(Raw water)"},{"Id":5,"SourceType":"WTP of PWS schemes (Treatment) "},{"Id":6,"SourceType":"Storage Structure (ESR/GSR)"},{"Id":3,"SourceType":"Households /school /AWCs"},{"Id":4,"SourceType":"Handpumps and other private sources"}]}
+
+  Map<String, int> getSampleCountsMap() {
+    final response = ftkDashboardResponse;
+
+    if (response == null) return {};
+
+    return {
+      // These keys MUST match wtsFilterList's source.id values
+      "2": response.totalSourceScheme,
+      "6": response.totalStorageStructure,
+      "3": response.totalHhScAwc,
+      "4": response.totalHandpumpsOtherPrivateSource,
+    };
+  }
+
+
 
 
 

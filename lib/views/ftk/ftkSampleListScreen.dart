@@ -171,7 +171,7 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (_) => TestReport(
-                                                        url: 'https://ejalshakti.gov.in/WQMIS/FTKUser/print_of_ftktest_result?s_id=${encryption.encryptText(sample.sId.toString())}'),
+                                                        url: 'https://ejalshakti.gov.in/wqmis//ftkuser/print_of_ftktest_result_API?s_id=${sample.sId}&RegId=${session.regId}'),
                                                   ),
                                                 );
                                               },

@@ -1,9 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +18,43 @@ class ftkDashboard extends StatefulWidget {
 
 class _ftkDashboard extends State<ftkDashboard> {
   final session = UserSessionManager();
+  int? villageId;
+  int? regId;
+
+/*
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    villageId = args?['villageId'];
+    regId = args?['regId'];
+  }
+*/
 
   @override
   void initState() {
     super.initState();
-    session.init();
+
+    /////////////
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+      session.init();
+/*
+      // 2. Extract arguments from Navigator
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      villageId = args?['villageId'];
+      regId = args?['regId'];
+
+      // 3. Use it in your API call
+      if (villageId != null) {
+         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(regId!, villageId!);
+      } else {
+        print("villageIdD is null");
+      }*/
+     await Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId, session.villageId);
+
+    });
+    /////////////
   }
 
   @override
@@ -52,6 +86,20 @@ class _ftkDashboard extends State<ftkDashboard> {
               );
             },
           ),
+          actions: [
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.refresh,
+                      color: Colors.white),
+                  // Cart icon
+                  onPressed: () {
+                         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId,session.villageId);
+                  },
+                )
+              ],
+            ),
+          ],
           //elevation
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -115,17 +163,16 @@ class _ftkDashboard extends State<ftkDashboard> {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     AppConstants.navigateToLoginScreen,
-                        (route) => false,
+                    (route) => false,
                   );
-
                 },
               ),
             ],
           ),
         ),
-        body: Consumer<AuthenticationProvider>(
-          builder: (context, authProvider, child) {
-            return SingleChildScrollView(
+        body: Consumer2<AuthenticationProvider, Ftkprovider>(
+          builder: (context, authProvider, ftkProvider, child) {
+            return ftkProvider.isLoading? LoaderUtils.conditionalLoader(isLoading: ftkProvider.isLoading): SingleChildScrollView(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,7 +381,6 @@ class _ftkDashboard extends State<ftkDashboard> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () {
@@ -378,7 +424,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -391,8 +437,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                                       ),
                                     ),
                                     SizedBox(height: 4),
-                                    Text(
-                                      '425', // 🔹 Static value
+                                    //fix thi
+                                    Text('${ftkProvider.ftkDashboardResponse?.totalSampleTested}', // 🔹 Static value
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,
@@ -425,8 +471,9 @@ class _ftkDashboard extends State<ftkDashboard> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: ()  {
-                          print('----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
+                        onPressed: () {
+                          print(
+                              '----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
                           Navigator.pushReplacementNamed(
                               context, AppConstants.navigateToFtkSampleScreen);
                         },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/SampleSubRepo.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';

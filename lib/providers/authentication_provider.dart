@@ -66,7 +66,7 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   // Method to login user
-  Future<void> loginUser(phoneNumber, password, appId, Function onSuccess,
+  Future<void> loginUser(phoneNumber, password, appId, Function() onSuccess,
       Function onFailure) async {
 
     _isLoading = true;

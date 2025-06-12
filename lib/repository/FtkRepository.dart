@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
+import 'package:jjm_wqmis/models/FTK/FtkDashboardResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkDataResponse.dart';
 import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
-import 'package:jjm_wqmis/models/SampleResponse.dart';
+import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
 import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
 
@@ -105,6 +106,23 @@ class FtkRepository {
 
       return BaseResponseModel<FtkSample>.fromJson(
           response, (json) => FtkSample.fromJson(json));
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow;
+    }
+  }
+
+  Future<FtkDashboardResponse> fetchFtkDashboardData(
+      int regId,
+      int villageid,
+      ) async {
+    try {
+      final String endpoint =
+          '/apimobile/FTKDashboard?reg_id=$regId&villageid=$villageid';
+
+      final response = await _apiService.get(endpoint);
+
+      return FtkDashboardResponse.fromJson(response);
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
