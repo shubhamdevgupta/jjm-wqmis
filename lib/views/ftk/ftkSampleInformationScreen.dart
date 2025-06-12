@@ -221,7 +221,28 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(sourceType!),
+          SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              sourceType ?? 'N/A',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'OpenSans',
+                letterSpacing: 0.3,
+                color: Color(0xFF1A1A1A),
+                height: 1.4,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Divider(thickness: 1, color: Colors.grey.shade500),
+
           buildSchemeDropDown(masterProvider),
           buildSourceofScheme(masterProvider),
           buildEsrWater(masterProvider),

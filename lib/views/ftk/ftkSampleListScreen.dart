@@ -258,14 +258,9 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                                     vertical: 4,
                                                   ),
                                                   decoration: BoxDecoration(
-                                                    color: sample
-                                                                .contaminatedStatus ==
-                                                            "Report Approved"
-                                                        ? Colors.green[100]
-                                                        : sample.contaminatedStatus ==
-                                                                "Under Process"
-                                                            ? Colors.yellow[100]
-                                                            : Colors.blue[100],
+                                                    color: sample.contaminatedStatus == "Contaminated"
+                                                        ? Colors.red[100]
+                                                        :  Colors.green[100],
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             16),
@@ -274,16 +269,8 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                                     sample.contaminatedStatus ??
                                                         'N/A',
                                                     style: TextStyle(
-                                                      color: sample
-                                                                  .contaminatedStatus ==
-                                                              "Report Approved"
-                                                          ? Colors.green[800]
-                                                          : sample.contaminatedStatus ==
-                                                                  "Under Process"
-                                                              ? Colors
-                                                                  .orange[800]
-                                                              : Colors
-                                                                  .blue[800],
+                                                      color: sample.contaminatedStatus == "Contaminated"
+                                                          ? Colors.red[800] : Colors.green[800],
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 14,

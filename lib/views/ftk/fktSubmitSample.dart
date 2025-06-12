@@ -107,9 +107,18 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                         print('---- after parsing  $parsedSource');
 
                         print('---- default valuee  ${masterProvider.ftkRemarkController.text}');
-                        await masterProvider.fetchLocation();
-                        await ftkProvider.fetchDeviceId();
-                        await  ftkProvider.saveFtkData(
+
+
+
+                        final allMarkedNotTested = ftkProvider.ftkParameterList.every((param) => param.selectedValue == 2);
+                        if (allMarkedNotTested) {
+                          ToastHelper.showToastMessage("Please select at least one sample");
+
+                        }
+                        else {
+                          await masterProvider.fetchLocation();
+                          await ftkProvider.fetchDeviceId();
+                          await  ftkProvider.saveFtkData(
                             session.loginId,
                             session.regId,
                             session.roleId,
@@ -135,79 +144,86 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                             masterProvider.sampleTypeOther,
                             ftkProvider.getSelectedParameterIds(),
                             ftkProvider.getSelectedParameterValues(),
-                            );
+                          );
 
-                        if (ftkProvider.sampleresponse!.status == 1) {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false, // Disable tap outside to dismiss
-                            builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              titlePadding: const EdgeInsets.only(top: 20),
-                              contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                              actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
-                              title: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/icons/check.png',
-                                    height: 60,
-                                    width: 80,
+                          if (ftkProvider.sampleresponse!.status == 1) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // Disable tap outside to dismiss
+                              builder: (context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                titlePadding: const EdgeInsets.only(top: 20),
+                                contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                                actionsPadding: const EdgeInsets.only(bottom: 10, right: 10),
+                                title: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icons/check.png',
+                                      height: 60,
+                                      width: 80,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      "Success!",
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: Text(
+                                  ftkProvider.sampleresponse?.message ??
+                                      'Ftk Submitted successfully!',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
                                   ),
-                                  const SizedBox(height: 10),
-                                  const Text(
-                                    "Success!",
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
+                                ),
+                                actions: [
+                                  Center(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        padding:
+                                        const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context); // Close dialog
+                                        Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          AppConstants.navigateToFtkDashboard,
+                                              (route) => false, // Clear back stack
+                                        );
+                                        //    masterProvider.clearData();
+                                      },
+                                      child: const Text(
+                                        "OK",
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              content: Text(
-                                ftkProvider.sampleresponse?.message ??
-                                    'Ftk Submitted successfully!',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              actions: [
-                                Center(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding:
-                                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context); // Close dialog
-                                      Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        AppConstants.navigateToFtkDashboard,
-                                            (route) => false, // Clear back stack
-                                      );
-                                      //    masterProvider.clearData();
-                                    },
-                                    child: const Text(
-                                      "OK",
-                                      style: TextStyle(fontSize: 16, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          ToastHelper.showErrorSnackBar(context, ftkProvider.errorMsg);
+                            );
+                          } else {
+                            ToastHelper.showErrorSnackBar(context, ftkProvider.errorMsg);
+                          }
+                          // Proceed with logic
                         }
+
+
+
+
+
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
