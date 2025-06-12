@@ -35,11 +35,11 @@ class WaterQualityParameterCard extends StatelessWidget {
   List<Color> _getGradientColors() {
     switch (selectedValue) {
       case 1: // Yes
-        return [Colors.green.shade100, Colors.green.shade200];
+        return [Colors.green.shade100, Colors.green.shade50];
       case 0: // No
-        return [Colors.red.shade100, Colors.red.shade200];
+        return [Colors.red.shade100, Colors.red.shade50];
       case 2: // Not Tested
-        return [Colors.blue.shade100, Colors.blue.shade200];
+        return [Colors.blue.shade100, Colors.blue.shade50];
       default:
         return [Colors.grey.shade100, Colors.grey.shade200];
     }
@@ -89,7 +89,7 @@ class WaterQualityParameterCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _getBorderColor(), width: 2),
+        border: Border.all(color: _getBorderColor(), width: 1.2),
         color: Colors.white,
         boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
