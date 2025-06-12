@@ -6,12 +6,12 @@ import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/views/dwsm_data/DwsmLocationScreen.dart';
+import 'package:jjm_wqmis/views/dwsm_data/dwsmList/SchoolAwcScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
-import 'package:jjm_wqmis/views/DWSM/DwsmLocationScreen.dart';
-import 'package:jjm_wqmis/views/DWSM/dwsmList/DemonstrationScreen.dart';
-import 'package:jjm_wqmis/views/DWSM/dwsmList/SchoolAwcScreen.dart';
+import 'package:jjm_wqmis/views/dwsm_data/dwsmList/DemonstrationScreen.dart';
 
 class Dwsdashboardscreen extends StatefulWidget {
   const Dwsdashboardscreen({super.key});

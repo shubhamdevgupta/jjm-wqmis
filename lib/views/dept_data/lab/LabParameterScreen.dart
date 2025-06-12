@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/views/dept_data/lab/AsPerLabView.dart';
+import 'package:jjm_wqmis/views/dept_data/lab/AsPerParameterView.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/views/lab/AsPerLabView.dart';
-import 'package:jjm_wqmis/views/lab/AsPerParameterView.dart';
 
 class Labparameterscreen extends StatefulWidget {
   const Labparameterscreen({super.key});

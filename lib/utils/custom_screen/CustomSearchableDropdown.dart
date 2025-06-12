@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/views/lab/LabParameterScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/lab/LabParameterScreen.dart';
 
 class CustomSearchableDropdown extends StatefulWidget {
   final String? value;

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomDropdown.dart';
 
 class DwsmLocation extends StatefulWidget {
   const DwsmLocation({super.key});

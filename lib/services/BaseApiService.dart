@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:jjm_wqmis/utils/CustomException.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomException.dart';
 
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';

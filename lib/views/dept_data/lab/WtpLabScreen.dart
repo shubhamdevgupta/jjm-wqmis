@@ -4,13 +4,13 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomDropdown.dart';
 
 class Wtplabscreen extends StatefulWidget {
   const Wtplabscreen({super.key});
