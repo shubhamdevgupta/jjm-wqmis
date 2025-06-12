@@ -48,12 +48,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           session.villageId.toString(),
           masterProvider.selectedHabitation!,
           sourceId.toString());
-      await masterProvider.fetchHabitations(
-          session.stateId.toString(),
-          session.districtId.toString(),
-          session.blockId.toString(),
-          session.panchayatId.toString(),
-          session.villageId.toString());
     });
   }
 
@@ -547,13 +541,19 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 3,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
+                          masterProvider.fetchHabitations(
+                              session.stateId.toString(),
+                              session.districtId.toString(),
+                              session.blockId.toString(),
+                              session.panchayatId.toString(),
+                              session.villageId.toString());
                           masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(3);
-                        },
+                           },
                         child: const Text('At household'),
                       ),
                     ],
@@ -582,23 +582,26 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           const SizedBox(
             height: 10,
           ),
-          CustomDropdown(
-            title: "Habitation *",
-            value: masterProvider.selectedHabitation,
-            items: masterProvider.habitationId.map((habitation) {
-              return DropdownMenuItem<String>(
-                value: habitation.habitationId.toString(),
-                child: Text(
-                  habitation.habitationName,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              masterProvider.setSelectedHabitation(value);
-            },
-            appBarTitle: "Select Habitation",
+          Visibility(
+            visible: masterProvider.selectedHousehold == 3,
+            child: CustomDropdown(
+              title: "Habitation *",
+              value: masterProvider.selectedHabitation,
+              items: masterProvider.habitationId.map((habitation) {
+                return DropdownMenuItem<String>(
+                  value: habitation.habitationId.toString(),
+                  child: Text(
+                    habitation.habitationName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                masterProvider.setSelectedHabitation(value);
+              },
+              appBarTitle: "Select Habitation",
+            ),
           ),
           const SizedBox(
             height: 10,
