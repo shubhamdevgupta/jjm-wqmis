@@ -16,78 +16,28 @@ class CustomDateTimePicker extends StatefulWidget {
 }
 
 class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
-  String _selectedDateTime = "";
+  late DateTime _selectedDateTime;
 
   @override
   void initState() {
     super.initState();
+    _selectedDateTime = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setCurrentDateTime();
+      _notifyParent();
     });
   }
 
-  void _setCurrentDateTime() {
-    DateTime now = DateTime.now();
-    String formattedDateTime = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(now);
-
-    setState(() {
-      _selectedDateTime = formattedDateTime;
-    });
-
-    Future.delayed(Duration.zero, () {
-      widget.onDateTimeSelected(_selectedDateTime);
-    });
-  }
-
-  Future<void> _selectDateTime(BuildContext context) async {
-    DateTime now = DateTime.now();
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: now,
-      firstDate: DateTime(2000),
-      lastDate: now, // Restrict future dates
-    );
-
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(now),
-      );
-
-      if (pickedTime != null) {
-        DateTime combinedDateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-
-        if (combinedDateTime.isAfter(now)) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Future time is not allowed.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        } else {
-          String formattedDateTime =
-          DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(combinedDateTime);
-
-          setState(() {
-            _selectedDateTime = formattedDateTime;
-          });
-
-          widget.onDateTimeSelected(_selectedDateTime);
-        }
-      }
-    }
+  void _notifyParent() {
+    final formatted = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(_selectedDateTime);
+    widget.onDateTimeSelected(formatted);
   }
 
   @override
   Widget build(BuildContext context) {
+    final displayText = DateFormat('dd MMM yyyy, hh:mm a').format(_selectedDateTime);
+
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,23 +53,20 @@ class _CustomDateTimePickerState extends State<CustomDateTimePicker> {
             ),
           const SizedBox(height: 8),
           InkWell(
-            onTap: () => _selectDateTime(context),
+            onTap: null, // Tap disabled – does nothing
             child: Container(
-              padding:
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade400),
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey.shade300),
               ),
               child: Row(
                 children: [
                   const Icon(Icons.access_time, color: Colors.blueGrey),
                   const SizedBox(width: 10),
                   Text(
-                    _selectedDateTime.isNotEmpty
-                        ? _selectedDateTime
-                        : "Select Date & Time",
+                    displayText,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

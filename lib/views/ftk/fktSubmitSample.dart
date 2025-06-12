@@ -105,7 +105,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                       ),
                       Center(
                         child: SizedBox(
-                          width: 220, // or any appropriate width like 250, 300
+                          width: 250, // or any appropriate width like 250, 300
                           child: ElevatedButton(
                             onPressed: () async {
                               await validateAndSaveData(context,ftkProvider);
@@ -125,7 +125,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                                 fontSize: 16,
                               ),
                             ),
-                            child: const Text('Save Data'),
+                            child: const Text('Submit'),
                           ),
                         ),
                       )
