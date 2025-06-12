@@ -193,9 +193,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                   ),
                                 ),
                                 Column(
-                                  children: masterProvider.wtsFilterList
-                                      .where((source) =>
-                                          source.id != "5") // Exclude ID 5
+                                  children: masterProvider.wtsFilterList.where((source) => source.id != "5") // Exclude ID 5
                                       .map((source) {
                                     final colorIndex = masterProvider
                                             .wtsFilterList
@@ -209,19 +207,21 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                       color: Colors.primaries[colorIndex],
                                       count: count.toString(),
                                       // Convert int to string
-                                      onTap: () {
-                                        masterProvider
-                                            .setSelectedWaterSourcefilter(
-                                                source.id);
-                                        Navigator.pushNamed(
-                                          context,
-                                          AppConstants
-                                              .navigateToftkSampleInfoScreen,
-                                          arguments: {
-                                            'sourceId': source.id,
-                                            'sourceType': source.sourceType,
-                                          },
-                                        );
+                                      onTap: (count) {
+
+                                        if(count.isNotEmpty){
+                                          masterProvider.setSelectedWaterSourcefilter(source.id);
+                                          Navigator.pushNamed(
+                                            context,
+                                            AppConstants
+                                                .navigateToftkSampleInfoScreen,
+                                            arguments: {
+                                              'sourceId': source.id,
+                                              'sourceType': source.sourceType,
+                                            },
+                                          );
+                                        }
+
                                       },
                                     );
                                   }).toList(),
@@ -288,89 +288,104 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
 
   Widget buildSampleCard({
     required String title,
-    required VoidCallback onTap,
+    required Function(String count) onTap,
     required String count,
     required Color color,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: color.withOpacity(0.5), width: 1.2),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color.withOpacity(0.1),
-                  ),
-                  child: Image.asset(
-                    'assets/icons/medical-lab.png',
-                    width: 22,
-                    height: 22,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+    final bool isDisabled = count == "0";
+
+    Widget cardContent = Opacity(
+      opacity: isDisabled ? 0.7 : 1.0,
+      child: GestureDetector(
+        onTap: isDisabled ? null : () => onTap(count),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: color.withOpacity(0.5), width: 1.2),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12.withOpacity(0.05),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: color.withOpacity(0.1),
+                    ),
+                    child: Image.asset(
+                      'assets/icons/medical-lab.png',
+                      width: 22,
+                      height: 22,
                     ),
                   ),
-                ),
-                Text(count,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    count,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
-                    )),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: onTap,
-                icon: const Icon(Icons.add, size: 18, color: Colors.white),
-                label: const Text(
-                  "Add Sample",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: color,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  minimumSize: const Size(25, 40),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: isDisabled ? null : () => onTap(count),
+                  icon: const Icon(Icons.add, size: 18, color: Colors.white),
+                  label: const Text(
+                    "Add Sample",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: color,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    minimumSize: const Size(25, 40),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
+
+    return isDisabled
+        ? Tooltip(
+      message: "No samples available",
+      child: cardContent,
+    )
+        : cardContent;
   }
+
+
 }
