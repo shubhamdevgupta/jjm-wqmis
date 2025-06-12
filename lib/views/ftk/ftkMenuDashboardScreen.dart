@@ -1,12 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/dashboardProvider.dart';
+import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/utils/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 class Ftkmenudashboardscreen extends StatefulWidget {
@@ -18,18 +17,20 @@ class Ftkmenudashboardscreen extends StatefulWidget {
 
 class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
-
+  Map<String, int>? sampleCounts;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       session.init();
 
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      final masterProvider =
+          Provider.of<Masterprovider>(context, listen: false);
       masterProvider.fetchWatersourcefilterList();
+       sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
+
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                 style: AppStyles.appBarTitle,
               ),
 
-
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
@@ -89,135 +89,142 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
             ),
             body: Consumer<Masterprovider>(
               builder: (context, masterProvider, child) {
-                if (masterProvider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                return masterProvider.isLoading
+                    ? LoaderUtils.conditionalLoader(
+                        isLoading: masterProvider.isLoading)
+                    : SingleChildScrollView(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                const Text(
-                                  "Village Details",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Village Details",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+
+                                      // ✅ First Row: State + District
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: buildLocationTile(
+                                              icon: Icons.flag,
+                                              label: "State",
+                                              value: session.stateName,
+                                              color: Colors.teal,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: buildLocationTile(
+                                              icon: Icons.location_city,
+                                              label: "District",
+                                              value: session.districtName,
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+
+                                      // ✅ Second Row: Block + GP
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: buildLocationTile(
+                                              icon: Icons.map,
+                                              label: "Block",
+                                              value: session.blockName,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: buildLocationTile(
+                                              icon: Icons.groups,
+                                              label: "GP",
+                                              value: session.panchayatName,
+                                              color: Colors.orange,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+
+                                      // ✅ Third Row: Village (can add more if needed)
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: buildLocationTile(
+                                              icon: Icons.home,
+                                              label: "Village",
+                                              value: session.villageName,
+                                              color: Colors.purple,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 16),
+                                Column(
+                                  children: masterProvider.wtsFilterList
+                                      .where((source) => source.id != "5") // Exclude ID 5
+                                      .map((source) {
+                                    final colorIndex = masterProvider.wtsFilterList.indexOf(source) %
+                                        Colors.primaries.length;
 
-                                // ✅ First Row: State + District
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: buildLocationTile(
-                                        icon: Icons.flag,
-                                        label: "State",
-                                        value: session.stateName,
-                                        color: Colors.teal,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: buildLocationTile(
-                                        icon: Icons.location_city,
-                                        label: "District",
-                                        value: session.districtName,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
+                                    final count = sampleCounts![source.id] ?? 0;
 
-                                // ✅ Second Row: Block + GP
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: buildLocationTile(
-                                        icon: Icons.map,
-                                        label: "Block",
-                                        value: session.blockName,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: buildLocationTile(
-                                        icon: Icons.groups,
-                                        label: "GP",
-                                        value: session.panchayatName,
-                                        color: Colors.orange,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
 
-                                // ✅ Third Row: Village (can add more if needed)
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: buildLocationTile(
-                                        icon: Icons.home,
-                                        label: "Village",
-                                        value: session.villageName,
-                                        color: Colors.purple,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    return buildSampleCard(
+                                      title: source.sourceType,
+                                      color: Colors.primaries[colorIndex],
+                                      count: count.toString(), // Convert int to string
+                                      onTap: () {
+                                        masterProvider.setSelectedWaterSourcefilter(source.id);
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppConstants.navigateToftkSampleInfoScreen,
+                                          arguments: {
+                                            'sourceId': source.id,
+                                            'sourceType': source.sourceType,
+                                          },
+                                        );
+                                      },
+                                    );
+                                  }).toList(),
+                                )
                               ],
                             ),
-                          ),
-
-                          Column(
-                            children: masterProvider.wtsFilterList
-                                .where((source) => source.id != "5") // 👈 filter out ID 5
-                                .map((source) {
-                              return buildSampleCard(
-                                title: source.sourceType,
-                                color: Colors.primaries[masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length],
-                                onTap: () {
-                                  masterProvider.setSelectedWaterSourcefilter(source.id);
-                                    Navigator.pushNamed(
-                                      context,
-                                      AppConstants.navigateToftkSampleInfoScreen,
-                                      arguments:  {
-                                        'sourceId': source.id,
-                                        'sourceType': source.sourceType,
-                                      }, // 👈 Pass the ID here
-                                    );
-                                },
-                              );
-                            }).toList(),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                );
+                          ],
+                        ),
+                      );
               },
             )),
       ),
@@ -276,6 +283,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   Widget buildSampleCard({
     required String title,
     required VoidCallback onTap,
+    required String count,
     required Color color,
   }) {
     return GestureDetector(
@@ -323,7 +331,12 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     ),
                   ),
                 ),
-
+                Text(count,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )),
               ],
             ),
             const SizedBox(height: 12),
@@ -338,7 +351,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                 ),
                 style: TextButton.styleFrom(
                   backgroundColor: color,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   minimumSize: const Size(25, 40),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,

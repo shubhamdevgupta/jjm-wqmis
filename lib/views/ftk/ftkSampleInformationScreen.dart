@@ -2,18 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CustomDateTimePicker.dart';
+import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
+import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/ftk/fktSubmitSample.dart';
-import 'package:jjm_wqmis/views/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
-
-import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/utils/CustomDropdown.dart';
-import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 
 class ftkSampleInformationScreen extends StatefulWidget {
   const ftkSampleInformationScreen({super.key});
@@ -28,22 +26,34 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   final TextEditingController householdController = TextEditingController();
   final TextEditingController handpumpSourceController =
       TextEditingController();
-  final TextEditingController handpumpLocationController = TextEditingController();
+  final TextEditingController handpumpLocationController =
+      TextEditingController();
   String? sourceId; // 👈 Store the ID here
   String? sourceType;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       session.init();
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      final masterProvider =
+          Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.setSelectedHabitation('0');
-      masterProvider.fetchSchemes(session.stateId.toString(),session.districtId.toString(),session.villageId.toString(),masterProvider.selectedHabitation!,sourceId.toString());
-      masterProvider.fetchHabitations(session.stateId.toString(), session.districtId.toString(),
-          session.blockId.toString(), session.panchayatId.toString(), session.villageId.toString());
+
+      await masterProvider.fetchSchemes(
+          session.stateId.toString(),
+          session.districtId.toString(),
+          session.villageId.toString(),
+          masterProvider.selectedHabitation!,
+          sourceId.toString());
+      await masterProvider.fetchHabitations(
+          session.stateId.toString(),
+          session.districtId.toString(),
+          session.blockId.toString(),
+          session.panchayatId.toString(),
+          session.villageId.toString());
     });
   }
 
@@ -59,6 +69,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       debugPrint("sourceId: $sourceId");
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -75,7 +86,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         child: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
+                image: AssetImage('assets/icons/header_bg.png'),
+                fit: BoxFit.cover),
           ),
           child: Scaffold(
               backgroundColor: Colors.transparent,
@@ -100,7 +112,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     }
                   },
                 ),
-                title: Text('Ftk Collection form', style: AppStyles.appBarTitle,
+                title: Text(
+                  'Ftk Collection form',
+                  style: AppStyles.appBarTitle,
                 ),
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(
@@ -118,23 +132,24 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               body: Consumer<Masterprovider>(
                   builder: (context, masterProvider, child) {
                 return masterProvider.isLoading
-                    ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                    :Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        //card for state district selection
-                        buildSampleTaken(masterProvider),
+                    ? LoaderUtils.conditionalLoader(
+                        isLoading: masterProvider.isLoading)
+                    : Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              //card for state district selection
+                              buildSampleTaken(masterProvider),
 
-                        const SizedBox(
-                          height: 12,
+                              const SizedBox(
+                                height: 12,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
+                      );
               })),
         ),
       ),
@@ -142,76 +157,82 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   }
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),),
-      margin: const EdgeInsets.all(5),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Select Scheme",
-              style: TextStyle(
-                fontSize: 16, fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                color:
-                Colors.black87, // Dark text for better readability
+    return masterProvider.baseStatus == 0 &&
+            masterProvider.selectedScheme == null
+        ? AppTextWidgets.errorText(masterProvider.errorMsg)
+        : Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: const EdgeInsets.all(5),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Select Scheme",
+                    style: TextStyle(
+                      fontSize: 16, fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87, // Dark text for better readability
+                    ),
+                  ),
 
+                  const Divider(
+                    height: 10,
+                    color: Colors.grey,
+                    thickness: 1,
+                  ),
+                  const SizedBox(height: 4), // Space between title and dropdown
+                  CustomDropdown(
+                    value: masterProvider.selectedScheme,
+                    items: masterProvider.schemes.map((scheme) {
+                      return DropdownMenuItem<String>(
+                        value: scheme.schemeId.toString(),
+                        child: Text(
+                          scheme.schemeName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'OpenSans',
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    title: "",
+                    appBarTitle: "Select Scheme",
+                    showSearchBar: false,
+                    onChanged: (value) {
+                      masterProvider.setSelectedScheme(value);
+                      if (sourceId == "5") {
+                        masterProvider.fetchWTPList(
+                          masterProvider.selectedStateId!,
+                          value!, // <-- use directly here
+                        );
+                      } else if (sourceId == "6") {
+                        masterProvider.setSelectedSubSource(0);
+                        masterProvider.setSelectedWTP("0");
+                        masterProvider.fetchSourceInformation(
+                          masterProvider.selectedVillage!,
+                          masterProvider.selectedHabitation!,
+                          sourceId.toString(),
+                          "0",
+                          masterProvider.selectedSubSource.toString(),
+                          masterProvider.selectedWtp!,
+                          masterProvider.selectedStateId!,
+                          masterProvider.selectedScheme!,
+                        );
+                      }
+                    },
+                  )
+                ],
               ),
             ),
-
-            const Divider(
-              height: 10,
-              color: Colors.grey,
-              thickness: 1,
-            ),
-            const SizedBox(height: 4), // Space between title and dropdown
-            CustomDropdown(
-              value: masterProvider.selectedScheme,
-              items: masterProvider.schemes.map((scheme) {
-                return DropdownMenuItem<String>(
-                  value: scheme.schemeId.toString(),
-                  child: Text(
-                    scheme.schemeName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
-                  ),
-                );
-              }).toList(),
-              title: "",
-              appBarTitle: "Select Scheme",
-              showSearchBar: false,
-              onChanged: (value) {
-                masterProvider.setSelectedScheme(value);
-                if (sourceId == "5") {
-                  masterProvider.fetchWTPList(
-                    masterProvider.selectedStateId!,
-                    value!, // <-- use directly here
-                  );
-                } else if (sourceId == "6") {
-                  masterProvider.setSelectedSubSource(0);
-                  masterProvider.setSelectedWTP("0");
-                  masterProvider.fetchSourceInformation(
-                    masterProvider.selectedVillage!,
-                    masterProvider.selectedHabitation!,
-                    sourceId.toString(),
-                    "0",
-                    masterProvider.selectedSubSource.toString(),
-                    masterProvider.selectedWtp!,
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
-                  );
-                }
-              },
-            )
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget buildSampleTaken(Masterprovider masterProvider) {
@@ -227,7 +248,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           buildEsrWater(masterProvider),
           buildHouseholdWater(masterProvider),
           buildHandpumpWater(masterProvider),
-
         ],
       ),
     );
@@ -258,10 +278,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                   Text(
+                  Text(
                     'Select Sub-Source Category:',
-                      style: AppStyles.textStyleBoldBlack16,
-
+                    style: AppStyles.textStyleBoldBlack16,
                   ),
                   Row(
                     children: [
@@ -276,7 +295,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         onTap: () {
                           masterProvider.selectRadioOption(1);
                         },
-                        child: const Text('Ground water sources (GW)',style: TextStyle(fontWeight: FontWeight.w400,fontFamily: 'OpenSans'),),
+                        child: const Text(
+                          'Ground water sources (GW)',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'OpenSans'),
+                        ),
                       ),
                     ],
                   ),
@@ -293,7 +317,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           onTap: () {
                             masterProvider.selectRadioOption(2);
                           },
-                          child: const Text('Surface water sources (SW)',style: TextStyle(fontWeight: FontWeight.w400,fontFamily: 'OpenSans'),)),
+                          child: const Text(
+                            'Surface water sources (SW)',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'OpenSans'),
+                          )),
                     ],
                   ),
                 ],
@@ -337,24 +366,26 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            final selectedWaterSource = masterProvider.waterSource.firstWhere(
-                                  (source) => source.locationId == value,
-                              orElse: () => masterProvider.waterSource.first, // Handle the case where no match is found (optional)
+                            final selectedWaterSource =
+                                masterProvider.waterSource.firstWhere(
+                              (source) => source.locationId == value,
+                              orElse: () => masterProvider.waterSource
+                                  .first, // Handle the case where no match is found (optional)
                             );
-                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
-                            masterProvider.setSelectedWaterSourceInformation(value);
+                            masterProvider
+                                .setSelectedWaterSourceInformationName(
+                                    selectedWaterSource.locationName);
+                            masterProvider
+                                .setSelectedWaterSourceInformation(value);
                           },
                         ),
-
                   const SizedBox(
                     height: 10,
                   ),
-
                   buildTimeAddressRemarks(masterProvider),
                   const SizedBox(
                     height: 10,
                   ),
-
                   Center(
                     child: SizedBox(
                       width: double.infinity, // Full width of the parent
@@ -364,14 +395,16 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChangeNotifierProvider.value(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
                                   value: masterProvider,
                                   child: const FtkParameterListScreen(),
                                 ),
                               ),
                             );
                           } else {
-                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                            ToastHelper.showToastMessage(
+                                masterProvider.errorMsg);
                           }
                         },
                         style: AppStyles.buttonStylePrimary(),
@@ -382,7 +415,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       ),
                     ),
                   )
-
                 ],
               ),
             ),
@@ -391,7 +423,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       ],
     );
   }
-
 
   Widget buildEsrWater(Masterprovider masterProvider) {
     return Visibility(
@@ -470,7 +501,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: sourceId == "3" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
+      visible: sourceId == "3" &&
+          (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         children: [
           Card(
@@ -573,11 +605,10 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       controller: householdController,
                       isRequired: true,
                     ),
-                buildTimeAddressRemarks(masterProvider),
+                    buildTimeAddressRemarks(masterProvider),
                     const SizedBox(
                       height: 18,
                     ),
-
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -588,13 +619,15 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: const FtkParameterListScreen(),
-                                  )),
+                                  builder: (context) =>
+                                      ChangeNotifierProvider.value(
+                                        value: masterProvider,
+                                        child: const FtkParameterListScreen(),
+                                      )),
                             );
                           } else {
-                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                            ToastHelper.showToastMessage(
+                                masterProvider.errorMsg);
                           }
                         },
                         style: AppStyles.buttonStylePrimary(),
@@ -650,7 +683,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             },
                           ),
                     buildTimeAddressRemarks(masterProvider),
-
                     SizedBox(
                       height: 10,
                     ),
@@ -664,13 +696,15 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: const FtkParameterListScreen(),
-                                  )),
+                                  builder: (context) =>
+                                      ChangeNotifierProvider.value(
+                                        value: masterProvider,
+                                        child: const FtkParameterListScreen(),
+                                      )),
                             );
                           } else {
-                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                            ToastHelper.showToastMessage(
+                                masterProvider.errorMsg);
                           }
                         },
                         style: AppStyles.buttonStylePrimary(),
@@ -688,7 +722,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           const SizedBox(
             height: 10,
           ),
-
         ],
       ),
     );
@@ -698,7 +731,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     return Column(
       children: [
         Visibility(
-          visible: sourceId == "4" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
+          visible: sourceId == "4" &&
+              (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -754,7 +788,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
+          visible:
+              masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -768,27 +803,30 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // Align text to the left
                 children: [
-                masterProvider.baseStatus==0?AppTextWidgets.errorText(masterProvider.errorMsg):   CustomDropdown(
-                    title: "Select Govt. Handpump *",
-                    value: masterProvider.waterSource.any((item) =>
-                            item.locationId ==
-                            masterProvider.selectedWaterSource)
-                        ? masterProvider.selectedWaterSource
-                        : null, // Ensure value exists in items
-                    items: masterProvider.waterSource.map((waterSource) {
-                      return DropdownMenuItem<String>(
-                        value: waterSource.locationId,
-                        child: Text(
-                          waterSource.locationName,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                  masterProvider.baseStatus == 0
+                      ? AppTextWidgets.errorText(masterProvider.errorMsg)
+                      : CustomDropdown(
+                          title: "Select Govt. Handpump *",
+                          value: masterProvider.waterSource.any((item) =>
+                                  item.locationId ==
+                                  masterProvider.selectedWaterSource)
+                              ? masterProvider.selectedWaterSource
+                              : null, // Ensure value exists in items
+                          items: masterProvider.waterSource.map((waterSource) {
+                            return DropdownMenuItem<String>(
+                              value: waterSource.locationId,
+                              child: Text(
+                                waterSource.locationName,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            masterProvider
+                                .setSelectedWaterSourceInformation(value);
+                          },
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      masterProvider.setSelectedWaterSourceInformation(value);
-                    },
-                  ),
                   buildTimeAddressRemarks(masterProvider),
                   const SizedBox(
                     height: 10,
@@ -830,8 +868,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           ),
         ),
         Visibility(
-          visible: masterProvider.selectedHandpumpPrivate == 8 &&
-              sourceId == "4",
+          visible:
+              masterProvider.selectedHandpumpPrivate == 8 && sourceId == "4",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -1051,7 +1089,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     return true;
   }
 
-
   Widget buildTimeAddressRemarks(Masterprovider masterProvider) {
     return Column(
       children: [
@@ -1059,145 +1096,84 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           // Align text to the left
           children: [
-            CustomDateTimePicker(onDateTimeSelected: (value) {
-              masterProvider.setSelectedDateTime(value);
-            },textTitle: "Date & Time of Sample Collection *",),
+            CustomDateTimePicker(
+              onDateTimeSelected: (value) {
+                masterProvider.setSelectedDateTime(value);
+              },
+              textTitle: "Date & Time of Sample Collection *",
+            ),
             const SizedBox(
               height: 10,
             ),
-
-            CustomDateTimePicker(onDateTimeSelected: (value) {
-              masterProvider.setSelectedDateTime(value);
-            },textTitle: "Date & Time of Sample tested *",),
+            CustomDateTimePicker(
+              onDateTimeSelected: (value) {
+                masterProvider.setSelectedDateTime(value);
+              },
+              textTitle: "Date & Time of Sample tested *",
+            ),
             const SizedBox(
               height: 10,
             ),
-
             TextFormField(
               maxLines: 1,
               controller: masterProvider.addressController,
               // Allows multiline input
-              decoration:
-              InputDecoration(
+              decoration: InputDecoration(
                 filled: true,
-                fillColor:
-                Colors
-                    .white,
-                contentPadding: const EdgeInsets
-                    .symmetric(
-                    vertical:
-                    14,
-                    horizontal:
-                    16),
+                fillColor: Colors.white,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                 // Better padding
-                border:
-                OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(
-                      12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                   // Smoother rounded edges
-                  borderSide: BorderSide(
-                      color: Colors
-                          .grey
-                          .shade300,
-                      width:
-                      1),
+                  borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
                 ),
-                focusedBorder:
-                OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(
-                      12),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                      color: Colors
-                          .blueAccent,
-                      width:
-                      1.5), // Focus highlight
+                      color: Colors.blueAccent, width: 1.5), // Focus highlight
                 ),
-                hintText:
-                "Enter your Address",
-                hintStyle: TextStyle(
-                    fontSize:
-                    16,
-                    color: Colors
-                        .grey
-                        .shade600),
-
+                hintText: "Enter your Address",
+                hintStyle: TextStyle(fontSize: 16, color: Colors.grey.shade600),
               ),
-              keyboardType:
-              TextInputType
-                  .multiline,
-              textInputAction:
-              TextInputAction
-                  .newline, // Allows new line input
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline, // Allows new line input
             ),
-
             SizedBox(
               height: 14,
             ),
-
-
             SizedBox(
-              width: double
-                  .infinity,
-              child:
-              TextFormField(
+              width: double.infinity,
+              child: TextFormField(
                 maxLines: 2,
                 controller: masterProvider.ftkRemarkController,
                 // Allows multiline input
-                decoration:
-                InputDecoration(
+                decoration: InputDecoration(
                   filled: true,
-                  fillColor:
-                  Colors
-                      .white,
-                  contentPadding: const EdgeInsets
-                      .symmetric(
-                      vertical:
-                      14,
-                      horizontal:
-                      16),
+                  fillColor: Colors.white,
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   // Better padding
-                  border:
-                  OutlineInputBorder(
-                    borderRadius:
-                    BorderRadius.circular(
-                        12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                     // Smoother rounded edges
-                    borderSide: BorderSide(
-                        color: Colors
-                            .grey
-                            .shade300,
-                        width:
-                        1),
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade300, width: 1),
                   ),
-                  focusedBorder:
-                  OutlineInputBorder(
-                    borderRadius:
-                    BorderRadius.circular(
-                        12),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                        color: Colors
-                            .blueAccent,
-                        width:
-                        1.5), // Focus highlight
+                        color: Colors.blueAccent,
+                        width: 1.5), // Focus highlight
                   ),
-                  hintText:
-                  "Enter your remarks",
-                  hintStyle: TextStyle(
-                      fontSize:
-                      16,
-                      color: Colors
-                          .grey
-                          .shade600),
-
+                  hintText: "Enter your remarks",
+                  hintStyle:
+                      TextStyle(fontSize: 16, color: Colors.grey.shade600),
                 ),
-                keyboardType:
-                TextInputType
-                    .multiline,
+                keyboardType: TextInputType.multiline,
                 textInputAction:
-                TextInputAction
-                    .newline, // Allows new line input
+                    TextInputAction.newline, // Allows new line input
               ),
             ),
           ],
@@ -1205,5 +1181,4 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       ],
     );
   }
-
 }

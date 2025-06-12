@@ -75,7 +75,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         color: Colors.white),
                     // Cart icon
                     onPressed: () {
-                 //     Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
+                      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
                     },
                   )
                 ],
