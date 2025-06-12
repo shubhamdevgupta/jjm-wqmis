@@ -66,7 +66,7 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   // Method to login user
-  Future<void> loginUser(phoneNumber, password, appId, Function onSuccess,
+  Future<void> loginUser(phoneNumber, password, appId, Function(int villageId,int regId) onSuccess,
       Function onFailure) async {
 
     _isLoading = true;
@@ -100,7 +100,7 @@ class AuthenticationProvider extends ChangeNotifier {
         _localStorage.saveString(AppConstants.prefVillageName, _loginResponse!.villageName.toString());
 
         notifyListeners();
-        onSuccess();
+        onSuccess(_loginResponse!.villageId!,_loginResponse!.regId!);
         generateCaptcha();
       } else {
         errorMsg = _loginResponse!.msg!;

@@ -183,9 +183,10 @@ class Ftkprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _ftkRepository.fetchFtkDashboardData(regId,villageid);
-      baseStatus = response.status;
-      errorMsg = response.message;
+       ftkDashboardResponse = await _ftkRepository.fetchFtkDashboardData(regId,villageid);
+       print("totalSampleTested prov ${ftkDashboardResponse?.totalSampleTested}");
+      baseStatus = ftkDashboardResponse!.status;
+      errorMsg = ftkDashboardResponse!.message;
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
     } finally {

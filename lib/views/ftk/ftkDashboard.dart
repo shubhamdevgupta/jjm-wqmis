@@ -17,13 +17,39 @@ class ftkDashboard extends StatefulWidget {
 
 class _ftkDashboard extends State<ftkDashboard> {
   final session = UserSessionManager();
+  int? villageId;
+  int? regId;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    villageId = args?['villageId'];
+    regId = args?['regId'];
+  }
+
   @override
   void initState() {
     super.initState();
+
+    /////////////
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       session.init();
-      Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId,session.villageId);
+      session.init();
+
+      // 2. Extract arguments from Navigator
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      villageId = args?['villageId'];
+      regId = args?['regId'];
+
+      // 3. Use it in your API call
+      if (villageId != null) {
+         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(regId!, villageId!);
+      } else {
+        print("villageIdD is null");
+      }
     });
+    /////////////
   }
 
   @override
@@ -125,8 +151,9 @@ class _ftkDashboard extends State<ftkDashboard> {
             ],
           ),
         ),
-        body: Consumer<AuthenticationProvider>(
-          builder: (context, authProvider, child) {
+        body: Consumer2<AuthenticationProvider, Ftkprovider>(
+          builder: (context, authProvider, ftkProvider, child) {
+          print("totalSampleTested: ${ftkProvider.ftkDashboardResponse?.totalSampleTested}");
             return SingleChildScrollView(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -393,7 +420,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                     ),
                                     SizedBox(height: 4),
                                     //fix thi
-                                    Text('${ftkprovider.ftkDashboardResponse?.totalSampleTested}', // 🔹 Static value
+                                    Text('${ftkProvider.ftkDashboardResponse?.totalSampleTested}', // 🔹 Static value
                                       style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,

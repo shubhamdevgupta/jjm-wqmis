@@ -152,7 +152,7 @@ class _LoginpageState extends State<Loginscreen> {
                                         provider.loginUser(
                                           phoneController.text,
                                           passwordController.text, 1,
-                                              () {
+                                              (villageId,regId) {
                                             provider.fetchLocation();
                                             if(provider.loginResponse?.roleId==4){
                                               Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
@@ -160,6 +160,16 @@ class _LoginpageState extends State<Loginscreen> {
                                               Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
                                             }else if(provider.loginResponse?.roleId==7){
                                               Navigator.pushReplacementNamed(context, AppConstants.navigateToFtkDashboard);
+
+
+                                              Navigator.pushReplacementNamed(
+                                                context,
+                                                AppConstants.navigateToFtkDashboard,
+                                                arguments: {
+                                                  'villageId': villageId, 'regId': regId,
+                                                },
+                                              );
+
                                             }
                                           },
                                               (errorMessage) {
