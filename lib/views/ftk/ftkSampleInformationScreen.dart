@@ -387,11 +387,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               orElse: () => masterProvider.waterSource
                                   .first, // Handle the case where no match is found (optional)
                             );
-                            masterProvider
-                                .setSelectedWaterSourceInformationName(
-                                    selectedWaterSource.locationName);
-                            masterProvider
-                                .setSelectedWaterSourceInformation(value);
+                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
+                            masterProvider.setSelectedWaterSourceInformation(value);
                           },
                         ),
                   const SizedBox(
@@ -702,8 +699,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               );
                             }).toList(),
                             onChanged: (value) {
-                              masterProvider
-                                  .setSelectedWaterSourceInformation(value);
+                              final selectedWaterSource =
+                              masterProvider.waterSource.firstWhere(
+                                    (source) => source.locationId == value,
+                                orElse: () => masterProvider.waterSource
+                                    .first, // Handle the case where no match is found (optional)
+                              );
+                              masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
+                              masterProvider.setSelectedWaterSourceInformation(value);
                             },
                           ),
                     buildTimeAddressRemarks(masterProvider),
@@ -847,8 +850,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            masterProvider
-                                .setSelectedWaterSourceInformation(value);
+                            final selectedWaterSource =
+                            masterProvider.waterSource.firstWhere(
+                                  (source) => source.locationId == value,
+                              orElse: () => masterProvider.waterSource
+                                  .first, // Handle the case where no match is found (optional)
+                            );
+                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
+                            masterProvider.setSelectedWaterSourceInformation(value);
                           },
                         ),
                   buildTimeAddressRemarks(masterProvider),
