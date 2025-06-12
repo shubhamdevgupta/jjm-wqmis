@@ -195,6 +195,24 @@ class Ftkprovider extends ChangeNotifier {
     }
   }
 
+ // [log] Response: 200 : Body: {"Status":1,"Message":"List of Water Source","Result":[{"Id":2,"SourceType":"Sources of Schemes \r\n(Raw water)"},{"Id":5,"SourceType":"WTP of PWS schemes (Treatment) "},{"Id":6,"SourceType":"Storage Structure (ESR/GSR)"},{"Id":3,"SourceType":"Households /school /AWCs"},{"Id":4,"SourceType":"Handpumps and other private sources"}]}
+
+  Map<String, int> getSampleCountsMap() {
+    final response = ftkDashboardResponse;
+
+    if (response == null) return {};
+
+    return {
+      // These keys MUST match wtsFilterList's source.id values
+      "2": response.totalSourceScheme,
+      "6": response.totalStorageStructure,
+      "3": response.totalHhScAwc,
+      "4": response.totalHandpumpsOtherPrivateSource,
+    };
+  }
+
+
+
 
 
 }

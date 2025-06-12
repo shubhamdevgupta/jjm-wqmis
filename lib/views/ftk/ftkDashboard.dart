@@ -5,6 +5,7 @@ import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class _ftkDashboard extends State<ftkDashboard> {
   int? villageId;
   int? regId;
 
+/*
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -28,15 +30,16 @@ class _ftkDashboard extends State<ftkDashboard> {
     villageId = args?['villageId'];
     regId = args?['regId'];
   }
+*/
 
   @override
   void initState() {
     super.initState();
 
     /////////////
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
       session.init();
-
+/*
       // 2. Extract arguments from Navigator
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       villageId = args?['villageId'];
@@ -47,7 +50,9 @@ class _ftkDashboard extends State<ftkDashboard> {
          Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(regId!, villageId!);
       } else {
         print("villageIdD is null");
-      }
+      }*/
+     await Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId, session.villageId);
+
     });
     /////////////
   }
@@ -81,6 +86,20 @@ class _ftkDashboard extends State<ftkDashboard> {
               );
             },
           ),
+          actions: [
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.refresh,
+                      color: Colors.white),
+                  // Cart icon
+                  onPressed: () {
+                         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId,session.villageId);
+                  },
+                )
+              ],
+            ),
+          ],
           //elevation
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -153,8 +172,7 @@ class _ftkDashboard extends State<ftkDashboard> {
         ),
         body: Consumer2<AuthenticationProvider, Ftkprovider>(
           builder: (context, authProvider, ftkProvider, child) {
-          print("totalSampleTested: ${ftkProvider.ftkDashboardResponse?.totalSampleTested}");
-            return SingleChildScrollView(
+            return ftkProvider.isLoading? LoaderUtils.conditionalLoader(isLoading: ftkProvider.isLoading): SingleChildScrollView(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
