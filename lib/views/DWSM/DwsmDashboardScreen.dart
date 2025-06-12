@@ -27,10 +27,11 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   @override
   void initState() {
     super.initState();
-    session.init();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
+      await  session.init();
+
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(session.regId);

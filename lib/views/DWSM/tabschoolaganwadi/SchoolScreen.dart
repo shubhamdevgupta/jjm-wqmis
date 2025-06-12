@@ -37,7 +37,10 @@ final session = UserSessionManager();
   @override
   void initState() {
     super.initState();
-    session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await  session.init();
+
+    });
   }
 
   @override

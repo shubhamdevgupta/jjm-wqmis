@@ -21,40 +21,14 @@ class _ftkDashboard extends State<ftkDashboard> {
   int? villageId;
   int? regId;
 
-/*
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    villageId = args?['villageId'];
-    regId = args?['regId'];
-  }
-*/
-
   @override
   void initState() {
     super.initState();
-
-    /////////////
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
-      session.init();
-/*
-      // 2. Extract arguments from Navigator
-      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-      villageId = args?['villageId'];
-      regId = args?['regId'];
-
-      // 3. Use it in your API call
-      if (villageId != null) {
-         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(regId!, villageId!);
-      } else {
-        print("villageIdD is null");
-      }*/
-     await Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId, session.villageId);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await session.init();
+      await Provider.of<Ftkprovider>(context, listen: false)
+          .fetchFtkDashboardData(session.regId, session.villageId);
     });
-    /////////////
   }
 
   @override
@@ -90,11 +64,12 @@ class _ftkDashboard extends State<ftkDashboard> {
             Stack(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.refresh,
-                      color: Colors.white),
+                  icon: const Icon(Icons.refresh, color: Colors.white),
                   // Cart icon
                   onPressed: () {
-                         Provider.of<Ftkprovider>(context, listen: false).fetchFtkDashboardData(session.regId,session.villageId);
+                    Provider.of<Ftkprovider>(context, listen: false)
+                        .fetchFtkDashboardData(
+                            session.regId, session.villageId);
                   },
                 )
               ],
@@ -172,279 +147,117 @@ class _ftkDashboard extends State<ftkDashboard> {
         ),
         body: Consumer2<AuthenticationProvider, Ftkprovider>(
           builder: (context, authProvider, ftkProvider, child) {
-            return ftkProvider.isLoading? LoaderUtils.conditionalLoader(isLoading: ftkProvider.isLoading): SingleChildScrollView(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
+            return ftkProvider.isLoading
+                ? LoaderUtils.conditionalLoader(
+                    isLoading: ftkProvider.isLoading)
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Profile Picture
                         Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.blue.shade300,
-                                Colors.blue.shade800
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(2),
-                          // Border-like effect
-                          child: CircleAvatar(
-                            radius: 32,
-                            backgroundColor: Colors.grey[100],
-                            backgroundImage:
-                                const AssetImage('assets/icons/user.png'),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-
-                        // User Info
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Welcome Text
-                              Text(
-                                '${AppConstants.welcome},',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'OpenSans',
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                              Text(
-                                session.userName,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'OpenSans',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-
-                              const SizedBox(height: 4),
-
-                              // Department and Phone
-                              const Row(
-                                children: [
-                                  Icon(Icons.account_balance_sharp,
-                                      size: 18, color: Colors.teal),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'FTK User',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'OpenSans',
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 6),
-
-                              Row(
-                                children: [
-                                  const Icon(Icons.phone_android,
-                                      size: 18, color: Colors.teal),
-                                  const SizedBox(width: 6),
-                                  Flexible(
-                                    child: Text(
-                                      session.mobile,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'OpenSans',
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Village Details",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // ✅ First Row: State + District
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: buildLocationTile(
-                                    icon: Icons.flag,
-                                    label: "State",
-                                    value: session.stateName,
-                                    color: Colors.teal,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: buildLocationTile(
-                                    icon: Icons.location_city,
-                                    label: "District",
-                                    value: session.districtName,
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-
-                            // ✅ Second Row: Block + GP
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: buildLocationTile(
-                                    icon: Icons.map,
-                                    label: "Block",
-                                    value: session.blockName,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: buildLocationTile(
-                                    icon: Icons.groups,
-                                    label: "GP",
-                                    value: session.panchayatName,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-
-                            // ✅ Third Row: Village (can add more if needed)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: buildLocationTile(
-                                    icon: Icons.home,
-                                    label: "Village",
-                                    value: session.villageName,
-                                    color: Colors.purple,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppConstants.navigateToFtkSampleListScreen,
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 14),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Colors.lightGreen, Colors.green],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.blueAccent.withOpacity(0.2),
-                                blurRadius: 8,
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: Row(
                             children: [
+                              // Profile Picture
                               Container(
-                                padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.15),
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white24),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue.shade300,
+                                      Colors.blue.shade800
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
                                 ),
-                                child: Image.asset(
-                                  'assets/icons/medical-lab.png',
-                                  width: 22,
-                                  height: 22,
-                                  color: Colors.white,
+                                padding: const EdgeInsets.all(2),
+                                // Border-like effect
+                                child: CircleAvatar(
+                                  radius: 32,
+                                  backgroundColor: Colors.grey[100],
+                                  backgroundImage:
+                                      const AssetImage('assets/icons/user.png'),
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                               Expanded(
+                              const SizedBox(width: 16),
+
+                              // User Info
+                              Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    // Welcome Text
                                     Text(
-                                      AppConstants.totalSamplesalreadytested,
+                                      '${AppConstants.welcome},',
                                       style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15,
+                                        fontFamily: 'OpenSans',
+                                        color: Colors.grey.shade700,
                                       ),
                                     ),
-                                    SizedBox(height: 4),
-                                    //fix thi
-                                    Text('${ftkProvider.ftkDashboardResponse?.totalSampleTested}', // 🔹 Static value
-                                      style: TextStyle(
+                                    Text(
+                                      session.userName,
+                                      style: const TextStyle(
                                         fontSize: 20,
-                                        color: Colors.white,
+                                        fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.5,
+                                        color: Colors.black87,
                                       ),
+                                    ),
+
+                                    const SizedBox(height: 4),
+
+                                    // Department and Phone
+                                    const Row(
+                                      children: [
+                                        Icon(Icons.account_balance_sharp,
+                                            size: 18, color: Colors.teal),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          'FTK User',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'OpenSans',
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 6),
+
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.phone_android,
+                                            size: 18, color: Colors.teal),
+                                        const SizedBox(width: 6),
+                                        Flexible(
+                                          child: Text(
+                                            session.mobile,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'OpenSans',
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -452,61 +265,231 @@ class _ftkDashboard extends State<ftkDashboard> {
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Text(
-                        "This figure are based on current year data.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print(
-                              '----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
-                          Navigator.pushReplacementNamed(
-                              context, AppConstants.navigateToFtkSampleScreen);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0468B1),
-                          textStyle: const TextStyle(fontSize: 16),
-                          minimumSize: const Size(300, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(8), // ← removes rounding
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
+                        const SizedBox(height: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 18,
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Village Details",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // ✅ First Row: State + District
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: buildLocationTile(
+                                          icon: Icons.flag,
+                                          label: "State",
+                                          value: session.stateName,
+                                          color: Colors.teal,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: buildLocationTile(
+                                          icon: Icons.location_city,
+                                          label: "District",
+                                          value: session.districtName,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+
+                                  // ✅ Second Row: Block + GP
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: buildLocationTile(
+                                          icon: Icons.map,
+                                          label: "Block",
+                                          value: session.blockName,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: buildLocationTile(
+                                          icon: Icons.groups,
+                                          label: "GP",
+                                          value: session.panchayatName,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+
+                                  // ✅ Third Row: Village (can add more if needed)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: buildLocationTile(
+                                          icon: Icons.home,
+                                          label: "Village",
+                                          value: session.villageName,
+                                          color: Colors.purple,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(width: 8),
-                            Text(
-                              AppConstants.addftk,
-                              style: AppStyles.textStyle,
+                            const SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppConstants.navigateToFtkSampleListScreen,
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 14),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Colors.lightGreen, Colors.green],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blueAccent.withOpacity(0.2),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.15),
+                                        shape: BoxShape.circle,
+                                        border:
+                                            Border.all(color: Colors.white24),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/icons/medical-lab.png',
+                                        width: 22,
+                                        height: 22,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            AppConstants
+                                                .totalSamplesalreadytested,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          //fix thi
+                                          Text(
+                                            '${ftkProvider.ftkDashboardResponse?.totalSampleTested}',
+                                            // 🔹 Static value
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 0.5,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              "This figure are based on current year data.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13.5,
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                print(
+                                    '----------->>>  ${AppConstants.navigateToFtkSampleScreen}');
+                                Navigator.pushReplacementNamed(context,
+                                    AppConstants.navigateToFtkSampleScreen);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0468B1),
+                                textStyle: const TextStyle(fontSize: 16),
+                                minimumSize: const Size(300, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8), // ← removes rounding
+                                ),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    AppConstants.addftk,
+                                    style: AppStyles.textStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            );
+                  );
           },
         ),
       ),

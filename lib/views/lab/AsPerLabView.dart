@@ -24,12 +24,13 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
   @override
   void initState() {
     super.initState();
-    masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await session.init();
+      masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
       Provider.of<ParameterProvider>(context, listen: false).isLab=true;
       Provider.of<ParameterProvider>(context, listen: false).isParam=false;
     });
-    session.init();
   }
 
   @override

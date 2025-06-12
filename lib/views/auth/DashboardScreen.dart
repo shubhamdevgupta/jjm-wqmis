@@ -25,11 +25,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   final encryption = AesEncryption();
   @override
-  void initState() {
+  void initState() async{
     super.initState();
-   // var enc = encryption.encryptText("Beneficiaryname");
-    //var dep = encryption.decryptText("lXYW81WigJhGmrXtPxd15g==");
-    session.init();
+  await  session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);

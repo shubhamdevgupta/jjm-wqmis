@@ -26,11 +26,12 @@ class _LabParameterScreen extends State<Labparameterscreen>
   void initState() {
     super.initState();
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
-    session.init();
     // Get providers
     paramProvider = Provider.of<ParameterProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+     await session.init();
+
       Provider.of<ParameterProvider>(context, listen: false).clearData();
     });
     mTabController.addListener(() {

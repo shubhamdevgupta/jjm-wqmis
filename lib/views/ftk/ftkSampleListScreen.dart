@@ -25,12 +25,12 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await  session.init();
       Ftkprovider ftkprovider =
           Provider.of<Ftkprovider>(context, listen: false);
 
-      ftkprovider.fetchftkSampleList(session.regId, session.villageId, 0);
+    await  ftkprovider.fetchftkSampleList(session.regId, session.villageId, 0);
     });
   }
 

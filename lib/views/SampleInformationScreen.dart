@@ -33,9 +33,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       TextEditingController();
 
   @override
-  void initState() {
+  void initState()async {
     super.initState();
-    session.init();
+ await   session.init();
   }
   @override
   Widget build(BuildContext context) {

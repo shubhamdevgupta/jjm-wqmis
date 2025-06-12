@@ -18,17 +18,17 @@ class Ftkmenudashboardscreen extends StatefulWidget {
 class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
   Map<String, int>? sampleCounts;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+     await session.init();
 
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-      masterProvider.fetchWatersourcefilterList();
-       sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
-
+    await  masterProvider.fetchWatersourcefilterList();
+      sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
     });
   }
 
@@ -194,24 +194,29 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                 ),
                                 Column(
                                   children: masterProvider.wtsFilterList
-                                      .where((source) => source.id != "5") // Exclude ID 5
+                                      .where((source) =>
+                                          source.id != "5") // Exclude ID 5
                                       .map((source) {
-                                    final colorIndex = masterProvider.wtsFilterList.indexOf(source) %
+                                    final colorIndex = masterProvider
+                                            .wtsFilterList
+                                            .indexOf(source) %
                                         Colors.primaries.length;
 
                                     final count = sampleCounts![source.id] ?? 0;
 
-
-
                                     return buildSampleCard(
                                       title: source.sourceType,
                                       color: Colors.primaries[colorIndex],
-                                      count: count.toString(), // Convert int to string
+                                      count: count.toString(),
+                                      // Convert int to string
                                       onTap: () {
-                                        masterProvider.setSelectedWaterSourcefilter(source.id);
+                                        masterProvider
+                                            .setSelectedWaterSourcefilter(
+                                                source.id);
                                         Navigator.pushNamed(
                                           context,
-                                          AppConstants.navigateToftkSampleInfoScreen,
+                                          AppConstants
+                                              .navigateToftkSampleInfoScreen,
                                           arguments: {
                                             'sourceId': source.id,
                                             'sourceType': source.sourceType,
@@ -286,7 +291,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
     required VoidCallback onTap,
     required String count,
     required Color color,
-    required int count, // 🔢 New count parameter
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -333,19 +337,14 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     ),
                   ),
                 ),
-                Text(
-                  "$count",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
-                ),
-
+                Text(count,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )),
               ],
             ),
-
-
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
@@ -374,5 +373,4 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       ),
     );
   }
-
 }

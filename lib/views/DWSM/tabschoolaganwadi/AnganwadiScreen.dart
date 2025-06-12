@@ -36,10 +36,12 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   final lng = CurrentLocation.longitude;
 
   @override
-  void initState() {
+  void initState()async {
     super.initState();
-    session.init();
-  }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await  session.init();
+
+    });  }
 
   @override
   Widget build(BuildContext context) {

@@ -25,9 +25,10 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
   @override
   void initState() {
-      session.init();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmProvider>(context, listen: false).fetchDemonstrationList(
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+     await session.init();
+
+    await  Provider.of<DwsmProvider>(context, listen: false).fetchDemonstrationList(
           session.stateId,
           session.districtId,
           "2025-2026",

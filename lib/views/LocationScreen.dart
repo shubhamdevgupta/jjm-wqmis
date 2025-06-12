@@ -26,9 +26,9 @@ class _LocationscreenState extends State<Locationscreen> {
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    session.init();
+   await session.init();
   }
 
   @override

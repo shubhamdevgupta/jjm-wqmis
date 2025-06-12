@@ -22,7 +22,11 @@ class _DwsmLocation extends State<DwsmLocation> {
   @override
   void initState() {
     super.initState();
-    session.init();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await  session.init();
+
+    });
   }
 
   @override

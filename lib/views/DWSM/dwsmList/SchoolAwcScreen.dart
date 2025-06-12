@@ -25,9 +25,10 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
 
   @override
   void initState() {
-      session.init();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await  session.init();
+
       final dashboardProvider =
           Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(

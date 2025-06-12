@@ -26,9 +26,10 @@ class _WtpLabScreen extends State<Wtplabscreen> {
   @override
   void initState() {
     super.initState();
-    session.init();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+     await session.init();
+
       final paramProvider =
           Provider.of<ParameterProvider>(context, listen: false);
       paramProvider.fetchWTPLab(masterProvider);

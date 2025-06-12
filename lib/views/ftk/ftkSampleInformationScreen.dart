@@ -35,7 +35,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      session.init();
+     await session.init();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());

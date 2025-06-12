@@ -72,7 +72,8 @@ class _SampleListScreenState extends State<SampleListScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await session.init();
 
       Masterprovider masterprovider =
           Provider.of<Masterprovider>(context, listen: false);
@@ -94,7 +95,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
           } else if (flagfloation == AppConstants.totalSampleTested) {
             C_STATUS = 6;
           }
-          sampleListProvider.fetchSampleList(
+       await  sampleListProvider.fetchSampleList(
               session.regId,
               PAGE,
               SEARCH,
@@ -108,18 +109,18 @@ class _SampleListScreenState extends State<SampleListScreen> {
         } else if (flag == AppConstants.totalPhysicalSubmitted ||
             flag == AppConstants.openSampleListScreen) {
           C_STATUS = 2;
-          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH,
+       await   sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH,
               C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSampleTested ||
             flag == AppConstants.openSampleListScreen) {
-          sampleListProvider.fetchSampleList(
+       await   sampleListProvider.fetchSampleList(
               session.regId, 1, "0", 6, "0", 0, 0, 0, 0, 0);
         } else if (flag == AppConstants.totalSamplesSubmitted || flag == AppConstants.openSampleListScreen)
         {C_STATUS = 1;
-          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        await  sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         }else if (flag == AppConstants.knowyoursampledetail || flag == AppConstants.openSampleListScreen)
         {C_STATUS = 0;
-          sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
+        await  sampleListProvider.fetchSampleList(session.regId, PAGE, SEARCH, C_STATUS, SAMPLE_ID, 0, 0, 0, 0, 0);
         }
       }
     });
