@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 
 import 'package:jjm_wqmis/main.dart';
-import 'package:jjm_wqmis/views/ExceptionScreen.dart';
-import 'package:jjm_wqmis/utils/CustomException.dart';
+import 'package:jjm_wqmis/utils/custom_screen/ExceptionScreen.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomException.dart';
 
 class GlobalExceptionHandler {
   static void handleException(Exception e) {

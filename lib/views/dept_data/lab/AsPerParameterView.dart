@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/views/dept_data/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
 
 class Asperparameterview extends StatefulWidget {
   const Asperparameterview({super.key});
