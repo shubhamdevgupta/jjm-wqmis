@@ -202,6 +202,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                     final count = sampleCounts![source.id] ?? 0;
 
 
+
                                     return buildSampleCard(
                                       title: source.sourceType,
                                       color: Colors.primaries[colorIndex],
@@ -285,6 +286,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
     required VoidCallback onTap,
     required String count,
     required Color color,
+    required int count, // 🔢 New count parameter
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -331,14 +333,19 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     ),
                   ),
                 ),
-                Text(count,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
+                Text(
+                  "$count",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+
               ],
             ),
+
+
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
@@ -367,4 +374,5 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       ),
     );
   }
+
 }
