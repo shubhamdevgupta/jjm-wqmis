@@ -703,7 +703,48 @@ class Masterprovider extends ChangeNotifier {
     errorMsg = '';
     otherSourceLocation = '';
     sampleTypeOther = '';
+    ftkRemarkController.clear();
+    addressController.clear();
+    _isLoading = false;
 
+    notifyListeners();
+  }
+  void clearDataforFtk() {
+    habitationId.clear();
+    selectedHabitation = null;
+
+    schemes.clear();
+    selectedScheme = null;
+
+    waterSource.clear();
+    selectedWaterSource = null;
+
+    wtpList.clear();
+    selectedWtp = null;
+
+    istreated = 0;
+
+    _currentLatitude = null;
+    _currentLongitude = null;
+
+    wtsFilterList.clear();
+    selectedWtsfilter = null;
+
+    _villageDetails.clear();
+
+    _validateVillageResponse = null;
+
+    baseStatus = 0;
+    _selectedSubSource = null;
+    _selectedHouseHoldType = null;
+    _selectedHandpumpPrivate = null;
+    _selectedDatetime = '';
+
+    errorMsg = '';
+    otherSourceLocation = '';
+    sampleTypeOther = '';
+    ftkRemarkController.clear();
+    addressController.clear();
     _isLoading = false;
 
     notifyListeners();

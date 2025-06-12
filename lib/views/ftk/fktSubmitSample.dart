@@ -214,6 +214,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                 ),
                 onPressed: () {
+                  masterProvider.clearDataforFtk();
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
                     context,
