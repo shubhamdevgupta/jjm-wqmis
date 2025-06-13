@@ -29,9 +29,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
 
   @override
-  void initState()async {
+  void initState() {
     super.initState();
- await   session.init();
+    session.init();
   }
   @override
   Widget build(BuildContext context) {

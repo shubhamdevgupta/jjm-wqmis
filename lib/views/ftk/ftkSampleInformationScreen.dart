@@ -558,13 +558,31 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
                           masterProvider.selectRadioOption(value!);
-                          masterProvider.setSelectedHabitation("0");
+                          masterProvider.setSelectedHouseHold(value);
+                          masterProvider.setSelectedSubSource(2);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              "0",
+                              masterProvider.selectedWtsfilter!,
+                              masterProvider.selectedSubSource.toString(),
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
                         },
                       ),
                       InkWell(
                         onTap: () {
-                          masterProvider.selectRadioOption(4);
-                          masterProvider.setSelectedHabitation("0");
+                          masterProvider.setSelectedSubSource(2);
+                          masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              "0",
+                              masterProvider.selectedWtsfilter!,
+                              masterProvider.selectedSubSource.toString(),
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
 
                         },
                         child: const Text('At school/AWCs'),
