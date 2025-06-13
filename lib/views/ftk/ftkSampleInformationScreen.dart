@@ -638,7 +638,10 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
             height: 10,
           ),
           Visibility(
-            visible: masterProvider.selectedHousehold == 3,
+              visible: masterProvider.selectedHousehold == 3 &&
+                  masterProvider.selectedHabitation != null &&
+                  masterProvider.selectedHabitation != "0",
+
             child: Card(
               elevation: 5,
               // Increased elevation for a more modern shadow effect
