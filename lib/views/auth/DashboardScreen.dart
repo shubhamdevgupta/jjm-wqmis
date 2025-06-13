@@ -25,10 +25,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   final encryption = AesEncryption();
   @override
-  void initState() async{
+  void initState() {
     super.initState();
-  await  session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+     await session.init();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchDistricts(session.stateId.toString());
