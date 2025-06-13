@@ -562,11 +562,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
                           masterProvider.selectRadioOption(value!);
+                          masterProvider.setSelectedHabitation("0");
                         },
                       ),
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(4);
+                          masterProvider.setSelectedHabitation("0");
+
                         },
                         child: const Text('At school/AWCs'),
                       ),
