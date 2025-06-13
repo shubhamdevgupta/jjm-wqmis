@@ -569,6 +569,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         onTap: () {
                           masterProvider.selectRadioOption(4);
                           masterProvider.setSelectedHabitation("0");
+
                         },
                         child: const Text('At school/AWCs'),
                       ),
