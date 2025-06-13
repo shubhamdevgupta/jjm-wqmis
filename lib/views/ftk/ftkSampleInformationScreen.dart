@@ -23,7 +23,6 @@ class ftkSampleInformationScreen extends StatefulWidget {
 class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   final session = UserSessionManager();
 
-
   String? sourceId; // 👈 Store the ID here
   String? sourceType;
 
@@ -31,7 +30,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     await session.init();
+      await session.init();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
@@ -253,7 +252,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           ),
           const SizedBox(height: 12),
           Divider(thickness: 1, color: Colors.grey.shade500),
-
           buildSchemeDropDown(masterProvider),
           buildSourceofScheme(masterProvider),
           buildEsrWater(masterProvider),
@@ -383,8 +381,11 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               orElse: () => masterProvider.waterSource
                                   .first, // Handle the case where no match is found (optional)
                             );
-                            masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
-                            masterProvider.setSelectedWaterSourceInformation(value);
+                            masterProvider
+                                .setSelectedWaterSourceInformationName(
+                                    selectedWaterSource.locationName);
+                            masterProvider
+                                .setSelectedWaterSourceInformation(value);
                           },
                         ),
                   const SizedBox(
@@ -546,7 +547,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       InkWell(
                         onTap: () {
                           masterProvider.selectRadioOption(3);
-                           },
+                        },
                         child: const Text('At household'),
                       ),
                     ],
@@ -561,19 +562,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           masterProvider.selectRadioOption(value!);
                           masterProvider.setSelectedHouseHold(value);
                           masterProvider.setSelectedSubSource(2);
-                         await masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!, "0",
-                              masterProvider.selectedWtsfilter!,
-                              masterProvider.selectedSubSource.toString(), "0", "0",
-                              masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
-                        },
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          masterProvider.setSelectedHabitation("0");
-                          masterProvider.setSelectedSubSource(2);
-                         await masterProvider.fetchSourceInformation(
+                          await masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
                               "0",
                               masterProvider.selectedWtsfilter!,
@@ -582,7 +571,21 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               "0",
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!);
-
+                        },
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          masterProvider.setSelectedHabitation("0");
+                          masterProvider.setSelectedSubSource(2);
+                          await masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!,
+                              "0",
+                              masterProvider.selectedWtsfilter!,
+                              masterProvider.selectedSubSource.toString(),
+                              "0",
+                              "0",
+                              masterProvider.selectedStateId!,
+                              masterProvider.selectedScheme!);
                         },
                         child: const Text('At school/AWCs'),
                       ),
@@ -595,66 +598,67 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           const SizedBox(
             height: 10,
           ),
-      Visibility(
-        visible: masterProvider.selectedHousehold == 3,
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.all(5),
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Select Habitation *",
-                  style: TextStyle(
-                    fontSize: 16, fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87, // Dark text for better readability
-                  ),
-                ),
-
-                const Divider(
-                  height: 10,
-                  color: Colors.grey,
-                  thickness: 1,
-                ),
-                const SizedBox(height: 4), // Space between title and dropdown
-                CustomDropdown(
-                  title: "",
-                  value: masterProvider.selectedHabitation,
-                  items: masterProvider.habitationId.map((habitation) {
-                    return DropdownMenuItem<String>(
-                      value: habitation.habitationId.toString(),
-                      child: Text(
-                        habitation.habitationName,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+          Visibility(
+            visible: masterProvider.selectedHousehold == 3,
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.all(5),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Select Habitation *",
+                      style: TextStyle(
+                        fontSize: 16, fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        color:
+                            Colors.black87, // Dark text for better readability
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    masterProvider.setSelectedHabitation(value);
-                  },
-                  appBarTitle: "Select Habitation",
+                    ),
+
+                    const Divider(
+                      height: 10,
+                      color: Colors.grey,
+                      thickness: 1,
+                    ),
+                    const SizedBox(height: 4),
+                    // Space between title and dropdown
+                    CustomDropdown(
+                      title: "",
+                      value: masterProvider.selectedHabitation,
+                      items: masterProvider.habitationId.map((habitation) {
+                        return DropdownMenuItem<String>(
+                          value: habitation.habitationId.toString(),
+                          child: Text(
+                            habitation.habitationName,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        masterProvider.setSelectedHabitation(value);
+                      },
+                      appBarTitle: "Select Habitation",
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
           const SizedBox(
             height: 10,
           ),
           Visibility(
-              visible: masterProvider.selectedHousehold == 3 &&
-                  masterProvider.selectedHabitation != null &&
-                  masterProvider.selectedHabitation != "0",
-
+            visible: masterProvider.selectedHousehold == 3 &&
+                masterProvider.selectedHabitation != null &&
+                masterProvider.selectedHabitation != "0",
             child: Card(
               elevation: 5,
               // Increased elevation for a more modern shadow effect
@@ -683,8 +687,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (validateHouseholdWaterFields(
-                              masterProvider, masterProvider.householdController)) {
+                          if (validateHouseholdWaterFields(masterProvider,
+                              masterProvider.householdController)) {
                             masterProvider.otherSourceLocation =
                                 masterProvider.householdController.text;
                             Navigator.push(
@@ -731,12 +735,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     masterProvider.baseStatus == 0
                         ? AppTextWidgets.errorText(masterProvider.errorMsg)
                         : CustomDropdown(
+                            appBarTitle: 'Select School / AWCs',
                             title: "Select School / AWCs *",
                             value: masterProvider.waterSource.any((item) =>
                                     item.locationId ==
                                     masterProvider.selectedWaterSource)
                                 ? masterProvider.selectedWaterSource
-                                : null, // Ensure valid value
+                                : null,
+                            // Ensure valid value
                             items:
                                 masterProvider.waterSource.map((waterSource) {
                               return DropdownMenuItem<String>(
@@ -750,13 +756,16 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             }).toList(),
                             onChanged: (value) {
                               final selectedWaterSource =
-                              masterProvider.waterSource.firstWhere(
-                                    (source) => source.locationId == value,
+                                  masterProvider.waterSource.firstWhere(
+                                (source) => source.locationId == value,
                                 orElse: () => masterProvider.waterSource
-                                    .first, // Handle the case where no match is found (optional)
+                                    .first,
                               );
-                              masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
-                              masterProvider.setSelectedWaterSourceInformation(value);
+                              masterProvider
+                                  .setSelectedWaterSourceInformationName(
+                                      selectedWaterSource.locationName);
+                              masterProvider
+                                  .setSelectedWaterSourceInformation(value);
                             },
                           ),
                     buildTimeAddressRemarks(masterProvider),
@@ -766,8 +775,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (validateHouseholdWaterFields(
-                              masterProvider, masterProvider.householdController)) {
+                          if (validateHouseholdWaterFields(masterProvider,
+                              masterProvider.householdController)) {
                             masterProvider.otherSourceLocation =
                                 masterProvider.householdController.text;
                             Navigator.push(
@@ -830,6 +839,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 7,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
+                          masterProvider.setSelectedHabitation("0");
                           masterProvider.cleartxt();
                           masterProvider.selectRadioOption(value!);
                           print('----${masterProvider.selectedWaterSourceName}');
@@ -848,10 +858,17 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       Radio(
                         value: 8,
                         groupValue: masterProvider.selectedHandpumpPrivate,
-                        onChanged: (value) {
+                        onChanged: (value) async{
                           masterProvider.cleartxt(); // if you want to clear text fields too
+                          await   masterProvider.fetchHabitations(
+                              session.stateId.toString(),
+                              session.districtId.toString(),
+                              session.blockId.toString(),
+                              session.panchayatId.toString(),
+                              session.villageId.toString());
                           masterProvider.selectRadioOption(value!);
-                          print('----${masterProvider.selectedWaterSourceName}');
+                          print(
+                              '----${masterProvider.selectedWaterSourceName}');
                         },
                       ),
                       InkWell(
@@ -861,7 +878,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         },
                         child: const Text('Private source location'),
                       ),
-
                     ],
                   ),
                 ],
@@ -873,20 +889,77 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
+          visible: masterProvider.selectedHandpumpPrivate == 8,
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: const EdgeInsets.all(5),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Select Habitation *",
+                    style: TextStyle(
+                      fontSize: 16, fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                      color:
+                      Colors.black87, // Dark text for better readability
+                    ),
+                  ),
+
+                  const Divider(
+                    height: 10,
+                    color: Colors.grey,
+                    thickness: 1,
+                  ),
+                  const SizedBox(height: 4),
+                  // Space between title and dropdown
+                  CustomDropdown(
+                    title: "",
+                    value: masterProvider.selectedHabitation,
+                    items: masterProvider.habitationId.map((habitation) {
+                      return DropdownMenuItem<String>(
+                        value: habitation.habitationId.toString(),
+                        child: Text(
+                          habitation.habitationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      masterProvider.setSelectedHabitation(value);
+                    },
+                    appBarTitle: "Select Habitation",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(
+          height: 10,
+        ),
+        Visibility(
           visible:
               masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
           child: Card(
-            elevation: 5, // Increased elevation for a more modern shadow effect
+            elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
-                  12), // Slightly increased border radius for a smooth look
+                  12),
             ),
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                // Align text to the left
                 children: [
                   masterProvider.baseStatus == 0
                       ? AppTextWidgets.errorText(masterProvider.errorMsg)
@@ -896,7 +969,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                                   item.locationId ==
                                   masterProvider.selectedWaterSource)
                               ? masterProvider.selectedWaterSource
-                              : null, // Ensure value exists in items
+                              : null,
                           items: masterProvider.waterSource.map((waterSource) {
                             return DropdownMenuItem<String>(
                               value: waterSource.locationId,
@@ -909,13 +982,13 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           }).toList(),
                           onChanged: (value) {
                             final selectedWaterSource =
-                            masterProvider.waterSource.firstWhere(
-                                  (source) => source.locationId == value,
-                              orElse: () => masterProvider.waterSource
-                                  .first, // Handle the case where no match is found (optional)
+                                masterProvider.waterSource.firstWhere(
+                              (source) => source.locationId == value,
+                              orElse: () => masterProvider.waterSource.first,
                             );
                             masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
                             masterProvider.setSelectedWaterSourceInformation(value);
+                            print('oooooo  ${masterProvider.selectedWaterSourceName}');
                           },
                         ),
                   buildTimeAddressRemarks(masterProvider),
@@ -960,7 +1033,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible:
-              masterProvider.selectedHandpumpPrivate == 8 && sourceId == "4",
+              masterProvider.selectedHandpumpPrivate == 8 && sourceId == "4" && masterProvider.selectedHabitation != null &&
+                  masterProvider.selectedHabitation != "0",
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -1003,6 +1077,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           masterProvider.otherSourceLocation =
                               masterProvider.handpumpLocationController.text;
                           masterProvider.setSelectedWaterSourceInformation("0");
+                          masterProvider.setSelectedWaterSourceInformationName(" ");
 
                           Navigator.push(
                             context,

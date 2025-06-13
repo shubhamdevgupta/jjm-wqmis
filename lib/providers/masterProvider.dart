@@ -384,6 +384,7 @@ class Masterprovider extends ChangeNotifier {
         waterSource = rawWaterSource.result;
         if (waterSource.length == 1) {
           selectedWaterSource = waterSource.first.locationId.toString();
+          selectedWaterSourceName= waterSource.first.locationName;
         }
       } else {
         errorMsg = rawWaterSource.message;
