@@ -579,27 +579,58 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           const SizedBox(
             height: 10,
           ),
-          Visibility(
-            visible: masterProvider.selectedHousehold == 3,
-            child: CustomDropdown(
-              title: "Habitation *",
-              value: masterProvider.selectedHabitation,
-              items: masterProvider.habitationId.map((habitation) {
-                return DropdownMenuItem<String>(
-                  value: habitation.habitationId.toString(),
-                  child: Text(
-                    habitation.habitationName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+      Visibility(
+        visible: masterProvider.selectedHousehold == 3,
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          margin: const EdgeInsets.all(5),
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Select Habitation *",
+                  style: TextStyle(
+                    fontSize: 16, fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87, // Dark text for better readability
                   ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                masterProvider.setSelectedHabitation(value);
-              },
-              appBarTitle: "Select Habitation",
+                ),
+
+                const Divider(
+                  height: 10,
+                  color: Colors.grey,
+                  thickness: 1,
+                ),
+                const SizedBox(height: 4), // Space between title and dropdown
+                CustomDropdown(
+                  title: "",
+                  value: masterProvider.selectedHabitation,
+                  items: masterProvider.habitationId.map((habitation) {
+                    return DropdownMenuItem<String>(
+                      value: habitation.habitationId.toString(),
+                      child: Text(
+                        habitation.habitationName,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    masterProvider.setSelectedHabitation(value);
+                  },
+                  appBarTitle: "Select Habitation",
+                ),
+              ],
             ),
           ),
+        ),
+      ),
           const SizedBox(
             height: 10,
           ),
