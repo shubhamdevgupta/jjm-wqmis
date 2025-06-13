@@ -556,25 +556,24 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       Radio(
                         value: 4,
                         groupValue: masterProvider.selectedHousehold,
-                        onChanged: (value) {
+                        onChanged: (value) async {
+                          masterProvider.setSelectedHabitation("0");
                           masterProvider.selectRadioOption(value!);
                           masterProvider.setSelectedHouseHold(value);
                           masterProvider.setSelectedSubSource(2);
-                          masterProvider.fetchSourceInformation(
-                              masterProvider.selectedVillage!,
-                              "0",
+                         await masterProvider.fetchSourceInformation(
+                              masterProvider.selectedVillage!, "0",
                               masterProvider.selectedWtsfilter!,
-                              masterProvider.selectedSubSource.toString(),
-                              "0",
-                              "0",
+                              masterProvider.selectedSubSource.toString(), "0", "0",
                               masterProvider.selectedStateId!,
                               masterProvider.selectedScheme!);
                         },
                       ),
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          masterProvider.setSelectedHabitation("0");
                           masterProvider.setSelectedSubSource(2);
-                          masterProvider.fetchSourceInformation(
+                         await masterProvider.fetchSourceInformation(
                               masterProvider.selectedVillage!,
                               "0",
                               masterProvider.selectedWtsfilter!,
