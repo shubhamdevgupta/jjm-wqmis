@@ -26,11 +26,7 @@ class Sampleinformationscreen extends StatefulWidget {
 class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   final session = UserSessionManager();
 
-  final TextEditingController householdController = TextEditingController();
-  final TextEditingController handpumpSourceController =
-      TextEditingController();
-  final TextEditingController handpumpLocationController =
-      TextEditingController();
+
 
   @override
   void initState()async {
@@ -769,7 +765,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       labelText: 'Name of household *',
                       hintText: 'Enter Location',
                       prefixIcon: Icons.cabin_rounded,
-                      controller: householdController,
+                      controller: masterProvider.householdController,
                       isRequired: true,
                     ),
                     CustomDateTimePicker(onDateTimeSelected: (value) {
@@ -841,9 +837,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               child: ElevatedButton(
                 onPressed: () {
                   if (validateHouseholdWaterFields(
-                      masterProvider, householdController)) {
+                      masterProvider, masterProvider.householdController)) {
                     masterProvider.otherSourceLocation =
-                        householdController.text;
+                        masterProvider.householdController.text;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -895,14 +891,17 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 7,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
+                          masterProvider.cleartxt();
                           masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
-                          onTap: () {
-                            masterProvider.selectRadioOption(7);
-                          },
-                          child: const Text('Govt. Handpump')),
+                        onTap: () {
+                          masterProvider.cleartxt();
+                          masterProvider.selectRadioOption(7);
+                        },
+                        child: const Text('Govt. Handpump'),
+                      ),
                     ],
                   ),
                   Row(
@@ -911,18 +910,22 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         value: 8,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
+                          masterProvider.cleartxt();
                           masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
-                          onTap: () {
-                            masterProvider.selectRadioOption(8);
-                          },
-                          child: const Text('Private source location')),
+                        onTap: () {
+                          masterProvider.cleartxt();
+                          masterProvider.selectRadioOption(8);
+                        },
+                        child: const Text('Private source location'),
+                      ),
                     ],
                   ),
                 ],
               ),
+
             ),
           ),
         ),
@@ -976,13 +979,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (validateHandpumpWaterFields(
-                            masterProvider,
-                            handpumpSourceController,
-                            handpumpLocationController)) {
-                          masterProvider.sampleTypeOther =
-                              handpumpSourceController.text;
-                          masterProvider.otherSourceLocation =
-                              handpumpLocationController.text;
+                            masterProvider, masterProvider.handpumpSourceController, masterProvider.handpumpLocationController)) {
+                          masterProvider.sampleTypeOther = masterProvider.handpumpSourceController.text;
+                          masterProvider.otherSourceLocation = masterProvider.handpumpLocationController.text;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -1027,14 +1026,14 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     labelText: 'Type of source *',
                     hintText: 'Enter Source type',
                     prefixIcon: Icons.edit_calendar_sharp,
-                    controller: handpumpSourceController,
+                    controller: masterProvider.handpumpSourceController,
                     isRequired: true,
                   ),
                   CustomTextField(
                     labelText: 'Enter Location *',
                     hintText: 'Enter Location',
                     prefixIcon: Icons.dehaze,
-                    controller: handpumpLocationController,
+                    controller: masterProvider.handpumpLocationController,
                     isRequired: true,
                   ),
                   CustomDateTimePicker(onDateTimeSelected: (value) {
@@ -1048,12 +1047,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       onPressed: () {
                         if (validateHandpumpWaterFields(
                             masterProvider,
-                            handpumpSourceController,
-                            handpumpLocationController)) {
+                            masterProvider.handpumpSourceController,
+                            masterProvider.handpumpLocationController)) {
                           masterProvider.sampleTypeOther =
-                              handpumpSourceController.text;
+                              masterProvider.handpumpSourceController.text;
                           masterProvider.otherSourceLocation =
-                              handpumpLocationController.text;
+                              masterProvider.handpumpLocationController.text;
                           masterProvider.setSelectedWaterSourceInformation("0");
 
                           Navigator.push(

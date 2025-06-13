@@ -102,6 +102,10 @@ class Masterprovider extends ChangeNotifier {
 
   String? get selectedDatetimeSampleTested => _selectedDatetimeSampleTested;
 
+  final TextEditingController householdController = TextEditingController();
+  final TextEditingController handpumpSourceController = TextEditingController();
+  final TextEditingController handpumpLocationController = TextEditingController();
+
   TextEditingController addressController = TextEditingController();
   TextEditingController ftkRemarkController = TextEditingController();
   String errorMsg = '';
@@ -654,6 +658,8 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   void clearData() {
     states.clear();
     selectedStateId = null;
@@ -750,6 +756,18 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearSelectedWaterSource() {
+    selectedWaterSource = null;
+    selectedWaterSourceName = null; // if you're using name too
+    notifyListeners();
+  }
+
+  void cleartxt() {
+    handpumpSourceController.clear();
+    householdController.clear();
+    handpumpLocationController.clear();
+    notifyListeners(); // Important if UI is bound to the controller values
+  }
 
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {

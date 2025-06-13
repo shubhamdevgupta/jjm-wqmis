@@ -23,11 +23,7 @@ class ftkSampleInformationScreen extends StatefulWidget {
 class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
   final session = UserSessionManager();
 
-  final TextEditingController householdController = TextEditingController();
-  final TextEditingController handpumpSourceController =
-      TextEditingController();
-  final TextEditingController handpumpLocationController =
-      TextEditingController();
+
   String? sourceId; // 👈 Store the ID here
   String? sourceType;
 
@@ -660,7 +656,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       labelText: 'Name of household *',
                       hintText: 'Enter Location',
                       prefixIcon: Icons.cabin_rounded,
-                      controller: householdController,
+                      controller: masterProvider.householdController,
                       isRequired: true,
                     ),
                     buildTimeAddressRemarks(masterProvider),
@@ -671,9 +667,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (validateHouseholdWaterFields(
-                              masterProvider, householdController)) {
+                              masterProvider, masterProvider.householdController)) {
                             masterProvider.otherSourceLocation =
-                                householdController.text;
+                                masterProvider.householdController.text;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -754,9 +750,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (validateHouseholdWaterFields(
-                              masterProvider, householdController)) {
+                              masterProvider, masterProvider.householdController)) {
                             masterProvider.otherSourceLocation =
-                                householdController.text;
+                                masterProvider.householdController.text;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -817,11 +813,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 7,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
+                          masterProvider.cleartxt();
                           masterProvider.selectRadioOption(value!);
+                          print('----${masterProvider.selectedWaterSourceName}');
                         },
                       ),
                       InkWell(
                           onTap: () {
+                            masterProvider.cleartxt();
                             masterProvider.selectRadioOption(7);
                           },
                           child: const Text('Govt. Handpump')),
@@ -833,14 +832,19 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 8,
                         groupValue: masterProvider.selectedHandpumpPrivate,
                         onChanged: (value) {
+                          masterProvider.cleartxt(); // if you want to clear text fields too
                           masterProvider.selectRadioOption(value!);
+                          print('----${masterProvider.selectedWaterSourceName}');
                         },
                       ),
                       InkWell(
-                          onTap: () {
-                            masterProvider.selectRadioOption(8);
-                          },
-                          child: const Text('Private source location')),
+                        onTap: () {
+                          masterProvider.cleartxt(); // if needed
+                          masterProvider.selectRadioOption(8);
+                        },
+                        child: const Text('Private source location'),
+                      ),
+
                     ],
                   ),
                 ],
@@ -906,12 +910,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       onPressed: () {
                         if (validateHandpumpWaterFields(
                             masterProvider,
-                            handpumpSourceController,
-                            handpumpLocationController)) {
+                            masterProvider.handpumpSourceController,
+                            masterProvider.handpumpLocationController)) {
                           masterProvider.sampleTypeOther =
-                              handpumpSourceController.text;
+                              masterProvider.handpumpSourceController.text;
                           masterProvider.otherSourceLocation =
-                              handpumpLocationController.text;
+                              masterProvider.handpumpLocationController.text;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -956,14 +960,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     labelText: 'Type of source *',
                     hintText: 'Enter Source type',
                     prefixIcon: Icons.edit_calendar_sharp,
-                    controller: handpumpSourceController,
+                    controller: masterProvider.handpumpSourceController,
                     isRequired: true,
                   ),
                   CustomTextField(
                     labelText: 'Enter Location *',
                     hintText: 'Enter Location',
                     prefixIcon: Icons.dehaze,
-                    controller: handpumpLocationController,
+                    controller: masterProvider.handpumpLocationController,
                     isRequired: true,
                   ),
                   buildTimeAddressRemarks(masterProvider),
@@ -975,12 +979,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       onPressed: () {
                         if (validateHandpumpWaterFields(
                             masterProvider,
-                            handpumpSourceController,
-                            handpumpLocationController)) {
+                            masterProvider.handpumpSourceController,
+                            masterProvider.handpumpLocationController)) {
                           masterProvider.sampleTypeOther =
-                              handpumpSourceController.text;
+                              masterProvider.handpumpSourceController.text;
                           masterProvider.otherSourceLocation =
-                              handpumpLocationController.text;
+                              masterProvider.handpumpLocationController.text;
                           masterProvider.setSelectedWaterSourceInformation("0");
 
                           Navigator.push(
