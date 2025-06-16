@@ -36,7 +36,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   final lng = CurrentLocation.longitude;
 
   @override
-  void initState()async {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await  session.init();
@@ -105,8 +105,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
                                             if (dwsmprovider.mDemonstrationId ==
                                                 1) {
-                                              dwsmprovider
-                                                  .fetchDemonstrationList(
+                                              dwsmprovider.fetchDemonstrationList(
                                                       session.stateId,
                                                       session.districtId,
                                                       "2025-2026",
