@@ -234,43 +234,47 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                     alignment: Alignment.bottomRight,
                                     child: ElevatedButton.icon(
                                       onPressed: () async {
-                                        LoaderUtils.showCustomLoaderDialog(
-                                            context);
-                                        await provider.fetchDemonstrationList(
-                                          session.stateId,
-                                          session.districtId,
-                                          "2025-2026",
-                                          village.schoolId,
-                                          widget.type!,
-                                          onSuccess: (result) {
-                                            String base64String = result.photo
-                                                    .contains(',')
-                                                ? result.photo.split(',').last
-                                                : result.photo;
-                                            final imageBytes =
-                                                base64Decode(base64String);
-                                            LoaderUtils.hideLoaderDialog(
-                                                context);
-                                            showImage(imageBytes);
-                                          },
-                                        );
-                                        if (!mounted) return;
+                                        // Show loader only once
+                                        try {
+                                          // Call the provider function WITHOUT managing loader inside provider
+                                          await provider.fetchDemonstrationList(
+                                            session.stateId,
+                                            session.districtId,
+                                            "2025-2026",
+                                            village.schoolId,
+                                            widget.type!,
+                                            onSuccess: (result) {
+                                              final String base64String = result.photo.contains(',')
+                                                  ? result.photo.split(',').last
+                                                  : result.photo;
+
+                                              final imageBytes = base64Decode(base64String);
+                                              showImage(imageBytes); // show image in alert
+                                            },
+                                          );
+                                        } catch (e) {
+                                          debugPrint("Error fetching demonstration list: $e");
+                                          showImage(null); // Fallback if any error
+                                        } finally {
+                                          // Ensure loader is always dismissed
+                                          if (context.mounted) {
+                                            LoaderUtils.hideLoaderDialog(context);
+                                          }
+                                        }
                                       },
-                                      icon: const Icon(Icons.remove_red_eye,
-                                          size: 18),
+                                      icon: const Icon(Icons.remove_red_eye, size: 18),
                                       label: const Text("View"),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blueAccent,
                                         foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 10),
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
                                     ),
                                   ),
+
                                 ],
                               ),
                             ),
@@ -349,36 +353,46 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
             borderRadius: BorderRadius.circular(12),
             child: (imageBytes == null || imageBytes.isEmpty)
                 ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/icons/ic_no_image.png',
-                        height: 120,
-                        width: 120,
-                        fit: BoxFit.contain,
-                      ),
-                      const SizedBox(height: 12),
-                      const Text(
-                        "No Image Found",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  )
-                : Image.memory(
-                    imageBytes,
-                    fit: BoxFit.contain,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/icons/ic_no_image.png',
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "No Image Found",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.red,
                   ),
+                ),
+              ],
+            )
+                : Image.memory(
+              imageBytes,
+              fit: BoxFit.contain,
+            ),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await Provider.of<DwsmProvider>(context, listen: false)
+                    .fetchDemonstrationList(
+                  session.stateId,
+                  session.districtId,
+                  "2025-2026",
+                  0,
+                  widget.type!,
+                );
+              },
               child: const Text("Close"),
             ),
           ],
@@ -386,4 +400,5 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
       },
     );
   }
+
 }

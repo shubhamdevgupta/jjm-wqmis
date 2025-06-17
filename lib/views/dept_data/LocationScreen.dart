@@ -3,13 +3,13 @@ import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomDropdown.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
-import 'package:jjm_wqmis/utils/CustomDropdown.dart';
 
 class Locationscreen extends StatefulWidget {
   final String flag;
@@ -26,9 +26,9 @@ class _LocationscreenState extends State<Locationscreen> {
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
   @override
-  void initState() async {
+  void initState()  {
     super.initState();
-   await session.init();
+    session.init();
   }
 
   @override

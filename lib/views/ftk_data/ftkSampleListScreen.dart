@@ -7,8 +7,9 @@ import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:jjm_wqmis/views/ftk/ftkDashboard.dart';
-import 'package:jjm_wqmis/views/webView/testReport.dart';
+import 'package:jjm_wqmis/utils/webView/testReport.dart';
+import 'package:jjm_wqmis/views/ftk_data/ftkDashboard.dart';
+
 import 'package:provider/provider.dart';
 
 class ftkSampleListScreen extends StatefulWidget {

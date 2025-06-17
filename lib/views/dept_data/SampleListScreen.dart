@@ -4,8 +4,9 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/auth/DashboardScreen.dart';
-import 'package:jjm_wqmis/views/webView/testReport.dart';
+import 'package:jjm_wqmis/utils/webView/testReport.dart';
+import 'package:jjm_wqmis/views/dept_data/LocationScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/auth/DashboardScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
@@ -14,7 +15,6 @@ import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
 
 class SampleListScreen extends StatefulWidget {
   const SampleListScreen({super.key});

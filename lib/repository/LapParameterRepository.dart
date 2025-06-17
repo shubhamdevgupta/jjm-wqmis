@@ -8,7 +8,7 @@ import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';
 import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();

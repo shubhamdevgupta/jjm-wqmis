@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:jjm_wqmis/views/SubmitSampleScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
-import 'package:jjm_wqmis/utils/CustomSearchableDropdown.dart';
+import 'package:jjm_wqmis/utils/custom_screen/CustomSearchableDropdown.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 
 class AsPerLabTabView extends StatefulWidget {

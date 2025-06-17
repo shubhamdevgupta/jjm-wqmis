@@ -8,7 +8,7 @@ import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/LocationScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/utils/AppStyles.dart';
@@ -25,10 +25,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   final encryption = AesEncryption();
   @override
-  void initState() async{
+  void initState() {
     super.initState();
-  await  session.init();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+     await session.init();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchDistricts(session.stateId.toString());
