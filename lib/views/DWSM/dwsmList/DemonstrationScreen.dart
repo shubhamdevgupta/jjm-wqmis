@@ -383,10 +383,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog first
-
-                /// 🔁 Re-fetch the list (or trigger the same logic)
-
+                Navigator.of(context).pop();
                 await Provider.of<DwsmProvider>(context, listen: false)
                     .fetchDemonstrationList(
                   session.stateId,
@@ -395,7 +392,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                   0,
                   widget.type!,
                 );
-                LoaderUtils.hideLoaderDialog(context);
               },
               child: const Text("Close"),
             ),
