@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/AnganwadiScreen.dart';
+import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/SchoolScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
-import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/AnganwadiScreen.dart';
-import 'package:jjm_wqmis/views/DWSM/tabschoolaganwadi/SchoolScreen.dart';
+
 
 class Tabschoolaganwadi extends StatefulWidget {
   const Tabschoolaganwadi({super.key});

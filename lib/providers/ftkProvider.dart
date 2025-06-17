@@ -5,7 +5,7 @@ import 'package:jjm_wqmis/models/FTK/FtkParameterResponse.dart';
 import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/FtkRepository.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class Ftkprovider extends ChangeNotifier {
   final FtkRepository _ftkRepository = FtkRepository();

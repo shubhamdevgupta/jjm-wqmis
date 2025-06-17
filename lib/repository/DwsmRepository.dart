@@ -9,7 +9,7 @@ import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();

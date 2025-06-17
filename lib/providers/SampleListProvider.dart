@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
 import 'package:jjm_wqmis/repository/SampleListRepo.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class Samplelistprovider extends ChangeNotifier {
   final SampleListRepo _repository = SampleListRepo();

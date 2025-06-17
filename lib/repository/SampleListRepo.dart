@@ -3,7 +3,7 @@ import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
 
 import 'package:jjm_wqmis/services/BaseApiService.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class SampleListRepo {
   final BaseApiService _apiService = BaseApiService();

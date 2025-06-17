@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/models/DashboardResponse/DashboardResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
 
 import 'package:jjm_wqmis/models/LoginResponse.dart';
-import 'package:jjm_wqmis/utils/GlobalExceptionHandler.dart';
+import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class AuthenticaitonRepository {
   final BaseApiService _apiService = BaseApiService();
