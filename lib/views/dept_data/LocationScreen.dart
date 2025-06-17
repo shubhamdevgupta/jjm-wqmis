@@ -354,9 +354,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     }
 
                     //TODO LGD code
-                         /*             masterProvider.fetchVillageDetails(
-                          paramProvider.currentLongitude!,
-                          paramProvider.currentLatitude!);
+                     masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
                       print('Going to Save Sample screen');
                       final hasData = masterProvider.villageDetails.isNotEmpty;
                       final villageLgd = hasData
@@ -367,7 +365,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         Navigator.pushReplacementNamed(context, '/savesample');
                       }else{
                         ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }*/
+                      }
 
                   },
                   style: ElevatedButton.styleFrom(
