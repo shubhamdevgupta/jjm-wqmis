@@ -363,16 +363,7 @@ final session = UserSessionManager();
                                                           ElevatedButton.icon(
                                                         onPressed: () {
                                                           String? base64String =
-                                                              village!.photo
-                                                                      .contains(
-                                                                          ',')
-                                                                  ? village
-                                                                      ?.photo
-                                                                      .split(
-                                                                          ',')
-                                                                      .last
-                                                                  : village
-                                                                      ?.photo;
+                                                              village!.photo.contains(',') ? village?.photo.split(',').last : village?.photo;
 
                                                           final imageBytes =
                                                               base64Decode(
@@ -386,25 +377,11 @@ final session = UserSessionManager();
                                                             size: 18),
                                                         label:
                                                             const Text("View"),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Appcolor
-                                                                  .buttonBgColor,
-                                                          foregroundColor:
-                                                              Colors.white,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      20,
-                                                                  vertical: 10),
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor: Appcolor.buttonBgColor,
+                                                          foregroundColor: Colors.white,
+                                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),
                                                           ),
                                                         ),
                                                       ),
@@ -588,7 +565,7 @@ final session = UserSessionManager();
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Anganwadi Image"),
+          title: const Text("School Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.memory(imageBytes, fit: BoxFit.contain),
