@@ -427,8 +427,7 @@ class Masterprovider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners(); // Start loading
     try {
-      final rawWtsFilterList =
-          await _masterRepository.fetchWaterSourceFilterList();
+      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
         wtsFilterList = rawWtsFilterList.result;

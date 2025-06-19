@@ -354,18 +354,16 @@ class _LocationscreenState extends State<Locationscreen> {
                     }
 
                     //TODO LGD code
-                     masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
-                      print('Going to Save Sample screen');
-                      final hasData = masterProvider.villageDetails.isNotEmpty;
-                      final villageLgd = hasData
-                          ? masterProvider.villageDetails.first.villageLgd
-                          : "0";
-                      masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
-                      if(masterProvider.validateVillageResponse!.status==1) {
-                        Navigator.pushReplacementNamed(context, '/savesample');
-                      }else{
-                        ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }
+                 /*   masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
+                    print('Going to Save Sample screen');
+                    final hasData = masterProvider.villageDetails.isNotEmpty;
+                    final villageLgd = hasData ? masterProvider.villageDetails.first.villageLgd : "0";
+                    masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
+                    if(masterProvider.validateVillageResponse!.status==1) {
+                      Navigator.pushReplacementNamed(context, '/savesample');
+                    }else{
+                      ToastHelper.showErrorSnackBar(context, 'please check the location ');
+                    }*/
 
                   },
                   style: ElevatedButton.styleFrom(

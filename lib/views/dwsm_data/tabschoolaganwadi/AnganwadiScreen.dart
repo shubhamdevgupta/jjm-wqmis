@@ -105,8 +105,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
 
                                             if (dwsmprovider.mDemonstrationId ==
                                                 1) {
-                                              dwsmprovider
-                                                  .fetchDemonstrationList(
+                                              dwsmprovider.fetchDemonstrationList(
                                                       session.stateId,
                                                       session.districtId,
                                                       "2025-2026",
