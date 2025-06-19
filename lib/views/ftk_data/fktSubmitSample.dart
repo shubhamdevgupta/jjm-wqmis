@@ -151,7 +151,6 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       ToastHelper.showErrorSnackBar(context, 'Please select parameter');
       return;
     }
-
     await ftkProvider.saveFtkData(
       session.loginId,
       session.regId,
