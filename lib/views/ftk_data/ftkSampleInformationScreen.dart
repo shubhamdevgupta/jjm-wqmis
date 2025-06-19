@@ -37,6 +37,12 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.setSelectedHabitation('0');
+      masterProvider.fetchHabitations(
+          session.stateId.toString(),
+          session.districtId.toString(),
+          session.blockId.toString(),
+          session.panchayatId.toString(),
+          session.villageId.toString());
 
       await masterProvider.fetchSchemes(
           session.stateId.toString(),
@@ -536,12 +542,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 3,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
-                          masterProvider.fetchHabitations(
-                              session.stateId.toString(),
-                              session.districtId.toString(),
-                              session.blockId.toString(),
-                              session.panchayatId.toString(),
-                              session.villageId.toString());
                           masterProvider.selectRadioOption(value!);
                         },
                       ),
@@ -860,14 +860,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       Radio(
                         value: 8,
                         groupValue: masterProvider.selectedHandpumpPrivate,
-                        onChanged: (value) async{
+                        onChanged: (value) {
                           masterProvider.cleartxt(); // if you want to clear text fields too
-                          await   masterProvider.fetchHabitations(
-                              session.stateId.toString(),
-                              session.districtId.toString(),
-                              session.blockId.toString(),
-                              session.panchayatId.toString(),
-                              session.villageId.toString());
+
                           masterProvider.selectRadioOption(value!);
                           print(
                               '----${masterProvider.selectedWaterSourceName}');
