@@ -260,11 +260,7 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                                   ),
                                                   decoration: BoxDecoration(
                                                     color: sample.contaminatedStatus == "Contaminated"
-                                                        ? Colors.red[100]
-                                                        :  Colors.green[100],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
+                                                        ? Colors.red[100] :  Colors.green[100], borderRadius: BorderRadius.circular(16),
                                                   ),
                                                   child: Text(
                                                     sample.contaminatedStatus ??

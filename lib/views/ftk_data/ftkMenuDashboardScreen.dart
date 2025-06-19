@@ -102,96 +102,58 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.all(16),
+                                  padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.grey.withOpacity(0.1),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 4),
+                                        blurRadius: 6,
+                                        offset: Offset(0, 3),
                                       ),
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "Village Details",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16),
-
-                                      // ✅ First Row: State + District
                                       Row(
                                         children: [
-                                          Expanded(
-                                            child: buildLocationTile(
-                                              icon: Icons.flag,
-                                              label: "State",
-                                              value: session.stateName,
-                                              color: Colors.teal,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: buildLocationTile(
-                                              icon: Icons.location_city,
-                                              label: "District",
-                                              value: session.districtName,
-                                              color: Colors.blue,
-                                            ),
+                                          Icon(Icons.location_on, size: 18, color: Colors.redAccent),
+                                          SizedBox(width: 6),
+                                          Text(
+                                            "Location Details",
+                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 12),
-
-                                      // ✅ Second Row: Block + GP
-                                      Row(
+                                      SizedBox(height: 8),
+                                      Wrap(
+                                        spacing: 6,
+                                        runSpacing: 4,
                                         children: [
-                                          Expanded(
-                                            child: buildLocationTile(
-                                              icon: Icons.map,
-                                              label: "Block",
-                                              value: session.blockName,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: buildLocationTile(
-                                              icon: Icons.groups,
-                                              label: "GP",
-                                              value: session.panchayatName,
-                                              color: Colors.orange,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-
-                                      // ✅ Third Row: Village (can add more if needed)
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: buildLocationTile(
-                                              icon: Icons.home,
-                                              label: "Village",
-                                              value: session.villageName,
-                                              color: Colors.purple,
-                                            ),
-                                          ),
+                                          _info("State", session.stateName),
+                                          _arrow(),
+                                          _info("District", session.districtName),
+                                          _arrow(),
+                                          _info("Block", session.blockName),
+                                          _arrow(),
+                                          _info("GP", session.panchayatName),
+                                          _arrow(),
+                                          _info("Village", session.villageName),
                                         ],
                                       ),
                                     ],
                                   ),
                                 ),
+
+
+
+
+                                SizedBox(
+                                  height: 20,
+                                ),
+
                                 Column(
                                   children: masterProvider.wtsFilterList.where((source) => source.id != "5") // Exclude ID 5
                                       .map((source) {
@@ -236,6 +198,28 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       ),
     );
   }
+
+  Widget _info(String label, String value) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "$label: ",
+          style: TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          value,
+          style: TextStyle(fontSize: 12.5, color: Colors.black87, fontWeight: FontWeight.w600),
+        ),
+      ],
+    );
+  }
+  Widget _arrow() {
+    return Icon(Icons.arrow_forward_ios, size: 10, color: Colors.grey[500]);
+  }
+
+
+
 
   Widget buildLocationTile({
     required IconData icon,

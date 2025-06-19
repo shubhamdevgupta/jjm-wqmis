@@ -169,8 +169,7 @@ class MasterRepository {
       String formattedLon = lon.toStringAsFixed(8);
       String formattedLat = lat.toStringAsFixed(8);
 
-      final response = await _apiService.get(
-        'GetVillageDetails/api/GeoData/getVillageDetails?lon=$formattedLon&lat=$formattedLat',
+      final response = await _apiService.get('GetVillageDetails/api/GeoData/getVillageDetails?lon=$formattedLon&lat=$formattedLat',
         apiType: ApiType.reverseGeocoding,
       );
 
