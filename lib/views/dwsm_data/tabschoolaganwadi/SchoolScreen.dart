@@ -565,7 +565,7 @@ final session = UserSessionManager();
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(" School Image"),
+          title: const Text("School Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.memory(imageBytes, fit: BoxFit.contain),
