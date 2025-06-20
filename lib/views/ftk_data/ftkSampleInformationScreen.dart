@@ -140,7 +140,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               buildSampleTaken(masterProvider),
 
                               const SizedBox(
-                                height: 12,
+                                height: 8,
                               ),
                             ],
                           ),
@@ -161,7 +161,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            margin: const EdgeInsets.all(5),
+            margin: const EdgeInsets.only(left: 5,right: 5),
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -238,27 +238,27 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 10,
+          const SizedBox(
+            height: 4,
           ),
           Center(
             child: Text(
               sourceType ?? 'N/A',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
                 fontFamily: 'OpenSans',
                 letterSpacing: 0.3,
                 color: Color(0xFF1A1A1A),
-                height: 1.4,
+                height: 1.2,
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
           ),
-          const SizedBox(height: 12),
-          Divider(thickness: 1, color: Colors.grey.shade500),
+          const SizedBox(height: 6),
+          Divider(thickness: 1, color: Colors.white60),
           buildSchemeDropDown(masterProvider),
           buildSourceofScheme(masterProvider),
           buildEsrWater(masterProvider),
