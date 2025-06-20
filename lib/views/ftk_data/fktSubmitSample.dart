@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
@@ -20,6 +21,14 @@ class FtkParameterListScreen extends StatefulWidget {
 class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
   late Masterprovider masterProvider;
   final session = UserSessionManager();
+  final ScrollController _scrollController = ScrollController();
+  bool isAtBottom = false;
+  bool showScrollIcon = true;
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -30,6 +39,28 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       await ftkProvider.fetchParameterList(session.stateId, session.districtId);
       masterProvider = Provider.of<Masterprovider>(context, listen: false);
     });
+
+
+    _scrollController.addListener(() {
+      final position = _scrollController.position;
+      final max = position.maxScrollExtent;
+
+      // Detect if at bottom or top
+      if (position.pixels >= max && !isAtBottom) {
+        setState(() => isAtBottom = true);
+      } else if (position.pixels <= 0 && isAtBottom) {
+        setState(() => isAtBottom = false);
+      }
+      // Optional: hide icon while scrolling
+      if (position.userScrollDirection != ScrollDirection.idle && showScrollIcon) {
+        setState(() => showScrollIcon = false);
+      }
+
+      // Show again after user stops scrolling
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) setState(() => showScrollIcon = true);
+      });
+    });
   }
 
   @override
@@ -37,7 +68,9 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/icons/header_bg.png'), fit: BoxFit.cover),
+          image: AssetImage('assets/icons/header_bg.png'),
+          fit: BoxFit.cover,
+        ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -53,88 +86,125 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
               }
             },
           ),
-          // Removes the default back button
           centerTitle: true,
           title: Text(
             "Water Quality Parameters",
             style: AppStyles.appBarTitle,
           ),
-
-          //elevation
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF096DA8), // Dark blue color
-                  Color(0xFF3C8DBC), // Green color
+                  Color(0xFF096DA8),
+                  Color(0xFF3C8DBC),
                 ],
-                begin: Alignment.topCenter, // Start at the top center
-                end: Alignment.bottomCenter, // End at the bottom center
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
           ),
           elevation: 5,
         ),
-        body: Consumer<Ftkprovider>(
-          builder: (context, ftkProvider, child) {
-            return ftkProvider.isLoading
-                ? LoaderUtils.conditionalLoader(
-                    isLoading: ftkProvider.isLoading)
-                : Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: ftkProvider.ftkParameterList.length,
-                          itemBuilder: (context, index) {
-                            final param = ftkProvider.ftkParameterList[index];
-                            return WaterQualityParameterCard(
-                              index: index,
-                              parameterName: param.parameterName,
-                              measurementUnit: param.measurementUnit,
-                              acceptableLimit: param.acceptableLimit,
-                              permissibleLimit: param.permissibleLimit,
-                              selectedValue: param.selectedValue,
-                              onChanged: (val) {
-                                ftkProvider.setSelectedParamForIndex(
-                                    index, val!);
-                              },
-                            );
+        body: SafeArea( // 👈 SafeArea added here
+          child: Consumer<Ftkprovider>(
+            builder: (context, ftkProvider, child) {
+              return ftkProvider.isLoading
+                  ? LoaderUtils.conditionalLoader(isLoading: ftkProvider.isLoading)
+                  : Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController, // 👈 attach the controller
+                      itemCount: ftkProvider.ftkParameterList.length,
+                      itemBuilder: (context, index) {
+                        final param = ftkProvider.ftkParameterList[index];
+                        return WaterQualityParameterCard(
+                          index: index,
+                          parameterName: param.parameterName,
+                          measurementUnit: param.measurementUnit,
+                          acceptableLimit: param.acceptableLimit,
+                          permissibleLimit: param.permissibleLimit,
+                          selectedValue: param.selectedValue,
+                          onChanged: (val) {
+                            ftkProvider.setSelectedParamForIndex(
+                                index, val!);
                           },
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: 250, // or any appropriate width like 250, 300
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await validateAndSaveData(context,ftkProvider);
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewPadding.bottom + 4,
+                      top: 0,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (showScrollIcon)
+                          GestureDetector(
+                            onTap: () {
+                              final scrollTo = isAtBottom ? 0.0 : _scrollController.position.maxScrollExtent;
+
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (_scrollController.hasClients) {
+                                  _scrollController.animateTo(
+                                    scrollTo,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                              });
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: const BorderSide(
-                                    color: Colors.blueAccent, width: 1.5),
-                              ),
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                            child: Icon(
+                              isAtBottom ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                              color: Colors.grey,
+                              size: 28,
                             ),
-                            child: const Text('Submit'),
+                          ),
+
+
+
+                        //  const SizedBox(height: 4), // spacing between icon and button
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await validateAndSaveData(context, ftkProvider);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                elevation: 3,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: const BorderSide(
+                                      color: Colors.blueAccent, width: 1.5),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              child: const Text('Submit'),
+                            ),
                           ),
                         ),
-                      )
-                    ],
-                  );
-          },
+                      ],
+                    ),
+                  ),
+
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
+
 
   Future<void> validateAndSaveData(BuildContext context, Ftkprovider ftkProvider) async {
     final parsedSource = int.tryParse(masterProvider.selectedWaterSource?.toString() ?? '') ?? 0;
