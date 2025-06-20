@@ -52,9 +52,9 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
         setState(() => isAtBottom = false);
       }
       // Optional: hide icon while scrolling
-      if (position.userScrollDirection != ScrollDirection.idle && showScrollIcon) {
+     /* if (position.userScrollDirection != ScrollDirection.idle && showScrollIcon) {
         setState(() => showScrollIcon = false);
-      }
+      }*/
 
       // Show again after user stops scrolling
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -142,53 +142,54 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (showScrollIcon)
-                          GestureDetector(
-                            onTap: () {
-                              final scrollTo = isAtBottom ? 0.0 : _scrollController.position.maxScrollExtent;
-
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (_scrollController.hasClients) {
-                                  _scrollController.animateTo(
-                                    scrollTo,
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                              });
-                            },
-                            child: Icon(
-                              isAtBottom ? Icons.keyboard_double_arrow_up : Icons.keyboard_double_arrow_down,
-                              color: Colors.grey,
-                              size: 28,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0, bottom: 4),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end, // 👈 Pushes icon to right
+                              children: [
+                                AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 300),
+                                  opacity: showScrollIcon ? 1.0 : 0.0,
+                                  child: Icon(
+                                    isAtBottom
+                                        ? Icons.keyboard_double_arrow_up
+                                        : Icons.keyboard_double_arrow_down,
+                                    color: Colors.grey.shade400,
+                                    size: 28,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-
 
 
                         //  const SizedBox(height: 4), // spacing between icon and button
                       Center(
                           child: SizedBox(
                                 width: double.infinity, // or any appropriate width like 250, 300
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                await validateAndSaveData(context, ftkProvider);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  side: const BorderSide(
-                                      color: Colors.blueAccent, width: 1.5),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  await validateAndSaveData(context, ftkProvider);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: const BorderSide(
+                                        color: Colors.blueAccent, width: 1.5),
+                                  ),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                                child: const Text('Submit'),
                               ),
-                              child: const Text('Submit'),
                             ),
                           ),
                         ),
