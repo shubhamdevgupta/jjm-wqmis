@@ -151,7 +151,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                 ? LoaderUtils.conditionalLoader(
                     isLoading: ftkProvider.isLoading)
                 : SingleChildScrollView(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
