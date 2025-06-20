@@ -166,9 +166,9 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
 
 
                         //  const SizedBox(height: 4), // spacing between icon and button
-                        Center(
+                      Center(
                           child: SizedBox(
-                            width: 250,
+                                width: double.infinity, // or any appropriate width like 250, 300
                             child: ElevatedButton(
                               onPressed: () async {
                                 await validateAndSaveData(context, ftkProvider);
@@ -196,11 +196,11 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                     ),
                   ),
 
-                ],
-              );
-            },
-          ),
+                    ],
+                  );
+          },
         ),
+      ),
       ),
     );
   }
