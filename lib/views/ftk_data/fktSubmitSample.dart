@@ -157,7 +157,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                               });
                             },
                             child: Icon(
-                              isAtBottom ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                              isAtBottom ? Icons.keyboard_double_arrow_up : Icons.keyboard_double_arrow_down,
                               color: Colors.grey,
                               size: 28,
                             ),
