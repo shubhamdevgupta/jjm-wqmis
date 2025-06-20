@@ -93,16 +93,16 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     ? LoaderUtils.conditionalLoader(
                         isLoading: masterProvider.isLoading)
                     : SingleChildScrollView(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 8),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(12),
+                                  padding: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -117,12 +117,12 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Row(
+                                      const Row(
                                         children: [
                                           Icon(Icons.location_on, size: 18, color: Colors.redAccent),
                                           SizedBox(width: 6),
                                           Text(
-                                            "Location Details",
+                                            "Village Details",
                                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                                           ),
                                         ],
@@ -147,20 +147,12 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                   ),
                                 ),
 
-
-
-
-                                SizedBox(
-                                  height: 20,
-                                ),
+                                const SizedBox(height: 8,),
 
                                 Column(
                                   children: masterProvider.wtsFilterList.where((source) => source.id != "5") // Exclude ID 5
                                       .map((source) {
-                                    final colorIndex = masterProvider
-                                            .wtsFilterList
-                                            .indexOf(source) %
-                                        Colors.primaries.length;
+                                    final colorIndex = masterProvider.wtsFilterList.indexOf(source) % Colors.primaries.length;
 
                                     final count = sampleCounts![source.id] ?? 0;
 
@@ -284,7 +276,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
         onTap: isDisabled ? null : () => onTap(count),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 6),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: color.withOpacity(0.5), width: 1.2),
@@ -314,7 +306,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                       height: 22,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       title,
@@ -335,7 +327,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
