@@ -80,56 +80,64 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
             return ftkProvider.isLoading
                 ? LoaderUtils.conditionalLoader(
                     isLoading: ftkProvider.isLoading)
-                : Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: ftkProvider.ftkParameterList.length,
-                          itemBuilder: (context, index) {
-                            final param = ftkProvider.ftkParameterList[index];
-                            return WaterQualityParameterCard(
-                              index: index,
-                              parameterName: param.parameterName,
-                              measurementUnit: param.measurementUnit,
-                              acceptableLimit: param.acceptableLimit,
-                              permissibleLimit: param.permissibleLimit,
-                              selectedValue: param.selectedValue,
-                              onChanged: (val) {
-                                ftkProvider.setSelectedParamForIndex(
-                                    index, val!);
+                : SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 14.0),
+                    child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: ftkProvider.ftkParameterList.length,
+                              itemBuilder: (context, index) {
+                                final param = ftkProvider.ftkParameterList[index];
+                                return WaterQualityParameterCard(
+                                  index: index,
+                                  parameterName: param.parameterName,
+                                  measurementUnit: param.measurementUnit,
+                                  acceptableLimit: param.acceptableLimit,
+                                  permissibleLimit: param.permissibleLimit,
+                                  selectedValue: param.selectedValue,
+                                  onChanged: (val) {
+                                    ftkProvider.setSelectedParamForIndex(
+                                        index, val!);
+                                  },
+                                );
                               },
-                            );
-                          },
-                        ),
-                      ),
-                      Center(
-                        child: SizedBox(
-                          width: 250, // or any appropriate width like 250, 300
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await validateAndSaveData(context,ftkProvider);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: const BorderSide(
-                                    color: Colors.blueAccent, width: 1.5),
-                              ),
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                            ),
+                          ),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: double.infinity, // or any appropriate width like 250, 300
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    await validateAndSaveData(context,ftkProvider);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: const BorderSide(
+                                          color: Colors.blueAccent, width: 1.5),
+                                    ),
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  child: const Text('Submit'),
+                                ),
                               ),
                             ),
-                            child: const Text('Submit'),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
+                          )
+                        ],
+                      ),
+                  ),
+                );
           },
         ),
       ),
