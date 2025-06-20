@@ -265,7 +265,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -409,10 +409,9 @@ class _ftkDashboard extends State<ftkDashboard> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            AppConstants
-                                                .totalSamplesalreadytested,
+                                            AppConstants.totalSamplesalreadytested,
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -503,7 +502,7 @@ class _ftkDashboard extends State<ftkDashboard> {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),

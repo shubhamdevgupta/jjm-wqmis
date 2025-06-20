@@ -18,6 +18,19 @@ class Ftkmenudashboardscreen extends StatefulWidget {
 class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
   Map<String, int>? sampleCounts;
+  final List<Color> balancedColors = [
+    Color(0xFFFFB74D), // 🔶 Light Orange – your warm, only light shade
+    Color(0xFF42A5F5), // 🔵 Medium Blue – professional and calm
+    Color(0xFF66BB6A), // 🟢 Medium Green – fresh and natural
+    Color(0xFFAB47BC), // 🟣 Medium Purple – elegant and refined
+    Color(0xFF5C6BC0), // 🔷 Indigo – strong but not too dark
+    Color(0xFF26A69A), // 🧊 Cyan-Green – cool alternative to teal
+  ];
+
+
+
+
+
 
   @override
   void initState() {
@@ -122,7 +135,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                           Icon(Icons.location_on, size: 18, color: Colors.redAccent),
                                           SizedBox(width: 6),
                                           Text(
-                                            "Location Details",
+                                            "Village Details",
                                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                                           ),
                                         ],
@@ -158,34 +171,32 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                   children: masterProvider.wtsFilterList.where((source) => source.id != "5") // Exclude ID 5
                                       .map((source) {
                                     final colorIndex = masterProvider
-                                            .wtsFilterList
-                                            .indexOf(source) %
-                                        Colors.primaries.length;
+                                        .wtsFilterList.indexOf(source) % balancedColors.length;
+
+                                    final cardColor = balancedColors[colorIndex];
+
 
                                     final count = sampleCounts![source.id] ?? 0;
 
                                     return buildSampleCard(
                                       title: source.sourceType,
-                                      color: Colors.primaries[colorIndex],
+                                      color: cardColor,
                                       count: count.toString(),
-                                      // Convert int to string
                                       onTap: (count) {
-
-                                        if(count.isNotEmpty){
+                                        if (count.isNotEmpty) {
                                           masterProvider.setSelectedWaterSourcefilter(source.id);
                                           Navigator.pushNamed(
                                             context,
-                                            AppConstants
-                                                .navigateToftkSampleInfoScreen,
+                                            AppConstants.navigateToftkSampleInfoScreen,
                                             arguments: {
                                               'sourceId': source.id,
                                               'sourceType': source.sourceType,
                                             },
                                           );
                                         }
-
                                       },
                                     );
+
                                   }).toList(),
                                 )
                               ],

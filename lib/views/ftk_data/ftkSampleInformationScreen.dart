@@ -382,8 +382,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            final selectedWaterSource =
-                                masterProvider.waterSource.firstWhere(
+                            final selectedWaterSource = masterProvider.waterSource.firstWhere(
                               (source) => source.locationId == value,
                               orElse: () => masterProvider.waterSource
                                   .first, // Handle the case where no match is found (optional)
@@ -398,39 +397,50 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  buildTimeAddressRemarks(masterProvider),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: double.infinity, // Full width of the parent
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (validateSourceofScheme(masterProvider)) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeNotifierProvider.value(
-                                  value: masterProvider,
-                                  child: const FtkParameterListScreen(),
+
+
+
+                  Visibility(
+                      visible: masterProvider.selectedWaterSource != " " ,
+                      child: Column(
+                        children: [
+                          buildTimeAddressRemarks(masterProvider),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: double.infinity, // Full width of the parent
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (validateSourceofScheme(masterProvider)) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: masterProvider,
+                                              child: const FtkParameterListScreen(),
+                                            ),
+                                      ),
+                                    );
+                                  } else {
+                                    ToastHelper.showToastMessage(
+                                        masterProvider.errorMsg);
+                                  }
+                                },
+                                style: AppStyles.buttonStylePrimary(),
+                                child: const Text(
+                                  'Next',
+                                  style: AppStyles.textStyle,
                                 ),
                               ),
-                            );
-                          } else {
-                            ToastHelper.showToastMessage(
-                                masterProvider.errorMsg);
-                          }
-                        },
-                        style: AppStyles.buttonStylePrimary(),
-                        child: const Text(
-                          'Next',
-                          style: AppStyles.textStyle,
-                        ),
-                      ),
-                    ),
-                  )
+                            ),
+                          )
+                        ],
+                      )),
+
                 ],
               ),
             ),
