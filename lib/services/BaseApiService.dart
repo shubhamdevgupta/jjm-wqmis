@@ -33,7 +33,11 @@ class BaseApiService {
         url,
         headers: headers,
         body: body,
-      );
+      )
+      .timeout(const Duration(seconds: 10),
+      onTimeout: (){
+        throw ApiException('Request Timeout : Please Try after some time');
+      });
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
@@ -69,7 +73,10 @@ class BaseApiService {
       final response = await http.get(
         url,
         headers: headers,
-      );
+      ).timeout(const Duration(seconds: 10),
+          onTimeout: (){
+            throw ApiException('Request Timeout : Please Try after some time');
+          });;
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
