@@ -157,8 +157,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                       children: [
                         Container(
                           margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          padding: const EdgeInsets.all(8),
+                              horizontal: 2, vertical: 2),
+                          padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -265,12 +265,12 @@ class _ftkDashboard extends State<ftkDashboard> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
@@ -288,12 +288,12 @@ class _ftkDashboard extends State<ftkDashboard> {
                                   const Text(
                                     "Village Details",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
                                     ),
                                   ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 8),
 
                                   // ✅ First Row: State + District
                                   Row(
@@ -306,7 +306,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                           color: Colors.teal,
                                         ),
                                       ),
-                                      const SizedBox(width: 12),
+                                      const SizedBox(width: 8),
                                       Expanded(
                                         child: buildLocationTile(
                                           icon: Icons.location_city,
@@ -317,7 +317,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 12),
+                                  const SizedBox(height: 8),
 
                                   // ✅ Second Row: Block + GP
                                   Row(
@@ -330,7 +330,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                           color: Colors.green,
                                         ),
                                       ),
-                                      const SizedBox(width: 12),
+                                      const SizedBox(width: 8),
                                       Expanded(
                                         child: buildLocationTile(
                                           icon: Icons.groups,
@@ -341,7 +341,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 12),
+                                  const SizedBox(height: 8),
 
                                   // ✅ Third Row: Village (can add more if needed)
                                   Row(
@@ -359,7 +359,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
                                 Navigator.pushNamed(
@@ -402,22 +402,21 @@ class _ftkDashboard extends State<ftkDashboard> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            AppConstants
-                                                .totalSamplesalreadytested,
+                                            AppConstants.totalSamplesalreadytested,
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                          SizedBox(height: 4),
+                                          //SizedBox(height: 4),
                                           //fix thi
                                           Text(
                                             '${ftkProvider.ftkDashboardResponse?.totalSampleTested}',
@@ -503,7 +502,7 @@ class _ftkDashboard extends State<ftkDashboard> {
     required Color color,
   }) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: color.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
@@ -516,7 +515,7 @@ class _ftkDashboard extends State<ftkDashboard> {
             radius: 16,
             child: Icon(icon, size: 16, color: color),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -532,7 +531,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
                   ),

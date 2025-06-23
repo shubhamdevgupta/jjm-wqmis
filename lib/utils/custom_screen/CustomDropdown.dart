@@ -72,12 +72,23 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
     String label = "--Select--";
-    if (selectedValue != null && selectedValue!.isNotEmpty) {
-      final matchedItem = widget.items.firstWhere(
-            (item) => item.value == selectedValue,
-        orElse: () => const DropdownMenuItem(value: '', child: Text('')),
-      );
-      label = (matchedItem.child as Text).data ?? "--Select--";
+    try {
+      if (selectedValue != null && selectedValue!.isNotEmpty) {
+        final matchedItem = widget.items.firstWhere(
+              (item) => item.value == selectedValue,
+          orElse: () => const DropdownMenuItem(value: '', child: Text('--Select--')),
+        );
+
+        if (matchedItem.child is Text) {
+          final childText = matchedItem.child as Text;
+          if (childText.data != null && childText.data!.trim().isNotEmpty) {
+            label = childText.data!;
+          }
+        }
+      }
+    } catch (e) {
+      // fallback if something goes wrong
+      label = "--Select--";
     }
 
     return Column(

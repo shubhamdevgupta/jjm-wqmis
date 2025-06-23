@@ -140,7 +140,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               buildSampleTaken(masterProvider),
 
                               const SizedBox(
-                                height: 12,
+                                height: 8,
                               ),
                             ],
                           ),
@@ -161,7 +161,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            margin: const EdgeInsets.all(5),
+            margin: const EdgeInsets.only(left: 5,right: 5),
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -238,27 +238,27 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 10,
+          const SizedBox(
+            height: 4,
           ),
           Center(
             child: Text(
               sourceType ?? 'N/A',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
                 fontFamily: 'OpenSans',
                 letterSpacing: 0.3,
                 color: Color(0xFF1A1A1A),
-                height: 1.4,
+                height: 1.2,
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
           ),
-          const SizedBox(height: 12),
-          Divider(thickness: 1, color: Colors.grey.shade500),
+          const SizedBox(height: 6),
+          Divider(thickness: 1, color: Colors.white60),
           buildSchemeDropDown(masterProvider),
           buildSourceofScheme(masterProvider),
           buildEsrWater(masterProvider),
@@ -382,8 +382,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            final selectedWaterSource =
-                                masterProvider.waterSource.firstWhere(
+                            final selectedWaterSource = masterProvider.waterSource.firstWhere(
                               (source) => source.locationId == value,
                               orElse: () => masterProvider.waterSource
                                   .first, // Handle the case where no match is found (optional)
@@ -398,39 +397,50 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  buildTimeAddressRemarks(masterProvider),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: double.infinity, // Full width of the parent
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (validateSourceofScheme(masterProvider)) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeNotifierProvider.value(
-                                  value: masterProvider,
-                                  child: const FtkParameterListScreen(),
+
+
+
+                  Visibility(
+                      visible: masterProvider.selectedWaterSource != "",
+                      child: Column(
+                        children: [
+                          buildTimeAddressRemarks(masterProvider),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: double.infinity, // Full width of the parent
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (validateSourceofScheme(masterProvider)) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: masterProvider,
+                                              child: const FtkParameterListScreen(),
+                                            ),
+                                      ),
+                                    );
+                                  } else {
+                                    ToastHelper.showToastMessage(
+                                        masterProvider.errorMsg);
+                                  }
+                                },
+                                style: AppStyles.buttonStylePrimary(),
+                                child: const Text(
+                                  'Next',
+                                  style: AppStyles.textStyle,
                                 ),
                               ),
-                            );
-                          } else {
-                            ToastHelper.showToastMessage(
-                                masterProvider.errorMsg);
-                          }
-                        },
-                        style: AppStyles.buttonStylePrimary(),
-                        child: const Text(
-                          'Next',
-                          style: AppStyles.textStyle,
-                        ),
-                      ),
-                    ),
-                  )
+                            ),
+                          )
+                        ],
+                      )),
+
                 ],
               ),
             ),
@@ -481,34 +491,48 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                buildTimeAddressRemarks(masterProvider),
-                const SizedBox(
-                  height: 15,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (validateEsrWaterFields(masterProvider)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ChangeNotifierProvider.value(
-                                    value: masterProvider,
-                                    child: const FtkParameterListScreen(),
-                                  )),
-                        );
-                      } else {
-                        ToastHelper.showToastMessage(masterProvider.errorMsg);
-                      }
-                    },
-                    style: AppStyles.buttonStylePrimary(),
-                    child: const Text(
-                      'Next',
-                      style: AppStyles.textStyle,
-                    ),
-                  ),
-                )
+
+
+
+
+                Visibility(
+                    visible: masterProvider.selectedWaterSource != "",
+                    child: Column(
+                      children: [
+                        buildTimeAddressRemarks(masterProvider),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (validateEsrWaterFields(masterProvider)) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChangeNotifierProvider.value(
+                                              value: masterProvider,
+                                              child: const FtkParameterListScreen(),
+                                            )),
+                                  );
+                                } else {
+                                  ToastHelper.showToastMessage(masterProvider.errorMsg);
+                                }
+                              },
+                              style: AppStyles.buttonStylePrimary(),
+                              child: const Text(
+                                'Next',
+                                style: AppStyles.textStyle,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+
               ],
             ),
           ),
@@ -687,33 +711,37 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       height: 18,
                     ),
                     Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (validateHouseholdWaterFields(masterProvider,
-                              masterProvider.householdController)) {
-                            masterProvider.otherSourceLocation =
-                                masterProvider.householdController.text;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider.value(
-                                        value: masterProvider,
-                                        child: const FtkParameterListScreen(),
-                                      )),
-                            );
-                          } else {
-                            ToastHelper.showToastMessage(
-                                masterProvider.errorMsg);
-                          }
-                        },
-                        style: AppStyles.buttonStylePrimary(),
-                        child: const Text(
-                          'Next',
-                          style: AppStyles.textStyle,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (validateHouseholdWaterFields(masterProvider,
+                                masterProvider.householdController)) {
+                              masterProvider.otherSourceLocation =
+                                  masterProvider.householdController.text;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChangeNotifierProvider.value(
+                                          value: masterProvider,
+                                          child: const FtkParameterListScreen(),
+                                        )),
+                              );
+                            } else {
+                              ToastHelper.showToastMessage(
+                                  masterProvider.errorMsg);
+                            }
+                          },
+                          style: AppStyles.buttonStylePrimary(),
+                          child: const Text(
+                            'Next',
+                            style: AppStyles.textStyle,
+                          ),
                         ),
                       ),
-                    )
+                    ),
+
                   ],
                 ),
               ),
@@ -739,14 +767,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         : CustomDropdown(
                             appBarTitle: 'Select School / AWCs',
                             title: "Select School / AWCs *",
-                            value: masterProvider.waterSource.any((item) =>
-                                    item.locationId ==
-                                    masterProvider.selectedWaterSource)
-                                ? masterProvider.selectedWaterSource
-                                : null,
+                            value: masterProvider.waterSource.any((item) => item.locationId == masterProvider.selectedWaterSource) ? masterProvider.selectedWaterSource : null,
                             // Ensure valid value
-                            items:
-                                masterProvider.waterSource.map((waterSource) {
+                            items: masterProvider.waterSource.map((waterSource) {
                               return DropdownMenuItem<String>(
                                 value: waterSource.locationId,
                                 child: Text(
@@ -770,38 +793,49 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                                   .setSelectedWaterSourceInformation(value);
                             },
                           ),
-                    buildTimeAddressRemarks(masterProvider),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (validateHouseholdWaterFields(masterProvider,
-                              masterProvider.householdController)) {
-                            masterProvider.otherSourceLocation =
-                                masterProvider.householdController.text;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider.value(
-                                        value: masterProvider,
-                                        child: const FtkParameterListScreen(),
-                                      )),
-                            );
-                          } else {
-                            ToastHelper.showToastMessage(
-                                masterProvider.errorMsg);
-                          }
-                        },
-                        style: AppStyles.buttonStylePrimary(),
-                        child: const Text(
-                          'Next',
-                          style: AppStyles.textStyle,
-                        ),
-                      ),
-                    )
+                    Visibility(
+                         visible: masterProvider.selectedWaterSource != "",
+                        child: Column(
+                          children: [
+                            buildTimeAddressRemarks(masterProvider),
+
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Center(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (validateHouseholdWaterFields(masterProvider,
+                                        masterProvider.householdController)) {
+                                      masterProvider.otherSourceLocation =
+                                          masterProvider.householdController.text;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangeNotifierProvider.value(
+                                                  value: masterProvider,
+                                                  child: const FtkParameterListScreen(),
+                                                )),
+                                      );
+                                    } else {
+                                      ToastHelper.showToastMessage(
+                                          masterProvider.errorMsg);
+                                    }
+                                  },
+                                  style: AppStyles.buttonStylePrimary(),
+                                  child: const Text(
+                                    'Next',
+                                    style: AppStyles.textStyle,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
+
                   ],
                 ),
               ),
@@ -989,41 +1023,51 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             print('oooooo  ${masterProvider.selectedWaterSourceName}');
                           },
                         ),
-                  buildTimeAddressRemarks(masterProvider),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (validateHandpumpWaterFields(
-                            masterProvider,
-                            masterProvider.handpumpSourceController,
-                            masterProvider.handpumpLocationController)) {
-                          masterProvider.sampleTypeOther =
-                              masterProvider.handpumpSourceController.text;
-                          masterProvider.otherSourceLocation =
-                              masterProvider.handpumpLocationController.text;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeNotifierProvider.value(
-                                      value: masterProvider,
-                                      child: const FtkParameterListScreen(),
-                                    )),
-                          );
-                        } else {
-                          ToastHelper.showToastMessage(masterProvider.errorMsg);
-                        }
-                      },
-                      style: AppStyles.buttonStylePrimary(),
-                      child: const Text(
-                        'Next',
-                        style: AppStyles.textStyle,
-                      ),
-                    ),
-                  )
+                  Visibility(
+                      visible: masterProvider.selectedWaterSource != "",
+                      child: Column(
+                        children: [
+                          buildTimeAddressRemarks(masterProvider),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (validateHandpumpWaterFields(
+                                      masterProvider,
+                                      masterProvider.handpumpSourceController,
+                                      masterProvider.handpumpLocationController)) {
+                                    masterProvider.sampleTypeOther =
+                                        masterProvider.handpumpSourceController.text;
+                                    masterProvider.otherSourceLocation =
+                                        masterProvider.handpumpLocationController.text;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChangeNotifierProvider.value(
+                                                value: masterProvider,
+                                                child: const FtkParameterListScreen(),
+                                              )),
+                                    );
+                                  } else {
+                                    ToastHelper.showToastMessage(masterProvider.errorMsg);
+                                  }
+                                },
+                                style: AppStyles.buttonStylePrimary(),
+                                child: const Text(
+                                  'Next',
+                                  style: AppStyles.textStyle,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+
                 ],
               ),
             ),
@@ -1064,36 +1108,39 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     height: 10,
                   ),
                   Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (validateHandpumpWaterFields(
-                            masterProvider,
-                            masterProvider.handpumpSourceController,
-                            masterProvider.handpumpLocationController)) {
-                          masterProvider.sampleTypeOther =
-                              masterProvider.handpumpSourceController.text;
-                          masterProvider.otherSourceLocation =
-                              masterProvider.handpumpLocationController.text;
-                          masterProvider.setSelectedWaterSourceInformation("0");
-                          masterProvider.setSelectedWaterSourceInformationName(" ");
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (validateHandpumpWaterFields(
+                              masterProvider,
+                              masterProvider.handpumpSourceController,
+                              masterProvider.handpumpLocationController)) {
+                            masterProvider.sampleTypeOther =
+                                masterProvider.handpumpSourceController.text;
+                            masterProvider.otherSourceLocation =
+                                masterProvider.handpumpLocationController.text;
+                            masterProvider.setSelectedWaterSourceInformation("0");
+                            masterProvider.setSelectedWaterSourceInformationName(" ");
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ChangeNotifierProvider.value(
-                                      value: masterProvider,
-                                      child: const FtkParameterListScreen(),
-                                    )),
-                          );
-                        } else {
-                          ToastHelper.showToastMessage(masterProvider.errorMsg);
-                        }
-                      },
-                      style: AppStyles.buttonStylePrimary(),
-                      child: const Text(
-                        'Next',
-                        style: AppStyles.textStyle,
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangeNotifierProvider.value(
+                                        value: masterProvider,
+                                        child: const FtkParameterListScreen(),
+                                      )),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(masterProvider.errorMsg);
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
+                        ),
                       ),
                     ),
                   )
