@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -46,7 +47,10 @@ class BaseApiService {
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
       throw NetworkException('No internet connection');
-    } catch (e) {
+    } on TimeoutException{
+      throw ApiException('The connection has timed out. Please try again.');
+    }
+    catch (e) {
       log('Exception during GET request: $e');
       throw ApiException('');
     }
@@ -80,7 +84,10 @@ class BaseApiService {
     } on SocketException catch (e) {
       log('SocketException: ${e.message}');
       throw NetworkException('No internet connection');
-    } catch (e) {
+    } on TimeoutException{
+      throw ApiException('The connection has timed out. Please try again.');
+    }
+    catch (e) {
       log('Exception during GET request: $e');
       throw ApiException('API Error : $e');
     }
@@ -98,27 +105,37 @@ class BaseApiService {
     switch (response.statusCode) {
       case 200:
         return jsonDecode(response.body);
+
       case 400:
         throw ApiException(
-            'Bad Request ${handleErrorResp(response.body, '')}');
-      case 404:
-        throw ApiException('Page not found (404) ,Please contact to admin');
+            'Something went wrong with your request. Please check and try again.');
+
       case 401:
         throw ApiException(
-            'Unauthorized ${handleErrorResp(response.body, '')}');
+            'Your session has expired or you are not authorized. Please log in again.');
+
+      case 404:
+        throw ApiException(
+            'Oops! The page or service you’re trying to reach is not available. Please contact support.');
+
+      case 408:
+        throw ApiException(
+            'The request timed out. Please check your connection and try again.');
+
       case 500:
         throw ApiException(
-            handleErrorResp(response.body, 'Internal Server Error'));
+            'Server encountered an error. Please try again later.');
+
       case 502:
         throw ApiException(
-            'Bad Gateway ${handleErrorResp(response.body, '')}');
-      case 408:
-        throw ApiException('Request Timeout : Please Try after some time');
+            'We’re experiencing server issues. Please try again shortly.');
+
       default:
         throw ApiException(
-            'Unexpected error ${response.statusCode} \n ${handleErrorResp(response.body, '')}');
+            'Unexpected error occurred [${response.statusCode}]. Please try again.');
     }
   }
+
 
   String getBaseUrl(ApiType apiType) {
     switch (apiType) {
