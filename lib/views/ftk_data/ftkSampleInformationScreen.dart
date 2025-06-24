@@ -584,6 +584,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) async {
                           masterProvider.setSelectedHabitation("0");
+                          masterProvider.householdController.clear();
                           masterProvider.selectRadioOption(value!);
                           masterProvider.setSelectedHouseHold(value);
                           masterProvider.setSelectedSubSource(2);
