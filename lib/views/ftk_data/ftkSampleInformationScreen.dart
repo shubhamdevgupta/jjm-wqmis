@@ -566,11 +566,13 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 3,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) {
+                          masterProvider.householdController.clear();
                           masterProvider.selectRadioOption(value!);
                         },
                       ),
                       InkWell(
                         onTap: () {
+                          masterProvider.householdController.clear();
                           masterProvider.selectRadioOption(3);
                         },
                         child: const Text('At household'),
@@ -583,8 +585,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                         value: 4,
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) async {
-                          masterProvider.setSelectedHabitation("0");
                           masterProvider.householdController.clear();
+                          masterProvider.setSelectedHabitation("0");
                           masterProvider.selectRadioOption(value!);
                           masterProvider.setSelectedHouseHold(value);
                           masterProvider.setSelectedSubSource(2);
@@ -601,6 +603,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       ),
                       InkWell(
                         onTap: () async {
+                          masterProvider.householdController.clear();
                           masterProvider.setSelectedHabitation("0");
                           masterProvider.setSelectedSubSource(2);
                           await masterProvider.fetchSourceInformation(
