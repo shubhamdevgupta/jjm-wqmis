@@ -69,11 +69,9 @@ class _ftkDashboard extends State<ftkDashboard> {
                   icon: const Icon(Icons.refresh, color: Colors.white),
                   // Cart icon
                   onPressed: () {
-             /*       Provider.of<Ftkprovider>(context, listen: false)
+                    Provider.of<Ftkprovider>(context, listen: false)
                         .fetchFtkDashboardData(
-                            session.regId, session.villageId);*/
-                    DialogUtils.showUpdateDialog(context, Updateresponse(version: '1.1', apkUrl: "new url", whatsNew: 'A Latest version of this app is available now. please download file \n  For a better experience, please uninstall the applicaiton befor updating.'));
-
+                            session.regId, session.villageId);
                   },
                 )
               ],
