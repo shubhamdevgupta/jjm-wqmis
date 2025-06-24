@@ -751,6 +751,7 @@ class Masterprovider extends ChangeNotifier {
     sampleTypeOther = '';
     ftkRemarkController.clear();
     addressController.clear();
+    householdController.clear();
     _isLoading = false;
 
     notifyListeners();

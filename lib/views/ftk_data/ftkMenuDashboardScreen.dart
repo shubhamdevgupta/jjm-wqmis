@@ -27,21 +27,17 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
     Color(0xFF26A69A), // 🧊 Cyan-Green – cool alternative to teal
   ];
 
-
-
-
-
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
-     await session.init();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await session.init();
 
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-    await  masterProvider.fetchWatersourcefilterList();
-      sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
+      await masterProvider.fetchWatersourcefilterList();
+      sampleCounts =
+          Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
     });
   }
 
@@ -100,7 +96,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
               ),
               elevation: 5,
             ),
-
             body: Consumer<Masterprovider>(
               builder: (context, masterProvider, child) {
                 return masterProvider.isLoading
@@ -129,15 +124,20 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                     ],
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Row(
                                         children: [
-                                          Icon(Icons.location_on, size: 18, color: Colors.redAccent),
+                                          Icon(Icons.location_on,
+                                              size: 18,
+                                              color: Colors.redAccent),
                                           SizedBox(width: 6),
                                           Text(
                                             "Village Details",
-                                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14),
                                           ),
                                         ],
                                       ),
@@ -148,7 +148,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                         children: [
                                           _info("State", session.stateName),
                                           _arrow(),
-                                          _info("District", session.districtName),
+                                          _info(
+                                              "District", session.districtName),
                                           _arrow(),
                                           _info("Block", session.blockName),
                                           _arrow(),
@@ -160,40 +161,53 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                sampleCounts == null
+                                    ? LoaderUtils.conditionalLoader(
+                                        isLoading: sampleCounts == null)
+                                    : Column(
+                                        children: masterProvider.wtsFilterList
+                                            .where((source) =>
+                                                source.id !=
+                                                "5") // Exclude ID 5
+                                            .map((source) {
+                                          final colorIndex = masterProvider
+                                                  .wtsFilterList
+                                                  .indexOf(source) %
+                                              balancedColors.length;
 
-                                const SizedBox(height: 8,),
+                                          final cardColor =
+                                              balancedColors[colorIndex];
 
-                                Column(
-                                  children: masterProvider.wtsFilterList.where((source) => source.id != "5") // Exclude ID 5
-                                      .map((source) {
-                                    final colorIndex = masterProvider
-                                        .wtsFilterList.indexOf(source) % balancedColors.length;
+                                          final count =
+                                              sampleCounts![source.id] ?? 0;
 
-                                    final cardColor = balancedColors[colorIndex];
-
-                                    final count = sampleCounts![source.id] ?? 0;
-
-                                    return buildSampleCard(
-                                      title: source.sourceType,
-                                      color: cardColor,
-                                      count: count.toString(),
-                                      onTap: (count) {
-                                        if (count.isNotEmpty) {
-                                          masterProvider.setSelectedWaterSourcefilter(source.id);
-                                          Navigator.pushNamed(
-                                            context,
-                                            AppConstants.navigateToftkSampleInfoScreen,
-                                            arguments: {
-                                              'sourceId': source.id,
-                                              'sourceType': source.sourceType,
+                                          return buildSampleCard(
+                                            title: source.sourceType,
+                                            color: cardColor,
+                                            count: count.toString(),
+                                            onTap: (count) {
+                                              if (count.isNotEmpty) {
+                                                masterProvider
+                                                    .setSelectedWaterSourcefilter(
+                                                        source.id);
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  AppConstants
+                                                      .navigateToftkSampleInfoScreen,
+                                                  arguments: {
+                                                    'sourceId': source.id,
+                                                    'sourceType':
+                                                        source.sourceType,
+                                                  },
+                                                );
+                                              }
                                             },
                                           );
-                                        }
-                                      },
-                                    );
-
-                                  }).toList(),
-                                )
+                                        }).toList(),
+                                      )
                               ],
                             ),
                           ],
@@ -211,21 +225,23 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       children: [
         Text(
           "$label: ",
-          style: TextStyle(fontSize: 12, color: Colors.teal, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              fontSize: 12, color: Colors.teal, fontWeight: FontWeight.w500),
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 12.5, color: Colors.black87, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 12.5,
+              color: Colors.black87,
+              fontWeight: FontWeight.w600),
         ),
       ],
     );
   }
+
   Widget _arrow() {
     return Icon(Icons.arrow_forward_ios, size: 10, color: Colors.grey[500]);
   }
-
-
-
 
   Widget buildLocationTile({
     required IconData icon,
@@ -353,7 +369,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                   ),
                   style: TextButton.styleFrom(
                     backgroundColor: color,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     minimumSize: const Size(25, 40),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
@@ -371,11 +388,9 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
 
     return isDisabled
         ? Tooltip(
-      message: "No samples available",
-      child: cardContent,
-    )
+            message: "No samples available",
+            child: cardContent,
+          )
         : cardContent;
   }
-
-
 }

@@ -29,11 +29,11 @@ class FtkSample {
   final int currentStatus;
   final int regId;
   final int cat;
-  final String sampleTypeOther;
-  final String otherSourceLocation;
+  final String? sampleTypeOther;
+  final String? otherSourceLocation;
   final int sampleSourceLocation;
-  final DateTime sampleCollectionTime;
-  final DateTime sampleTestingTime;
+  final DateTime? sampleCollectionTime;
+  final DateTime? sampleTestingTime;
   final String sourceLatitude;
   final String sourceLongitude;
   final int sourceState;
@@ -48,8 +48,8 @@ class FtkSample {
   final String grampanchayat;
   final String villageName;
   final String habitation;
-  final String address;
-  final String remarks;
+  final String? address;
+  final String? remarks;
   final String enterBy;
   final String contaminatedStatus;
 
@@ -62,11 +62,11 @@ class FtkSample {
     required this.currentStatus,
     required this.regId,
     required this.cat,
-    required this.sampleTypeOther,
-    required this.otherSourceLocation,
+    this.sampleTypeOther,
+    this.otherSourceLocation,
     required this.sampleSourceLocation,
-    required this.sampleCollectionTime,
-    required this.sampleTestingTime,
+    this.sampleCollectionTime,
+    this.sampleTestingTime,
     required this.sourceLatitude,
     required this.sourceLongitude,
     required this.sourceState,
@@ -81,8 +81,8 @@ class FtkSample {
     required this.grampanchayat,
     required this.villageName,
     required this.habitation,
-    required this.address,
-    required this.remarks,
+    this.address,
+    this.remarks,
     required this.enterBy,
     required this.contaminatedStatus,
   });
@@ -100,10 +100,10 @@ class FtkSample {
       sampleTypeOther: json['sample_type_other'],
       otherSourceLocation: json['Other_Source_location'],
       sampleSourceLocation: json['sample_source_location'],
-      sampleCollectionTime: DateTime.parse(json['sample_collection_time']),
-      sampleTestingTime: DateTime.parse(json['sample_testing_time']),
-      sourceLatitude: json['source_latitude'],
-      sourceLongitude: json['source_longitude'],
+      sampleCollectionTime: DateTime.tryParse(json['sample_collection_time']),
+      sampleTestingTime: DateTime.tryParse(json['sample_testing_time']),
+      sourceLatitude: json['source_latitude'].toString(),
+      sourceLongitude: json['source_longitude'].toString(),
       sourceState: json['source_state'],
       sourceDistrict: json['source_district'],
       sourceBlock: json['source_block'],
@@ -123,3 +123,4 @@ class FtkSample {
     );
   }
 }
+

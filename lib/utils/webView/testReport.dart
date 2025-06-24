@@ -40,7 +40,7 @@ class _TestReportState extends State<TestReport> {
               }
             }),
         title: const Text(
-          'Test Report',
+          'FTK Report',
           style: TextStyle( fontFamily: 'OpenSans',color: Colors.white),
         ),
         flexibleSpace: Container(

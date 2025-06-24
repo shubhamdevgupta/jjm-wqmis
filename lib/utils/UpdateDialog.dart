@@ -63,7 +63,7 @@ class DialogUtils {
               const SizedBox(height: 12),
 
               // What's new
-              Align(
+             /* Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'What\'s New:',
@@ -73,7 +73,7 @@ class DialogUtils {
                     color: Colors.grey[800],
                   ),
                 ),
-              ),
+              ),*/
               const SizedBox(height: 8),
 
               // Update details (bulleted)

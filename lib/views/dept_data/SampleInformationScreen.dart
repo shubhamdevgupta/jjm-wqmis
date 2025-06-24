@@ -197,7 +197,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               }).toList(),
               title: "",
               appBarTitle: "Select Scheme",
-              showSearchBar: false,
+              showSearchBar: true,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
                 if (masterProvider.selectedWtsfilter == "5") {
@@ -376,6 +376,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                       ? AppTextWidgets.errorText(masterProvider.errorMsg)
                       : CustomDropdown(
                           title: "Select Water Source *",
+                          appBarTitle: "Water Source",
                           value: masterProvider.selectedWaterSource,
                           items: masterProvider.waterSource.map((waterSource) {
                             return DropdownMenuItem<String>(

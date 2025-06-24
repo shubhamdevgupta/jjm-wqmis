@@ -219,7 +219,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     await ftkProvider.fetchDeviceId();
 
     if (ftkProvider.getSelectedParameterIds().isEmpty || ftkProvider.getSelectedParameterValues().isEmpty) {
-      ToastHelper.showErrorSnackBar(context, 'Please select parameter');
+      ToastHelper.showErrorSnackBar(context, 'Please select at least 1 parameter');
       return;
     }
     await ftkProvider.saveFtkData(

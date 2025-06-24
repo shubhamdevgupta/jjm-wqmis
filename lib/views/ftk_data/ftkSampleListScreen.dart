@@ -198,7 +198,7 @@ class _ftkSampleListScreenState extends State<ftkSampleListScreen> {
                                           const SizedBox(width: 5),
                                           Expanded(
                                             child: Text(
-                                              sample.otherSourceLocation,
+                                              sample.otherSourceLocation??'not found',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontFamily: 'OpenSans',

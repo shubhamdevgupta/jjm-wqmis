@@ -37,7 +37,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
       masterProvider.setSelectedVillageOnly(session.villageId.toString());
       masterProvider.setSelectedStateOnly(session.stateId.toString());
       masterProvider.setSelectedHabitation('0');
-      masterProvider.fetchHabitations(
+    await  masterProvider.fetchHabitations(
           session.stateId.toString(),
           session.districtId.toString(),
           session.blockId.toString(),
@@ -953,7 +953,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   CustomDropdown(
                     title: "",
                     value: masterProvider.selectedHabitation,
-                    showSearchBar: false,
+                    showSearchBar: true,
                     items: masterProvider.habitationId.map((habitation) {
                       return DropdownMenuItem<String>(
                         value: habitation.habitationId.toString(),
@@ -997,6 +997,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       ? AppTextWidgets.errorText(masterProvider.errorMsg)
                       : CustomDropdown(
                           title: "Select Govt. Handpump *",
+                          appBarTitle: "Govt Handpump",
                           value: masterProvider.waterSource.any((item) =>
                                   item.locationId ==
                                   masterProvider.selectedWaterSource)
@@ -1020,7 +1021,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                             );
                             masterProvider.setSelectedWaterSourceInformationName(selectedWaterSource.locationName);
                             masterProvider.setSelectedWaterSourceInformation(value);
-                            print('oooooo  ${masterProvider.selectedWaterSourceName}');
                           },
                         ),
                   Visibility(

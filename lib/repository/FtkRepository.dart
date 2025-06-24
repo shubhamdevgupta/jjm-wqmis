@@ -100,7 +100,7 @@ class FtkRepository {
       ) async {
     try {
       final String endpoint =
-          '/apimobile/ftksampleList?reg_id=$regId&villageid=$villageid&SampleId$SampleId';
+          '/apimobile/ftksampleList?reg_id=$regId&villageid=$villageid&SampleId=$SampleId';
 
       final response = await _apiService.get(endpoint);
 
