@@ -5,8 +5,8 @@ import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/webView/testReport.dart';
-import 'package:jjm_wqmis/views/dept_data/LocationScreen.dart';
-import 'package:jjm_wqmis/views/dept_data/auth/DashboardScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/DashboardScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/sampleinfo/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
