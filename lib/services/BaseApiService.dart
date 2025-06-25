@@ -180,6 +180,21 @@ class BaseApiService {
   }
 }
 
+Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
+  return json.map((key, value) {
+    var encryption = AesEncryption();
+    final encryptedValue = encryption.encryptText(value.toString());
+    return MapEntry(key, encryptedValue);
+  });
+}
+
+Map<String, dynamic> encryptDataClassBody(dynamic model) {
+  final json = model.toJson(); // assumes model has toJson()
+  return encryptJsonBody(json);
+}// CALL IT LIKE final user = User(name: "Shakti", age: 25);
+// final encryptedBody = encryptDataClassBody(user);
+// body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
+
 enum ApiType {
   ejalShakti,
   reverseGeocoding,
