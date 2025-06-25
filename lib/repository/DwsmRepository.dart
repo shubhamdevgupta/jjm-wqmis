@@ -23,14 +23,15 @@ class DwsmRepository{
   }
       ) async {
     try {
+
       final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
-        body: jsonEncode({
+        body: jsonEncode(encryptDataClassBody({
           'StateId': stateId,
           'DistrictId': districtId,
           'FineYear': fineYear,
           'SchoolId': schoolId,
           'DemonstrationType': demonstrationType,
-        }),
+        })),
       );
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
 
@@ -40,11 +41,22 @@ class DwsmRepository{
     }
   }
 
-  Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int Stateid, int Districtid,
-      int Blockid, int Gpid, int Villageid, int type) async {
+  Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int stateId, int districtId,
+      int blockId, int gpId, int villageId, int type) async {
     try {
+
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'blockid': blockId,
+        'gpid': gpId,
+        'villageid': villageId,
+        'type': type,
+      });
+
       final response = await _apiService.get(
-          'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
+          'ApiMaster/GetSchoolAwcs?$query');
       return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -56,11 +68,11 @@ class DwsmRepository{
       int demonstrationType) async {
     try {
       final response = await _apiService.post('APIMobile/GetSchoolAWCsListDetails',
-        body: jsonEncode({
+        body: jsonEncode(encryptDataClassBody({
           "StateId": stateId,
           "DistrictId": districtId,
           "DemonstrationType": demonstrationType,
-        }));
+        })));
 
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
     } catch (e) {
