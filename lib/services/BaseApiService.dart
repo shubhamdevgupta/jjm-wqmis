@@ -114,8 +114,9 @@ class BaseApiService {
             final decryptedString = encryption.decryptText(encryptedData);
             final decryptedJson = json.decode(decryptedString);
             return decryptedJson;
-          }
 
+
+          }
           return rawJson;
         } catch (e) {
           throw ApiException('Failed to decode or decrypt response: $e');
@@ -188,12 +189,22 @@ Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> encryptDataClassBody(dynamic model) {
-  final json = model.toJson(); // assumes model has toJson()
-  return encryptJsonBody(json);
-}// CALL IT LIKE final user = User(name: "Shakti", age: 25);
-// final encryptedBody = encryptDataClassBody(user);
+
+Map<String, dynamic> encryptDataClassBody(dynamic input) {
+  final Map<String, dynamic> rawMap =
+  (input is Map<String, dynamic>) ? input : input.toJson();
+
+  return encryptJsonBody(rawMap);
+}// CALL IT LIKE final
+// final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
 // body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
+//or just
+// body: jsonEncode( encryptDataClassBody({
+//             'loginid': "phoneNumber",
+//             'password': "password",
+//             'txtSaltedHash': "txtSalt",
+//             'App_id':"appId"
+//           });)
 
 enum ApiType {
   ejalShakti,

@@ -45,7 +45,13 @@ class MasterRepository {
   Future<BaseResponseModel<BlockResponse>> fetchBlocks(
       String stateId, String districtId) async {
     try {
-      final response = await _apiService.get('/apimaster/getblock?stateid=$stateId&districtid=$districtId');
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+      });
+
+      final response = await _apiService.get('/apimaster/getblock?$query');
 
       return BaseResponseModel<BlockResponse>.fromJson(response,(json)=>BlockResponse.fromJson(json));
 
@@ -59,7 +65,14 @@ class MasterRepository {
   Future<BaseResponseModel<GramPanchayatresponse>> fetchGramPanchayats(
       String stateId, String districtId, String blockId) async {
     try {
-      final response = await _apiService.get('/apimaster/GetGramPanchayat?stateid=$stateId&districtid=$districtId&blockid=$blockId',);
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'blockid': blockId,
+      });
+
+      final response = await _apiService.get('/apimaster/GetGramPanchayat?$query',);
 
       return BaseResponseModel<GramPanchayatresponse>.fromJson(response,(json)=>GramPanchayatresponse.fromJson(json));
 
@@ -72,7 +85,15 @@ class MasterRepository {
   Future<BaseResponseModel<Villageresponse>> fetchVillages(
       String stateId, String districtId, String blockId, String gpId) async {
     try {
-      final response = await _apiService.get('/apimaster/Getvillage?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId',);
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'blockid': blockId,
+        'gpid': gpId,
+      });
+
+      final response = await _apiService.get('/apimaster/Getvillage?$query',);
 
       return BaseResponseModel<Villageresponse>.fromJson(response,(json)=>Villageresponse.fromJson(json));
 
@@ -82,7 +103,6 @@ class MasterRepository {
     }
   }
 
-
   Future<BaseResponseModel<HabitationResponse>> fetchHabitations(
       String stateId,
       String districtId,
@@ -90,8 +110,17 @@ class MasterRepository {
       String gpId,
       String villageId) async {
     try {
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'blockid': blockId,
+        'gpid': gpId,
+        'villageid': villageId,
+      });
+
       final response = await _apiService.get(
-        '/apimaster/GetHabitaion?stateid=$stateId&districtid=$districtId&blockid=$blockId&gpid=$gpId&villageid=$villageId',
+        '/apimaster/GetHabitaion?$query',
       );
 
       return BaseResponseModel<HabitationResponse>.fromJson(response,(json)=>HabitationResponse.fromJson(json));
@@ -110,7 +139,16 @@ class MasterRepository {
       String filter,
       ) async {
     try {
-      final response = await _apiService.get('/apimaster/getScheme?stateId=$stateId&districtid=$districtId&villageid=$villageId&habitationid=$habitationId&filter=$filter');
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'villageid': villageId,
+        'habitationid': habitationId,
+        'filter': filter
+      });
+
+      final response = await _apiService.get('/apimaster/getScheme?$query');
 
       return BaseResponseModel<SchemeResponse>.fromJson(response,(json)=> SchemeResponse.fromJson(json));
 
@@ -123,6 +161,7 @@ class MasterRepository {
 
   Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList() async {
     try {
+
       final response = await _apiService.get('/apimaster/Get_water_source_filter');
       return BaseResponseModel<Watersourcefilterresponse>.fromJson(response,(json)=> Watersourcefilterresponse.fromJson(json));
 
@@ -143,8 +182,20 @@ class MasterRepository {
       String schemeId,
       ) async {
     try {
+      final query = _apiService.buildEncryptedQuery({
+        'villageid': villageId,
+        'habitaionid': habitationId,
+        'filter': filter,
+        'cat': cat,
+        'subcat': subcat,
+        'wtpid': wtpId,
+        'stateid': stateId,
+        'schemeid': schemeId,
+      });
+
+
       final response = await _apiService.get(
-        '/apimaster/Getsources_information?villageid=$villageId&habitaionid=$habitationId&filter=$filter&cat=$cat&subcat=$subcat&wtpid=$wtpId&stateid=$stateId&schemeid=$schemeId');
+        '/apimaster/Getsources_information?$query');
 
       return BaseResponseModel<WaterSourceResponse>.fromJson(response,(json)=> WaterSourceResponse.fromJson(json));
 
@@ -158,8 +209,14 @@ class MasterRepository {
 
   Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
     try {
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'schemeid': schemeId,
+      });
+
       final response = await _apiService.get(
-        '/apimaster/GetWTP?stateid=$stateId&schemeid=$schemeId',
+        '/apimaster/GetWTP?$query',
       );
 
       return BaseResponseModel<Wtp>.fromJson(response,(json)=> Wtp.fromJson(json));
@@ -173,10 +230,13 @@ class MasterRepository {
 
   Future<List<Lgdresponse>> fetchVillageLgd(double lon, double lat) async {
     try {
-      String formattedLon = lon.toStringAsFixed(8);
-      String formattedLat = lat.toStringAsFixed(8);
 
-      final response = await _apiService.get('GetVillageDetails/api/GeoData/getVillageDetails?lon=$formattedLon&lat=$formattedLat',
+      final query = _apiService.buildEncryptedQuery({
+        'lat': lat.toStringAsFixed(8),
+        'lon': lon.toStringAsFixed(8),
+      });
+
+      final response = await _apiService.get('GetVillageDetails/api/GeoData/getVillageDetails?$query',
         apiType: ApiType.reverseGeocoding,
       );
 
@@ -191,8 +251,14 @@ class MasterRepository {
   Future<ValidateVillageResponse> validateVillage(
       String villageId, String lgdCode) async {
     try {
+
+      final query = _apiService.buildEncryptedQuery({
+        'villageid': villageId,
+        'lgdcode': lgdCode,
+      });
+
       final response = await _apiService.get(
-        '/apimaster/validateVillage?villageid=$villageId&lgdcode=$lgdCode',
+        '/apimaster/validateVillage?$query',
       );
 
        return ValidateVillageResponse.fromJson(response);
