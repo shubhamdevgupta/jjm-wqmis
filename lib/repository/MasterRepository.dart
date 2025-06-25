@@ -21,7 +21,7 @@ import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
-
+  final encryption= AesEncryption();
   Future<BaseResponseModel<Stateresponse>> fetchStates() async {
       final response = await _apiService.get('/apimaster/GetState');
       return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
@@ -30,7 +30,11 @@ class MasterRepository {
 
   Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
     try {
-      final response = await _apiService.get('/apimaster/getdistrict?stateid=$stateId');
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+      });
+
+      final response = await _apiService.get('/apimaster/getdistrict?$query');
       return BaseResponseModel<Districtresponse>.fromJson(response, (json)=>Districtresponse.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);

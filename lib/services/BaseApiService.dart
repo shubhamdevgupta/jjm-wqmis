@@ -151,6 +151,13 @@ class BaseApiService {
     }
   }
 
+  String buildEncryptedQuery(Map<String, dynamic> params) {
+    return params.entries.map((entry) {
+      final key = entry.key;
+      final value = encryption.encryptText(entry.value.toString());
+      return "$key=$value";
+    }).join("&");
+  }
 
 
   String getBaseUrl(ApiType apiType) {
