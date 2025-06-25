@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:jjm_wqmis/models/BaseResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/DistrictResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/GramPanchayatResponse.dart';
@@ -14,6 +16,7 @@ import 'package:jjm_wqmis/models/LgdResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/HabitationResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
+import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class MasterRepository {
@@ -195,4 +198,10 @@ class MasterRepository {
       rethrow; // Propagate the exception for further handling
     }
   }
+  Future<Map<String, dynamic>> decryptResponse(Map<String, dynamic> response) async {
+    final encrypted = response['EncryptedData'];
+    final decryptedString = encryption.decryptText(encrypted);
+    return jsonDecode(decryptedString);
+  }
+
 }

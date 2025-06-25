@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:jjm_wqmis/utils/Aesen.dart';
 
 import 'package:jjm_wqmis/utils/custom_screen/CustomException.dart';
 
@@ -13,6 +14,7 @@ class BaseApiService {
   static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
+  final encryption = AesEncryption(); // Put this at the top of your BaseApiService class
 
   Future<dynamic> post(
     String endpoint, {
@@ -104,7 +106,20 @@ class BaseApiService {
   dynamic _processResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-        return jsonDecode(response.body);
+        try {
+          final rawJson = json.decode(response.body);
+
+          if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
+            final encryptedData = rawJson['EncryptedData'];
+            final decryptedString = encryption.decryptText(encryptedData);
+            final decryptedJson = json.decode(decryptedString);
+            return decryptedJson;
+          }
+
+          return rawJson;
+        } catch (e) {
+          throw ApiException('Failed to decode or decrypt response: $e');
+        }
 
       case 400:
         throw ApiException(
@@ -135,6 +150,7 @@ class BaseApiService {
             'Unexpected error occurred [${response.statusCode}]. Please try again.');
     }
   }
+
 
 
   String getBaseUrl(ApiType apiType) {

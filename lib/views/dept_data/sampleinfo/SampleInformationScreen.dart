@@ -8,7 +8,7 @@ import 'package:jjm_wqmis/utils/custom_screen/CustomTextField.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:jjm_wqmis/views/dept_data/LocationScreen.dart';
+import 'package:jjm_wqmis/views/dept_data/sampleinfo/LocationScreen.dart';
 import 'package:jjm_wqmis/views/dept_data/lab/LabParameterScreen.dart';
 import 'package:jjm_wqmis/views/dept_data/lab/WtpLabScreen.dart';
 import 'package:provider/provider.dart';
