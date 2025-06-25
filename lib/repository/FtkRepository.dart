@@ -15,8 +15,16 @@ class FtkRepository {
   Future<BaseResponseModel<FtkParameter>> fetchParameterList(
       int stateId, int districtId) async {
     try {
+
+      final query = _apiService.buildEncryptedQuery(
+        {
+          'StateId': stateId.toString(),
+          'DistrictId': districtId.toString(),
+        },
+      );
+
       final response = await _apiService.get(
-          'APIMaster/GetParameterList?StateId=$stateId&DistrictId=$districtId');
+          'APIMaster/GetParameterList?$query');
       print("RRRRR_----$response");
       return BaseResponseModel<FtkParameter>.fromJson(
           response, (json) => FtkParameter.fromJson(json));
@@ -52,7 +60,7 @@ class FtkRepository {
       String sampleTypeOther,
       String parameteId,
       String paramSaferange) async {
-    final requestData = jsonEncode({
+    final requestData = jsonEncode(encryptDataClassBody({
       "loginid": mobileNumber,
       "Reg_Id": regId,
       "role_id": roleId,
@@ -78,7 +86,7 @@ class FtkRepository {
       "sample_type_other": sampleTypeOther,
       "test_selected": parameteId,
       "saferangeid": paramSaferange
-    });
+    }));
 
     debugPrint("Sample Submit Request: $requestData");
 
@@ -99,8 +107,16 @@ class FtkRepository {
       int SampleId,
       ) async {
     try {
-      final String endpoint =
-          '/apimobile/ftksampleList?reg_id=$regId&villageid=$villageid&SampleId=$SampleId';
+
+      final query = _apiService.buildEncryptedQuery(
+        {
+          'reg_id': regId.toString(),
+          'villageid': villageid.toString(),
+          'SampleId': SampleId.toString(),
+        },
+      );
+
+      final String endpoint = '/apimobile/ftksampleList?$query';
 
       final response = await _apiService.get(endpoint);
 
@@ -117,8 +133,15 @@ class FtkRepository {
       int villageid,
       ) async {
     try {
-      final String endpoint =
-          '/apimobile/FTKDashboard?reg_id=$regId&villageid=$villageid';
+
+      final query = _apiService.buildEncryptedQuery(
+        {
+          'reg_id': regId.toString(),
+          'villageid': villageid.toString(),
+        },
+      );
+
+      final String endpoint = '/apimobile/FTKDashboard?$query';
 
       final response = await _apiService.get(endpoint);
 

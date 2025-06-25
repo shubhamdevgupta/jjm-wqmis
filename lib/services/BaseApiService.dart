@@ -198,13 +198,7 @@ Map<String, dynamic> encryptDataClassBody(dynamic input) {
 }// CALL IT LIKE final
 // final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
 // body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
-//or just
-// body: jsonEncode( encryptDataClassBody({
-//             'loginid': "phoneNumber",
-//             'password': "password",
-//             'txtSaltedHash': "txtSalt",
-//             'App_id':"appId"
-//           });)
+
 
 enum ApiType {
   ejalShakti,

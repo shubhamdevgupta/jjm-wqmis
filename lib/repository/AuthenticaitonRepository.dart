@@ -14,13 +14,12 @@ class AuthenticaitonRepository {
     try {
       // Call the POST method from BaseApiService
       final response = await _apiService.post('APIMobile/Login',
-        body: jsonEncode({
+        body: jsonEncode(encryptDataClassBody({
           'loginid': phoneNumber,
           'password': password,
           'txtSaltedHash': txtSalt,
            'App_id':appId
-        }),
-      );
+        })));
 
       return LoginResponse.fromJson(response);
     } catch (e) {
@@ -32,7 +31,15 @@ class AuthenticaitonRepository {
   Future<Dashboardresponse> fetchDashboardData(int roleId, int userId, int stateId) async {
     try {
       String endpoint = '/apiMobile/dashbord?role_id=$roleId&userid=$userId&stateid=$stateId';
-      final response = await _apiService.get(endpoint);
+
+      final query = _apiService.buildEncryptedQuery({
+        'role_id': roleId,
+        'userid': userId,
+        'stateid': stateId,
+      });
+
+
+      final response = await _apiService.get('/apiMobile/dashbord?$query');
 
         return Dashboardresponse.fromJson(response);
     } catch ( e) {

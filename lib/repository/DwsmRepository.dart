@@ -20,10 +20,8 @@ class DwsmRepository{
     required String fineYear,
     required int schoolId,
     required int demonstrationType,
-  }
-      ) async {
+  }) async {
     try {
-
       final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
         body: jsonEncode(encryptDataClassBody({
           'StateId': stateId,
@@ -31,10 +29,8 @@ class DwsmRepository{
           'FineYear': fineYear,
           'SchoolId': schoolId,
           'DemonstrationType': demonstrationType,
-        })),
-      );
+        })));
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
-
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
@@ -44,8 +40,6 @@ class DwsmRepository{
   Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int stateId, int districtId,
       int blockId, int gpId, int villageId, int type) async {
     try {
-
-
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'districtid': districtId,
@@ -93,7 +87,7 @@ class DwsmRepository{
        String ipAddress,) async {
     try {
       final response = await _apiService.post('APIMobile/FTK_Demonstrated',
-        body: jsonEncode({
+        body: jsonEncode(encryptDataClassBody({
           "UserId": userId,
           "SchoolId": schoolId,
           "StateId": stateId,
@@ -103,8 +97,7 @@ class DwsmRepository{
           "Latitude": latitude,
           "Longitude": longitude,
           "IPAddress": ipAddress,
-        }),
-      );
+        })));
       return DemonstrationResponse.fromJson(response);
 
     } catch (e) {
@@ -115,8 +108,13 @@ class DwsmRepository{
   }
 
   Future<Dwsmdashboardresponse> fetchDwsmDashboard(int userId) async {
+
+    final query = _apiService.buildEncryptedQuery({
+      'userid': userId,
+    });
+
     try {
-      String endpoint = '/apiMobile/dashDistrictUser?userid=$userId';
+      String endpoint = '/apiMobile/dashDistrictUser?$query';
       final response = await _apiService.get(endpoint);
 
       return Dwsmdashboardresponse.fromJson(response);
