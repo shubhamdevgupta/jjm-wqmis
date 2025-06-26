@@ -114,7 +114,7 @@ class DwsmRepository{
     });
 
     try {
-      String endpoint = '/apiMobile/dashDistrictUser?$query';
+      String endpoint = '/apiMobileA/dashDistrictUser?$query';
       final response = await _apiService.get(endpoint);
 
       return Dwsmdashboardresponse.fromJson(response);

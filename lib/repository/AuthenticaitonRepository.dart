@@ -13,7 +13,7 @@ class AuthenticaitonRepository {
       String phoneNumber, String password, String txtSalt, int appId) async {
     try {
       // Call the POST method from BaseApiService
-      final response = await _apiService.post('APIMobile/Login',
+      final response = await _apiService.post('APIMobileA/Login',
         body: jsonEncode(encryptDataClassBody({
           'loginid': phoneNumber,
           'password': password,
@@ -30,7 +30,6 @@ class AuthenticaitonRepository {
 
   Future<Dashboardresponse> fetchDashboardData(int roleId, int userId, int stateId) async {
     try {
-      String endpoint = '/apiMobile/dashbord?role_id=$roleId&userid=$userId&stateid=$stateId';
 
       final query = _apiService.buildEncryptedQuery({
         'role_id': roleId,
@@ -39,7 +38,7 @@ class AuthenticaitonRepository {
       });
 
 
-      final response = await _apiService.get('/apiMobile/dashbord?$query');
+      final response = await _apiService.get('/apiMobileA/dashbord?$query');
 
         return Dashboardresponse.fromJson(response);
     } catch ( e) {

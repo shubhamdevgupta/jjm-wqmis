@@ -67,7 +67,7 @@ class Samplesubrepo {
     debugPrint("Sample Submit Request: $requestData");
 
     try {
-      final response = await _apiService.post('APIMobile/add_sample', body: requestData);
+      final response = await _apiService.post('APIMobileA/add_sample', body: requestData);
 
 
       return Sampleresponse.fromJson(response);

@@ -34,7 +34,7 @@ class MasterRepository {
         'stateid': stateId,
       });
 
-      final response = await _apiService.get('/apimaster/getdistrict?$query');
+      final response = await _apiService.get('/apimasterA/getdistrict?$query');
       return BaseResponseModel<Districtresponse>.fromJson(response, (json)=>Districtresponse.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -51,7 +51,7 @@ class MasterRepository {
         'districtid': districtId,
       });
 
-      final response = await _apiService.get('/apimaster/getblock?$query');
+      final response = await _apiService.get('/apimasterA/getblock?$query');
 
       return BaseResponseModel<BlockResponse>.fromJson(response,(json)=>BlockResponse.fromJson(json));
 
@@ -72,7 +72,7 @@ class MasterRepository {
         'blockid': blockId,
       });
 
-      final response = await _apiService.get('/apimaster/GetGramPanchayat?$query',);
+      final response = await _apiService.get('/apimasterA/GetGramPanchayat?$query',);
 
       return BaseResponseModel<GramPanchayatresponse>.fromJson(response,(json)=>GramPanchayatresponse.fromJson(json));
 
@@ -93,7 +93,7 @@ class MasterRepository {
         'gpid': gpId,
       });
 
-      final response = await _apiService.get('/apimaster/Getvillage?$query',);
+      final response = await _apiService.get('/apimasterA/Getvillage?$query',);
 
       return BaseResponseModel<Villageresponse>.fromJson(response,(json)=>Villageresponse.fromJson(json));
 
@@ -120,7 +120,7 @@ class MasterRepository {
       });
 
       final response = await _apiService.get(
-        '/apimaster/GetHabitaion?$query',
+        '/apimasterA/GetHabitaion?$query',
       );
 
       return BaseResponseModel<HabitationResponse>.fromJson(response,(json)=>HabitationResponse.fromJson(json));
@@ -148,7 +148,7 @@ class MasterRepository {
         'filter': filter
       });
 
-      final response = await _apiService.get('/apimaster/getScheme?$query');
+      final response = await _apiService.get('/apimasterA/getScheme?$query');
 
       return BaseResponseModel<SchemeResponse>.fromJson(response,(json)=> SchemeResponse.fromJson(json));
 
@@ -162,7 +162,7 @@ class MasterRepository {
   Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList() async {
     try {
 
-      final response = await _apiService.get('/apimaster/Get_water_source_filter');
+      final response = await _apiService.get('/apimasterA/Get_water_source_filter');
       return BaseResponseModel<Watersourcefilterresponse>.fromJson(response,(json)=> Watersourcefilterresponse.fromJson(json));
 
     } catch (e) {
@@ -195,7 +195,7 @@ class MasterRepository {
 
 
       final response = await _apiService.get(
-        '/apimaster/Getsources_information?$query');
+        '/apimasterA/Getsources_information?$query');
 
       return BaseResponseModel<WaterSourceResponse>.fromJson(response,(json)=> WaterSourceResponse.fromJson(json));
 
@@ -216,7 +216,7 @@ class MasterRepository {
       });
 
       final response = await _apiService.get(
-        '/apimaster/GetWTP?$query',
+        '/apimasterA/GetWTP?$query',
       );
 
       return BaseResponseModel<Wtp>.fromJson(response,(json)=> Wtp.fromJson(json));
@@ -258,7 +258,7 @@ class MasterRepository {
       });
 
       final response = await _apiService.get(
-        '/apimaster/validateVillage?$query',
+        '/apimasterA/validateVillage?$query',
       );
 
        return ValidateVillageResponse.fromJson(response);

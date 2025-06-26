@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:jjm_wqmis/utils/Aesen.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 
 import 'package:jjm_wqmis/utils/custom_screen/CustomException.dart';
 
@@ -15,6 +16,8 @@ class BaseApiService {
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
   final encryption = AesEncryption(); // Put this at the top of your BaseApiService class
+
+
 
   Future<dynamic> post(
     String endpoint, {
@@ -26,8 +29,10 @@ class BaseApiService {
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
+    headers['APIKey'] = await getEncryptedToken();
+
     log('POST Request: URL: $url');
-    log('POST_Request--- : ${body.toString()}');
+    log('POST_Request ency--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
     try {
@@ -67,7 +72,10 @@ class BaseApiService {
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
-    log('GET Request: URL: $url \n Headers: ${headers.toString()}');
+    headers['APIKey'] = await getEncryptedToken();
+
+    log('GET Request: URL: $url');
+    log('GET Request: Headers: ${headers.toString()}');
 
     try {
       await _checkConnectivity();
@@ -160,7 +168,6 @@ class BaseApiService {
     }).join("&");
   }
 
-
   String getBaseUrl(ApiType apiType) {
     switch (apiType) {
       case ApiType.ejalShakti:
@@ -179,10 +186,17 @@ class BaseApiService {
     String res = " $message";
     return res;
   }
+
+
 }
+
 
 Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
   return json.map((key, value) {
+    if (value == null || value.toString().trim().isEmpty) {
+      // Skip encryption, keep it as is (or return empty string)
+      return MapEntry(key, value);
+    }
     var encryption = AesEncryption();
     final encryptedValue = encryption.encryptText(value.toString());
     return MapEntry(key, encryptedValue);
@@ -190,16 +204,23 @@ Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
 }
 
 
-Map<String, dynamic> encryptDataClassBody(dynamic input) {
-  final Map<String, dynamic> rawMap =
-  (input is Map<String, dynamic>) ? input : input.toJson();
-
-  return encryptJsonBody(rawMap);
-}// CALL IT LIKE final
+// CALL IT LIKE final
 // final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
 // body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
+Map<String, dynamic> encryptDataClassBody(dynamic input) {
+  final Map<String, dynamic> rawMap = (input is Map<String, dynamic>) ? input : input.toJson();
+  return encryptJsonBody(rawMap);
+}
 
 
+
+Future<String> getEncryptedToken() async {
+  final session = UserSessionManager();
+
+  await session.init();
+  print("TOKKKK ${session.token}");
+  return session.token.toString();
+}
 enum ApiType {
   ejalShakti,
   reverseGeocoding,
