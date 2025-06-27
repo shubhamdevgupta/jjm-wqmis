@@ -216,6 +216,19 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     print('---- default remark value: ${masterProvider.ftkRemarkController.text}');
 
     await masterProvider.fetchLocation();
+
+    if (masterProvider.lat == null || masterProvider.lng == null) {
+      await masterProvider.checkAndPromptLocation(context);
+
+      if (masterProvider.lat == null || masterProvider.lng == null) {
+        // User cancelled or GPS still off
+        ToastHelper.showSnackBar(context, "Location is required to proceed.");
+        return;
+      }
+    }
+
+
+
     await ftkProvider.fetchDeviceId();
 
     if (ftkProvider.getSelectedParameterIds().isEmpty || ftkProvider.getSelectedParameterValues().isEmpty) {
