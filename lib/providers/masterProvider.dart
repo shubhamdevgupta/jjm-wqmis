@@ -20,6 +20,8 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
+import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -64,7 +66,12 @@ class Masterprovider extends ChangeNotifier {
   double? get currentLatitude => _currentLatitude;
 
   double? get currentLongitude => _currentLongitude;
+  double? _latitude;
+  double? _longitude;
 
+  // ✅ Getters
+  double? get lat => _latitude;
+  double? get lng => _longitude;
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
@@ -503,6 +510,69 @@ class Masterprovider extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+
+
+  // ✅ Optional helper method
+  void setLocation(double? lat, double? lng) {
+    _latitude = lat;
+    _longitude = lng;
+    notifyListeners();
+  }
+
+
+  Future<void> checkAndPromptLocation(BuildContext context) async {
+    _isLoading = true;
+
+    final status = await Permission.location.request();
+
+    if (status.isGranted) {
+      Location location = Location();
+
+      // Check if GPS is enabled
+      bool serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          _isLoading=false;
+          // Show dialog if user still refuses
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: const Text("Enable Location"),
+              content: const Text("GPS is required to fetch location."),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await openAppSettings();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Open Settings"),
+                ),
+              ],
+            ),
+          );
+          return;
+        }
+      }
+
+      // ✅ Now GPS is ON and permission is granted
+      LocationData locationData = await location.getLocation();
+
+      setLocation(locationData.latitude, locationData.longitude);
+      _isLoading=false;
+      print("Lat: $_latitude, Lng: $_longitude");
+
+    } else {
+      _isLoading=false;
+      // Permission denied
+      await openAppSettings();
     }
   }
 
