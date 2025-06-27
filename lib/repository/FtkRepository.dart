@@ -24,7 +24,7 @@ class FtkRepository {
       );
 
       final response = await _apiService.get(
-          'APIMaster/GetParameterList?$query');
+          'APIMasterA/GetParameterList?$query');
       print("RRRRR_----$response");
       return BaseResponseModel<FtkParameter>.fromJson(
           response, (json) => FtkParameter.fromJson(json));
@@ -92,7 +92,7 @@ class FtkRepository {
 
     try {
       final response =
-          await _apiService.post('APIMobile/add_ftk_data', body: requestData);
+          await _apiService.post('APIMobileA/add_ftk_data', body: requestData);
 
       return Sampleresponse.fromJson(response);
     } catch (e) {
@@ -116,7 +116,7 @@ class FtkRepository {
         },
       );
 
-      final String endpoint = '/apimobile/ftksampleList?$query';
+      final String endpoint = '/apimobileA/ftksampleList?$query';
 
       final response = await _apiService.get(endpoint);
 
@@ -141,7 +141,7 @@ class FtkRepository {
         },
       );
 
-      final String endpoint = '/apimobile/FTKDashboard?$query';
+      final String endpoint = '/apimobileA/FTKDashboard?$query';
 
       final response = await _apiService.get(endpoint);
 

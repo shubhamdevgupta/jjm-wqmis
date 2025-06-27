@@ -22,7 +22,7 @@ class DwsmRepository{
     required int demonstrationType,
   }) async {
     try {
-      final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
+      final response = await _apiService.post('APIMobileA/FTK_DemonstratedList',
         body: jsonEncode(encryptDataClassBody({
           'StateId': stateId,
           'DistrictId': districtId,
@@ -50,7 +50,7 @@ class DwsmRepository{
       });
 
       final response = await _apiService.get(
-          'ApiMaster/GetSchoolAwcs?$query');
+          'ApiMasterA/GetSchoolAwcs?$query');
       return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -61,7 +61,7 @@ class DwsmRepository{
   Future<BaseResponseModel<DashboardSchoolModel>> fetchDashboardSchoolList(int stateId, int districtId,
       int demonstrationType) async {
     try {
-      final response = await _apiService.post('APIMobile/GetSchoolAWCsListDetails',
+      final response = await _apiService.post('APIMobileA/GetSchoolAWCsListDetails',
         body: jsonEncode(encryptDataClassBody({
           "StateId": stateId,
           "DistrictId": districtId,
@@ -86,7 +86,7 @@ class DwsmRepository{
        String longitude,
        String ipAddress,) async {
     try {
-      final response = await _apiService.post('APIMobile/FTK_Demonstrated',
+      final response = await _apiService.post('APIMobileA/FTK_Demonstrated',
         body: jsonEncode(encryptDataClassBody({
           "UserId": userId,
           "SchoolId": schoolId,
