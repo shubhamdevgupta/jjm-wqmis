@@ -66,7 +66,12 @@ class Masterprovider extends ChangeNotifier {
   double? get currentLatitude => _currentLatitude;
 
   double? get currentLongitude => _currentLongitude;
+  double? _latitude;
+  double? _longitude;
 
+  // ✅ Getters
+  double? get lat => _latitude;
+  double? get lng => _longitude;
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
@@ -508,12 +513,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  double? _latitude;
-  double? _longitude;
 
-  // ✅ Getters
-  double? get lat => _latitude;
-  double? get lng => _longitude;
 
   // ✅ Optional helper method
   void setLocation(double? lat, double? lng) {
