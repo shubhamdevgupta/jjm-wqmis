@@ -17,7 +17,6 @@ class BaseApiService {
   static const String github = "https://api.github.com/repos/";
   final encryption = AesEncryption(); // Put this at the top of your BaseApiService class
 
-
   Future<dynamic> post(
     String endpoint, {
     Map<String, String>? headers,
