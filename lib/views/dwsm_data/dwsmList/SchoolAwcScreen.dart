@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
-import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 class SchoolAWCScreen extends StatefulWidget {
   final int? type;

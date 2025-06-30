@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/ftkParameterScreen.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
@@ -216,6 +214,19 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     print('---- default remark value: ${masterProvider.ftkRemarkController.text}');
 
     await masterProvider.fetchLocation();
+
+    if (masterProvider.lat == null || masterProvider.lng == null) {
+      await masterProvider.checkAndPromptLocation(context);
+
+      if (masterProvider.lat == null || masterProvider.lng == null) {
+        // User cancelled or GPS still off
+        ToastHelper.showSnackBar(context, "Location is required to proceed.");
+        return;
+      }
+    }
+
+
+
     await ftkProvider.fetchDeviceId();
 
     if (ftkProvider.getSelectedParameterIds().isEmpty || ftkProvider.getSelectedParameterValues().isEmpty) {
@@ -242,8 +253,8 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       int.parse(masterProvider.selectedScheme!),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSourceName ?? '',
-      masterProvider.currentLatitude.toString(),
-      masterProvider.currentLongitude.toString(),
+      masterProvider.lat.toString(),
+      masterProvider.lng.toString(),
       ftkProvider.deviceId,
       masterProvider.sampleTypeOther,
       ftkProvider.getSelectedParameterIds(),

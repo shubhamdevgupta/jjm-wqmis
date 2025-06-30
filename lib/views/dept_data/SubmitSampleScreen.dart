@@ -52,17 +52,16 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
 
-      final sampleSubProvider =
-          Provider.of<Samplesubprovider>(context, listen: false);
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       if (CurrentLocation.latitude != null &&
           CurrentLocation.longitude != null) {
-        sampleSubProvider.setLocation(
+        masterProvider.setLocation(
           CurrentLocation.latitude,
           CurrentLocation.longitude,
         );
       }
-      if (sampleSubProvider.lat == null || sampleSubProvider.lng == null) {
-        sampleSubProvider.checkAndPromptLocation(context);
+      if (masterProvider.lat == null || masterProvider.lng == null) {
+        masterProvider.checkAndPromptLocation(context);
       }
     });
   }
@@ -73,7 +72,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     return Consumer<Samplesubprovider>(builder: (context, provider, child) {
-      print("Rebuilding UI with lat: ${provider.lat} :Long ${provider.lng}");
 
       return Scrollbar(
         thumbVisibility: true,
@@ -591,7 +589,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${provider.lat}",
+                                                          "${masterProvider.lat}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -624,7 +622,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${provider.lng}",
+                                                          "${masterProvider.lng}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -1017,7 +1015,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${provider.lat}",
+                                                                      "${masterProvider.lat}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -1054,7 +1052,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${provider.lng}",
+                                                                      "${masterProvider.lng}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -1157,10 +1155,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     }
     await masterProvider.fetchLocation();
 
-    if (provider.lat == null || provider.lng == null) {
-      await provider.checkAndPromptLocation(context);
+    if (masterProvider.lat == null || masterProvider.lng == null) {
+      await masterProvider.checkAndPromptLocation(context);
 
-      if (provider.lat == null || provider.lng == null) {
+      if (masterProvider.lat == null || masterProvider.lng == null) {
         // User cancelled or GPS still off
         ToastHelper.showSnackBar(context, "Location is required to proceed.");
         return;
@@ -1195,8 +1193,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSource,
-      provider.lat!.toString(),
-      provider.lng!.toString(),
+      masterProvider.lat!.toString(),
+      masterProvider.lng!.toString(),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,

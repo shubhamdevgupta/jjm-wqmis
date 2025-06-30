@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/Camera.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';

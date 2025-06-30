@@ -162,7 +162,7 @@ class WaterQualityParameterCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           /// Selection buttons
-          Text("Is water sample safe?",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
+          const Text("Is water sample safe?",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15),),
           const SizedBox(height: 5),
           Row(
             children: [

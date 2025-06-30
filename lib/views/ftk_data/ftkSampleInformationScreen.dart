@@ -258,7 +258,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
             ),
           ),
           const SizedBox(height: 6),
-          Divider(thickness: 1, color: Colors.white60),
+          const Divider(thickness: 1, color: Colors.white60),
           buildSchemeDropDown(masterProvider),
           buildSourceofScheme(masterProvider),
           buildEsrWater(masterProvider),
@@ -803,7 +803,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           children: [
                             buildTimeAddressRemarks(masterProvider),
 
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Center(
@@ -1355,7 +1355,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline, // Allows new line input
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             SizedBox(
