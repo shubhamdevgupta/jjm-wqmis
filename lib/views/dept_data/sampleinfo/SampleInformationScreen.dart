@@ -97,7 +97,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                   color: Colors.white,
                                   height: screenHeight * 0.8,
                                   width: screenwidth * 0.99,
-                                  child:  Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
+                                  child:  const Locationscreen(flag: AppConstants.openSampleInfoScreen,flagFloating: "",), // Your widget
                                 ),
                               );
                             },

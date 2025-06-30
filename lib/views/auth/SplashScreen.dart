@@ -6,7 +6,6 @@ import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/UpdateProvider.dart';
-import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 
 class SplashScreen extends StatefulWidget {

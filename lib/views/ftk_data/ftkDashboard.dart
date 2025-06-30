@@ -1,13 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
@@ -410,7 +408,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
+                                          const Text(
                                             AppConstants.totalSamplesalreadytested,
                                             style: TextStyle(
                                               fontSize: 16,
@@ -423,7 +421,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                           Text(
                                             '${ftkProvider.ftkDashboardResponse?.totalSampleTested}',
                                             // 🔹 Static value
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 20,
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,

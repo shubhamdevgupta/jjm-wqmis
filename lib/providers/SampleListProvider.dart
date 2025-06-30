@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import 'package:jjm_wqmis/models/SampleListResponse.dart';
 import 'package:jjm_wqmis/repository/SampleListRepo.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
@@ -12,6 +11,8 @@ class Samplelistprovider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   String errorMsg = '';
+  bool hasMore = true;
+  int PAGE = 1;
 
   int _baseStatus = 0;
 
@@ -34,7 +35,29 @@ class Samplelistprovider extends ChangeNotifier {
     try {
       final response = await _repository.fetchSampleList(regId, page, search,
           cstatus, sampleId, stateid, districtid, blockid, gpid, villageid);
-      samples = response.result;
+
+      // Make a safe local copy of current samples
+      final List<Sample> currentSamples = List.from(samples);
+
+// Get new items from API response
+      final List<Sample> newSamples = response.result;
+
+// Clear list only if it's the first page
+      if (PAGE == 1) {
+        currentSamples.clear();
+      }
+
+// Safely add new items
+      currentSamples.addAll(newSamples);
+
+// Update the state once all modifications are done
+      samples = currentSamples;
+
+// Update pagination flags
+      hasMore = newSamples.length >= 20; // Adjust to your backend's page size
+      if (hasMore) PAGE++; // Increment only if there's more to fetch
+
+// Handle status and messages
       _baseStatus = response.status;
       errorMsg = response.message;
     } catch (e) {
@@ -45,11 +68,14 @@ class Samplelistprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteSample(String encSid, String? userId, String deviceId, Function(String response) onSuccess,
+  Future<void> deleteSample(
+      String encSid,
+      String? userId,
+      String deviceId,
+      Function(String response) onSuccess,
       Function(String error) onError) async {
     notifyListeners();
     try {
-
       final response = await _repository.deleteSample(encSid, userId, deviceId);
 
       _baseStatus = response.status;
@@ -68,7 +94,6 @@ class Samplelistprovider extends ChangeNotifier {
   }
 
   bool deleteSampleFromList(int index, int targetSId) {
-
     bool exists = samples.any((sample) => sample.sId == targetSId);
     if (exists) {
       samples.removeWhere((sample) => sample.sId == targetSId);
@@ -79,7 +104,5 @@ class Samplelistprovider extends ChangeNotifier {
     // notifyListeners();
 
     return false;
-
-
   }
 }

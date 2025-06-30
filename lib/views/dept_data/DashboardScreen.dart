@@ -7,7 +7,6 @@ import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/LocationScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -149,7 +148,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             color: Colors.white,
                             height: screenHeight * 0.8,
                             width: screenwidth * 0.99,
-                            child:  Locationscreen(
+                            child:  const Locationscreen(
                               flag: AppConstants.openSampleInfoScreen,
                               flagFloating: "",
                             ),
@@ -526,7 +525,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     color: Colors.white,
                                     height: screenHeight * 0.8,
                                     width: screenwidth * 0.99,
-                                    child:  Locationscreen(
+                                    child:  const Locationscreen(
                                       flag: AppConstants.openSampleInfoScreen,
                                       flagFloating: "",
                                     ),

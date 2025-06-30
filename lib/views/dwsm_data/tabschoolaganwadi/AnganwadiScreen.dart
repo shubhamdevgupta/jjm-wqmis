@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
@@ -14,7 +15,6 @@ import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/Camera.dart';
-import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 
@@ -27,19 +27,20 @@ class AnganwadiScreen extends StatefulWidget {
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
   final session = UserSessionManager();
+  late Masterprovider masterProvider;
 
   Village? village;
 
   final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();
-  final lat = CurrentLocation.latitude;
-  final lng = CurrentLocation.longitude;
+
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await  session.init();
+      masterProvider = Provider.of<Masterprovider>(context, listen: false);
 
     });  }
 
@@ -541,7 +542,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     );
   }
 
-  Future<bool> validate(DwsmProvider dwsmprovider) async {
+  Future<bool> validate(DwsmProvider dwsmprovider, Masterprovider masterProvider) async {
     await dwsmprovider.fetchDeviceId();
 
     if (dwsmprovider.selectedAnganwadi == null) {
@@ -552,6 +553,19 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       dwsmprovider.errorMessage = "Please capture an image first.";
       return false;
     }
+    await masterProvider.fetchLocation();
+
+    if (masterProvider.lat == null || masterProvider.lng == null) {
+      await masterProvider.checkAndPromptLocation(context);
+
+      if (masterProvider.lat == null || masterProvider.lng == null) {
+        // User cancelled or GPS still off
+        ToastHelper.showSnackBar(context, "Location is required to proceed.");
+        return false;
+      }
+    }
+
+
     return true;
   }
 
@@ -889,7 +903,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Latitude: ${lat?.toStringAsFixed(5)}',
+                              'Latitude: ${masterProvider.lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -905,7 +919,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Longitude: ${lng?.toStringAsFixed(5)}',
+                              'Longitude: ${masterProvider.lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -927,7 +941,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
               width: double.infinity,
               child: ElevatedButton(
                   onPressed: () async {
-                    if (await validate(dwsmprovider)) {
+                    if (await validate(dwsmprovider,masterProvider)) {
                       await dwsmprovider.submitDemonstration(
                           session.regId,
                           int.parse(dwsmprovider.selectedAnganwadi!),
@@ -935,8 +949,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          lat.toString(),
-                          lng.toString(),
+                          masterProvider.lat.toString(),
+                          masterProvider.lng.toString(),
                           dwsmprovider.deviceId!, () {
                         showResponse(dwsmprovider);
                       });
