@@ -65,7 +65,7 @@ class AppRoutes {
           ),
 
       AppConstants.navigateToExceptionScreen: (context) =>
-          const ExceptionScreen(errorMessage: ''),
+          const ExceptionScreen(errorMessage: '',errorCode: "",),
       AppConstants.navigateToLocationScreen: (context) =>
            Locationscreen(flag: '',flagFloating: '',),
       AppConstants.navigateToSampleInformationScreen: (context) =>

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/services/AppResetService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 
 class ExceptionScreen extends StatelessWidget {
   final String errorMessage;
+  final String errorCode;
 
-  const ExceptionScreen({super.key, required this.errorMessage});
+  const ExceptionScreen({super.key, required this.errorMessage,required this.errorCode});
 
   @override
   Widget build(BuildContext context) {
-    final errorProvider = Provider.of<ErrorProvider>(context, listen: false);
 
     return SingleChildScrollView(
       child: Center(
@@ -37,11 +39,19 @@ class ExceptionScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  errorProvider.clearError();
-                  Navigator.of(context).pop(); // ✅ This dismisses the dialog
+                onPressed: () async {
+                  if(errorCode=="401"){
+                    final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+                    await authProvider.logoutUser();
+                    Navigator.of(context).pop(); // ✅ This dismisses the dialog
+                    await AppResetService.fullReset(context);
+                    Navigator.pushNamedAndRemoveUntil(context, AppConstants.navigateToLoginScreen,
+                          (route) => false,
+                    );
+                  }
+                  Navigator.of(context).pop();
                 },
-                child:  Text('Dismiss' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),),
+                child:  Text('OK' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),),
               ),
             ],
           ),

@@ -18,7 +18,6 @@ class BaseApiService {
   final encryption = AesEncryption(); // Put this at the top of your BaseApiService class
 
 
-
   Future<dynamic> post(
     String endpoint, {
     Map<String, String>? headers,
@@ -35,13 +34,8 @@ class BaseApiService {
     log('POST_Request ency--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-    try {
       await _checkConnectivity();
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+      final response = await http.post(url, headers: headers, body: body,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
@@ -51,16 +45,6 @@ class BaseApiService {
       log('Response Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } on TimeoutException{
-      throw ApiException('The connection has timed out. Please try again.');
-    }
-    catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('');
-    }
   }
 
   Future<dynamic> get(String endpoint,
@@ -77,7 +61,6 @@ class BaseApiService {
     log('GET Request: URL: $url');
     log('GET Request: Headers: ${headers.toString()}');
 
-    try {
       await _checkConnectivity();
 
       final response = await http.get(
@@ -91,16 +74,6 @@ class BaseApiService {
       log('Response: ${response.statusCode} : Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } on TimeoutException{
-      throw ApiException('The connection has timed out. Please try again.');
-    }
-    catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('API Error : $e');
-    }
   }
 
   Future<void> _checkConnectivity() async {
@@ -111,54 +84,65 @@ class BaseApiService {
     }
   }
 
+
   dynamic _processResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        try {
-          final rawJson = json.decode(response.body);
+    try {
+      switch (response.statusCode) {
+        case 200:
+            final rawJson = json.decode(response.body);
+            if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
+              final encryptedData = rawJson['EncryptedData'];
+              final decryptedString = encryption.decryptText(encryptedData);
+              final decryptedJson = json.decode(decryptedString);
+              log('Decrypted Response:  ${decryptedString.toString()}');
 
-          if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
-            final encryptedData = rawJson['EncryptedData'];
-            final decryptedString = encryption.decryptText(encryptedData);
-            final decryptedJson = json.decode(decryptedString);
-            return decryptedJson;
+              return decryptedJson;
+            }
+            return rawJson;
 
+        case 400:
+          throw ApiException(
+              'Something went wrong with your request. Please check and try again.',
+              response.statusCode.toString());
 
-          }
-          return rawJson;
-        } catch (e) {
-          throw ApiException('Failed to decode or decrypt response: $e');
-        }
+        case 401:
+          throw ApiException(
+              'Your session has expired or you are not authorized. Please log in again.',
+              response.statusCode.toString());
 
-      case 400:
-        throw ApiException(
-            'Something went wrong with your request. Please check and try again.');
+        case 404:
+          throw ApiException(
+              'Oops! The page or service you’re trying to reach is not available. Please contact support.',
+              response.statusCode.toString());
 
-      case 401:
-        throw ApiException(
-            'Your session has expired or you are not authorized. Please log in again.');
+        case 408:
+          throw ApiException(
+              'The request timed out. Please check your connection and try again.',
+              response.statusCode.toString());
 
-      case 404:
-        throw ApiException(
-            'Oops! The page or service you’re trying to reach is not available. Please contact support.');
+        case 500:
+          throw ApiException(
+              'Server encountered an error. Please try again later.',
+              response.statusCode.toString());
 
-      case 408:
-        throw ApiException(
-            'The request timed out. Please check your connection and try again.');
+        case 502:
+          throw ApiException(
+              'We’re experiencing server issues. Please try again shortly.',
+              response.statusCode.toString());
 
-      case 500:
-        throw ApiException(
-            'Server encountered an error. Please try again later.');
-
-      case 502:
-        throw ApiException(
-            'We’re experiencing server issues. Please try again shortly.');
-
-      default:
-        throw ApiException(
-            'Unexpected error occurred [${response.statusCode}]. Please try again.');
+        default:
+          throw ApiException(
+              'Unexpected error occurred [${response.statusCode}]. Please try again.',
+              response.statusCode.toString());
+      }
+    } catch (e) {
+      if (e is AppException) {
+        rethrow; // Let known exceptions pass through
+      }
+      throw ApiException('An unexpected error occurred: $e', response.statusCode.toString());
     }
   }
+
 
   String buildEncryptedQuery(Map<String, dynamic> params) {
     return params.entries.map((entry) {
@@ -203,8 +187,6 @@ Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
   });
 }
 
-
-// CALL IT LIKE final
 // final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
 // body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
 Map<String, dynamic> encryptDataClassBody(dynamic input) {
@@ -212,13 +194,11 @@ Map<String, dynamic> encryptDataClassBody(dynamic input) {
   return encryptJsonBody(rawMap);
 }
 
-
-
 Future<String> getEncryptedToken() async {
   final session = UserSessionManager();
 
   await session.init();
-  print("TOKKKK ${session.token}");
+  print("TOKEN :  ${session.token}");
   return session.token.toString();
 }
 enum ApiType {

@@ -14,11 +14,15 @@ class GlobalExceptionHandler {
 
     BuildContext context = navigatorKey.currentContext!;
     String errorMessage;
+    String httpErrCode;
 
     if (e is AppException) {
-      errorMessage = e.toString();
+      // errorMessage = e.toString();
+      errorMessage = e.message;
+      httpErrCode = e.httpErrCode;
     } else {
       errorMessage = 'Unexpected Error Occurred \n$e';
+      httpErrCode = "";
     }
 
     debugPrint("Error Handled: $errorMessage");
@@ -44,7 +48,7 @@ class GlobalExceptionHandler {
                 maxHeight: MediaQuery.of(context).size.height * 0.4,
                 maxWidth: MediaQuery.of(context).size.width * 0.8,
               ),
-              child: ExceptionScreen(errorMessage: errorMessage),
+              child: ExceptionScreen(errorMessage: errorMessage,errorCode: httpErrCode,),
             ),
           ),
         );
