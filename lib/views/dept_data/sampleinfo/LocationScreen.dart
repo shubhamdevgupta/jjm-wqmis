@@ -15,7 +15,7 @@ class Locationscreen extends StatefulWidget {
   final String flag;
   final String flagFloating; // Declare flag parameter
 
-   Locationscreen({super.key, required this.flag , required this.flagFloating });
+   const Locationscreen({super.key, required this.flag , required this.flagFloating });
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();

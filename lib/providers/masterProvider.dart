@@ -16,7 +16,6 @@ import 'package:jjm_wqmis/models/LgdResponse.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
 import 'package:jjm_wqmis/models/ValidateVillage.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
-import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';

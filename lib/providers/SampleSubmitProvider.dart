@@ -4,8 +4,6 @@ import 'package:jjm_wqmis/models/FTK/SampleResponse.dart';
 import 'package:jjm_wqmis/repository/SampleSubRepo.dart';
 import 'package:jjm_wqmis/utils/DeviceUtils.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
-import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class Samplesubprovider extends ChangeNotifier {
   final Samplesubrepo _samplesubrepo = Samplesubrepo();

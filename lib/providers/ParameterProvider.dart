@@ -10,7 +10,6 @@ import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 
 import 'package:jjm_wqmis/models/Wtp/WtpLabResponse.dart';
 
-import 'package:jjm_wqmis/utils/AppConstants.dart';
 
 import 'package:jjm_wqmis/models/LabInchargeResponse/AllLabResponse.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/ParameterResponse.dart';

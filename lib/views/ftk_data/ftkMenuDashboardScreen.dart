@@ -19,12 +19,12 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
   final session = UserSessionManager();
   Map<String, int>? sampleCounts;
   final List<Color> balancedColors = [
-    Color(0xFFFFB74D), // 🔶 Light Orange – your warm, only light shade
-    Color(0xFF42A5F5), // 🔵 Medium Blue – professional and calm
-    Color(0xFF66BB6A), // 🟢 Medium Green – fresh and natural
-    Color(0xFFAB47BC), // 🟣 Medium Purple – elegant and refined
-    Color(0xFF5C6BC0), // 🔷 Indigo – strong but not too dark
-    Color(0xFF26A69A), // 🧊 Cyan-Green – cool alternative to teal
+    const Color(0xFFFFB74D), // 🔶 Light Orange – your warm, only light shade
+    const Color(0xFF42A5F5), // 🔵 Medium Blue – professional and calm
+    const Color(0xFF66BB6A), // 🟢 Medium Green – fresh and natural
+    const Color(0xFFAB47BC), // 🟣 Medium Purple – elegant and refined
+    const Color(0xFF5C6BC0), // 🔷 Indigo – strong but not too dark
+    const Color(0xFF26A69A), // 🧊 Cyan-Green – cool alternative to teal
   ];
 
   @override
@@ -111,7 +111,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -119,7 +119,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                       BoxShadow(
                                         color: Colors.grey.withOpacity(0.1),
                                         blurRadius: 6,
-                                        offset: Offset(0, 3),
+                                        offset: const Offset(0, 3),
                                       ),
                                     ],
                                   ),
@@ -141,7 +141,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Wrap(
                                         spacing: 6,
                                         runSpacing: 4,
@@ -225,12 +225,12 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       children: [
         Text(
           "$label: ",
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 12, color: Colors.teal, fontWeight: FontWeight.w500),
         ),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 12.5,
               color: Colors.black87,
               fontWeight: FontWeight.w600),

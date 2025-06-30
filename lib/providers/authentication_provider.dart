@@ -3,8 +3,6 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/main.dart';
-import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/repository/AuthenticaitonRepository.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 
@@ -14,7 +12,6 @@ import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
-import 'package:provider/provider.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();

@@ -7,7 +7,7 @@ class VersionUtils {
     try {
       final String version = await _channel.invokeMethod('getVersionName');
       return version;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return null;
     }
   }

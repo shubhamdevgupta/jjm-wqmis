@@ -15,7 +15,6 @@ import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
 import 'package:jjm_wqmis/utils/Camera.dart';
-import 'package:jjm_wqmis/utils/CurrentLocation.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 
