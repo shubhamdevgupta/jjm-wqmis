@@ -1,13 +1,14 @@
 class AppException implements Exception {
   final String message;
-  final String prefix;
+  final String httpErrCode;
 
-  AppException(this.message, this.prefix);
+  AppException(this.message, this.httpErrCode);
 
   @override
   String toString() {
-    return "$prefix$message";
+    return message;
   }
+
 }
 
 class NetworkException extends AppException {
@@ -16,6 +17,5 @@ class NetworkException extends AppException {
 }
 
 class ApiException extends AppException {
-  ApiException([String message = "Something went wrong with the API"])
-      : super(message, "");
+  ApiException(String message,String httpErrCode) : super(message, httpErrCode);
 }
