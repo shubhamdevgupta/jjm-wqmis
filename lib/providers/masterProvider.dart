@@ -74,9 +74,7 @@ class Masterprovider extends ChangeNotifier {
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
-  List<Lgdresponse> _villageDetails =
-      []; // Update to a List instead of a single object
-  List<Lgdresponse> get villageDetails => _villageDetails;
+  List<Lgdresponse> villageDetails = []; // Update to a List instead of a single object
 
   ValidateVillageResponse? _validateVillageResponse;
 
@@ -455,20 +453,20 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      String formattedLon = lon.toStringAsFixed(8);
-      String formattedLat = lat.toStringAsFixed(8);
+      villageDetails = await _masterRepository.fetchVillageLgd(lon,lat,);
+      print("village d-->$villageDetails");
 
-      _villageDetails = await _masterRepository.fetchVillageLgd(
-        double.parse(formattedLon),
-        double.parse(formattedLat),
-      );
-
-      if (_villageDetails.isEmpty) {
+      if (villageDetails.isEmpty) {
         errorMsg = "No village details found.";
+        print("empty--->");
       }
     } catch (e) {
-      debugPrint('Error in fetchVillageDetails: $e');
-      errorMsg = e.toString();
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      } else {
+        print("Non-Exception error: $e");
+      }
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -580,8 +578,7 @@ class Masterprovider extends ChangeNotifier {
     errorMsg = "";
     notifyListeners();
     try {
-      _validateVillageResponse =
-          await _masterRepository.validateVillage(villageId, lgdCode);
+      _validateVillageResponse = await _masterRepository.validateVillage(villageId, lgdCode);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -765,7 +762,7 @@ class Masterprovider extends ChangeNotifier {
     wtsFilterList.clear();
     selectedWtsfilter = null;
 
-    _villageDetails.clear();
+    villageDetails.clear();
 
     _validateVillageResponse = null;
 
@@ -805,7 +802,7 @@ class Masterprovider extends ChangeNotifier {
     wtsFilterList.clear();
     selectedWtsfilter = null;
 
-    _villageDetails.clear();
+    villageDetails.clear();
 
     _validateVillageResponse = null;
 

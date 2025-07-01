@@ -154,8 +154,8 @@ class _LocationscreenState extends State<Locationscreen> {
                 ],
               ),
               const SizedBox(width: 10),
-              //district data here--------------
-              Column(
+              //district data here--  ------------
+            /*  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -198,13 +198,11 @@ class _LocationscreenState extends State<Locationscreen> {
                           value: session.districtId.toString(),
                           // Ensure this matches the selected value
 
-                          child: Text(
-                              session.districtName,
+                          child: Text(session.districtName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
-                                  fontWeight:
-                                  FontWeight.w500)), // Display state name
+                                  fontWeight: FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -220,10 +218,38 @@ class _LocationscreenState extends State<Locationscreen> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               const SizedBox(height: 12),
               //block data here--------------
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDropdown(
+                    value: masterProvider.selectedDistrictId,
+                    items: masterProvider.districts.map((districts) {
+                      return DropdownMenuItem<String>(
+                        value: districts.jjmDistrictId,
+                        child: Text(
+                          districts.districtName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    title: "District *",
+                    onChanged: (value) {
+                      masterProvider.setSelectedBlock(value);
+                      if (value != null&&value.isNotEmpty) {
+                        masterProvider.fetchBlocks(
+                            masterProvider.selectedStateId!,
+                            value);
+                      }
+                    },
+                    appBarTitle: "Select block",
+
+                  ),
+                ],
+              ), Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomDropdown(
@@ -296,6 +322,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       ));
                 }).toList(),
                 onChanged: (value) {
+                  print("village id -->$value");
                   masterProvider.setSelectedVillage(value);
                   if (value != null && value.isNotEmpty) {
                     masterProvider.fetchHabitations(
@@ -344,26 +371,41 @@ class _LocationscreenState extends State<Locationscreen> {
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
-                      masterProvider.fetchWatersourcefilterList();
-                      masterProvider.clearsampleinfo();
-                      Navigator.pop(context, true);
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
+
+                     /* */
+
+                      //TODO LGD code
+                      await masterProvider.fetchVillageDetails(78.907433, 26.750398);
+                      print('Going to Save Sample screen');
+
+                      final hasData = masterProvider.villageDetails.isNotEmpty;
+                      print("hasdata --> $hasData");
+
+                      if(hasData){
+                        final villageLgd = hasData ? masterProvider.villageDetails.first.villageLgd : "0";
+                        print("->lgd $villageLgd");
+                        await masterProvider.validateVillage(masterProvider.selectedVillage!, villageLgd);
+                      }
+
+                      print("village deatils not found");
+                      if (masterProvider.validateVillageResponse?.status == 1) {
+                        masterProvider.fetchWatersourcefilterList();
+                        masterProvider.clearsampleinfo();
+                        Navigator.pop(context, true);
+                        Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
+                      } else {
+                        ToastHelper.showToastMessage('Please check the location');
+                      }
+
+
+
+
                     } else {
                       /*ToastHelper.showErrorSnackBar(context, masterProvider.errorMsg);*/
                       ToastHelper.showToastMessage(masterProvider.errorMsg);
                     }
 
-                    //TODO LGD code
-                 /*   masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
-                    print('Going to Save Sample screen');
-                    final hasData = masterProvider.villageDetails.isNotEmpty;
-                    final villageLgd = hasData ? masterProvider.villageDetails.first.villageLgd : "0";
-                    masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
-                    if(masterProvider.validateVillageResponse!.status==1) {
-                      Navigator.pushReplacementNamed(context, '/savesample');
-                    }else{
-                      ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                    }*/
+
 
                   },
                   style: ElevatedButton.styleFrom(

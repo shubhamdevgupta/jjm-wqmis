@@ -187,8 +187,7 @@ class MasterRepository {
   Future<ValidateVillageResponse> validateVillage(
       String villageId, String lgdCode) async {
     try {
-      final response = await _apiService.get(
-        '/apimaster/validateVillage?villageid=$villageId&lgdcode=$lgdCode',
+      final response = await _apiService.get('/apimaster/validateVillage?villageid=$villageId&lgdcode=$lgdCode',
       );
 
        return ValidateVillageResponse.fromJson(response);
