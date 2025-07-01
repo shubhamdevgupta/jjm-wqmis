@@ -51,7 +51,8 @@ class ExceptionScreen extends StatelessWidget {
                   }
                   Navigator.of(context).pop();
                 },
-                child:  Text('OK' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),),
+                child:  Padding(padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                child: Text('OK' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),)),
               ),
             ],
           ),

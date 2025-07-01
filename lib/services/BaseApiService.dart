@@ -144,6 +144,7 @@ class BaseApiService {
 
 
   String buildEncryptedQuery(Map<String, dynamic> params) {
+    log("PARAM FOR ENCRYPTION : ${params.toString()}");
     return params.entries.map((entry) {
       final key = entry.key;
       final value = encryption.encryptText(entry.value.toString());
