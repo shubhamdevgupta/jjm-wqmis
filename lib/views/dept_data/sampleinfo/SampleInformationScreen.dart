@@ -200,12 +200,21 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               showSearchBar: true,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
+
+                // 🔴 Immediately hide the card by resetting both
+
+                masterProvider.setSelectedSubSource(null); // Optional: if you want to force hide
+                masterProvider.setSchemeChange(true);
+
+
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
                     value!, // <-- use directly here
                   );
-                } else if (masterProvider.selectedWtsfilter == "6") {
+                }
+
+                else if (masterProvider.selectedWtsfilter == "6") {
                   masterProvider.setSelectedSubSource(0);
                   masterProvider.setSelectedWTP("0");
                   masterProvider.fetchSourceInformation(
@@ -355,8 +364,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedSubSource != null &&
-              masterProvider.selectedWtsfilter == "2",
+          visible: masterProvider.selectedSubSource != null && masterProvider.selectedWtsfilter == "2" && masterProvider.isSchemeChange,
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -686,8 +694,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
 
   Widget buildHouseholdWater(Masterprovider masterProvider) {
     return Visibility(
-      visible: masterProvider.selectedWtsfilter == "3" &&
-          (masterProvider.selectedScheme?.isNotEmpty ?? false),
+      visible: masterProvider.selectedWtsfilter == "3" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
       child: Column(
         children: [
           Card(
@@ -747,7 +754,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             height: 10,
           ),
           Visibility(
-            visible: masterProvider.selectedHousehold == 3,
+            visible:  masterProvider.selectedHousehold == 3 &&  masterProvider.isSchemeChange ,
             child: Card(
               elevation: 5,
               // Increased elevation for a more modern shadow effect
@@ -780,8 +787,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
             ),
           ),
-          Visibility(
-            visible: masterProvider.selectedHousehold == 4,
+          Visibility(visible: masterProvider.selectedHousehold == 4 && masterProvider.isSchemeChange,
             child: Card(
               elevation: 5,
               // Increased elevation for a more modern shadow effect
@@ -832,8 +838,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
             height: 10,
           ),
           Visibility(
-            visible: masterProvider.selectedHousehold == 3 ||
-                masterProvider.selectedHousehold == 4,
+            visible: (masterProvider.selectedHousehold == 3 || masterProvider.selectedHousehold == 4 ) && masterProvider.isSchemeChange,
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -1086,14 +1091,12 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
 
   bool validateSourceofScheme(Masterprovider masterProvider) {
-    if (masterProvider.selectedScheme == null ||
-        masterProvider.selectedScheme!.isEmpty) {
+    if (masterProvider.selectedScheme == null || masterProvider.selectedScheme!.isEmpty) {
       masterProvider.errorMsg = "Scheme is empty or invalid.";
       return false;
     }
 
-    if (masterProvider.selectedWaterSource == "" ||
-        masterProvider.selectedWaterSource!.isEmpty) {
+    if (masterProvider.selectedWaterSource == "" || masterProvider.selectedWaterSource!.isEmpty) {
       masterProvider.errorMsg = "Water Source is empty or invalid";
       return false;
     }

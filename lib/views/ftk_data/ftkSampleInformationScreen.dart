@@ -204,6 +204,17 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     showSearchBar: true,
                     onChanged: (value) {
                       masterProvider.setSelectedScheme(value);
+
+                      masterProvider.setSchemeChange(false);
+                      masterProvider.setSelectedSubSource(null); // Optional: if you want to force hide
+
+                      // 🔃 Logic to determine if it should be shown later again
+                      if (sourceId == "2" || sourceId == "4"||sourceId == "5"|| masterProvider.selectedHousehold == 4) {
+                        // Optional delay or reset logic after API call if needed
+                        masterProvider.setSchemeChange(true);
+                      }  // 🔃 Logic to determine if it should be shown later again
+
+
                       if (sourceId == "5") {
                         masterProvider.fetchWTPList(
                           masterProvider.selectedStateId!,
@@ -350,7 +361,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           height: 10,
         ),
         Visibility(
-          visible: masterProvider.selectedSubSource != null && sourceId == "2",
+          visible: masterProvider.selectedSubSource != null && sourceId == "2" && masterProvider.isSchemeChange,
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -752,7 +763,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
             ),
           ),
           Visibility(
-            visible: masterProvider.selectedHousehold == 4,
+            visible: masterProvider.selectedHousehold == 4 && masterProvider.isSchemeChange ,
             child: Card(
               elevation: 5,
               // Increased elevation for a more modern shadow effect
@@ -984,7 +995,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
         ),
         Visibility(
           visible:
-              masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4",
+              masterProvider.selectedHandpumpPrivate == 7 && sourceId == "4" && masterProvider.isSchemeChange,
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(

@@ -108,6 +108,13 @@ class Masterprovider extends ChangeNotifier {
 
   String? get selectedDatetimeSampleTested => _selectedDatetimeSampleTested;
 
+  bool isSchemeChange = false;
+
+  void setSchemeChange(bool value) {
+    isSchemeChange = value;
+    notifyListeners();
+  }
+
   final TextEditingController householdController = TextEditingController();
   final TextEditingController handpumpSourceController = TextEditingController();
   final TextEditingController handpumpLocationController = TextEditingController();
