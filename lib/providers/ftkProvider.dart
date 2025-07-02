@@ -17,7 +17,7 @@ class Ftkprovider extends ChangeNotifier {
   int selectedParam = 0;
   List<FtkParameter> ftkParameterList = [];
   String errorMessage = '';
-  int baseStatus = 101;
+  int baseStatus = 123;
   int? selectedValue; // Add this if not already present
 
   bool isSubmitData = false;
@@ -25,12 +25,10 @@ class Ftkprovider extends ChangeNotifier {
   FtkDashboardResponse? ftkDashboardResponse;
   String errorMsg = '';
 
-
   String? _deviceId;
   String? get deviceId => _deviceId;
 
   List<FtkSample> ftkSample = []; // Correctly storing List<Sample>
-
 
   Future<void> fetchDeviceId() async {
     _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
@@ -194,8 +192,6 @@ class Ftkprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
- // [log] Response: 200 : Body: {"Status":1,"Message":"List of Water Source","Result":[{"Id":2,"SourceType":"Sources of Schemes \r\n(Raw water)"},{"Id":5,"SourceType":"WTP of PWS schemes (Treatment) "},{"Id":6,"SourceType":"Storage Structure (ESR/GSR)"},{"Id":3,"SourceType":"Households /school /AWCs"},{"Id":4,"SourceType":"Handpumps and other private sources"}]}
 
   Map<String, int> getSampleCountsMap() {
     final response = ftkDashboardResponse;
