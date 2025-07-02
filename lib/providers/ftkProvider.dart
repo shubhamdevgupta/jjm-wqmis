@@ -79,7 +79,6 @@ class Ftkprovider extends ChangeNotifier {
   }
 
 
-
   Future<void> saveFtkData(
       mobileNumber,
       regId,
