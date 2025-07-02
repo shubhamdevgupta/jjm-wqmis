@@ -21,7 +21,9 @@ import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 
 class MasterRepository {
   final BaseApiService _apiService = BaseApiService();
-  final encryption= AesEncryption();
+
+  final encryption = AesEncryption();
+
   Future<BaseResponseModel<Stateresponse>> fetchStates() async {
       final response = await _apiService.get('/apimasterA/GetState');
       return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
