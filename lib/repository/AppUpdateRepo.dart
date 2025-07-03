@@ -10,7 +10,7 @@ class Appupdaterepo extends ChangeNotifier {
   Future<Updateresponse> fetchUpdateInfo() async {
     try {
       final response = await _apiService.get(
-        'shubhamdevgupta/jjm-wqmis/contents/assets/update_info.json?ref=SchemeSelectionFix&ts=${DateTime.now().millisecondsSinceEpoch}',
+        'shubhamdevgupta/jjm-wqmis/contents/assets/update_info.json?ref=master&ts=${DateTime.now().millisecondsSinceEpoch}',
         apiType: ApiType.github,
       );
 
