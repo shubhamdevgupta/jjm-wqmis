@@ -608,6 +608,12 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
+
+  void setSelectedSubSource(int? value) {
+    _selectedSubSource = value;
+    notifyListeners(); // Notify listeners to rebuild the widget
+  }
+
   void setSelectedWaterSourcefilterOnly(String? value) {
     selectedWtsfilter = value;
     notifyListeners(); // Notify listeners to rebuild the widget
