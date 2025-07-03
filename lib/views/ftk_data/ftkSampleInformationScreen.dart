@@ -606,6 +606,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       ),
                       InkWell(
                         onTap: () async {
+                          masterProvider.selectRadioOption(4);
                           masterProvider.householdController.clear();
                           masterProvider.setSelectedHabitation("0");
                           masterProvider.setSelectedSubSource(2);
