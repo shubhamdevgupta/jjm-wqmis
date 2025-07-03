@@ -149,84 +149,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       ),
     );
   }
-
-  Widget buildSchemeDropDown(Masterprovider masterProvider) {
-    return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            12),
-      ),
-      margin: const EdgeInsets.all(5),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Select Scheme",
-              style: TextStyle(
-                fontSize: 16, fontFamily: 'OpenSans',
-                fontWeight: FontWeight.bold,
-                color:
-                Colors.black87, // Dark text for better readability
-
-
-              ),
-            ),
-
-            const Divider(
-              height: 10,
-              color: Colors.grey,
-              thickness: 1,
-            ),
-            const SizedBox(height: 4), // Space between title and dropdown
-            CustomDropdown(
-              value: masterProvider.selectedScheme,
-              items: masterProvider.schemes.map((scheme) {
-                return DropdownMenuItem<String>(
-                  value: scheme.schemeId.toString(),
-                  child: Text(
-                    scheme.schemeName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
-                  ),
-                );
-              }).toList(),
-              title: "",
-              appBarTitle: "Select Scheme",
-              showSearchBar: true,
-              onChanged: (value) {
-                masterProvider.setSelectedScheme(value);
-                if (masterProvider.selectedWtsfilter == "5") {
-                  masterProvider.fetchWTPList(
-                    masterProvider.selectedStateId!,
-                    value!, // <-- use directly here
-                  );
-                } else if (masterProvider.selectedWtsfilter == "6") {
-                  masterProvider.setSelectedSubSource(0);
-                  masterProvider.setSelectedWTP("0");
-                  masterProvider.fetchSourceInformation(
-                    masterProvider.selectedVillage!,
-                    masterProvider.selectedHabitation!,
-                    masterProvider.selectedWtsfilter!,
-                    "0",
-                    masterProvider.selectedSubSource.toString(),
-                    masterProvider.selectedWtp!,
-                    masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
-                  );
-                }
-              },
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget buildSampleTaken(Masterprovider masterProvider) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -245,7 +167,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               padding: const EdgeInsets.all(8.0),
               child: CustomDropdown(
                 title:
-                    "Sample source location",
+                "Sample source location",
                 value: masterProvider.selectedWtsfilter,
                 items: masterProvider.wtsFilterList.map((wtsFilter) {
                   return DropdownMenuItem<String>(
@@ -283,12 +205,90 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
+
+  Widget buildSchemeDropDown(Masterprovider masterProvider) {
+    return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+            12),
+      ),
+      margin: const EdgeInsets.all(5),
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Select Scheme",
+              style: TextStyle(
+                fontSize: 16, fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                color:
+                Colors.black87, // Dark text for better readability
+              ),
+            ),
+
+            const Divider(
+              height: 10,
+              color: Colors.grey,
+              thickness: 1,
+            ),
+            const SizedBox(height: 4), // Space between title and dropdown
+            CustomDropdown(
+              value: masterProvider.selectedScheme,
+              items: masterProvider.schemes.map((scheme) {
+                return DropdownMenuItem<String>(
+                  value: scheme.schemeId.toString(),
+                  child: Text(
+                    scheme.schemeName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                  ),
+                );
+              }).toList(),
+              title: "",
+              appBarTitle: "Select Scheme",
+              showSearchBar: true,
+              onChanged: (value) {
+                masterProvider.setSelectedScheme(value);
+
+                masterProvider.clearSelection();
+
+                if (masterProvider.selectedWtsfilter == "5") {
+                  masterProvider.fetchWTPList(
+                    masterProvider.selectedStateId!,
+                    value!, // <-- use directly here
+                  );
+                } else if (masterProvider.selectedWtsfilter == "6") {
+                  masterProvider.setSelectedSubSource(0);
+                  masterProvider.setSelectedWTP("0");
+                  masterProvider.fetchSourceInformation(
+                    masterProvider.selectedVillage!,
+                    masterProvider.selectedHabitation!,
+                    masterProvider.selectedWtsfilter!,
+                    "0",
+                    masterProvider.selectedSubSource.toString(),
+                    masterProvider.selectedWtp!,
+                    masterProvider.selectedStateId!,
+                    masterProvider.selectedScheme!,
+                  );
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" &&
-              (masterProvider.selectedScheme?.isNotEmpty ?? false),
+          visible: masterProvider.selectedWtsfilter == "2" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(
