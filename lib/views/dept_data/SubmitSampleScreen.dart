@@ -212,8 +212,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         ),
                                                       ),
                                                     ],
-                                                  )
-                                                  ,
+                                                  ),
                                                 ),
 
                                                 const Divider(),
