@@ -203,6 +203,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     appBarTitle: "Select Scheme",
                     showSearchBar: true,
                     onChanged: (value) {
+
+                      masterProvider.clearSelection();
+
                       masterProvider.setSelectedScheme(value);
                       if (sourceId == "5") {
                         masterProvider.fetchWTPList(
@@ -369,7 +372,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   masterProvider.baseStatus == 0
                       ? AppTextWidgets.errorText(masterProvider.errorMsg)
                       : CustomDropdown(
-                          title: "Select Water Source *",
+                          title: "Select Water Source *",appBarTitle: "Select Water Source",
                           value: masterProvider.selectedWaterSource,
                           items: masterProvider.waterSource.map((waterSource) {
                             return DropdownMenuItem<String>(

@@ -255,9 +255,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
 
-                masterProvider.setSelectedSubSource(null);
-                masterProvider.setSelectedHouseHold(null);
-                masterProvider.setSelectedHandpump(null);
+                masterProvider.clearSelection();
 
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(

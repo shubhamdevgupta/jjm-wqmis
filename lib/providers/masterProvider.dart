@@ -609,8 +609,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
 
-  void setSelectedSubSource(int? value) {
-    _selectedSubSource = value;
+  void clearSelectedSubSource() {
+    _selectedSubSource = null;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
@@ -920,5 +920,11 @@ class Masterprovider extends ChangeNotifier {
     selectedWtsfilter = null;
     selectedScheme = null;
     notifyListeners();
+  }
+
+  void clearSelection(){
+    clearSelectedSubSource();
+    setSelectedHouseHold(null);
+    setSelectedHandpump(null);
   }
 }
