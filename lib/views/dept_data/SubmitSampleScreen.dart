@@ -146,7 +146,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: SizedBox(
+                                        child: SizedBox(width: double.infinity,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
@@ -162,10 +162,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                         scrollDirection: Axis.horizontal,
                                                         child: Row(
                                                           children: [
-                                                            _buildHeaderCell('Sr. No.', width: 60),
-                                                            _buildHeaderCell('Test Name', width: MediaQuery.of(context).size.width * 0.4),
-                                                            _buildHeaderCell('Price', width: 85),
-                                                            _buildHeaderCell('Action', width: 60),
+                                                            _buildHeaderCell(' Sr ', width: 35),
+                                                            _buildHeaderCell('Test Name', width: MediaQuery.of(context).size.width * 0.50),
+                                                            _buildHeaderCell('Price', width: 60),
+                                                            _buildHeaderCell('Action', width: 50),
                                                           ],
                                                         ),
                                                       ),
@@ -182,11 +182,11 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                   var param = entry.value;
                                                                   return Row(
                                                                     children: [
-                                                                      _buildRowCell('${index + 1}', width: 60),
-                                                                      _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.4),
-                                                                      _buildRowCell(param.deptRate.toString(), width: 85),
+                                                                      _buildRowCell('${index + 1}', width: 35),
+                                                                      _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.50),
+                                                                      _buildRowCell(param.deptRate.toString(), width: 60),
                                                                       SizedBox(
-                                                                        width: 60,
+                                                                        width: 50,
                                                                         child: IconButton(
                                                                           icon: const Icon(Icons.delete, color: Colors.red),
                                                                           onPressed: () {
@@ -1191,7 +1191,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   Widget _buildHeaderCell(String text, {required double width}) {
     return Container(
       width: width,
-      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0,left: 2.0,right: 2.0),
+      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0,left: 2.0,right: 4.0),
       color: Colors.blue,
       child: Text(
         text,
