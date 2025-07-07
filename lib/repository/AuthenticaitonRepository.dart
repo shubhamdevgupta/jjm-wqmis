@@ -33,9 +33,9 @@ class AuthenticaitonRepository {
 
       final query = _apiService.buildEncryptedQuery({
         'role_id': roleId,
-        'userid': userId,
+        'reg_id': userId,
         'stateid': stateId,
-      });
+      });  //
 
 
       final response = await _apiService.get('/apiMobileA/dashbord?$query');

@@ -33,22 +33,19 @@ class Samplelistprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      if(sampleId.isNotEmpty){
+        samples.clear();
+      }  // if user is searching by id clear existing list
       final response = await _repository.fetchSampleList(regId, page, search,
           cstatus, sampleId, stateid, districtid, blockid, gpid, villageid);
 
-      // Make a safe local copy of current samples
       final List<Sample> currentSamples = List.from(samples);
-
-// Get new items from API response
       final List<Sample> newSamples = response.result;
 
-// Clear list only if it's the first page
       if (PAGE == 1) {
         currentSamples.clear();
       }
-
-// Safely add new items
-      currentSamples.addAll(newSamples);
+      currentSamples.addAll(newSamples);// Safely add new items
 
 // Update the state once all modifications are done
       samples = currentSamples;

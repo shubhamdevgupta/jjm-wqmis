@@ -233,19 +233,12 @@ class _SampleListScreenState extends State<SampleListScreen> {
                           onPressed: () {
                             if (searchController.text.isNotEmpty) {
                               provider.fetchSampleList(session.regId, 1,
-                                  "", 0, searchController.text, 0, 0, 0, 0, 0);
+                                  "0", 0, searchController.text, 0, 0, 0, 0, 0);
                             } else {
-                              ToastHelper.showErrorSnackBar(
-                                  context, "Please enter sample id");
+                              ToastHelper.showErrorSnackBar(context, "Please enter sample id");
                             }
                           },
-                          child: const Text(
-                            "Search",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'OpenSans',
-                            ),
-                          ),
+                          child: const Text("Search", style: TextStyle(color: Colors.white, fontFamily: 'OpenSans',),),
                         ),
                       ],
                     ),
