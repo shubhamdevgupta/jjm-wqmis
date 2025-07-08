@@ -42,14 +42,14 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
           session.districtId.toString(),
           session.blockId.toString(),
           session.panchayatId.toString(),
-          session.villageId.toString());
+          session.villageId.toString(),session.regId);
 
       await masterProvider.fetchSchemes(
           session.stateId.toString(),
           session.districtId.toString(),
           session.villageId.toString(),
           masterProvider.selectedHabitation!,
-          sourceId.toString());
+          sourceId.toString(),session.regId);
     });
   }
 

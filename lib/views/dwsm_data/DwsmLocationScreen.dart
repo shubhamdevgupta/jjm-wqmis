@@ -260,7 +260,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                       masterProvider.setSelectedBlock(value);
                       if (value != null) {
                         masterProvider.fetchGramPanchayat(
-                            masterProvider.selectedStateId!, session.districtId.toString(), value);
+                            masterProvider.selectedStateId!, session.districtId.toString(), value,session.regId);
                       }
                     },
                     appBarTitle: "Select Block",
@@ -286,7 +286,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                   masterProvider.setSelectedGrampanchayat(value);
                   if (value != null) {
                     masterProvider.fetchVillage(masterProvider.selectedStateId!,
-                        session.districtId.toString(), masterProvider.selectedBlockId!, value);
+                        session.districtId.toString(), masterProvider.selectedBlockId!, value,session.regId);
                   }
                 },
                 appBarTitle: "Select Gram Panchayat",
@@ -313,7 +313,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         session.districtId.toString(),
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
-                        value);
+                        value,session.regId);
                     masterProvider.fetchWatersourcefilterList();
                   }
                 },

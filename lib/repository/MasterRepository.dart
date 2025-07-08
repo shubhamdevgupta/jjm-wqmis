@@ -66,13 +66,15 @@ class MasterRepository {
 
 
   Future<BaseResponseModel<GramPanchayatresponse>> fetchGramPanchayats(
-      String stateId, String districtId, String blockId) async {
+      String stateId, String districtId, String blockId,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'districtid': districtId,
         'blockid': blockId,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get('/apimasterA/GetGramPanchayat?$query',);
@@ -86,7 +88,7 @@ class MasterRepository {
   }
 
   Future<BaseResponseModel<Villageresponse>> fetchVillages(
-      String stateId, String districtId, String blockId, String gpId) async {
+      String stateId, String districtId, String blockId, String gpId,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
@@ -94,6 +96,8 @@ class MasterRepository {
         'districtid': districtId,
         'blockid': blockId,
         'gpid': gpId,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get('/apimasterA/Getvillage?$query',);
@@ -111,7 +115,9 @@ class MasterRepository {
       String districtId,
       String blockId,
       String gpId,
-      String villageId) async {
+      String villageId,
+      int regId
+      ) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
@@ -120,6 +126,8 @@ class MasterRepository {
         'blockid': blockId,
         'gpid': gpId,
         'villageid': villageId,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get(
@@ -140,6 +148,7 @@ class MasterRepository {
       String villageId,
       String habitationId,
       String filter,
+      int regId
       ) async {
     try {
 
@@ -148,7 +157,9 @@ class MasterRepository {
         'districtid': districtId,
         'villageid': villageId,
         'habitationid': habitationId,
-        'filter': filter
+        'filter': filter,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get('/apimasterA/getScheme?$query');

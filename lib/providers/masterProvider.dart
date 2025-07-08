@@ -197,7 +197,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchGramPanchayat(
-      String stateId, String districtId, String blockId) async {
+      String stateId, String districtId, String blockId ,int regId) async {
     if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty) {
       errorMsg = "Please select State, District, and Block.";
       notifyListeners();
@@ -209,7 +209,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
-          stateId, districtId, blockId);
+          stateId, districtId, blockId,regId);
 
       baseStatus = rawGPs.status;
 
@@ -235,7 +235,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchVillage(
-      String stateId, String districtId, String blockId, String gpID) async {
+      String stateId, String districtId, String blockId, String gpID,int regId) async {
     if (stateId.isEmpty ||
         districtId.isEmpty ||
         blockId.isEmpty ||
@@ -250,7 +250,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawVillages = await _masterRepository.fetchVillages(
-          stateId, districtId, blockId, gpID);
+          stateId, districtId, blockId, gpID,regId);
 
       baseStatus = rawVillages.status;
 
@@ -267,7 +267,7 @@ class Masterprovider extends ChangeNotifier {
             districtId,
             blockId,
             gpID,
-            singleVillage.jjmVillageId,
+            singleVillage.jjmVillageId,regId
           );
         }
       } else {
@@ -284,7 +284,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchHabitations(String stateId, String districtId,
-      String blockId, String gpId, String villageId) async {
+      String blockId, String gpId, String villageId,int regId) async {
     if ([stateId, districtId, blockId, gpId, villageId].any((e) => e.isEmpty)) {
       errorMsg = "Please select all fields to load habitations.";
       notifyListeners();
@@ -296,7 +296,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawHabitations = await _masterRepository.fetchHabitations(
-          stateId, districtId, blockId, gpId, villageId);
+          stateId, districtId, blockId, gpId, villageId,regId);
 
       baseStatus = rawHabitations.status;
 
@@ -322,12 +322,12 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
-      String filter) async {
+      String filter,int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final mSchemes = await _masterRepository.fetchSchemes(stateId,
-          districtid, villageId, habitationId, filter);
+          districtid, villageId, habitationId, filter,regId);
       baseStatus = mSchemes.status;
 
       if (baseStatus == 1) {
