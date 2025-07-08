@@ -49,7 +49,7 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
                   FloatingActionButton(
                     onPressed: () async{
                       if (provider.cart!.isNotEmpty) {
-                        provider.fetchLabIncharge(int.parse(provider.selectedLab!));
+                        provider.fetchLabIncharge(int.parse(provider.selectedLab!),session.regId);
                         provider.isLab=true;
                         Navigator.push(
                           context,
@@ -328,6 +328,6 @@ class _AsPerLabTabView extends State<AsPerLabTabView> {
         masterProvider.selectedBlockId!,
         masterProvider.selectedGramPanchayat!,
         masterProvider.selectedVillage!,
-        "1");
+        "1",session.regId);
   }
 }

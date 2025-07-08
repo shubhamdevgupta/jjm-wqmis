@@ -277,7 +277,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                                     paramProvider.removeFromCart(param);
                                                                                     if (paramProvider.isParam) {
                                                                                       var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
-                                                                                      paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId);
+                                                                                      paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId,session.regId);
                                                                                       paramProvider.selectedLab = "";
                                                                                     }
                                                                                   } else {
@@ -711,7 +711,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                             paramProvider
                                                                 .fetchLabIncharge(
                                                                     selectedLab
-                                                                        .labId);
+                                                                        .labId,session.regId);
                                                             paramProvider
                                                                 .setSelectedLab(
                                                                     value);

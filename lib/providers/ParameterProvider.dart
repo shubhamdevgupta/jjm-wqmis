@@ -74,11 +74,11 @@ class ParameterProvider with ChangeNotifier {
   int baseStatus = 0;
 
   Future<void> fetchAllLabs(String stateId, String districtId, String blockId,
-      String gpId, String villageId, String isAll) async {
+      String gpId, String villageId, String isAll, int regId) async {
     _isLoading = true;
     try {
       final rawLabList = await _lapparameterrepository.fetchAllLab(
-          stateId, districtId, blockId, gpId, villageId, isAll);
+          stateId, districtId, blockId, gpId, villageId, isAll,regId);
       if (rawLabList.status == 1) {
         labList = rawLabList.result;
       } else {
@@ -111,12 +111,12 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchLabIncharge(int labId) async {
+  Future<void> fetchLabIncharge(int labId, int regId) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      labIncharge = await _lapparameterrepository.fetchLabIncharge(labId);
+      labIncharge = await _lapparameterrepository.fetchLabIncharge(labId,regId);
       if (labIncharge != null) {
         baseStatus = labIncharge!.status;
         errorMsg = labIncharge!.message;
@@ -136,17 +136,17 @@ class ParameterProvider with ChangeNotifier {
     notifyListeners();
   }
   /// Fetch Labs from API
-  Future<void> fetchParamLabs(String stateId, String parameterIds) async {
+  Future<void> fetchParamLabs(String stateId, String parameterIds, int regId) async {
     _isLoading = true;
     notifyListeners(); // Notify before starting the fetch
 
     try {
-      var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds);
+      var response = await _lapparameterrepository.fetchParamLabs(stateId, parameterIds,regId);
 
       if (response.status == 1) {
         _labResponse = response.result;
         _selectedParamLabId = response.result.first.labId;
-        fetchLabIncharge(_selectedParamLabId!);
+        fetchLabIncharge(_selectedParamLabId!,regId);
       } else {
         errorMsg = response.message;
       }
@@ -160,13 +160,13 @@ class ParameterProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPLab(Masterprovider masterProvider) async {
+  Future<void> fetchWTPLab(Masterprovider masterProvider, int regId) async {
     _isLoading = true;
     notifyListeners();
 
     try {
       final response = await _lapparameterrepository.fetchWtpLabs(
-          masterProvider.selectedStateId!, masterProvider.selectedWtp!);
+          masterProvider.selectedStateId!, masterProvider.selectedWtp!,regId);
 
       if (response.status == 1) {
         wtpLab = response.result;

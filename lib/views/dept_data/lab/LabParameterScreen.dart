@@ -64,7 +64,7 @@ class _LabParameterScreen extends State<Labparameterscreen>
       masterProvider.selectedBlockId!,
       masterProvider.selectedGramPanchayat!,
       masterProvider.selectedVillage!,
-      "1",
+      "1",session.regId
     );
   }
 

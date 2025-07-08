@@ -14,7 +14,7 @@ class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<Alllabresponse>> fetchAllLab(String StateId, String districtId,
-      String blockid, String gpid, String villageid, String isall) async {
+      String blockid, String gpid, String villageid, String isall, int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
@@ -24,6 +24,7 @@ class Lapparameterrepository {
         'gpid': gpid,
         'villageid': villageid,
         'isall': isall,
+        'reg_Id' :regId
       });
 
       final response = await _apiService.get('/apimasterA/Getalllab?$query');
@@ -59,11 +60,12 @@ class Lapparameterrepository {
     }
   }
 
-  Future<Labinchargeresponse?> fetchLabIncharge(int labId) async {
+  Future<Labinchargeresponse?> fetchLabIncharge(int labId, int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'labid': labId,
+        'reg_Id' :regId
       });
 
       final response = await _apiService.get('APIMasterA/getLabIncharge?$query');
@@ -78,12 +80,14 @@ class Lapparameterrepository {
 
 
 
-  Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds) async {
+  Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds, int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'StateId': stateId,
         'parameter_ids': parameterIds,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get("APIMasterA/getLaboratoriesby_parameter_ids?$query");
@@ -95,12 +99,14 @@ class Lapparameterrepository {
       rethrow; // Return null in case of an error
     }
   }
-  Future<BaseResponseModel<WtpLab>> fetchWtpLabs(String stateId, String wtpId) async {
+  Future<BaseResponseModel<WtpLab>> fetchWtpLabs(String stateId, String wtpId, int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'wtpid': wtpId,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get('/apimasterA/GetwtpLab?$query');
