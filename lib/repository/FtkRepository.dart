@@ -13,13 +13,14 @@ class FtkRepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<FtkParameter>> fetchParameterList(
-      int stateId, int districtId) async {
+      int stateId, int districtId,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery(
         {
           'StateId': stateId.toString(),
           'DistrictId': districtId.toString(),
+          'reg_Id' :regId
         },
       );
 

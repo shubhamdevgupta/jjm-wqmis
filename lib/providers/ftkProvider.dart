@@ -36,13 +36,13 @@ class Ftkprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchParameterList(int stateId, int districtId,) async {
+  Future<void> fetchParameterList(int stateId, int districtId,int regId) async {
     _isLoading = true;
 
     notifyListeners();
     try {
       final rawParamList =
-          await _ftkRepository.fetchParameterList(stateId, districtId);
+          await _ftkRepository.fetchParameterList(stateId, districtId,regId);
 
       if (rawParamList.status == 1) {
         ftkParameterList = rawParamList.result;

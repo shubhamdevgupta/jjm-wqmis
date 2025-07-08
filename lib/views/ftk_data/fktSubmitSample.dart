@@ -34,7 +34,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      await session.init();
       final ftkProvider = Provider.of<Ftkprovider>(context, listen: false);
-      await ftkProvider.fetchParameterList(session.stateId, session.districtId);
+      await ftkProvider.fetchParameterList(session.stateId, session.districtId,session.regId);
       masterProvider = Provider.of<Masterprovider>(context, listen: false);
     });
 
