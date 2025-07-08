@@ -33,6 +33,9 @@ class Samplelistprovider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      if(sampleId.isNotEmpty){
+        samples.clear();
+      }
       final response = await _repository.fetchSampleList(regId, page, search,
           cstatus, sampleId, stateid, districtid, blockid, gpid, villageid);
 
