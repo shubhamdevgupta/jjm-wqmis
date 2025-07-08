@@ -38,7 +38,7 @@ class DwsmRepository{
   }
 
   Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int stateId, int districtId,
-      int blockId, int gpId, int villageId, int type) async {
+      int blockId, int gpId, int villageId, int type, int regId) async {
     try {
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
@@ -47,6 +47,7 @@ class DwsmRepository{
         'gpid': gpId,
         'villageid': villageId,
         'type': type,
+        'reg_id': regId,
       });
 
       final response = await _apiService.get(
@@ -59,13 +60,14 @@ class DwsmRepository{
   }
 
   Future<BaseResponseModel<DashboardSchoolModel>> fetchDashboardSchoolList(int stateId, int districtId,
-      int demonstrationType) async {
+      int demonstrationType, int regId) async {
     try {
       final response = await _apiService.post('APIMobileA/GetSchoolAWCsListDetails',
         body: jsonEncode(encryptDataClassBody({
           "StateId": stateId,
           "DistrictId": districtId,
           "DemonstrationType": demonstrationType,
+          "Reg_id": regId,
         })));
 
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
@@ -110,7 +112,7 @@ class DwsmRepository{
   Future<Dwsmdashboardresponse> fetchDwsmDashboard(int userId) async {
 
     final query = _apiService.buildEncryptedQuery({
-      'userid': userId,
+      'reg_id': userId,
     });
 
     try {

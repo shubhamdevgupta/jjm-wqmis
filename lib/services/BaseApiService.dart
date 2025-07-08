@@ -190,6 +190,7 @@ Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
 // final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
 // body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
 Map<String, dynamic> encryptDataClassBody(dynamic input) {
+  log("PARAM FOR ENCRYPTION POST : ${input}");
   final Map<String, dynamic> rawMap = (input is Map<String, dynamic>) ? input : input.toJson();
   return encryptJsonBody(rawMap);
 }
