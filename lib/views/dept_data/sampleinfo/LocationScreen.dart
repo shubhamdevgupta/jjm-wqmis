@@ -344,7 +344,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
-                      masterProvider.fetchWatersourcefilterList();
+                      masterProvider.fetchWatersourcefilterList(session.regId);
                       masterProvider.clearsampleinfo();
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);

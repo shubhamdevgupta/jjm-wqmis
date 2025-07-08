@@ -173,10 +173,14 @@ class MasterRepository {
   }
 
 
-  Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList() async {
+  Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
     try {
 
-      final response = await _apiService.get('/apimasterA/Get_water_source_filter');
+      final query = _apiService.buildEncryptedQuery({
+        'reg_Id' :regId
+      });
+
+      final response = await _apiService.get('/apimasterA/Get_water_source_filter?$query');
       return BaseResponseModel<Watersourcefilterresponse>.fromJson(response,(json)=> Watersourcefilterresponse.fromJson(json));
 
     } catch (e) {
@@ -194,6 +198,7 @@ class MasterRepository {
       String wtpId,
       String stateId,
       String schemeId,
+      int regId
       ) async {
     try {
       final query = _apiService.buildEncryptedQuery({
@@ -205,6 +210,8 @@ class MasterRepository {
         'wtpid': wtpId,
         'stateid': stateId,
         'schemeid': schemeId,
+        'reg_Id' :regId
+
       });
 
 
@@ -221,12 +228,14 @@ class MasterRepository {
 
 
 
-  Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId, String schemeId) async {
+  Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId, String schemeId,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'schemeid': schemeId,
+        'reg_Id' :regId
+
       });
 
       final response = await _apiService.get(
@@ -263,12 +272,13 @@ class MasterRepository {
   }
 
   Future<ValidateVillageResponse> validateVillage(
-      String villageId, String lgdCode) async {
+      String villageId, String lgdCode,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'villageid': villageId,
         'lgdcode': lgdCode,
+        'reg_Id' :regId
       });
 
       final response = await _apiService.get(
@@ -281,11 +291,6 @@ class MasterRepository {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow; // Propagate the exception for further handling
     }
-  }
-  Future<Map<String, dynamic>> decryptResponse(Map<String, dynamic> response) async {
-    final encrypted = response['EncryptedData'];
-    final decryptedString = encryption.decryptText(encrypted);
-    return jsonDecode(decryptedString);
   }
 
 }

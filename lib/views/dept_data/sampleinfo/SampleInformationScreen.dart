@@ -203,7 +203,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
-                    value!, // <-- use directly here
+                    value!, session.regId
                   );
                 } else if (masterProvider.selectedWtsfilter == "6") {
                   masterProvider.setSelectedSubSource(0);
@@ -216,7 +216,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.selectedSubSource.toString(),
                     masterProvider.selectedWtp!,
                     masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
+                    masterProvider.selectedScheme!,session.regId
                   );
                 }
               },

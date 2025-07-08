@@ -207,7 +207,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       if (sourceId == "5") {
                         masterProvider.fetchWTPList(
                           masterProvider.selectedStateId!,
-                          value!, // <-- use directly here
+                          value!, session.regId
                         );
                       } else if (sourceId == "6") {
                         masterProvider.setSelectedSubSource(0);
@@ -220,7 +220,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                           masterProvider.selectedSubSource.toString(),
                           masterProvider.selectedWtp!,
                           masterProvider.selectedStateId!,
-                          masterProvider.selectedScheme!,
+                          masterProvider.selectedScheme!,session.regId
                         );
                       }
                     },
@@ -598,7 +598,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               "0",
                               "0",
                               masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                              masterProvider.selectedScheme!,session.regId);
                         },
                       ),
                       InkWell(
@@ -614,7 +614,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                               "0",
                               "0",
                               masterProvider.selectedStateId!,
-                              masterProvider.selectedScheme!);
+                              masterProvider.selectedScheme!,session.regId);
                         },
                         child: const Text('At school/AWCs'),
                       ),

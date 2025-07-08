@@ -17,6 +17,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
 import 'package:jjm_wqmis/models/ValidateVillage.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
 import 'package:location/location.dart';
@@ -24,6 +25,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
+  final session = UserSessionManager();
 
   List<Stateresponse> states = [];
 
@@ -339,7 +341,7 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = mSchemes.message;
       }
       if (selectedWtsfilter == "5") {
-        await fetchWTPList(selectedStateId!, selectedScheme!);
+        await fetchWTPList(selectedStateId!, selectedScheme!,regId);
       } else if (selectedWtsfilter == "6") {
         setSelectedSubSource(0);
         setSelectedWTP("0");
@@ -352,6 +354,7 @@ class Masterprovider extends ChangeNotifier {
           selectedWtp!,
           selectedStateId!,
           selectedScheme!,
+          regId
         );
       }
     } catch (e) {
@@ -371,7 +374,7 @@ class Masterprovider extends ChangeNotifier {
     String subcat,
     String wtpId,
     String stateId,
-    String schemeId,
+    String schemeId, int regId
   ) async {
     _isLoading = true;
     try {
@@ -383,7 +386,7 @@ class Masterprovider extends ChangeNotifier {
           subcat,
           wtpId,
           stateId,
-          schemeId);
+          schemeId,regId);
       baseStatus = rawWaterSource.status;
 
       if (rawWaterSource.status == 1) {
@@ -404,12 +407,12 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String stateId, String schemeId) async {
+  Future<void> fetchWTPList(String stateId, String schemeId,int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final fetchedList =
-          await _masterRepository.fetchWTPlist(stateId, schemeId);
+          await _masterRepository.fetchWTPlist(stateId, schemeId,regId);
 
       if (fetchedList.status == 1) {
         wtpList = fetchedList.result;
@@ -429,11 +432,11 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWatersourcefilterList() async {
+  Future<void> fetchWatersourcefilterList(int regId) async {
     _isLoading = true;
     notifyListeners(); // Start loading
     try {
-      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
+      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList(regId);
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
         wtsFilterList = rawWtsFilterList.result;
@@ -575,13 +578,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> validateVillage(String villageId, String lgdCode) async {
+  Future<void> validateVillage(String villageId, String lgdCode,int regId) async {
     _isLoading = true;
     errorMsg = "";
     notifyListeners();
     try {
       _validateVillageResponse =
-          await _masterRepository.validateVillage(villageId, lgdCode);
+          await _masterRepository.validateVillage(villageId, lgdCode,regId);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -851,7 +854,7 @@ class Masterprovider extends ChangeNotifier {
             "0",
             "0",
             selectedStateId!,
-            selectedScheme!);
+            selectedScheme!,session.regId);
       });
     } else if (value == 3) {
       setSelectedWaterSourceInformation("0");
@@ -868,7 +871,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 5) {
       setSelectedSubSource(value);
       fetchSourceInformation(
@@ -879,7 +882,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           selectedWtp!,
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 6) {
       setSelectedSubSource(value);
     } else if (value == 7) {
@@ -893,7 +896,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 8) {
       setSelectedHandpump(value);
       setSelectedSubSource(2);
@@ -905,7 +908,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     }
     notifyListeners();
   }

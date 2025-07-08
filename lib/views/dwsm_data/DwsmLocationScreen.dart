@@ -314,7 +314,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
                         value,session.regId);
-                    masterProvider.fetchWatersourcefilterList();
+                    masterProvider.fetchWatersourcefilterList(session.regId);
                   }
                 },
                 appBarTitle: "Select Village",
