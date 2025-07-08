@@ -37,8 +37,8 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(session.regId);
       //   masterProvider.clearData();
-      await masterProvider.fetchDistricts(session.stateId.toString());
-      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
+      await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
     });
   }
 

@@ -28,13 +28,13 @@ class AuthenticaitonRepository {
     }
   }
 
-  Future<Dashboardresponse> fetchDashboardData(int roleId, int userId, int stateId) async {
+  Future<Dashboardresponse> fetchDashboardData(int roleId, int regId, int stateId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'role_id': roleId,
-        'userid': userId,
         'stateid': stateId,
+        'reg_id': regId,
       });
 
 

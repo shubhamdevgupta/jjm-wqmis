@@ -138,13 +138,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDistricts(String stateId) async {
+  Future<void> fetchDistricts(String stateId,int regId) async {
     setSelectedState(stateId);
     _isLoading = true;
     notifyListeners();
 
     try {
-      final rawDistricts = await _masterRepository.fetchDistricts(stateId);
+      final rawDistricts = await _masterRepository.fetchDistricts(stateId,regId);
       baseStatus = rawDistricts.status;
       if (rawDistricts.status == 1) {
         districts = rawDistricts.result;
@@ -164,7 +164,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchBlocks(String stateId, String districtId) async {
+  Future<void> fetchBlocks(String stateId, String districtId, int regId) async {
     setSelectedDistrict(districtId);
 
     if (stateId.isEmpty || districtId.isEmpty) {
@@ -178,7 +178,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawBlocks =
-          await _masterRepository.fetchBlocks(stateId, districtId);
+          await _masterRepository.fetchBlocks(stateId, districtId, regId);
       baseStatus = rawBlocks.status;
 
       if (rawBlocks.status == 1) {

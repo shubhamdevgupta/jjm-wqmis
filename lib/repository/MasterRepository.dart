@@ -27,10 +27,11 @@ class MasterRepository {
       return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
   }
 
-  Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId) async {
+  Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId ,int regId) async {
     try {
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
+        'reg_Id' :regId
       });
 
       final response = await _apiService.get('/apimasterA/getdistrict?$query');
@@ -42,12 +43,13 @@ class MasterRepository {
   }
 
   Future<BaseResponseModel<BlockResponse>> fetchBlocks(
-      String stateId, String districtId) async {
+      String stateId, String districtId , int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'districtid': districtId,
+        'reg_Id' :regId
       });
 
       final response = await _apiService.get('/apimasterA/getblock?$query');

@@ -30,8 +30,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
      await session.init();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-      await masterProvider.fetchDistricts(session.stateId.toString());
-      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
+      await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
       Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
 
     });
