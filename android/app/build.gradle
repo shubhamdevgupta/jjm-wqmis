@@ -48,6 +48,7 @@ android {
         implementation("com.google.firebase:firebase-perf-ktx")
     }
 
-flutter {
-    source = "../.."
+    flutter {
+        source = "../.."
+    }
 }
