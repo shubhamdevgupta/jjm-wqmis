@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/ErrorProvider.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
 import 'package:jjm_wqmis/providers/SampleListProvider.dart';
 import 'package:jjm_wqmis/providers/SampleSubmitProvider.dart';
@@ -27,7 +26,6 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => Masterprovider()),
-        ChangeNotifierProvider(create: (context) => ErrorProvider()),
         ChangeNotifierProvider(create: (context) => ParameterProvider()),
         ChangeNotifierProvider(create: (context) => Samplesubprovider()),
         ChangeNotifierProvider(create: (context) => DashboardProvider()),

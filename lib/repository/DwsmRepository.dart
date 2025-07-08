@@ -20,31 +20,37 @@ class DwsmRepository{
     required String fineYear,
     required int schoolId,
     required int demonstrationType,
-  }
-      ) async {
+  }) async {
     try {
-      final response = await _apiService.post('APIMobile/FTK_DemonstratedList',
-        body: jsonEncode({
+      final response = await _apiService.post('APIMobileA/FTK_DemonstratedList',
+        body: jsonEncode(encryptDataClassBody({
           'StateId': stateId,
           'DistrictId': districtId,
           'FineYear': fineYear,
           'SchoolId': schoolId,
           'DemonstrationType': demonstrationType,
-        }),
-      );
+        })));
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
-
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;
     }
   }
 
-  Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int Stateid, int Districtid,
-      int Blockid, int Gpid, int Villageid, int type) async {
+  Future<BaseResponseModel<SchoolResult>> fetchSchoolAwcInfo(int stateId, int districtId,
+      int blockId, int gpId, int villageId, int type) async {
     try {
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'districtid': districtId,
+        'blockid': blockId,
+        'gpid': gpId,
+        'villageid': villageId,
+        'type': type,
+      });
+
       final response = await _apiService.get(
-          'ApiMaster/GetSchoolAwcs?stateid=$Stateid&districtid=$Districtid&blockid=$Blockid&gpid=$Gpid&villageid=$Villageid&type=$type');
+          'ApiMasterA/GetSchoolAwcs?$query');
       return BaseResponseModel<SchoolResult>.fromJson(response,(json)=> SchoolResult.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
@@ -55,12 +61,12 @@ class DwsmRepository{
   Future<BaseResponseModel<DashboardSchoolModel>> fetchDashboardSchoolList(int stateId, int districtId,
       int demonstrationType) async {
     try {
-      final response = await _apiService.post('APIMobile/GetSchoolAWCsListDetails',
-        body: jsonEncode({
+      final response = await _apiService.post('APIMobileA/GetSchoolAWCsListDetails',
+        body: jsonEncode(encryptDataClassBody({
           "StateId": stateId,
           "DistrictId": districtId,
           "DemonstrationType": demonstrationType,
-        }));
+        })));
 
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
     } catch (e) {
@@ -80,8 +86,8 @@ class DwsmRepository{
        String longitude,
        String ipAddress,) async {
     try {
-      final response = await _apiService.post('APIMobile/FTK_Demonstrated',
-        body: jsonEncode({
+      final response = await _apiService.post('APIMobileA/FTK_Demonstrated',
+        body: jsonEncode(encryptDataClassBody({
           "UserId": userId,
           "SchoolId": schoolId,
           "StateId": stateId,
@@ -91,8 +97,7 @@ class DwsmRepository{
           "Latitude": latitude,
           "Longitude": longitude,
           "IPAddress": ipAddress,
-        }),
-      );
+        })));
       return DemonstrationResponse.fromJson(response);
 
     } catch (e) {
@@ -103,8 +108,13 @@ class DwsmRepository{
   }
 
   Future<Dwsmdashboardresponse> fetchDwsmDashboard(int userId) async {
+
+    final query = _apiService.buildEncryptedQuery({
+      'userid': userId,
+    });
+
     try {
-      String endpoint = '/apiMobile/dashDistrictUser?userid=$userId';
+      String endpoint = '/apiMobileA/dashDistrictUser?$query';
       final response = await _apiService.get(endpoint);
 
       return Dwsmdashboardresponse.fromJson(response);
