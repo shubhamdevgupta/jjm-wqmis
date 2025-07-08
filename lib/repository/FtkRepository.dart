@@ -111,7 +111,7 @@ class FtkRepository {
 
       final query = _apiService.buildEncryptedQuery(
         {
-          'reg_id': regId.toString(),
+          'reg_id': regId,
           'villageid': villageid.toString(),
           'SampleId': SampleId.toString(),
         },
