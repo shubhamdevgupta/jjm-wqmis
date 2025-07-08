@@ -82,6 +82,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     flag = args?['flag'];
@@ -631,7 +632,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
     } else if (flag == AppConstants.knowyoursampledetail) {
       C_STATUS = 0;
     }
-
+sampleListProvider.resetPagination();
     // Call fetch based on flags
     if (flag == AppConstants.openSampleListScreen ||
         flagfloation != null) {

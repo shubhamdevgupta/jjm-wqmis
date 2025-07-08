@@ -354,9 +354,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                          'flagFloating': ""
+                                          'flag': AppConstants.totalSamplesSubmitted,
+                                          'flagFloating': AppConstants.totalSamplesSubmitted
                                         });
                                   },
                                 ),
@@ -374,7 +373,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         arguments: {
                                           'flag':
                                           AppConstants.totalPhysicalSubmitted,
-                                          'flagFloating': ""
+                                          'flagFloating': AppConstants.totalPhysicalSubmitted
                                         });
                                   },
                                 ),
@@ -398,7 +397,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
                                           'flag': AppConstants.totalSampleTested,
-                                          'flagFloating': ""
+                                          'flagFloating': AppConstants.totalSampleTested
                                         });
                                   },
                                 ),
@@ -414,8 +413,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag': AppConstants.totalSampleTested,
-                                          'flagFloating': ""
+                                          'flag': AppConstants.knowyoursampledetail,
+                                          'flagFloating': AppConstants.knowyoursampledetail
                                         });
                                   },
                                 ),
