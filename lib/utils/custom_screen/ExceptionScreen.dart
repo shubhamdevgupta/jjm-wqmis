@@ -45,9 +45,6 @@ class ExceptionScreen extends StatelessWidget {
                     await authProvider.logoutUser();
                     Navigator.of(context).pop(); // ✅ This dismisses the dialog
                     await AppResetService.fullReset(context);
-                    Navigator.pushNamedAndRemoveUntil(context, AppConstants.navigateToLoginScreen,
-                          (route) => false,
-                    );
                   }
                   Navigator.of(context).pop();
                 },
