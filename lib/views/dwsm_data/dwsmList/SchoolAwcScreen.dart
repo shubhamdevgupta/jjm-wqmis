@@ -30,7 +30,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
       final dashboardProvider =
           Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
-          session.stateId, session.districtId, widget.type!);
+          session.stateId, session.districtId, widget.type!,session.regId);
     });
 
     super.initState();

@@ -103,12 +103,12 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchSchoolAwcInfo(int Stateid, int Districtid, int Blockid,
-      int Gpid, int Villageid, int type) async {
+      int Gpid, int Villageid, int type,int regId) async {
     _isLoading = true;
     dataState = DataState.loading;
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
-          Stateid, Districtid, Blockid, Gpid, Villageid, type);
+          Stateid, Districtid, Blockid, Gpid, Villageid, type, regId);
 
       if (rawSchoolInfo.status == 1) {
         if (type == 0) {
@@ -132,13 +132,13 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDashboardSchoolList(
-      int stateId, int districtId, int demonstrationType) async {
+      int stateId, int districtId, int demonstrationType, int regId) async {
     _isLoading = true;
 
     notifyListeners();
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchDashboardSchoolList(
-          stateId, districtId, demonstrationType);
+          stateId, districtId, demonstrationType,regId);
 
       if (rawSchoolInfo.status == 1) {
         dashboardSchoolListModel = rawSchoolInfo.result;
