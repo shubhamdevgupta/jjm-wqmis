@@ -599,7 +599,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                         CircleAvatar(
                                           backgroundColor: Colors.blue,
                                           child: Text(
-                                            "${index + 1}",
+                                            "${sample.rowNo}",
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'OpenSans',
