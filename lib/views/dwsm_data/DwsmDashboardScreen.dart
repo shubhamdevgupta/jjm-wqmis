@@ -1,9 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/UpdateProvider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/dwsm_data/DwsmLocationScreen.dart';
@@ -24,6 +26,7 @@ class Dwsdashboardscreen extends StatefulWidget {
 class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   final session = UserSessionManager();
   late DwsmProvider dashboardProvider;
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   @override
   void initState() {
@@ -32,7 +35,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
       await  session.init();
-
+_checkForUpdateAndNavigate();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(session.regId);
@@ -40,6 +43,19 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
       await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
     });
+  }
+  Future<void> _checkForUpdateAndNavigate() async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+
+    if (isAvailable && mounted) {
+      final updateInfo = await _updateViewModel.getUpdateInfo();
+
+      if (updateInfo != null) {
+
+        DialogUtils.showUpdateDialog(context, updateInfo);
+        return;
+      }
+    }
   }
 
   @override

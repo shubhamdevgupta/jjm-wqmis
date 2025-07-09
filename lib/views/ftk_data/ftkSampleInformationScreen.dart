@@ -203,6 +203,9 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                     appBarTitle: "Select Scheme",
                     showSearchBar: true,
                     onChanged: (value) {
+
+                      masterProvider.clearSelection();
+
                       masterProvider.setSelectedScheme(value);
                       if (sourceId == "5") {
                         masterProvider.fetchWTPList(
@@ -370,6 +373,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       ? AppTextWidgets.errorText(masterProvider.errorMsg)
                       : CustomDropdown(
                           title: "Select Water Source *",
+                          appBarTitle: "Select Water Source",
                           value: masterProvider.selectedWaterSource,
                           items: masterProvider.waterSource.map((waterSource) {
                             return DropdownMenuItem<String>(
@@ -397,8 +401,6 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-
-
 
                   Visibility(
                       visible: masterProvider.selectedWaterSource != "",
@@ -604,6 +606,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       InkWell(
                         onTap: () async {
                           masterProvider.householdController.clear();
+                          masterProvider.selectRadioOption(4);
                           masterProvider.setSelectedHabitation("0");
                           masterProvider.setSelectedSubSource(2);
                           await masterProvider.fetchSourceInformation(

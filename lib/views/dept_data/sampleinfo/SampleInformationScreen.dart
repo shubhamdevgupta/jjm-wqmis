@@ -149,6 +149,62 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       ),
     );
   }
+  Widget buildSampleTaken(Masterprovider masterProvider) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            elevation: 5, // Increased elevation for a more modern shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                  12),
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomDropdown(
+                title:
+                "Sample source location",
+                value: masterProvider.selectedWtsfilter,
+                items: masterProvider.wtsFilterList.map((wtsFilter) {
+                  return DropdownMenuItem<String>(
+                    value: wtsFilter.id.toString(),
+                    child: Text(
+                      wtsFilter.sourceType,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null && value != "0") {
+                    masterProvider.setSelectedWaterSourcefilter(value);
+                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value);
+                  }
+                },
+                appBarTitle: "Select Location",
+                showSearchBar: false,
+              ),
+            ),
+          ),
+          buildSchemeDropDown(masterProvider),
+
+          const SizedBox(height: 10),
+          // First Visibility Widget with Border
+
+          buildSourceofScheme(masterProvider),
+          buildWtpWater(masterProvider),
+          buildEsrWater(masterProvider),
+          buildHouseholdWater(masterProvider),
+          buildHandpumpWater(masterProvider),
+        ],
+      ),
+    );
+  }
+
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {
     return masterProvider.baseStatus==0 && masterProvider.selectedScheme ==null?AppTextWidgets.errorText(masterProvider.errorMsg): Card(
@@ -200,6 +256,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               showSearchBar: true,
               onChanged: (value) {
                 masterProvider.setSelectedScheme(value);
+
+                masterProvider.clearSelection();
+
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
@@ -227,68 +286,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     );
   }
 
-  Widget buildSampleTaken(Masterprovider masterProvider) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Card(
-            elevation: 5, // Increased elevation for a more modern shadow effect
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                  12),
-            ),
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomDropdown(
-                title:
-                    "Sample source location",
-                value: masterProvider.selectedWtsfilter,
-                items: masterProvider.wtsFilterList.map((wtsFilter) {
-                  return DropdownMenuItem<String>(
-                    value: wtsFilter.id.toString(),
-                    child: Text(
-                      wtsFilter.sourceType,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null && value != "0") {
-                    masterProvider.setSelectedWaterSourcefilter(value);
-                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value,session.regId);
-                  }
-                },
-                appBarTitle: "Select Location",
-                showSearchBar: false,
-              ),
-            ),
-          ),
-          buildSchemeDropDown(masterProvider),
-
-          const SizedBox(height: 10),
-          // First Visibility Widget with Border
-
-          buildSourceofScheme(masterProvider),
-          buildWtpWater(masterProvider),
-          buildEsrWater(masterProvider),
-          buildHouseholdWater(masterProvider),
-          buildHandpumpWater(masterProvider),
-        ],
-      ),
-    );
-  }
-
   Widget buildSourceofScheme(Masterprovider masterProvider) {
     return Column(
       children: [
         Visibility(
-          visible: masterProvider.selectedWtsfilter == "2" &&
-              (masterProvider.selectedScheme?.isNotEmpty ?? false),
+          visible: masterProvider.selectedWtsfilter == "2" && (masterProvider.selectedScheme?.isNotEmpty ?? false),
           child: Card(
             elevation: 5,
             shape: RoundedRectangleBorder(

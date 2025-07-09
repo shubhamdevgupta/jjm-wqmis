@@ -1,11 +1,13 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/providers/UpdateProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/Aesen.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/LocationScreen.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,7 @@ class Dashboardscreen extends StatefulWidget {
 
 class _DashboardscreenState extends State<Dashboardscreen> {
   final session = UserSessionManager();
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   final encryption = AesEncryption();
   @override
@@ -28,6 +31,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      await session.init();
+     _checkForUpdateAndNavigate();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
@@ -37,6 +41,19 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     });
   }
 
+  Future<void> _checkForUpdateAndNavigate() async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+
+    if (isAvailable && mounted) {
+      final updateInfo = await _updateViewModel.getUpdateInfo();
+
+      if (updateInfo != null) {
+
+        DialogUtils.showUpdateDialog(context, updateInfo);
+        return;
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -337,9 +354,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag':
-                                          AppConstants.totalSamplesSubmitted,
-                                          'flagFloating': ""
+                                          'flag': AppConstants.totalSamplesSubmitted,
+                                          'flagFloating': AppConstants.totalSamplesSubmitted
                                         });
                                   },
                                 ),
@@ -357,7 +373,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         arguments: {
                                           'flag':
                                           AppConstants.totalPhysicalSubmitted,
-                                          'flagFloating': ""
+                                          'flagFloating': AppConstants.totalPhysicalSubmitted
                                         });
                                   },
                                 ),
@@ -381,7 +397,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
                                           'flag': AppConstants.totalSampleTested,
-                                          'flagFloating': ""
+                                          'flagFloating': AppConstants.totalSampleTested
                                         });
                                   },
                                 ),
@@ -397,8 +413,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag': AppConstants.totalSampleTested,
-                                          'flagFloating': ""
+                                          'flag': AppConstants.knowyoursampledetail,
+                                          'flagFloating': AppConstants.knowyoursampledetail
                                         });
                                   },
                                 ),

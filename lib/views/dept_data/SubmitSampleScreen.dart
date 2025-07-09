@@ -137,10 +137,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8.0),
+                                  children: [Padding(
+                                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                                       child: Card(
                                         elevation: 4,
                                         color: Colors.white, // White background
@@ -148,164 +146,80 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: SizedBox(
+                                        child: SizedBox(width: double.infinity,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
                                               children: [
                                                 // Dynamic height adjustment
-                                                ConstrainedBox(
-                                                  constraints:
-                                                      const BoxConstraints(
-                                                    maxHeight:
-                                                        250, // Maximum height before scrolling starts
-                                                  ),
-                                                  child:
-                                                      paramProvider
-                                                              .cart!.isEmpty
-                                                          ? const Center(
-                                                              child: Text(
-                                                                  "No tests selected"), // Show message if no items
-                                                            )
-                                                          : Container(
-                                                              constraints:
-                                                                  const BoxConstraints(
-                                                                minHeight: 0,
-                                                                // Allow shrinking when few items
-                                                                maxHeight:
-                                                                    250, // Max height to enable scrolling
-                                                              ),
-                                                              child: Scrollbar(
-                                                                thumbVisibility:
-                                                                    true,
-                                                                // Show scrollbar when scrolling
-                                                                child:
-                                                                    SingleChildScrollView(
-                                                                  scrollDirection:
-                                                                      Axis.vertical,
-                                                                  // Enables vertical scrolling
-                                                                  child:
-                                                                      SingleChildScrollView(
-                                                                    scrollDirection:
-                                                                        Axis.horizontal,
-                                                                    // Enables horizontal scrolling if needed
-                                                                    child:
-                                                                        DataTable(
-                                                                      headingRowColor:
-                                                                          WidgetStateProperty.all(
-                                                                              Colors.blue),
-                                                                      columnSpacing:
-                                                                          MediaQuery.of(context).size.width *
-                                                                              0.02,
-                                                                      columns: [
-                                                                        DataColumn(
-                                                                          label:
-                                                                              Text(
-                                                                            'Sr. No.',
-                                                                            style:
-                                                                                _headerTextStyle(),
-                                                                          ),
-                                                                        ),
-                                                                        DataColumn(
-                                                                          label:
-                                                                              Text(
-                                                                            'Test Name',
-                                                                            style:
-                                                                                _headerTextStyle(),
-                                                                          ),
-                                                                        ),
-                                                                        DataColumn(
-                                                                          label:
-                                                                              Text(
-                                                                            'Price',
-                                                                            style:
-                                                                                _headerTextStyle(),
-                                                                          ),
-                                                                        ),
-                                                                        DataColumn(
-                                                                          label:
-                                                                              Text(
-                                                                            'Action',
-                                                                            style:
-                                                                                _headerTextStyle(),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                      rows: paramProvider
-                                                                          .cart!
-                                                                          .asMap()
-                                                                          .entries
-                                                                          .map(
-                                                                              (entry) {
-                                                                        int index =
-                                                                            entry.key;
-                                                                        var param =
-                                                                            entry.value;
-
-                                                                        return DataRow(
-                                                                          cells: <DataCell>[
-                                                                            DataCell(
-                                                                              Text(
-                                                                                '${index + 1}',
-                                                                                style: _rowTextStyle(),
-                                                                              ),
-                                                                            ),
-                                                                            DataCell(
-                                                                              SizedBox(
-                                                                                width: MediaQuery.of(context).size.width * 0.4,
-                                                                                child: Text(
-                                                                                  param.parameterName,
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  style: _rowTextStyle(),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            DataCell(
-                                                                              Text(
-                                                                                param.deptRate.toString(),
-                                                                                style: _rowTextStyle(),
-                                                                              ),
-                                                                            ),
-                                                                            DataCell(
-                                                                              IconButton(
-                                                                                icon: const Icon(
-                                                                                  Icons.delete,
-                                                                                  color: Colors.red,
-                                                                                ),
-                                                                                onPressed: () {
-                                                                                  if (paramProvider.cart!.length > 1) {
-                                                                                    paramProvider.removeFromCart(param);
-                                                                                    if (paramProvider.isParam) {
-                                                                                      var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
+                                                ConstrainedBox(constraints: const BoxConstraints(maxHeight: 250, ), // Maximum height before scrolling starts
+                                                  child: paramProvider.cart!.isEmpty ? const Center(child: Text("No tests selected"),) // Show message if no items
+                                                          : Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      // 🔵 Fixed Header
+                                                      SingleChildScrollView(
+                                                        scrollDirection: Axis.horizontal,
+                                                        child: Row(
+                                                          children: [
+                                                            _buildHeaderCell(' Sr ', width: 35),
+                                                            _buildHeaderCell('Test Name', width: MediaQuery.of(context).size.width * 0.50),
+                                                            _buildHeaderCell('Price', width: 60),
+                                                            _buildHeaderCell('Action', width: 50),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5), // spacing
+                                                      // 🟢 Scrollable Table Body (constrained height)
+                                                      ConstrainedBox(
+                                                        constraints: const BoxConstraints(maxHeight: 205),
+                                                        child: Scrollbar(thumbVisibility: true,
+                                                          child: SingleChildScrollView(scrollDirection: Axis.vertical,
+                                                            child: SingleChildScrollView(scrollDirection: Axis.horizontal,
+                                                              child: Column(
+                                                                children: paramProvider.cart!.asMap().entries.map((entry) {
+                                                                  int index = entry.key;
+                                                                  var param = entry.value;
+                                                                  return Row(
+                                                                    children: [
+                                                                      _buildRowCell('${index + 1}', width: 35),
+                                                                      _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.50),
+                                                                      _buildRowCell(param.deptRate.toString(), width: 60),
+                                                                      SizedBox(
+                                                                        width: 50,
+                                                                        child: IconButton(
+                                                                          icon: const Icon(Icons.delete, color: Colors.red),
+                                                                          onPressed: () {
+                                                                            if (paramProvider.cart!.length > 1) {
+                                                                              paramProvider.removeFromCart(param);
+                                                                              if (paramProvider.isParam) {
+                                                                                var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
                                                                                       paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId,session.regId);
-                                                                                      paramProvider.selectedLab = "";
-                                                                                    }
-                                                                                  } else {
-                                                                                    ToastHelper.showSnackBar(context, "Parameter cannot be empty");
-                                                                                  }
-                                                                                },
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      }).toList(),
-                                                                    ),
-                                                                  ),
-                                                                ),
+                                                                                paramProvider.selectedLab = "";
+                                                                              }
+                                                                            } else {
+                                                                              ToastHelper.showSnackBar(context, "Parameter cannot be empty");
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                }).toList(),
                                                               ),
                                                             ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
 
                                                 const Divider(),
 
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 8.0,
-                                                      horizontal: 8.0),
+                                                Padding(padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
+                                                    mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       const Text("Total Price",
                                                           style: TextStyle(
@@ -317,12 +231,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       const SizedBox(width: 20),
                                                       Text(
                                                           "₹ ${paramProvider.calculateTotal()} /-",
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.green,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
+                                                          style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                                                     ],
                                                   ),
                                                 ),
@@ -1278,4 +1187,29 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showErrorSnackBar(context, provider.errorMsg);
     }
   }
+
+  Widget _buildHeaderCell(String text, {required double width}) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0,left: 2.0,right: 4.0),
+      color: Colors.blue,
+      child: Text(
+        text,
+        style: _headerTextStyle(),
+      ),
+    );
+  }
+
+  Widget _buildRowCell(String text, {required double width}) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(5.0),
+      child: Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+        style: _rowTextStyle(),
+      ),
+    );
+  }
+
 }

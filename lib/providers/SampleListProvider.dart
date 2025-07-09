@@ -52,7 +52,7 @@ class Samplelistprovider extends ChangeNotifier {
 
 // Update pagination flags
       hasMore = newSamples.length >= 20; // Adjust to your backend's page size
-      if (hasMore) PAGE++; // Increment only if there's more to fetch
+      if (hasMore) ++PAGE; // Increment only if there's more to fetch
 
 // Handle status and messages
       _baseStatus = response.status;
@@ -101,5 +101,11 @@ class Samplelistprovider extends ChangeNotifier {
     // notifyListeners();
 
     return false;
+  }
+  void resetPagination() {
+    print("calling the reset function of pagination ");
+    PAGE= 1;
+    hasMore = true;
+    notifyListeners();
   }
 }

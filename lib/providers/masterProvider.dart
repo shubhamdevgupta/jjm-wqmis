@@ -611,6 +611,12 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild the widget
   }
 
+
+  void clearSelectedSubSource() {
+    _selectedSubSource = null;
+    notifyListeners(); // Notify listeners to rebuild the widget
+  }
+
   void setSelectedWaterSourcefilterOnly(String? value) {
     selectedWtsfilter = value;
     notifyListeners(); // Notify listeners to rebuild the widget
@@ -844,6 +850,7 @@ class Masterprovider extends ChangeNotifier {
 
   void selectRadioOption(int value) {
     if (value == 2 || value == 1) {
+      clearAddresRemarks();
       setSelectedSubSource(value);
       Future.delayed(Duration.zero, () {
         fetchSourceInformation(
@@ -860,9 +867,12 @@ class Masterprovider extends ChangeNotifier {
       setSelectedWaterSourceInformation("0");
       setSelectedHouseHold(value);
       setSelectedSubSource(1);
+      clearAddresRemarks();
     } else if (value == 4) {
       setSelectedHouseHold(value);
       setSelectedSubSource(2);
+      clearAddresRemarks();
+      householdController.clear();
       fetchSourceInformation(
           selectedVillage!,
           selectedHabitation!,
@@ -874,6 +884,7 @@ class Masterprovider extends ChangeNotifier {
           selectedScheme!,session.regId);
     } else if (value == 5) {
       setSelectedSubSource(value);
+      clearAddresRemarks();
       fetchSourceInformation(
           selectedVillage!,
           selectedHabitation!,
@@ -886,6 +897,7 @@ class Masterprovider extends ChangeNotifier {
     } else if (value == 6) {
       setSelectedSubSource(value);
     } else if (value == 7) {
+      clearAddresRemarks();
       setSelectedHandpump(value);
       setSelectedSubSource(1);
       fetchSourceInformation(
@@ -898,6 +910,7 @@ class Masterprovider extends ChangeNotifier {
           selectedStateId!,
           selectedScheme!,session.regId);
     } else if (value == 8) {
+      clearAddresRemarks();
       setSelectedHandpump(value);
       setSelectedSubSource(2);
       fetchSourceInformation(
@@ -917,5 +930,16 @@ class Masterprovider extends ChangeNotifier {
     selectedWtsfilter = null;
     selectedScheme = null;
     notifyListeners();
+  }
+
+  void clearSelection(){
+    clearSelectedSubSource();
+    setSelectedHouseHold(null);
+    setSelectedHandpump(null);
+    clearAddresRemarks();
+  }
+  void clearAddresRemarks(){
+    addressController.clear();
+    ftkRemarkController.clear();
   }
 }
