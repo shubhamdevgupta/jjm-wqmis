@@ -18,8 +18,10 @@ class DwsmRepository{
     required int stateId,
     required int districtId,
     required String fineYear,
-    required int schoolId,
+    required String schoolId,
     required int demonstrationType,
+    required int regId,
+
   }) async {
     try {
       final response = await _apiService.post('APIMobileA/FTK_DemonstratedList',
@@ -29,6 +31,7 @@ class DwsmRepository{
           'FineYear': fineYear,
           'SchoolId': schoolId,
           'DemonstrationType': demonstrationType,
+          'Reg_id': regId,
         })));
       return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
     } catch (e) {
@@ -72,7 +75,7 @@ class DwsmRepository{
 
       return BaseResponseModel<DashboardSchoolModel>.fromJson(response,(json)=> DashboardSchoolModel.fromJson(json));
     } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+      GlobalExceptionHandler.handleException(Exception(e.toString())); // ✅ Safe wrap
       rethrow;
     }
   }
@@ -86,7 +89,9 @@ class DwsmRepository{
        String remark,
        String latitude,
        String longitude,
-       String ipAddress,) async {
+       String ipAddress,
+        int regId
+      ) async {
     try {
       final response = await _apiService.post('APIMobileA/FTK_Demonstrated',
         body: jsonEncode(encryptDataClassBody({
@@ -99,6 +104,7 @@ class DwsmRepository{
           "Latitude": latitude,
           "Longitude": longitude,
           "IPAddress": ipAddress,
+          "Reg_Id": regId,
         })));
       return DemonstrationResponse.fromJson(response);
 

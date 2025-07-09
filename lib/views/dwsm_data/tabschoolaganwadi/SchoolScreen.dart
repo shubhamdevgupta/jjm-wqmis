@@ -2,21 +2,20 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/providers/dwsmProvider.dart';
+import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
+import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/Appcolor.dart';
+import 'package:jjm_wqmis/utils/Camera.dart';
+import 'package:jjm_wqmis/utils/LoaderUtils.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/CustomDropdown.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/TabSchoolAganwadi.dart';
 import 'package:provider/provider.dart';
-
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
-import 'package:jjm_wqmis/providers/dwsmProvider.dart';
-import 'package:jjm_wqmis/utils/AppStyles.dart';
-import 'package:jjm_wqmis/utils/Camera.dart';
-import 'package:jjm_wqmis/utils/CurrentLocation.dart';
-import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 
 class SchoolScreen extends StatefulWidget {
   const SchoolScreen({super.key});
@@ -26,24 +25,24 @@ class SchoolScreen extends StatefulWidget {
 }
 
 class _SchoolScreen extends State<SchoolScreen> {
-final session = UserSessionManager();
-  final CameraHelper _cameraHelper = CameraHelper();
+  final session = UserSessionManager();
 
+  final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();
   Village? village;
-  final lat = CurrentLocation.latitude;
-  final lng = CurrentLocation.longitude;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await  session.init();
+      await session.init();
 
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final masterProvider = Provider.of<Masterprovider>(context, listen: false);
     return ChangeNotifierProvider.value(
       value: Provider.of<DwsmProvider>(context, listen: false),
       child: Consumer<DwsmProvider>(
@@ -51,365 +50,445 @@ final session = UserSessionManager();
           return dwsmprovider.isLoading
               ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
               : Container(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Builder(builder: (context) {
-                          switch (dwsmprovider.dataState) {
-                            case DataState.loading:
-                              return LoaderUtils.conditionalLoader(
-                                  isLoading: true);
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    body: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Builder(builder: (context) {
+                                switch (dwsmprovider.dataState) {
+                                  case DataState.loading:
+                                    return LoaderUtils.conditionalLoader(
+                                        isLoading: true);
 
-                            case DataState.error:
-                              return AppTextWidgets.errorText(
-                                  dwsmprovider.errorMessage);
-                            case DataState.loaded:
-                              return Column(
-                                children: [
-                                  CustomDropdown(
-                                    title: "Select School",
-                                    appBarTitle: "Select School",
-                                    value: dwsmprovider.selectedSchoolResult,
-                                    items: dwsmprovider.schoolResultList
-                                        .map((school) {
-                                      return DropdownMenuItem<String>(
-                                        value: school.id.toString(),
-                                        child: Text(
-                                          school.name,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (selectedId) {
-                                      final selectedSchool = dwsmprovider
-                                          .schoolResultList
-                                          .firstWhere(
-                                        (item) =>
-                                            item.id.toString() == selectedId,
-                                      );
-                                      dwsmprovider.setSelectedSchool(
-                                          selectedId!,
-                                          selectedSchool.name,
-                                          selectedSchool.demonstrated,
-                                        selectedSchool.demonstrated_date.toString()
-
-                                      );
-                                      dwsmprovider
-                                          .showDemonstartionButton(false);
-                                      if (dwsmprovider.mDemonstrationId == 1) {
-                                        dwsmprovider.fetchDemonstrationList(
-                                            session.stateId,
-                                            session.districtId,
-                                            "2025-2026",
-                                            int.parse(selectedId),
-                                            10, onSuccess: (result) {
-                                          village = result;
-
-                                        });
-
-                                        dwsmprovider
-                                            .showDemonstartionButton(false);
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Visibility(visible: dwsmprovider.selectedSchoolResult !=
-                                            null,
-                                    child: Card(
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(16),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.withOpacity(0.1),
-                                              blurRadius: 8,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  const Icon(Icons.school_rounded, color: Colors.green, size: 24),
-                                                  const SizedBox(width: 10),
-                                                  Expanded(
-                                                    child: Text(
-                                                      dwsmprovider.selectedSchoolName ?? "N/A",
-                                                      style: const TextStyle(
-                                                        fontSize: 17,
-                                                        fontFamily: 'OpenSans',
-                                                        fontWeight: FontWeight.w600,
-                                                        color: Colors.black87,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                  case DataState.error:
+                                    return AppTextWidgets.errorText(
+                                        dwsmprovider.errorMessage);
+                                  case DataState.loaded:
+                                    return Column(
+                                      children: [
+                                        CustomDropdown(
+                                          title: "Select School",
+                                          appBarTitle: "Select School",
+                                          value:
+                                              dwsmprovider.selectedSchoolResult,
+                                          items: dwsmprovider.schoolResultList
+                                              .map((school) {
+                                            return DropdownMenuItem<String>(
+                                              value: school.id.toString(),
+                                              child: Text(
+                                                school.name,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
-                                            ],
-                                          ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (selectedId) {
+                                            final selectedSchool = dwsmprovider
+                                                .schoolResultList
+                                                .firstWhere(
+                                              (item) =>
+                                                  item.id.toString() ==
+                                                  selectedId,
+                                            );
+                                            dwsmprovider.setSelectedSchool(
+                                                selectedId!,
+                                                selectedSchool.name,
+                                                selectedSchool.demonstrated,
+                                                selectedSchool.demonstrated_date
+                                                    .toString());
+                                            dwsmprovider
+                                                .showDemonstartionButton(false);
+                                            if (dwsmprovider.mDemonstrationId ==
+                                                1) {
+                                              dwsmprovider
+                                                  .fetchDemonstrationList(
+                                                      session.stateId,
+                                                      session.districtId,
+                                                      "2025-2026",
+                                                      selectedId,
+                                                      10,session.regId, onSuccess: (result) {
+                                                village = result;
+                                              });
+
+                                              dwsmprovider
+                                                  .showDemonstartionButton(
+                                                      false);
+                                            }
+                                          },
                                         ),
-                                      ),
-                                    )
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  dwsmprovider.mDemonstrationId == 1
-                                      ? Column(
-                                          children: [
-                                            Visibility(
-                                              visible: dwsmprovider
-                                                          .selectedSchoolResult !=
-                                                      null &&
-                                                  !dwsmprovider
-                                                      .showDemonstartion,
-                                              child: SizedBox(
-                                                width: double.infinity,
-                                                child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      dwsmprovider
-                                                          .showDemonstartionButton(
-                                                              true);
-                                                    });
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Appcolor.buttonBgColor,
-                                                    foregroundColor: Colors.white,
-
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    "New Demonstration",
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontFamily: 'OpenSans',
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Visibility(
-                                                visible: dwsmprovider
-                                                            .selectedSchoolResult !=
-                                                        null &&
-                                                    dwsmprovider
-                                                        .showDemonstartion,
-                                                child: showForm(dwsmprovider)),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.blue.shade100
-                                                        .withOpacity(0.4),
-                                                    blurRadius: 12,
-                                                    offset: const Offset(0, 4),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    // Heading
-
-                                                    Row(
-                                                      children: [
-                                                        _iconCircle(
-                                                            Icons.location_city,
-                                                            Colors.blue),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        const Text(
-                                                          "Demonstrated Details",
-                                                          style:
-                                                              TextStyle(
-                                                            fontSize: 18,
-                                                            fontFamily:
-                                                                'OpenSans',
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.blue,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const Divider(height: 30),
-                                                    const SizedBox(height: 12),
-
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        _iconCircle(
-                                                            Icons.location_on,
-                                                            Colors.red),
-                                                        const SizedBox(
-                                                            width: 10),
-                                                        Expanded(
-                                                          child: Text(
-                                                            _buildLocationPath([
-                                                              village != null
-                                                                  ? village
-                                                                      ?.stateName
-                                                                  : "",
-                                                              village != null
-                                                                  ? village
-                                                                      ?.districtName
-                                                                  : "",
-                                                              village != null
-                                                                  ? village
-                                                                      ?.blockName
-                                                                  : "",
-                                                              village != null
-                                                                  ? village
-                                                                      ?.panchayatName
-                                                                  : "",
-                                                              village != null
-                                                                  ? village
-                                                                      ?.villageName
-                                                                  : "",
-                                                            ]),
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily:
-                                                                  'OpenSans',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color: Colors
-                                                                  .black87,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-
-                                                    // School Name
-                                                    /*  _infoRow("$titleType Name", "$titleType",
-                                          Icons.school, Colors.deepPurple),
-                                  */
-                                                    // Category
-                                                    _infoRow(
-                                                        "Category",
-                                                        village != null
-                                                            ? village!
-                                                                .InstitutionCategory
-                                                            : "",
-                                                        Icons.category,
-                                                        Colors.orange),
-
-                                                    // Classification
-                                                    _infoRow(
-                                                        "Classification",
-                                                        village != null
-                                                            ? village!
-                                                                .InstitutionSubCategory
-                                                            : "",
-                                                        Icons.label,
-                                                        Colors.green),
-
-                                                    _infoRow(
-                                                        "Remark",
-                                                        village != null
-                                                            ? village!.remark: "",
-                                                        Icons.message,
-                                                        Colors.teal),
-                                                    _infoRow(
-                                                        "Date",
-                                                        dwsmprovider.selectedSchoolDate!,
-                                                        Icons.message,
-                                                        Colors.teal),
-
-                                                    const Divider(height: 30),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.bottomRight,
-                                                      child:
-                                                          ElevatedButton.icon(
-                                                        onPressed: () {
-                                                          String? base64String =
-                                                              village!.photo.contains(',') ? village?.photo.split(',').last : village?.photo;
-
-                                                          final imageBytes =
-                                                              base64Decode(
-                                                                  base64String!);
-
-                                                          showImage(imageBytes);
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons
-                                                                .remove_red_eye,
-                                                            size: 18),
-                                                        label:
-                                                            const Text("View"),
-                                                        style: ElevatedButton.styleFrom(
-                                                          backgroundColor: Appcolor.buttonBgColor,
-                                                          foregroundColor: Colors.white,
-                                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),
-                                                          ),
-                                                        ),
-                                                      ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Visibility(
+                                            visible: dwsmprovider
+                                                    .selectedSchoolResult !=
+                                                null,
+                                            child: Card(
+                                              elevation: 3,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16)),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1),
+                                                      blurRadius: 8,
+                                                      offset:
+                                                          const Offset(0, 4),
                                                     ),
                                                   ],
                                                 ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      12.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          const Icon(
+                                                              Icons
+                                                                  .school_rounded,
+                                                              color:
+                                                                  Colors.green,
+                                                              size: 24),
+                                                          const SizedBox(
+                                                              width: 10),
+                                                          Expanded(
+                                                            child: Text(
+                                                              dwsmprovider
+                                                                      .selectedSchoolName ??
+                                                                  "N/A",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 17,
+                                                                fontFamily:
+                                                                    'OpenSans',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .black87,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        )
-                                      : showForm(dwsmprovider),
-                                ],
-                              );
-                            case DataState.initial:
-                            default:
-                              return const SizedBox(); // or any placeholder
-                          }
-                        })),
+                                            )),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        dwsmprovider.mDemonstrationId == 1
+                                            ? Column(
+                                                children: [
+                                                  Visibility(
+                                                    visible: dwsmprovider
+                                                                .selectedSchoolResult !=
+                                                            null &&
+                                                        !dwsmprovider
+                                                            .showDemonstartion,
+                                                    child: SizedBox(
+                                                      width: double.infinity,
+                                                      child: ElevatedButton(
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            dwsmprovider
+                                                                .showDemonstartionButton(
+                                                                    true);
+                                                          });
+                                                        },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Appcolor
+                                                                  .buttonBgColor,
+                                                          foregroundColor:
+                                                              Colors.white,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                          ),
+                                                        ),
+                                                        child: const Text(
+                                                          "New Demonstration",
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily:
+                                                                  'OpenSans',
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Visibility(
+                                                      visible: dwsmprovider
+                                                                  .selectedSchoolResult !=
+                                                              null &&
+                                                          dwsmprovider
+                                                              .showDemonstartion,
+                                                      child: showForm(
+                                                          dwsmprovider,masterProvider)),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.all(8),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors
+                                                              .blue.shade100
+                                                              .withOpacity(0.4),
+                                                          blurRadius: 12,
+                                                          offset: const Offset(
+                                                              0, 4),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16.0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          // Heading
+
+                                                          Row(
+                                                            children: [
+                                                              _iconCircle(
+                                                                  Icons
+                                                                      .location_city,
+                                                                  Colors.blue),
+                                                              const SizedBox(
+                                                                  width: 10),
+                                                              const Text(
+                                                                "Demonstrated Details",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontFamily:
+                                                                      'OpenSans',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .blue,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const Divider(
+                                                              height: 30),
+                                                          const SizedBox(
+                                                              height: 12),
+
+                                                          Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              _iconCircle(
+                                                                  Icons
+                                                                      .location_on,
+                                                                  Colors.red),
+                                                              const SizedBox(
+                                                                  width: 10),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  _buildLocationPath([
+                                                                    village !=
+                                                                            null
+                                                                        ? village
+                                                                            ?.stateName
+                                                                        : "",
+                                                                    village !=
+                                                                            null
+                                                                        ? village
+                                                                            ?.districtName
+                                                                        : "",
+                                                                    village !=
+                                                                            null
+                                                                        ? village
+                                                                            ?.blockName
+                                                                        : "",
+                                                                    village !=
+                                                                            null
+                                                                        ? village
+                                                                            ?.panchayatName
+                                                                        : "",
+                                                                    village !=
+                                                                            null
+                                                                        ? village
+                                                                            ?.villageName
+                                                                        : "",
+                                                                  ]),
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontFamily:
+                                                                        'OpenSans',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .black87,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+
+                                                          // School Name
+                                                          /*  _infoRow("$titleType Name", "$titleType",
+                                          Icons.school, Colors.deepPurple),
+                                  */
+                                                          // Category
+                                                          _infoRow(
+                                                              "Category",
+                                                               village!
+                                                                      .institutionCategory
+                                                              ??"",
+                                                              Icons.category,
+                                                              Colors.orange),
+
+                                                          // Classification
+                                                          _infoRow(
+                                                              "Classification",
+                                                               village!
+                                                                      .institutionSubCategory
+                                                                  ?? "",
+                                                              Icons.label,
+                                                              Colors.green),
+
+                                                          _infoRow(
+                                                              "Remark",
+                                                              village!
+                                                                      .remark
+                                                                  ?? "",
+                                                              Icons.message,
+                                                              Colors.teal),
+                                                          _infoRow(
+                                                              "Date",
+                                                              dwsmprovider
+                                                                  .selectedSchoolDate!,
+                                                              Icons.message,
+                                                              Colors.teal),
+
+                                                          const Divider(
+                                                              height: 30),
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .bottomRight,
+                                                            child:
+                                                                ElevatedButton
+                                                                    .icon(
+                                                              onPressed: () {
+                                                                String? base64String = village!
+                                                                        .photo
+                                                                        !.contains(
+                                                                            ',')
+                                                                    ? village
+                                                                        ?.photo
+                                                                        !.split(
+                                                                            ',')
+                                                                        .last
+                                                                    : village
+                                                                        ?.photo;
+
+                                                                final imageBytes =
+                                                                    base64Decode(
+                                                                        base64String!);
+
+                                                                showImage(
+                                                                    imageBytes);
+                                                              },
+                                                              icon: const Icon(
+                                                                  Icons
+                                                                      .remove_red_eye,
+                                                                  size: 18),
+                                                              label: const Text(
+                                                                  "View"),
+                                                              style:
+                                                                  ElevatedButton
+                                                                      .styleFrom(
+                                                                backgroundColor:
+                                                                    Appcolor
+                                                                        .buttonBgColor,
+                                                                foregroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        20,
+                                                                    vertical:
+                                                                        10),
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              12),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : showForm(dwsmprovider,masterProvider),
+                                      ],
+                                    );
+                                  case DataState.initial:
+                                  default:
+                                    return const SizedBox(); // or any placeholder
+                                }
+                              })),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          );
+                );
         },
       ),
     );
   }
 
-  Future<bool> validate(DwsmProvider dwsmprovider) async {
+  Future<bool> validate(DwsmProvider dwsmprovider, Masterprovider masterProvider) async {
     await dwsmprovider.fetchDeviceId();
     if (dwsmprovider.selectedSchoolResult == null) {
       dwsmprovider.errorMessage = "Please Select School first.";
@@ -418,6 +497,17 @@ final session = UserSessionManager();
     if (_cameraHelper.imageFile == null) {
       dwsmprovider.errorMessage = "Please capture an image first.";
       return false;
+    }
+    await masterProvider!.fetchLocation();
+
+    if (masterProvider!.lat == null || masterProvider!.lng == null) {
+      await masterProvider!.checkAndPromptLocation(context);
+
+      if (masterProvider!.lat == null || masterProvider!.lng == null) {
+        // User cancelled or GPS still off
+        ToastHelper.showSnackBar(context, "Location is required to proceed.");
+        return false;
+      }
     }
     return true;
   }
@@ -583,7 +673,7 @@ final session = UserSessionManager();
     );
   }
 
-  Widget showForm(DwsmProvider dwsmprovider) {
+  Widget showForm(DwsmProvider dwsmprovider, Masterprovider masterProvider) {
     return Visibility(
       visible: dwsmprovider.selectedSchoolResult != null,
       child: Column(
@@ -629,7 +719,9 @@ final session = UserSessionManager();
               ),
             ),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           Card(
             child: Container(
               decoration: BoxDecoration(
@@ -658,7 +750,6 @@ final session = UserSessionManager();
                     ),
                   ),
                   Divider(thickness: 1, color: Colors.grey.shade300),
-
                   Center(
                     child: _cameraHelper.imageFile == null
                         ? GestureDetector(
@@ -700,7 +791,8 @@ final session = UserSessionManager();
                                 top: 0,
                                 right: 0,
                                 child: IconButton(
-                                  icon: const Icon(Icons.close, color: Colors.white),
+                                  icon: const Icon(Icons.close,
+                                      color: Colors.white),
                                   onPressed: () {
                                     _cameraHelper.removeImage();
                                     setState(() {});
@@ -710,7 +802,6 @@ final session = UserSessionManager();
                             ],
                           ),
                   ),
-
                   const SizedBox(height: 5),
                 ],
               ),
@@ -755,9 +846,11 @@ final session = UserSessionManager();
                           children: [
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
-                            const SizedBox(width: 5,),
+                            const SizedBox(
+                              width: 5,
+                            ),
                             Text(
-                              'Latitude: ${lat?.toStringAsFixed(5)}',
+                              'Latitude: ${masterProvider!.lat?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -772,9 +865,11 @@ final session = UserSessionManager();
                           children: [
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
-                            const SizedBox(width: 5,),
+                            const SizedBox(
+                              width: 5,
+                            ),
                             Text(
-                              'Longitude: ${lng?.toStringAsFixed(5)}',
+                              'Longitude: ${masterProvider!.lng?.toStringAsFixed(5)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -796,7 +891,7 @@ final session = UserSessionManager();
               width: double.infinity,
               child: ElevatedButton(
                   onPressed: () async {
-                    if (await validate(dwsmprovider)) {
+                    if (await validate(dwsmprovider,masterProvider)) {
                       await dwsmprovider.submitDemonstration(
                           session.regId,
                           int.parse(dwsmprovider.selectedSchoolResult!),
@@ -804,13 +899,15 @@ final session = UserSessionManager();
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          lat.toString(),
-                          lng.toString(),
-                          dwsmprovider.deviceId!, () {
+                          masterProvider!.lat.toString(),
+                          masterProvider!.lng.toString(),
+                          dwsmprovider.deviceId!,
+                          session.regId, () {
                         showResponse(dwsmprovider);
                       });
                     } else {
-                      ToastHelper.showSnackBar(context, dwsmprovider.errorMessage);
+                      ToastHelper.showSnackBar(
+                          context, dwsmprovider.errorMessage);
                     }
                   },
                   style: AppStyles.buttonStylePrimary(),

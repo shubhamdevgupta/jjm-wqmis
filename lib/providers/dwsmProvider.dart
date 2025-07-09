@@ -67,7 +67,7 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDemonstrationList(int stateId, int districtId,
-      String fineYear, int schoolId, int demonstrationType,
+      String fineYear, String schoolId, int demonstrationType,int regId,
       {Function(Village result)? onSuccess}) async {
     _isLoading = true;
     villages = [];
@@ -79,6 +79,7 @@ class DwsmProvider extends ChangeNotifier {
         fineYear: fineYear,
         schoolId: schoolId,
         demonstrationType: demonstrationType,
+        regId: regId
       );
       baseStatus = rawLIst.status;
       if (rawLIst.status == 1) {
@@ -148,7 +149,7 @@ class DwsmProvider extends ChangeNotifier {
       baseStatus = rawSchoolInfo.status;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
+      GlobalExceptionHandler.handleException(Exception(e.toString())); // ✅ Safe wrap
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -165,6 +166,7 @@ class DwsmProvider extends ChangeNotifier {
     String latitude,
     String longitude,
     String ipAddress,
+    int regId,
     Function onSuccess,
   ) async {
     _isLoading = true;
@@ -180,7 +182,7 @@ class DwsmProvider extends ChangeNotifier {
           remark,
           latitude,
           longitude,
-          ipAddress);
+          ipAddress,regId);
       baseStatus = rawSchoolInfo.status;
       if (rawSchoolInfo.status == 1) {
         ftkSubmitResponse = rawSchoolInfo.message;

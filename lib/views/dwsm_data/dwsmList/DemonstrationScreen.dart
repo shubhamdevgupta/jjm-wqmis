@@ -32,8 +32,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           session.stateId,
           session.districtId,
           "2025-2026",
-          0,
-          widget.type!);
+          "0",
+          widget.type!,session.regId);
     });
     super.initState();
   }
@@ -146,29 +146,6 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                           ),
                                         ),
                                       ),
-                               /*       ElevatedButton(
-                                        onPressed: () {
-                                          // Your logic here
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: Colors.red.shade50,
-                                          foregroundColor: Colors.red.shade700,
-                                          padding: const EdgeInsets.all(2),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            side: BorderSide(
-                                                color: Colors.red.shade200),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: const [
-                                            Icon(Icons.delete_outline,
-                                                size: 24),
-                                          ],
-                                        ),
-                                      ),*/
                                     ],
                                   ),
                                   const Divider(height: 30),
@@ -210,7 +187,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                   ),
                                   _infoRow(
                                       "Category",
-                                      village.InstitutionCategory,
+                                      village.institutionCategory??"NA",
                                       Icons.category,
                                       Colors.orange),
 
@@ -219,12 +196,12 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                       Icons.school, Colors.deepPurple),
                                   _infoRow(
                                       "Classification",
-                                      village.InstitutionSubCategory,
+                                      village.institutionSubCategory??"NA",
                                       Icons.label,
                                       Colors.green),
-                                  _infoRow("Remark", village.remark,
+                                  _infoRow("Remark", village.remark??"NA",
                                       Icons.message, Colors.teal),
-                                  _infoRow("Date", village.datetime,
+                                  _infoRow("Date", village.createdOn??"NA",
                                       Icons.message, Colors.blueGrey),
 
                                   const Divider(height: 30),
@@ -241,14 +218,14 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                             session.stateId,
                                             session.districtId,
                                             "2025-2026",
-                                            village.schoolId,
-                                            widget.type!,
+                                            village.schoolId??"0",
+                                            widget.type!,session.regId,
                                             onSuccess: (result) {
-                                              final String base64String = result.photo.contains(',')
-                                                  ? result.photo.split(',').last
+                                              final String? base64String = result.photo!.contains(',')
+                                                  ? result.photo!.split(',').last
                                                   : result.photo;
 
-                                              final imageBytes = base64Decode(base64String);
+                                              final imageBytes = base64Decode(base64String??"");
                                               showImage(imageBytes); // show image in alert
                                             },
                                           );
@@ -389,8 +366,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                   session.stateId,
                   session.districtId,
                   "2025-2026",
-                  0,
-                  widget.type!,
+                  "0",
+                  widget.type!,session.regId
                 );
               },
               child: const Text("Close"),

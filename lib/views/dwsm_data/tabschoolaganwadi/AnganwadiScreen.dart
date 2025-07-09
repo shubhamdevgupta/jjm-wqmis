@@ -27,7 +27,6 @@ class AnganwadiScreen extends StatefulWidget {
 
 class _AnganwadiScreen extends State<AnganwadiScreen> {
   final session = UserSessionManager();
-  late Masterprovider masterProvider;
 
   Village? village;
 
@@ -40,12 +39,12 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await  session.init();
-      masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
     });  }
 
   @override
   Widget build(BuildContext context) {
+    final masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
     return ChangeNotifierProvider.value(
       value: Provider.of<DwsmProvider>(context, listen: false),
       child: Consumer<DwsmProvider>(
@@ -110,8 +109,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                       session.stateId,
                                                       session.districtId,
                                                       "2025-2026",
-                                                      int.parse(selectedId),
-                                                      11, onSuccess: (result) {
+                                                      selectedId,
+                                                      11,session.regId, onSuccess: (result) {
                                                 village = result;
 
                                               });
@@ -249,7 +248,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                         dwsmprovider
                                                             .showDemonstartion,
                                                     child:
-                                                        showForm(dwsmprovider),
+                                                        showForm(dwsmprovider,masterProvider),
                                                   ),
                                                   const SizedBox(
                                                     height: 5,
@@ -376,30 +375,23 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                   */
                                                           // Category
                                                           _infoRow(
-                                                              "Category",
-                                                              village != null
-                                                                  ? village!
-                                                                      .InstitutionCategory
-                                                                  : "",
+                                                              "Category", village!.institutionCategory?? "",
                                                               Icons.category,
                                                               Colors.orange),
 
                                                           // Classification
                                                           _infoRow(
                                                               "Classification",
-                                                              village != null
-                                                                  ? village!
-                                                                      .InstitutionSubCategory
-                                                                  : "",
+                                                              village!.institutionSubCategory
+                                                                  ?? "",
                                                               Icons.label,
                                                               Colors.green),
 
                                                           _infoRow(
                                                               "Remark",
-                                                              village != null
-                                                                  ? village!
-                                                                      .remark
-                                                                  : "",
+                                                               village!
+                                                                   .remark
+                                                                  ?? "",
                                                               Icons.message,
                                                               Colors.teal),
                                                           _infoRow(
@@ -408,57 +400,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                               Icons.message,
                                                               Colors.teal),
 
-                                                          // Remark
-                                                          /*    Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical:
-                                                                        12),
-                                                            child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                _iconCircle(
-                                                                    Icons
-                                                                        .comment,
-                                                                    Colors
-                                                                        .teal),
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                                Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            10),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Colors
-                                                                          .teal
-                                                                          .shade50,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              12),
-                                                                    ),
-                                                                    child:
-                                                                        const Text(
-                                                                      "No remark provided",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              13,
-                                                                          fontFamily:
-                                                                              'OpenSans',
-                                                                          color:
-                                                                              Colors.teal),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),*/
                                                           const Divider(
                                                               height: 30),
                                                           Align(
@@ -470,11 +411,11 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                               onPressed: () {
                                                                 String? base64String = village!
                                                                         .photo
-                                                                        .contains(
+                                                                        !.contains(
                                                                             ',')
                                                                     ? village
                                                                         ?.photo
-                                                                        .split(
+                                                                        !.split(
                                                                             ',')
                                                                         .last
                                                                     : village
@@ -524,7 +465,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                   ),
                                                 ],
                                               )
-                                            : showForm(dwsmprovider),
+                                            : showForm(dwsmprovider,masterProvider),
                                       ],
                                     );
                                   case DataState.initial:
@@ -730,7 +671,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     );
   }
 
-  Widget showForm(DwsmProvider dwsmprovider) {
+  Widget showForm(DwsmProvider dwsmprovider, Masterprovider masterProvider) {
     return Visibility(
       visible: dwsmprovider.selectedAnganwadi != null,
       child: Column(
@@ -951,7 +892,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           remarkController.text,
                           masterProvider.lat.toString(),
                           masterProvider.lng.toString(),
-                          dwsmprovider.deviceId!, () {
+                          dwsmprovider.deviceId!, session.regId,() {
                         showResponse(dwsmprovider);
                       });
                     } else {
