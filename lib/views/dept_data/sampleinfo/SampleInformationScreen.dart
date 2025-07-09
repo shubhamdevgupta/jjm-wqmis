@@ -180,9 +180,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
+                  masterProvider.setSelectedWaterSourcefilter(value);
                   if (value != null && value != "0") {
-                    masterProvider.setSelectedWaterSourcefilter(value);
-                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value);
+                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value,session.regId);
                   }
                 },
                 appBarTitle: "Select Location",
