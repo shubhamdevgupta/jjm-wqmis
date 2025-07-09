@@ -10,6 +10,7 @@ import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
+import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppRoutes.dart';
 import 'package:provider/provider.dart';
 
@@ -26,12 +27,12 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => Masterprovider()),
-        ChangeNotifierProvider(create: (context) => ParameterProvider()),
-        ChangeNotifierProvider(create: (context) => Samplesubprovider()),
-        ChangeNotifierProvider(create: (context) => DashboardProvider()),
-        ChangeNotifierProvider(create: (context) => Samplelistprovider()),
-        ChangeNotifierProvider(create: (context) => DwsmProvider()),
-        ChangeNotifierProvider(create: (context) => Ftkprovider()),
+        ChangeNotifierProvider(create: (_) => ParameterProvider()),
+        ChangeNotifierProvider(create: (_) => Samplesubprovider()),
+        ChangeNotifierProvider(create: (_) => DashboardProvider()),
+        ChangeNotifierProvider(create: (_) => Samplelistprovider()),
+        ChangeNotifierProvider(create: (_) => DwsmProvider()),
+        ChangeNotifierProvider(create: (_) => Ftkprovider()),
       ],
       child: const MyApp(),
     ),
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      initialRoute: AppConstants.navigateToSplashScreen,
       routes: AppRoutes.getRoutes(),
     );
   }
