@@ -33,7 +33,7 @@ class AppRoutes {
       //auth
       AppConstants.navigateToDashboardScreen: (context) => const Dashboardscreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
-      '/': (context) => const SplashScreen(),
+      AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
 
       //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>
