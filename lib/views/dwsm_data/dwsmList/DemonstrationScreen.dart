@@ -221,6 +221,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                             village.schoolId??"0",
                                             widget.type!,session.regId,
                                             onSuccess: (result) {
+                                              print("photo data ${result.photo}");
                                               final String? base64String = result.photo!.contains(',')
                                                   ? result.photo!.split(',').last
                                                   : result.photo;

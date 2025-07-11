@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
@@ -29,7 +29,7 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();
-  Village? village;
+  VillageInfo? village;
 
   @override
   void initState() {

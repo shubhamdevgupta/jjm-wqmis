@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jjm_wqmis/models/BaseResponse.dart';
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/models/DWSM/DemonstrationResponse.dart';
 
 import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
+import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/DwsmDashboardResponse.dart';
 import 'package:jjm_wqmis/services/BaseApiService.dart';
@@ -14,7 +14,7 @@ import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 class DwsmRepository{
   final BaseApiService _apiService = BaseApiService();
 
-  Future<BaseResponseModel<Village>> fetchDemonstrationList({
+  Future<BaseResponseModel<VillageInfo>> fetchDemonstrationList({
     required int stateId,
     required int districtId,
     required String fineYear,
@@ -33,7 +33,7 @@ class DwsmRepository{
           'DemonstrationType': demonstrationType,
           'Reg_id': regId,
         })));
-      return BaseResponseModel<Village>.fromJson(response,(json)=> Village.fromJson(json));
+      return BaseResponseModel<VillageInfo>.fromJson(response,(json)=> VillageInfo.fromJson(json));
     } catch (e) {
       GlobalExceptionHandler.handleException(e as Exception);
       rethrow;

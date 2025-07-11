@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/Showerrormsg.dart';
@@ -28,7 +28,7 @@ class AnganwadiScreen extends StatefulWidget {
 class _AnganwadiScreen extends State<AnganwadiScreen> {
   final session = UserSessionManager();
 
-  Village? village;
+  VillageInfo? village;
 
   final CameraHelper _cameraHelper = CameraHelper();
   TextEditingController remarkController = TextEditingController();

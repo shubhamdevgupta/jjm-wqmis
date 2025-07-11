@@ -1,19 +1,21 @@
-class Dwsmdashboard {
+class VillageResponse {
   final int status;
   final String message;
-  final List<Village> result;
+  final List<VillageInfo> result;
 
-  Dwsmdashboard({
+  VillageResponse({
     required this.status,
     required this.message,
     required this.result,
   });
 
-  factory Dwsmdashboard.fromJson(Map<String, dynamic> json) {
-    return Dwsmdashboard(
-      status: json['Status'],
-      message: json['Message'],
-      result: List<Village>.from(json['Result'].map((x) => Village.fromJson(x))),
+  factory VillageResponse.fromJson(Map<String, dynamic> json) {
+    return VillageResponse(
+      status: json['Status'] ?? 0,
+      message: json['Message'] ?? '',
+      result: (json['Result'] as List<dynamic>)
+          .map((e) => VillageInfo.fromJson(e))
+          .toList(),
     );
   }
 
@@ -21,12 +23,12 @@ class Dwsmdashboard {
     return {
       'Status': status,
       'Message': message,
-      'Result': result.map((x) => x.toJson()).toList(),
+      'Result': result.map((e) => e.toJson()).toList(),
     };
   }
 }
 
-class Village {
+class VillageInfo {
   final String? stateName;
   final String? districtName;
   final String? blockName;
@@ -61,7 +63,7 @@ class Village {
   final String? pageSize;
   final String? total;
 
-  Village({
+  VillageInfo({
     this.stateName,
     this.districtName,
     this.blockName,
@@ -97,8 +99,8 @@ class Village {
     this.total,
   });
 
-  factory Village.fromJson(Map<String, dynamic> json) {
-    return Village(
+  factory VillageInfo.fromJson(Map<String, dynamic> json) {
+    return VillageInfo(
       stateName: json['StateName'],
       districtName: json['DistrictName'],
       blockName: json['BlockName'],
@@ -173,4 +175,3 @@ class Village {
     };
   }
 }
-
