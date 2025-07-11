@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
-import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
+import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
@@ -16,7 +16,7 @@ class DwsmProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  List<VillageInfo> villages = [];
+  List<Village> villages = [];
   int baseStatus = 101;
 
   List<DashboardSchoolModel> dashboardSchoolListModel = [];
@@ -66,15 +66,9 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDemonstrationList(
-      int stateId,
-      int districtId,
-      String fineYear,
-      String schoolId,
-      int demonstrationType,
-      int regId,
-      {Function(VillageInfo result)? onSuccess}
-      ) async {
+  Future<void> fetchDemonstrationList(int stateId, int districtId,
+      String fineYear, String schoolId, int demonstrationType,int regId,
+      {Function(Village result)? onSuccess}) async {
     _isLoading = true;
     villages = [];
     notifyListeners();
@@ -85,23 +79,21 @@ class DwsmProvider extends ChangeNotifier {
         fineYear: fineYear,
         schoolId: schoolId,
         demonstrationType: demonstrationType,
-        regId: regId,
+        regId: regId
       );
       baseStatus = rawLIst.status;
-
       if (rawLIst.status == 1) {
-        villages = rawLIst.result; // Set before onSuccess
-
         if (schoolId != "0" && onSuccess != null) {
-          onSuccess(rawLIst.result.first);
+            onSuccess(rawLIst.result.first);
+        } else {
+          villages = rawLIst.result;
         }
       } else {
         errorMessage = rawLIst.message;
       }
-
     } catch (e) {
       debugPrint('Error in fetchDemonstrationList: $e');
-       GlobalExceptionHandler.handleException(e as Exception);
+      // GlobalExceptionHandler.handleException(e as Exception);
     } finally {
       _isLoading = false;
       notifyListeners();
