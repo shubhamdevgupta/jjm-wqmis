@@ -33,7 +33,7 @@ class AppRoutes {
       //auth
       AppConstants.navigateToDashboardScreen: (context) => const Dashboardscreen(),
       AppConstants.navigateToLoginScreen: (context) => const Loginscreen(),
-      '/': (context) => const SplashScreen(),
+      AppConstants.navigateToSplashScreen: (context) => const SplashScreen(),
 
       //dwsmList
       AppConstants.navigateToDemonstrationScreen: (context) =>
@@ -65,7 +65,7 @@ class AppRoutes {
           ),
 
       AppConstants.navigateToExceptionScreen: (context) =>
-          const ExceptionScreen(errorMessage: ''),
+          const ExceptionScreen(errorMessage: '',errorCode: "",),
       AppConstants.navigateToLocationScreen: (context) =>
            const Locationscreen(flag: '',flagFloating: '',),
       AppConstants.navigateToSampleInformationScreen: (context) =>

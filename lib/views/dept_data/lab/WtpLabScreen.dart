@@ -32,7 +32,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
 
       final paramProvider =
           Provider.of<ParameterProvider>(context, listen: false);
-      paramProvider.fetchWTPLab(masterProvider);
+      paramProvider.fetchWTPLab(masterProvider,session.regId);
       paramProvider.clearData();
     });
   }
@@ -56,7 +56,7 @@ class _WtpLabScreen extends State<Wtplabscreen> {
                     provider.isParam = false;
                     if (provider.cart!.isNotEmpty) {
                       provider.fetchLabIncharge(
-                          int.parse(provider.selectedWtpLab!));
+                          int.parse(provider.selectedWtpLab!),session.regId);
                       Navigator.push(
                         context,
                         MaterialPageRoute(

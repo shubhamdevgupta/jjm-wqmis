@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/AnganwadiScreen.dart';
 import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/SchoolScreen.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
   late TabController mTabController;
   late DwsmProvider dwsmDashboardProvider;
   late Masterprovider masterProvider;
+  final session = UserSessionManager();
 
   @override
   void initState() {
@@ -52,7 +54,7 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
       int.parse(masterProvider.selectedBlockId!),
       int.parse(masterProvider.selectedGramPanchayat!),
       int.parse(masterProvider.selectedVillage!),
-      type,
+      type,session.regId
     );
   }
 

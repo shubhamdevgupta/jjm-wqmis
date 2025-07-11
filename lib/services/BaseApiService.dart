@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:jjm_wqmis/utils/Aesen.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 
 import 'package:jjm_wqmis/utils/custom_screen/CustomException.dart';
 
@@ -26,17 +27,14 @@ class BaseApiService {
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
+    headers['APIKey'] = await getEncryptedToken();
+
     log('POST Request: URL: $url');
-    log('POST_Request--- : ${body.toString()}');
+    log('POST_Request ency--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-    try {
       await _checkConnectivity();
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+      final response = await http.post(url, headers: headers, body: body,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
         response.headers['content-type'] = 'application/json; charset=utf-8';
@@ -46,16 +44,6 @@ class BaseApiService {
       log('Response Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } on TimeoutException{
-      throw ApiException('The connection has timed out. Please try again.');
-    }
-    catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('');
-    }
   }
 
   Future<dynamic> get(String endpoint,
@@ -67,9 +55,11 @@ class BaseApiService {
     headers ??= {};
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
-    log('GET Request: URL: $url \n Headers: ${headers.toString()}');
+    headers['APIKey'] = await getEncryptedToken();
 
-    try {
+    log('GET Request: URL: $url');
+    log('GET Request: Headers: ${headers.toString()}');
+
       await _checkConnectivity();
 
       final response = await http.get(
@@ -83,16 +73,6 @@ class BaseApiService {
       log('Response: ${response.statusCode} : Body: ${response.body}');
 
       return _processResponse(response);
-    } on SocketException catch (e) {
-      log('SocketException: ${e.message}');
-      throw NetworkException('No internet connection');
-    } on TimeoutException{
-      throw ApiException('The connection has timed out. Please try again.');
-    }
-    catch (e) {
-      log('Exception during GET request: $e');
-      throw ApiException('API Error : $e');
-    }
   }
 
   Future<void> _checkConnectivity() async {
@@ -103,55 +83,74 @@ class BaseApiService {
     }
   }
 
+
   dynamic _processResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        try {
-          final rawJson = json.decode(response.body);
+    try {
+      switch (response.statusCode) {
+        case 200:
+            final rawJson = json.decode(response.body);
+            if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
+              final encryptedData = rawJson['EncryptedData'];
+              final decryptedString = encryption.decryptText(encryptedData);
+              final decryptedJson = json.decode(decryptedString);
+              log('Decrypted Response:  ${decryptedString.toString()}');
 
-          if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
-            final encryptedData = rawJson['EncryptedData'];
-            final decryptedString = encryption.decryptText(encryptedData);
-            final decryptedJson = json.decode(decryptedString);
-            return decryptedJson;
-          }
+              return decryptedJson;
+            }
+            return rawJson;
 
-          return rawJson;
-        } catch (e) {
-          throw ApiException('Failed to decode or decrypt response: $e');
-        }
+        case 400:
+          throw ApiException(
+              'Something went wrong with your request. Please check and try again.',
+              response.statusCode.toString());
 
-      case 400:
-        throw ApiException(
-            'Something went wrong with your request. Please check and try again.');
+        case 401:
+          throw ApiException(
+              'Your session has expired or you are not authorized. Please log in again.',
+              response.statusCode.toString());
 
-      case 401:
-        throw ApiException(
-            'Your session has expired or you are not authorized. Please log in again.');
+        case 404:
+          throw ApiException(
+              'Oops! The page or service you’re trying to reach is not available. Please contact support.',
+              response.statusCode.toString());
 
-      case 404:
-        throw ApiException(
-            'Oops! The page or service you’re trying to reach is not available. Please contact support.');
+        case 408:
+          throw ApiException(
+              'The request timed out. Please check your connection and try again.',
+              response.statusCode.toString());
 
-      case 408:
-        throw ApiException(
-            'The request timed out. Please check your connection and try again.');
+        case 500:
+          throw ApiException(
+              'Server encountered an error. Please try again later.',
+              response.statusCode.toString());
 
-      case 500:
-        throw ApiException(
-            'Server encountered an error. Please try again later.');
+        case 502:
+          throw ApiException(
+              'We’re experiencing server issues. Please try again shortly.',
+              response.statusCode.toString());
 
-      case 502:
-        throw ApiException(
-            'We’re experiencing server issues. Please try again shortly.');
-
-      default:
-        throw ApiException(
-            'Unexpected error occurred [${response.statusCode}]. Please try again.');
+        default:
+          throw ApiException(
+              'Unexpected error occurred [${response.statusCode}]. Please try again.',
+              response.statusCode.toString());
+      }
+    } catch (e) {
+      if (e is AppException) {
+        rethrow; // Let known exceptions pass through
+      }
+      throw ApiException('An unexpected error occurred: $e', response.statusCode.toString());
     }
   }
 
 
+  String buildEncryptedQuery(Map<String, dynamic> params) {
+    log("PARAM FOR ENCRYPTION : ${params.toString()}");
+    return params.entries.map((entry) {
+      final key = entry.key;
+      final value = encryption.encryptText(entry.value.toString());
+      return "$key=$value";
+    }).join("&");
+  }
 
   String getBaseUrl(ApiType apiType) {
     switch (apiType) {
@@ -171,8 +170,38 @@ class BaseApiService {
     String res = " $message";
     return res;
   }
+
+
 }
 
+
+Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
+  return json.map((key, value) {
+    if (value == null || value.toString().trim().isEmpty) {
+      // Skip encryption, keep it as is (or return empty string)
+      return MapEntry(key, value);
+    }
+    var encryption = AesEncryption();
+    final encryptedValue = encryption.encryptText(value.toString());
+    return MapEntry(key, encryptedValue);
+  });
+}
+
+// final encryptedBody = encryptDataClassBody(User(name: "Shakti", age: 25));   Make sure User have toJson() method
+// body: jsonEncode(encryptedBody)  == > pass encryptedBody to post method by jsonEncode
+Map<String, dynamic> encryptDataClassBody(dynamic input) {
+  log("PARAM FOR ENCRYPTION POST : ${input}");
+  final Map<String, dynamic> rawMap = (input is Map<String, dynamic>) ? input : input.toJson();
+  return encryptJsonBody(rawMap);
+}
+
+Future<String> getEncryptedToken() async {
+  final session = UserSessionManager();
+
+  await session.init();
+  print("TOKEN :  ${session.token}");
+  return session.token.toString();
+}
 enum ApiType {
   ejalShakti,
   reverseGeocoding,

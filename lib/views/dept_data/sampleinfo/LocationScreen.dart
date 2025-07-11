@@ -245,7 +245,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.fetchGramPanchayat(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
-                            value);
+                            value,session.regId);
                       }
                     },
                     appBarTitle: "Select block",
@@ -275,7 +275,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedStateId!,
                         masterProvider.selectedDistrictId!,
                         masterProvider.selectedBlockId!,
-                        value);
+                        value,session.regId);
                   }
                 },
                 appBarTitle: "Select Gram Panchayat",
@@ -303,7 +303,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedDistrictId!,
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
-                        value);
+                        value,session.regId);
                   }
                 },
                 appBarTitle: "Select Village",
@@ -344,7 +344,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
                       );
                     } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
-                      masterProvider.fetchWatersourcefilterList();
+                      masterProvider.fetchWatersourcefilterList(session.regId);
                       masterProvider.clearsampleinfo();
                       Navigator.pop(context, true);
                       Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);

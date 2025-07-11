@@ -36,7 +36,7 @@ class Samplesubrepo {
       String testSelected,
       String sampleSubmitType,
       ) async {
-    final requestData = jsonEncode({
+    final requestData = jsonEncode(encryptDataClassBody({
       "Lab_id": labId,
       "Reg_Id": regId,
       "role_id": roleId,
@@ -62,13 +62,10 @@ class Samplesubrepo {
       "istreated":istreated,
       "test_selected": testSelected,
       "sample_submit_type": sampleSubmitType,
-    });
-
-    debugPrint("Sample Submit Request: $requestData");
+    }));
 
     try {
-      final response = await _apiService.post('APIMobile/add_sample', body: requestData);
-
+      final response = await _apiService.post('APIMobileA/add_sample', body: requestData);
 
       return Sampleresponse.fromJson(response);
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ParameterProvider.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/views/dept_data/SubmitSampleScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -15,12 +16,14 @@ class Asperparameterview extends StatefulWidget {
 
 class _AsperparameterviewState extends State<Asperparameterview> {
   late Masterprovider masterProvider;
+  final session = UserSessionManager();
 
   @override
   void initState() {
     super.initState();
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      session.init();
       Provider.of<ParameterProvider>(context, listen: false).isLab = false;
       Provider.of<ParameterProvider>(context, listen: false).isParam = true;
     });
@@ -47,7 +50,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                             .sublist(0, provider.cart!.length)
                             .join(",");
                        await provider.fetchParamLabs(
-                            masterProvider.selectedStateId!, paramterId);
+                            masterProvider.selectedStateId!, paramterId,session.regId);
                         provider.isParam = true;
                         Navigator.push(
                           context,

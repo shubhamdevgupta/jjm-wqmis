@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
@@ -16,7 +16,7 @@ class DwsmProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  List<Village> villages = [];
+  List<VillageInfo> villages = [];
   int baseStatus = 101;
 
   List<DashboardSchoolModel> dashboardSchoolListModel = [];
@@ -67,8 +67,8 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDemonstrationList(int stateId, int districtId,
-      String fineYear, int schoolId, int demonstrationType,
-      {Function(Village result)? onSuccess}) async {
+      String fineYear, String schoolId, int demonstrationType,int regId,
+      {Function(VillageInfo result)? onSuccess}) async {
     _isLoading = true;
     villages = [];
     notifyListeners();
@@ -79,20 +79,18 @@ class DwsmProvider extends ChangeNotifier {
         fineYear: fineYear,
         schoolId: schoolId,
         demonstrationType: demonstrationType,
+        regId: regId
       );
       baseStatus = rawLIst.status;
       if (rawLIst.status == 1) {
-        if (schoolId != 0) {
-          if (onSuccess != null) {
-            onSuccess(rawLIst.result.first /*.photo*/);
-          }
+        if (schoolId != "0" && onSuccess != null) {
+            onSuccess(rawLIst.result.first);
         } else {
           villages = rawLIst.result;
         }
       } else {
         errorMessage = rawLIst.message;
       }
-      notifyListeners();
     } catch (e) {
       debugPrint('Error in fetchDemonstrationList: $e');
       // GlobalExceptionHandler.handleException(e as Exception);
@@ -103,12 +101,12 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchSchoolAwcInfo(int Stateid, int Districtid, int Blockid,
-      int Gpid, int Villageid, int type) async {
+      int Gpid, int Villageid, int type,int regId) async {
     _isLoading = true;
     dataState = DataState.loading;
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
-          Stateid, Districtid, Blockid, Gpid, Villageid, type);
+          Stateid, Districtid, Blockid, Gpid, Villageid, type, regId);
 
       if (rawSchoolInfo.status == 1) {
         if (type == 0) {
@@ -132,13 +130,13 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> fetchDashboardSchoolList(
-      int stateId, int districtId, int demonstrationType) async {
+      int stateId, int districtId, int demonstrationType, int regId) async {
     _isLoading = true;
 
     notifyListeners();
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchDashboardSchoolList(
-          stateId, districtId, demonstrationType);
+          stateId, districtId, demonstrationType,regId);
 
       if (rawSchoolInfo.status == 1) {
         dashboardSchoolListModel = rawSchoolInfo.result;
@@ -148,7 +146,7 @@ class DwsmProvider extends ChangeNotifier {
       baseStatus = rawSchoolInfo.status;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
+      GlobalExceptionHandler.handleException(Exception(e.toString())); // ✅ Safe wrap
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -165,6 +163,7 @@ class DwsmProvider extends ChangeNotifier {
     String latitude,
     String longitude,
     String ipAddress,
+    int regId,
     Function onSuccess,
   ) async {
     _isLoading = true;
@@ -180,7 +179,7 @@ class DwsmProvider extends ChangeNotifier {
           remark,
           latitude,
           longitude,
-          ipAddress);
+          ipAddress,regId);
       baseStatus = rawSchoolInfo.status;
       if (rawSchoolInfo.status == 1) {
         ftkSubmitResponse = rawSchoolInfo.message;

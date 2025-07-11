@@ -1,119 +1,147 @@
 class DashboardSchoolModel {
-  final String stateName;
-  final String districtName;
-  final String blockName;
-  final String panchayatName;
-  final String villageName;
-  final int userId;
-  final int stateId;
-  final int districtId;
-  final int blockId;
-  final int panchayatId;
-  final int villageId;
-  final int schoolId;
+  final String? stateName;
+  final String? districtName;
+  final String? blockName;
+  final String? panchayatName;
+  final String? villageName;
+  final String? regId;
+  final String? stateId;
+  final String? districtId;
+  final String? blockId;
+  final String? panchayatId;
+  final String? villageId;
+  final String? schoolId;
   final String? photo;
   final String? photoData;
   final String? fineYear;
   final String? remark;
-  final double latitude;
-  final double longitude;
-  final int updatedBy;
-  final int? createdBy;
+  final String? latitude;
+  final String? longitude;
+  final String? updatedBy;
+  final String? createdBy;
   final String? ipAddress;
-  final String institutionCategory;
-  final String institutionSubCategory;
-  final String category;
-  final String schoolName;
-  final int demonstrationType;
+  final String? institutionCategory;
+  final String? institutionSubCategory;
+  final String? category;
+  final String? schoolName;
+  final String? demonstrationType;
+  final String? createdOn;
+  final String? page;
+  final String? sort;
+  final String? sortdir;
+  final String? pageIndex;
+  final String? pageSize;
+  final String? total;
 
   DashboardSchoolModel({
-    required this.stateName,
-    required this.districtName,
-    required this.blockName,
-    required this.panchayatName,
-    required this.villageName,
-    required this.userId,
-    required this.stateId,
-    required this.districtId,
-    required this.blockId,
-    required this.panchayatId,
-    required this.villageId,
-    required this.schoolId,
-    this.photo,
-    this.photoData,
-    this.fineYear,
-    this.remark,
-    required this.latitude,
-    required this.longitude,
-    required this.updatedBy,
-    this.createdBy,
-    this.ipAddress,
-    required this.institutionCategory,
-    required this.institutionSubCategory,
-    required this.category,
-    required this.schoolName,
-    required this.demonstrationType,
+  this.stateName,
+  this.districtName,
+  this.blockName,
+  this.panchayatName,
+  this.villageName,
+  this.regId,
+  this.stateId,
+  this.districtId,
+  this.blockId,
+  this.panchayatId,
+  this.villageId,
+  this.schoolId,
+  this.photo,
+  this.photoData,
+  this.fineYear,
+  this.remark,
+  this.latitude,
+  this.longitude,
+  this.updatedBy,
+  this.createdBy,
+  this.ipAddress,
+  this.institutionCategory,
+  this.institutionSubCategory,
+  this.category,
+  this.schoolName,
+  this.demonstrationType,
+  this.createdOn,
+  this.page,
+  this.sort,
+  this.sortdir,
+  this.pageIndex,
+  this.pageSize,
+  this.total,
   });
 
   factory DashboardSchoolModel.fromJson(Map<String, dynamic> json) {
-    return DashboardSchoolModel(
-      stateName: json['StateName'] ?? '',
-      districtName: json['DistrictName'] ?? '',
-      blockName: json['BlockName'] ?? '',
-      panchayatName: json['PanchayatName'] ?? '',
-      villageName: json['VillageName'] ?? '',
-      userId: json['UserId'] ?? 0,
-      stateId: json['StateId'] ?? 0,
-      districtId: json['DistrictId'] ?? 0,
-      blockId: json['BlockId'] ?? 0,
-      panchayatId: json['PanchayatId'] ?? 0,
-      villageId: json['VillageId'] ?? 0,
-      schoolId: json['SchoolId'] ?? 0,
-      photo: json['Photo'],
-      photoData: json['Photo_data'],
-      fineYear: json['FineYear'],
-      remark: json['Remark'],
-      latitude: (json['Latitude'] ?? 0).toDouble(),
-      longitude: (json['Longitude'] ?? 0).toDouble(),
-      updatedBy: json['Updated_by'] ?? 0,
-      createdBy: json['Created_by'],
-      ipAddress: json['IPAddress'],
-      institutionCategory: json['InstitutionCategory'] ?? '',
-      institutionSubCategory: json['InstitutionSubCategory'] ?? '',
-      category: json['Category'] ?? '',
-      schoolName: json['SchoolName'] ?? '',
-      demonstrationType: json['DemonstrationType'] ?? 0,
-    );
+  return DashboardSchoolModel(
+  stateName: json['StateName'],
+  districtName: json['DistrictName'],
+  blockName: json['BlockName'],
+  panchayatName: json['PanchayatName'],
+  villageName: json['VillageName'],
+  regId: json['Reg_id'],
+  stateId: json['StateId'],
+  districtId: json['DistrictId'],
+  blockId: json['BlockId'],
+  panchayatId: json['PanchayatId'],
+  villageId: json['VillageId'],
+  schoolId: json['SchoolId'],
+  photo: json['Photo'],
+  photoData: json['Photo_data'],
+  fineYear: json['FineYear'],
+  remark: json['Remark'],
+  latitude: json['Latitude'],
+  longitude: json['Longitude'],
+  updatedBy: json['Updated_by'],
+  createdBy: json['Created_by'],
+  ipAddress: json['IPAddress'],
+  institutionCategory: json['InstitutionCategory'],
+  institutionSubCategory: json['InstitutionSubCategory'],
+  category: json['Category'],
+  schoolName: json['SchoolName'],
+  demonstrationType: json['DemonstrationType'],
+  createdOn: json['createdon'],
+  page: json['page'],
+  sort: json['sort'],
+  sortdir: json['sortdir'],
+  pageIndex: json['pageIndex'],
+  pageSize: json['pageSize'],
+  total: json['Total'],
+  );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'StateName': stateName,
-      'DistrictName': districtName,
-      'BlockName': blockName,
-      'PanchayatName': panchayatName,
-      'VillageName': villageName,
-      'UserId': userId,
-      'StateId': stateId,
-      'DistrictId': districtId,
-      'BlockId': blockId,
-      'PanchayatId': panchayatId,
-      'VillageId': villageId,
-      'SchoolId': schoolId,
-      'Photo': photo,
-      'Photo_data': photoData,
-      'FineYear': fineYear,
-      'Remark': remark,
-      'Latitude': latitude,
-      'Longitude': longitude,
-      'Updated_by': updatedBy,
-      'Created_by': createdBy,
-      'IPAddress': ipAddress,
-      'InstitutionCategory': institutionCategory,
-      'InstitutionSubCategory': institutionSubCategory,
-      'Category': category,
-      'SchoolName': schoolName,
-      'DemonstrationType': demonstrationType,
-    };
+  return {
+  'StateName': stateName,
+  'DistrictName': districtName,
+  'BlockName': blockName,
+  'PanchayatName': panchayatName,
+  'VillageName': villageName,
+  'Reg_id': regId,
+  'StateId': stateId,
+  'DistrictId': districtId,
+  'BlockId': blockId,
+  'PanchayatId': panchayatId,
+  'VillageId': villageId,
+  'SchoolId': schoolId,
+  'Photo': photo,
+  'Photo_data': photoData,
+  'FineYear': fineYear,
+  'Remark': remark,
+  'Latitude': latitude,
+  'Longitude': longitude,
+  'Updated_by': updatedBy,
+  'Created_by': createdBy,
+  'IPAddress': ipAddress,
+  'InstitutionCategory': institutionCategory,
+  'InstitutionSubCategory': institutionSubCategory,
+  'Category': category,
+  'SchoolName': schoolName,
+  'DemonstrationType': demonstrationType,
+  'createdon': createdOn,
+  'page': page,
+  'sort': sort,
+  'sortdir': sortdir,
+  'pageIndex': pageIndex,
+  'pageSize': pageSize,
+  'Total': total,
+  };
   }
 }

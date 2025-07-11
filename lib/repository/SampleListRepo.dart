@@ -20,7 +20,21 @@ class SampleListRepo {
       int gpid,
       int villageid) async {
     try {
-      final String endpoint = '/apimobile/sampleList?reg_id=$regId&page=$page&Search=$search&cstatus=$cstatus&SampleID=$sampleId&stateid=$stateid&districtid=$districtid&blockid=$blockid&gpid=$gpid&villageid=$villageid';
+      final query = _apiService.buildEncryptedQuery({
+        'reg_id': regId,
+        'page': page,
+        'Search': search,
+        'cstatus': cstatus,
+        'SampleID': sampleId,
+        'stateid': stateid,
+        'districtid': districtid,
+        'blockid': blockid,
+        'gpid': gpid,
+        'villageid': villageid,
+      });
+
+
+      final String endpoint = '/apimobileA/sampleList?$query';
 
       final response = await _apiService.get(endpoint);
 
@@ -34,7 +48,14 @@ class SampleListRepo {
 
   Future<BaseResponseModel<dynamic>> deleteSample(String encryptedSid, String? userId, String deviceId) async {
     try {
-      final String urlEndpoint = '/APIMobile/remove_sample?s_id=$encryptedSid&userid=$userId&ip=$deviceId';
+
+      final query = _apiService.buildEncryptedQuery({
+        's_id': encryptedSid,
+        'userid': userId,
+        'ip': deviceId,
+      });
+
+      final String urlEndpoint = '/APIMobileA/remove_sample?$query';
 
       final response = await _apiService.get(urlEndpoint);
 

@@ -14,9 +14,20 @@ class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();
 
   Future<BaseResponseModel<Alllabresponse>> fetchAllLab(String StateId, String districtId,
-      String blockid, String gpid, String villageid, String isall) async {
+      String blockid, String gpid, String villageid, String isall, int regId) async {
     try {
-      final response = await _apiService.get('/apimaster/Getalllab?StateId=$StateId&districtId=$districtId&blockid=$blockid&gpid=$gpid&villageid=$villageid&isall=$isall');
+
+      final query = _apiService.buildEncryptedQuery({
+        'StateId': StateId,
+        'districtId': districtId,
+        'blockid': blockid,
+        'gpid': gpid,
+        'villageid': villageid,
+        'isall': isall,
+        'reg_Id' :regId
+      });
+
+      final response = await _apiService.get('/apimasterA/Getalllab?$query');
 
       return BaseResponseModel<Alllabresponse>.fromJson(response,(json)=> Alllabresponse.fromJson(json));
 
@@ -30,7 +41,16 @@ class Lapparameterrepository {
   Future<BaseResponseModel<Parameterresponse>> fetchAllParameter(String labid,
       String stateid, String sid, String regId, String parameteetype) async {
     try {
-      final response = await _apiService.get('/apimaster/GetTestList?labid=$labid&stateid=$stateid&sid=$sid&reg_id=$regId&parameteetype=$parameteetype');
+
+      final query = _apiService.buildEncryptedQuery({
+        'labid': labid,
+        'stateid': stateid,
+        'sid': sid,
+        'reg_id': regId,
+        'parameteetype': parameteetype,
+      });
+
+      final response = await _apiService.get('/apimasterA/GetTestList?$query');
 
       return BaseResponseModel<Parameterresponse>.fromJson(response,(json)=> Parameterresponse.fromJson(json));
 
@@ -40,9 +60,15 @@ class Lapparameterrepository {
     }
   }
 
-  Future<Labinchargeresponse?> fetchLabIncharge(int labId) async {
+  Future<Labinchargeresponse?> fetchLabIncharge(int labId, int regId) async {
     try {
-      final response = await _apiService.get('APIMaster/getLabIncharge?labid=$labId');
+
+      final query = _apiService.buildEncryptedQuery({
+        'labid': labId,
+        'reg_Id' :regId
+      });
+
+      final response = await _apiService.get('APIMasterA/getLabIncharge?$query');
 
         return Labinchargeresponse.fromJson(response); // Directly pass response
 
@@ -54,9 +80,17 @@ class Lapparameterrepository {
 
 
 
-  Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds) async {
+  Future<BaseResponseModel<Lab>> fetchParamLabs(String stateId, String parameterIds, int regId) async {
     try {
-      final response = await _apiService.get("APIMaster/getLaboratoriesby_parameter_ids?StateId=$stateId&parameter_ids=$parameterIds");
+
+      final query = _apiService.buildEncryptedQuery({
+        'StateId': stateId,
+        'parameter_ids': parameterIds,
+        'reg_Id' :regId
+
+      });
+
+      final response = await _apiService.get("APIMasterA/getLaboratoriesby_parameter_ids?$query");
 
       return BaseResponseModel<Lab>.fromJson(response,(json)=> Lab.fromJson(json));
 
@@ -65,9 +99,17 @@ class Lapparameterrepository {
       rethrow; // Return null in case of an error
     }
   }
-  Future<BaseResponseModel<WtpLab>> fetchWtpLabs(String stateId, String wtpId) async {
+  Future<BaseResponseModel<WtpLab>> fetchWtpLabs(String stateId, String wtpId, int regId) async {
     try {
-      final response = await _apiService.get('/apimaster/GetwtpLab?stateid=$stateId&wtpid=$wtpId');
+
+      final query = _apiService.buildEncryptedQuery({
+        'stateid': stateId,
+        'wtpid': wtpId,
+        'reg_Id' :regId
+
+      });
+
+      final response = await _apiService.get('/apimasterA/GetwtpLab?$query');
 
 
       return BaseResponseModel<WtpLab>.fromJson(response,(json)=> WtpLab.fromJson(json));

@@ -180,9 +180,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   );
                 }).toList(),
                 onChanged: (value) {
+                  masterProvider.setSelectedWaterSourcefilter(value);
                   if (value != null && value != "0") {
-                    masterProvider.setSelectedWaterSourcefilter(value);
-                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value);
+                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value,session.regId);
                   }
                 },
                 appBarTitle: "Select Location",
@@ -227,6 +227,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 fontWeight: FontWeight.bold,
                 color:
                 Colors.black87, // Dark text for better readability
+
+
               ),
             ),
 
@@ -260,7 +262,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 if (masterProvider.selectedWtsfilter == "5") {
                   masterProvider.fetchWTPList(
                     masterProvider.selectedStateId!,
-                    value!, // <-- use directly here
+                    value!, session.regId
                   );
                 } else if (masterProvider.selectedWtsfilter == "6") {
                   masterProvider.setSelectedSubSource(0);
@@ -273,7 +275,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     masterProvider.selectedSubSource.toString(),
                     masterProvider.selectedWtp!,
                     masterProvider.selectedStateId!,
-                    masterProvider.selectedScheme!,
+                    masterProvider.selectedScheme!,session.regId
                   );
                 }
               },

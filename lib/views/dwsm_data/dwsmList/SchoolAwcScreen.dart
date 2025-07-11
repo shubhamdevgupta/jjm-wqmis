@@ -30,7 +30,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
       final dashboardProvider =
           Provider.of<DwsmProvider>(context, listen: false);
       await dashboardProvider.fetchDashboardSchoolList(
-          session.stateId, session.districtId, widget.type!);
+          session.stateId, session.districtId, widget.type!,session.regId);
     });
 
     super.initState();
@@ -189,7 +189,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
     );
   }
 
-  Widget _infoRow(String title, String value, IconData icon, Color color) {
+  Widget _infoRow(String title, String? value, IconData icon, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -220,7 +220,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: value.isEmpty ? "No data provided" : value,
+                      text: value!.isEmpty ? "No data provided" : value,
                     ),
                   ],
                 ),

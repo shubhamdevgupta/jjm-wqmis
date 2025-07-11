@@ -17,6 +17,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/BlockResponse.dart';
 import 'package:jjm_wqmis/models/ValidateVillage.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/CurrentLocation.dart';
+import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/GlobalExceptionHandler.dart';
 import 'package:jjm_wqmis/utils/LocationUtils.dart';
 import 'package:location/location.dart';
@@ -24,6 +25,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
+  final session = UserSessionManager();
 
   List<Stateresponse> states = [];
 
@@ -138,13 +140,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDistricts(String stateId) async {
+  Future<void> fetchDistricts(String stateId,int regId) async {
     setSelectedState(stateId);
     _isLoading = true;
     notifyListeners();
 
     try {
-      final rawDistricts = await _masterRepository.fetchDistricts(stateId);
+      final rawDistricts = await _masterRepository.fetchDistricts(stateId,regId);
       baseStatus = rawDistricts.status;
       if (rawDistricts.status == 1) {
         districts = rawDistricts.result;
@@ -164,7 +166,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchBlocks(String stateId, String districtId) async {
+  Future<void> fetchBlocks(String stateId, String districtId, int regId) async {
     setSelectedDistrict(districtId);
 
     if (stateId.isEmpty || districtId.isEmpty) {
@@ -178,7 +180,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawBlocks =
-          await _masterRepository.fetchBlocks(stateId, districtId);
+          await _masterRepository.fetchBlocks(stateId, districtId, regId);
       baseStatus = rawBlocks.status;
 
       if (rawBlocks.status == 1) {
@@ -197,7 +199,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchGramPanchayat(
-      String stateId, String districtId, String blockId) async {
+      String stateId, String districtId, String blockId ,int regId) async {
     if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty) {
       errorMsg = "Please select State, District, and Block.";
       notifyListeners();
@@ -209,7 +211,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
-          stateId, districtId, blockId);
+          stateId, districtId, blockId,regId);
 
       baseStatus = rawGPs.status;
 
@@ -235,7 +237,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchVillage(
-      String stateId, String districtId, String blockId, String gpID) async {
+      String stateId, String districtId, String blockId, String gpID,int regId) async {
     if (stateId.isEmpty ||
         districtId.isEmpty ||
         blockId.isEmpty ||
@@ -250,7 +252,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawVillages = await _masterRepository.fetchVillages(
-          stateId, districtId, blockId, gpID);
+          stateId, districtId, blockId, gpID,regId);
 
       baseStatus = rawVillages.status;
 
@@ -267,7 +269,7 @@ class Masterprovider extends ChangeNotifier {
             districtId,
             blockId,
             gpID,
-            singleVillage.jjmVillageId,
+            singleVillage.jjmVillageId,regId
           );
         }
       } else {
@@ -284,7 +286,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchHabitations(String stateId, String districtId,
-      String blockId, String gpId, String villageId) async {
+      String blockId, String gpId, String villageId,int regId) async {
     if ([stateId, districtId, blockId, gpId, villageId].any((e) => e.isEmpty)) {
       errorMsg = "Please select all fields to load habitations.";
       notifyListeners();
@@ -296,7 +298,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawHabitations = await _masterRepository.fetchHabitations(
-          stateId, districtId, blockId, gpId, villageId);
+          stateId, districtId, blockId, gpId, villageId,regId);
 
       baseStatus = rawHabitations.status;
 
@@ -322,12 +324,12 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
-      String filter) async {
+      String filter,int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final mSchemes = await _masterRepository.fetchSchemes(stateId,
-          districtid, villageId, habitationId, filter);
+          districtid, villageId, habitationId, filter,regId);
       baseStatus = mSchemes.status;
 
       if (baseStatus == 1) {
@@ -339,7 +341,7 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = mSchemes.message;
       }
       if (selectedWtsfilter == "5") {
-        await fetchWTPList(selectedStateId!, selectedScheme!);
+        await fetchWTPList(selectedStateId!, selectedScheme!,regId);
       } else if (selectedWtsfilter == "6") {
         setSelectedSubSource(0);
         setSelectedWTP("0");
@@ -352,6 +354,7 @@ class Masterprovider extends ChangeNotifier {
           selectedWtp!,
           selectedStateId!,
           selectedScheme!,
+          regId
         );
       }
     } catch (e) {
@@ -371,7 +374,7 @@ class Masterprovider extends ChangeNotifier {
     String subcat,
     String wtpId,
     String stateId,
-    String schemeId,
+    String schemeId, int regId
   ) async {
     _isLoading = true;
     try {
@@ -383,7 +386,7 @@ class Masterprovider extends ChangeNotifier {
           subcat,
           wtpId,
           stateId,
-          schemeId);
+          schemeId,regId);
       baseStatus = rawWaterSource.status;
 
       if (rawWaterSource.status == 1) {
@@ -404,12 +407,12 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String stateId, String schemeId) async {
+  Future<void> fetchWTPList(String stateId, String schemeId,int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final fetchedList =
-          await _masterRepository.fetchWTPlist(stateId, schemeId);
+          await _masterRepository.fetchWTPlist(stateId, schemeId,regId);
 
       if (fetchedList.status == 1) {
         wtpList = fetchedList.result;
@@ -429,11 +432,11 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWatersourcefilterList() async {
+  Future<void> fetchWatersourcefilterList(int regId) async {
     _isLoading = true;
     notifyListeners(); // Start loading
     try {
-      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList();
+      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList(regId);
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
         wtsFilterList = rawWtsFilterList.result;
@@ -575,13 +578,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> validateVillage(String villageId, String lgdCode) async {
+  Future<void> validateVillage(String villageId, String lgdCode,int regId) async {
     _isLoading = true;
     errorMsg = "";
     notifyListeners();
     try {
       _validateVillageResponse =
-          await _masterRepository.validateVillage(villageId, lgdCode);
+          await _masterRepository.validateVillage(villageId, lgdCode,regId);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -858,7 +861,7 @@ class Masterprovider extends ChangeNotifier {
             "0",
             "0",
             selectedStateId!,
-            selectedScheme!);
+            selectedScheme!,session.regId);
       });
     } else if (value == 3) {
       setSelectedWaterSourceInformation("0");
@@ -878,7 +881,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 5) {
       setSelectedSubSource(value);
       clearAddresRemarks();
@@ -890,7 +893,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           selectedWtp!,
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 6) {
       setSelectedSubSource(value);
     } else if (value == 7) {
@@ -905,7 +908,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     } else if (value == 8) {
       clearAddresRemarks();
       setSelectedHandpump(value);
@@ -918,7 +921,7 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!);
+          selectedScheme!,session.regId);
     }
     notifyListeners();
   }
