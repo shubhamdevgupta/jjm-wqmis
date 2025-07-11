@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/DashBoardSchoolModel.dart';
-import 'package:jjm_wqmis/models/DWSM/DwsmDashboard.dart';
+import 'package:jjm_wqmis/models/DWSM/FtkDemonstrateListResponse.dart';
 import 'package:jjm_wqmis/repository/DwsmRepository.dart';
 
 import 'package:jjm_wqmis/models/DWSM/SchoolinfoResponse.dart';
@@ -16,7 +16,7 @@ class DwsmProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  List<Village> villages = [];
+  List<VillageInfo> villages = [];
   int baseStatus = 101;
 
   List<DashboardSchoolModel> dashboardSchoolListModel = [];
@@ -68,7 +68,7 @@ class DwsmProvider extends ChangeNotifier {
 
   Future<void> fetchDemonstrationList(int stateId, int districtId,
       String fineYear, String schoolId, int demonstrationType,int regId,
-      {Function(Village result)? onSuccess}) async {
+      {Function(VillageInfo result)? onSuccess}) async {
     _isLoading = true;
     villages = [];
     notifyListeners();
