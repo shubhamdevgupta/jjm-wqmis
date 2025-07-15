@@ -31,10 +31,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      await session.init();
-     _checkForUpdateAndNavigate();
+     await _checkForUpdateAndNavigate();
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
-      await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
       Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
 

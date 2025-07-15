@@ -40,15 +40,19 @@ class GlobalExceptionHandler {
         }
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            contentPadding: EdgeInsets.zero, // Remove default padding
-            content: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.4,
-                maxWidth: MediaQuery.of(context).size.width * 0.8,
+            barrierDismissible:false,
+          builder: (context) => WillPopScope(
+            onWillPop: ()async => false,
+            child: AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              contentPadding: EdgeInsets.zero, // Remove default padding
+              content: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  maxWidth: MediaQuery.of(context).size.width * 0.8,
+                ),
+                child: ExceptionScreen(errorMessage: errorMessage,errorCode: httpErrCode,),
               ),
-              child: ExceptionScreen(errorMessage: errorMessage,errorCode: httpErrCode,),
             ),
           ),
         );
