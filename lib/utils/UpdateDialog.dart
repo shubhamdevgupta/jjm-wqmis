@@ -3,9 +3,9 @@ import 'package:jjm_wqmis/models/UpdateResponse.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DialogUtils {
-  static void showUpdateDialog(BuildContext context, Updateresponse updateInfo) {
+  static Future<void> showUpdateDialog(BuildContext context, Updateresponse updateInfo) {
     const Color iconColor = Colors.blueAccent; // Or any color you prefer
-    showDialog(
+  return  showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => WillPopScope(

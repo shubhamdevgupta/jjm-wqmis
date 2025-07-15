@@ -5,6 +5,9 @@ import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
+import 'package:jjm_wqmis/providers/UpdateProvider.dart';
+import 'package:jjm_wqmis/utils/UpdateDialog.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,19 +17,36 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final session = UserSessionManager();
+  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.sanitizePrefs();  // await clear
-      await session.init();
-      _navigateToNextScreen();
+      await session.init();       // await init after clearing
+      await _checkForUpdateAndNavigate(); // navigate after setup
     });
   }
 
+
+  Future<void> _checkForUpdateAndNavigate() async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+
+    if (isAvailable && mounted) {
+      final updateInfo = await _updateViewModel.getUpdateInfo();
+
+      if (updateInfo != null) {
+
+        DialogUtils.showUpdateDialog(context, updateInfo);
+        return;
+      }
+    }
+    _navigateToNextScreen();
+  }
+
   Future<void> _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1)); // Optional splash delay
 
     final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);

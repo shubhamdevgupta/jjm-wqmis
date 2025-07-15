@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -50,36 +52,58 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  late UpdateViewModel _updateViewModel;
+  UpdateViewModel? _updateViewModel;
+  bool _updateDialogShown = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _updateViewModel = UpdateViewModel();
+    // Delay access to context until after build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateViewModel = Provider.of<UpdateViewModel>(navigatorKey.currentContext!, listen: false);
+      _checkForUpdate();
+      _startUpdateWatcher();
 
-    _checkForUpdate();
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _cancelPeriodicChecker();
     super.dispose();
+  }
+  /// ✅ Periodic checker to run every 5 minutes
+  Timer? _periodicTimer;
+  void _startUpdateWatcher() {
+    _checkForUpdate(); // Initial check
+    _periodicTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
+      _checkForUpdate();
+    });
+  }
+
+  void _cancelPeriodicChecker() {
+    _periodicTimer?.cancel();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed && !_updateDialogShown) {
       _checkForUpdate();
     }
   }
 
   Future<void> _checkForUpdate() async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
+    if (_updateViewModel == null || _updateDialogShown) return;
+
+    bool isAvailable = await _updateViewModel!.checkForUpdate();
     if (isAvailable && navigatorKey.currentContext != null) {
-      final updateInfo = await _updateViewModel.getUpdateInfo();
+      final updateInfo = await _updateViewModel!.getUpdateInfo();
       if (updateInfo != null) {
-        DialogUtils.showUpdateDialog(navigatorKey.currentContext!, updateInfo);
+        _updateDialogShown = true;
+        await DialogUtils.showUpdateDialog(navigatorKey.currentContext!, updateInfo);
+        _updateDialogShown = false;
       }
     }
   }
