@@ -19,6 +19,7 @@ class DwsmProvider extends ChangeNotifier {
   List<VillageInfo> villages = [];
   int baseStatus = 101;
 
+
   List<DashboardSchoolModel> dashboardSchoolListModel = [];
 
   List<SchoolResult> schoolResultList = [];
