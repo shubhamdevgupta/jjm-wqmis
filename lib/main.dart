@@ -9,9 +9,11 @@ import 'package:jjm_wqmis/providers/dashboardProvider.dart';
 import 'package:jjm_wqmis/providers/dwsmProvider.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/providers/masterProvider.dart';
+import 'package:jjm_wqmis/providers/UpdateProvider.dart';
 import 'package:jjm_wqmis/services/LocalStorageService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppRoutes.dart';
+import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -33,14 +35,54 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Samplelistprovider()),
         ChangeNotifierProvider(create: (_) => DwsmProvider()),
         ChangeNotifierProvider(create: (_) => Ftkprovider()),
+        ChangeNotifierProvider(create: (_) => UpdateViewModel()), // ✅ Added
       ],
       child: const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  late UpdateViewModel _updateViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _updateViewModel = UpdateViewModel();
+
+    _checkForUpdate();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkForUpdate();
+    }
+  }
+
+  Future<void> _checkForUpdate() async {
+    bool isAvailable = await _updateViewModel.checkForUpdate();
+    if (isAvailable && navigatorKey.currentContext != null) {
+      final updateInfo = await _updateViewModel.getUpdateInfo();
+      if (updateInfo != null) {
+        DialogUtils.showUpdateDialog(navigatorKey.currentContext!, updateInfo);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -26,7 +26,6 @@ class Dwsdashboardscreen extends StatefulWidget {
 class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
   final session = UserSessionManager();
   late DwsmProvider dashboardProvider;
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   @override
   void initState() {
@@ -35,28 +34,13 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       dashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
       await  session.init();
-_checkForUpdateAndNavigate();
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       await dashboardProvider.fetchDwsmDashboard(session.regId);
       //   masterProvider.clearData();
-      await masterProvider.fetchDistricts(session.stateId.toString(),session.regId);
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
     });
   }
-  Future<void> _checkForUpdateAndNavigate() async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
 
-    if (isAvailable && mounted) {
-      final updateInfo = await _updateViewModel.getUpdateInfo();
-
-      if (updateInfo != null) {
-
-        DialogUtils.showUpdateDialog(context, updateInfo);
-        return;
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

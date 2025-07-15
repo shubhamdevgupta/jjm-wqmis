@@ -1,13 +1,11 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/providers/UpdateProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/ftkProvider.dart';
 import 'package:jjm_wqmis/services/AppResetService.dart';
 import 'package:jjm_wqmis/utils/AppConstants.dart';
 import 'package:jjm_wqmis/utils/AppStyles.dart';
 import 'package:jjm_wqmis/utils/LoaderUtils.dart';
-import 'package:jjm_wqmis/utils/UpdateDialog.dart';
 import 'package:jjm_wqmis/utils/UserSessionManager.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +18,6 @@ class ftkDashboard extends StatefulWidget {
 
 class _ftkDashboard extends State<ftkDashboard> {
   final session = UserSessionManager();
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   int? villageId;
   int? regId;
@@ -30,25 +27,10 @@ class _ftkDashboard extends State<ftkDashboard> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
-      _checkForUpdateAndNavigate();
       await Provider.of<Ftkprovider>(context, listen: false)
           .fetchFtkDashboardData(session.regId, session.villageId);
     });
   }
-  Future<void> _checkForUpdateAndNavigate() async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
-
-    if (isAvailable && mounted) {
-      final updateInfo = await _updateViewModel.getUpdateInfo();
-
-      if (updateInfo != null) {
-
-        DialogUtils.showUpdateDialog(context, updateInfo);
-        return;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

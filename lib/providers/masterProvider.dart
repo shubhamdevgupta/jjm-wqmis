@@ -167,6 +167,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchBlocks(String stateId, String districtId, int regId) async {
+    setSelectedState(stateId);
     setSelectedDistrict(districtId);
 
     if (stateId.isEmpty || districtId.isEmpty) {
