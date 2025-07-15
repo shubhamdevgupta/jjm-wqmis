@@ -121,51 +121,6 @@ class Masterprovider extends ChangeNotifier {
   String sampleTypeOther = '';
   final LocalStorageService localStorage = LocalStorageService();
 
-  Future<void> fetchStates() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      final basestates = await _masterRepository.fetchStates();
-      if (basestates.status == 1) {
-        states = basestates.result;
-      } else {
-        errorMsg = basestates.message;
-      }
-    } catch (e) {
-      debugPrint('Error in StateProvider: $e');
-      GlobalExceptionHandler.handleException(e as Exception);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchDistricts(String stateId,int regId) async {
-    setSelectedState(stateId);
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final rawDistricts = await _masterRepository.fetchDistricts(stateId,regId);
-      baseStatus = rawDistricts.status;
-      if (rawDistricts.status == 1) {
-        districts = rawDistricts.result;
-      } else {
-        errorMsg = rawDistricts.message;
-      }
-
-
-    } catch (e,stackTrace) {
-      debugPrint('Error in fetching districts: master provider $e');
-      debugPrint('Error in fetching districts: master provider $stackTrace');
-      GlobalExceptionHandler.handleException(e as Exception);
-      errorMsg = "Failed to load districts.";
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
   Future<void> fetchBlocks(String stateId, String districtId, int regId) async {
     setSelectedState(stateId);
     setSelectedDistrict(districtId);

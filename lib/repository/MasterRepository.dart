@@ -24,26 +24,6 @@ class MasterRepository {
 
   final encryption = AesEncryption();
 
-  Future<BaseResponseModel<Stateresponse>> fetchStates() async {
-      final response = await _apiService.get('/apimasterA/GetState');
-      return BaseResponseModel<Stateresponse>.fromJson(response,(json)=>Stateresponse.fromJson(json));
-  }
-
-  Future<BaseResponseModel<Districtresponse>> fetchDistricts(String stateId ,int regId) async {
-    try {
-      final query = _apiService.buildEncryptedQuery({
-        'stateid': stateId,
-        'reg_Id' :regId
-      });
-
-      final response = await _apiService.get('/apimasterA/getdistrict?$query');
-      return BaseResponseModel<Districtresponse>.fromJson(response, (json)=>Districtresponse.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
-      rethrow;
-    }
-  }
-
   Future<BaseResponseModel<BlockResponse>> fetchBlocks(
       String stateId, String districtId , int regId) async {
     try {
