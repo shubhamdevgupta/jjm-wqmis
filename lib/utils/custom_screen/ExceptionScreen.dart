@@ -41,12 +41,10 @@ class ExceptionScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if(errorCode=="401"){
-                    final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
-                    await authProvider.logoutUser();
-                    Navigator.of(context).pop(); // ✅ This dismisses the dialog
                     await AppResetService.fullReset(context);
+                  }else{
+                    Navigator.of(context).pop();
                   }
-                  Navigator.of(context).pop();
                 },
                 child:  Padding(padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                 child: Text('OK' , style: AppStyles.setTextStyle(16, FontWeight.bold, Colors.red, ),)),

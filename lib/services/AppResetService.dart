@@ -8,10 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppResetService {
   static Future<void> fullReset(BuildContext context) async {
-    // 1. Clear Shared Preferences
+    /*// 1. Clear Shared Preferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear(); // Clears all stored values
-
+*/
     // 2. Reset All Providers
     Provider.of<AuthenticationProvider>(context, listen: false).logoutUser();
     Provider.of<Masterprovider>(context, listen: false).clearData();

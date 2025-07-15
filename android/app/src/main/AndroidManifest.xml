@@ -21,6 +21,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/wqmis_lunching5"
         android:label="JJM WQMIS"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
