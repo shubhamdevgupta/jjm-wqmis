@@ -226,8 +226,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                                   ? result.photo!.split(',').last
                                                   : result.photo;
 
-                                              final imageBytes = base64Decode(base64String??"");
-                                              showImage(imageBytes); // show image in alert
+                                              showImage(base64String); // show image in alert
                                             },
                                           );
                                         } catch (e) {
@@ -321,7 +320,25 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     return parts.where((e) => e != null && e.isNotEmpty).join(" > ");
   }
 
-  void showImage(Uint8List? imageBytes) {
+  void showImage(String? base64String) {
+    Uint8List? imageBytes;
+
+    // ✅ Step 1: Safely decode base64
+    try {
+      if (base64String != null && base64String.isNotEmpty) {
+        imageBytes = base64Decode(base64String);
+        if (imageBytes.isEmpty) {
+          imageBytes = null; // Empty image, fallback to no-image
+        }
+      }
+    } catch (e) {
+      print("Base64 Decoding Error: $e");
+      imageBytes = null;
+    }
+
+    print("Image bytes length: ${imageBytes?.length ?? 0}");
+
+    // ✅ Step 2: Show dialog
     showDialog(
       context: context,
       builder: (context) {
@@ -329,7 +346,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
           title: Text("$titleType Image"),
           content: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: (imageBytes == null || imageBytes.isEmpty)
+            child: imageBytes == null
                 ? Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -341,18 +358,43 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  "No Image Found",
+                  "No Image Found or Invalid Base64 String",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.red,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             )
                 : Image.memory(
               imageBytes,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                print('Image rendering error: $error');
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/icons/ic_no_image.png',
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      "Image Data Corrupted or Invalid Format",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           shape: RoundedRectangleBorder(
@@ -368,7 +410,8 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                   session.districtId,
                   "2025-2026",
                   "0",
-                  widget.type!,session.regId
+                  widget.type!,
+                  session.regId,
                 );
               },
               child: const Text("Close"),
@@ -378,5 +421,4 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
       },
     );
   }
-
 }
