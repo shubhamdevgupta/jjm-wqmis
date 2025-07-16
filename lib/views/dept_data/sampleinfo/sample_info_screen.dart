@@ -179,12 +179,20 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                     ),
                   );
                 }).toList(),
-                onChanged: (value) {
-                  masterProvider.setSelectedWaterSourcefilter(value);
-                  if (value != null && value != "0") {
-                    masterProvider.fetchSchemes(masterProvider.selectedStateId!,masterProvider.selectedDistrictId!,masterProvider.selectedVillage!,  masterProvider.selectedHabitation!, value,session.regId);
-                  }
-                },
+                  onChanged: (value) {
+                    masterProvider.setSelectedWaterSourcefilter(value);
+                    if (value != null && value != "0" &&
+                        [masterProvider.selectedStateId, masterProvider.selectedDistrictId, masterProvider.selectedVillage, masterProvider.selectedHabitation].every((e) => e != null)) {
+                      masterProvider.fetchSchemes(
+                        session.stateId.toString(),
+                        session.districtId.toString(),
+                        masterProvider.selectedVillage!,
+                        masterProvider.selectedHabitation!,
+                        value,
+                        session.regId,
+                      );
+                    }
+                  },
                 appBarTitle: "Select Location",
                 showSearchBar: false,
               ),
