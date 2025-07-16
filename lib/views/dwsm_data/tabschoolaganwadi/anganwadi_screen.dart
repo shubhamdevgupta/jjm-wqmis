@@ -51,133 +51,315 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
         builder: (context, dwsmprovider, child) {
           return dwsmprovider.isLoading
               ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
-              : Container(
-                  child: Scaffold(
-                    backgroundColor: Colors.transparent,
-                    body: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Builder(builder: (context) {
-                                switch (dwsmprovider.dataState) {
-                                  case DataState.loading:
-                                    return LoaderUtils.conditionalLoader(
-                                        isLoading: true);
+              : Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Builder(builder: (context) {
+                            switch (dwsmprovider.dataState) {
+                              case DataState.loading:
+                                return LoaderUtils.conditionalLoader(
+                                    isLoading: true);
 
-                                  case DataState.error:
-                                    return AppTextWidgets.errorText(
-                                        dwsmprovider.errorMessage);
+                              case DataState.error:
+                                return AppTextWidgets.errorText(
+                                    dwsmprovider.errorMessage);
 
-                                  case DataState.loaded:
-                                    return Column(
-                                      children: [
-                                        CustomDropdown(
-                                          title: "Select Anganwadi",
-                                          appBarTitle: "Select Anganwadi",
-                                          value: dwsmprovider.selectedAnganwadi,
-                                          items: dwsmprovider.anganwadiList
-                                              .map((anganwadi) {
-                                            return DropdownMenuItem<String>(
-                                              value: anganwadi.id.toString(),
-                                              child: Text(
-                                                anganwadi.name,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (selectedId) {
-                                            final selectedAnnganwadi =
-                                                dwsmprovider.anganwadiList
-                                                    .firstWhere(
-                                              (item) =>
-                                                  item.id.toString() ==
+                              case DataState.loaded:
+                                return Column(
+                                  children: [
+                                    CustomDropdown(
+                                      title: "Select Anganwadi",
+                                      appBarTitle: "Select Anganwadi",
+                                      value: dwsmprovider.selectedAnganwadi,
+                                      items: dwsmprovider.anganwadiList
+                                          .map((anganwadi) {
+                                        return DropdownMenuItem<String>(
+                                          value: anganwadi.id.toString(),
+                                          child: Text(
+                                            anganwadi.name,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (selectedId) {
+                                        final selectedAnnganwadi =
+                                            dwsmprovider.anganwadiList
+                                                .firstWhere(
+                                          (item) =>
+                                              item.id.toString() ==
+                                              selectedId,
+                                        );
+                                        dwsmprovider.setSelectedAnganwadi(
+                                            selectedId!,
+                                            selectedAnnganwadi.name,
+                                            selectedAnnganwadi.demonstrated,
+                                            selectedAnnganwadi
+                                                .demonstrated_date
+                                                .toString());
+
+                                        if (dwsmprovider.mDemonstrationId ==
+                                            1) {
+                                          dwsmprovider.fetchDemonstrationList(
+                                                  session.stateId,
+                                                  session.districtId,
+                                                  "2025-2026",
                                                   selectedId,
-                                            );
-                                            dwsmprovider.setSelectedAnganwadi(
-                                                selectedId!,
-                                                selectedAnnganwadi.name,
-                                                selectedAnnganwadi.demonstrated,
-                                                selectedAnnganwadi
-                                                    .demonstrated_date
-                                                    .toString());
+                                                  11,session.regId, onSuccess: (result) {
+                                            village = result;
 
-                                            if (dwsmprovider.mDemonstrationId ==
-                                                1) {
-                                              dwsmprovider.fetchDemonstrationList(
-                                                      session.stateId,
-                                                      session.districtId,
-                                                      "2025-2026",
-                                                      selectedId,
-                                                      11,session.regId, onSuccess: (result) {
-                                                village = result;
+                                          });
 
-                                              });
+                                          dwsmprovider
+                                              .showDemonstartionButton(
+                                                  false);
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Visibility(
+                                        visible: dwsmprovider
+                                                .selectedAnganwadi !=
+                                            null,
+                                        child: Card(
+                                          elevation: 3,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      16)),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 6,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                  16.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .start,
+                                                children: [
+                                                  // Header Row
+                                                  Row(
+                                                    children: [
+                                                      const Icon(
+                                                          Icons
+                                                              .school_rounded,
+                                                          color:
+                                                              Colors.green,
+                                                          size: 24),
+                                                      const SizedBox(width: 10),
+                                                      Expanded(
+                                                        child: Text(
+                                                          dwsmprovider
+                                                                  .selectedAnganwadiName ??
+                                                              "N/A",
+                                                          style: const TextStyle(
+                                                            fontSize: 17,
+                                                            fontFamily:
+                                                                'OpenSans',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600,
+                                                            color: Colors
+                                                                .black87,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    dwsmprovider.mDemonstrationId == 1
+                                        ? Column(
+                                            children: [
+                                              Visibility(
+                                                visible: dwsmprovider
+                                                            .selectedAnganwadi !=
+                                                        null &&
+                                                    !dwsmprovider
+                                                        .showDemonstartion,
+                                                child: SizedBox(
+                                                  width: double.infinity,
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
 
-                                              dwsmprovider
-                                                  .showDemonstartionButton(
-                                                      false);
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Visibility(
-                                            visible: dwsmprovider
-                                                    .selectedAnganwadi !=
-                                                null,
-                                            child: Card(
-                                              elevation: 3,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          16)),
-                                              child: Container(
+                                                      dwsmprovider
+                                                          .showDemonstartionButton(
+                                                              true);
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          Appcolor
+                                                              .buttonBgColor,
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    12),
+                                                      ),
+                                                    ),
+                                                    child: const Text(
+                                                      "New Demonstration",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight
+                                                                  .w500,
+                                                          fontFamily:
+                                                              'OpenSans',
+                                                          color:
+                                                              Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Visibility(
+                                                visible: dwsmprovider
+                                                            .selectedAnganwadi !=
+                                                        null &&
+                                                    dwsmprovider
+                                                        .showDemonstartion,
+                                                child:
+                                                    showForm(dwsmprovider,masterProvider),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                      BorderRadius.circular(16),
+                                                      BorderRadius.circular(
+                                                          16),
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.1),
-                                                      blurRadius: 6,
-                                                      offset: const Offset(0, 2),
+                                                      color: Colors
+                                                          .blue.shade100
+                                                          .withOpacity(0.4),
+                                                      blurRadius: 12,
+                                                      offset: const Offset(
+                                                          0, 4),
                                                     ),
                                                   ],
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
+                                                  padding:
+                                                      const EdgeInsets.all(
+                                                          16.0),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      // Header Row
+                                                      // Heading
+
                                                       Row(
                                                         children: [
-                                                          const Icon(
+                                                          _iconCircle(
                                                               Icons
-                                                                  .school_rounded,
-                                                              color:
-                                                                  Colors.green,
-                                                              size: 24),
-                                                          const SizedBox(width: 10),
+                                                                  .location_city,
+                                                              Colors.blue),
+                                                          const SizedBox(
+                                                              width: 10),
+                                                          const Text(
+                                                            "Demonstrated Details",
+                                                            style:
+                                                                TextStyle(
+                                                              fontSize: 18,
+                                                              fontFamily:
+                                                                  'OpenSans',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Colors
+                                                                  .blue,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const Divider(
+                                                          height: 30),
+                                                      const SizedBox(
+                                                          height: 12),
+
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          _iconCircle(
+                                                              Icons
+                                                                  .location_on,
+                                                              Colors.red),
+                                                          const SizedBox(
+                                                              width: 10),
                                                           Expanded(
                                                             child: Text(
-                                                              dwsmprovider
-                                                                      .selectedAnganwadiName ??
-                                                                  "N/A",
-                                                              style: const TextStyle(
-                                                                fontSize: 17,
+                                                              _buildLocationPath([
+                                                                village !=
+                                                                        null
+                                                                    ? village
+                                                                        ?.stateName
+                                                                    : "",
+                                                                village !=
+                                                                        null
+                                                                    ? village
+                                                                        ?.districtName
+                                                                    : "",
+                                                                village !=
+                                                                        null
+                                                                    ? village
+                                                                        ?.blockName
+                                                                    : "",
+                                                                village !=
+                                                                        null
+                                                                    ? village
+                                                                        ?.panchayatName
+                                                                    : "",
+                                                                village !=
+                                                                        null
+                                                                    ? village
+                                                                        ?.villageName
+                                                                    : "",
+                                                              ]),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize:
+                                                                    14,
                                                                 fontFamily:
                                                                     'OpenSans',
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w600,
+                                                                        .w500,
                                                                 color: Colors
                                                                     .black87,
                                                               ),
@@ -185,298 +367,114 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                           ),
                                                         ],
                                                       ),
+
+                                                      // School Name
+                                                      /*  _infoRow("$titleType Name", "$titleType",
+                                      Icons.school, Colors.deepPurple),
+                              */
+                                                      // Category
+                                                      _infoRow(
+                                                          "Category", village!.institutionCategory?? "",
+                                                          Icons.category,
+                                                          Colors.orange),
+
+                                                      // Classification
+                                                      _infoRow(
+                                                          "Classification",
+                                                          village!.institutionSubCategory
+                                                              ?? "",
+                                                          Icons.label,
+                                                          Colors.green),
+
+                                                      _infoRow(
+                                                          "Remark",
+                                                           village!
+                                                               .remark
+                                                              ?? "",
+                                                          Icons.message,
+                                                          Colors.teal),
+                                                      _infoRow(
+                                                          "Date",
+                                                          dwsmprovider.selectedAnganwadiDate!,
+                                                          Icons.message,
+                                                          Colors.teal),
+
+                                                      const Divider(
+                                                          height: 30),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .bottomRight,
+                                                        child:
+                                                            ElevatedButton
+                                                                .icon(
+                                                          onPressed: () {
+                                                            String? base64String = village!
+                                                                    .photo
+                                                                    !.contains(
+                                                                        ',')
+                                                                ? village
+                                                                    ?.photo
+                                                                    !.split(
+                                                                        ',')
+                                                                    .last
+                                                                : village
+                                                                    ?.photo;
+
+                                                            final imageBytes =
+                                                                base64Decode(
+                                                                    base64String!);
+
+                                                            showImage(
+                                                                imageBytes);
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons
+                                                                  .remove_red_eye,
+                                                              size: 18),
+                                                          label: const Text(
+                                                              "View"),
+                                                          style:
+                                                              ElevatedButton
+                                                                  .styleFrom(
+                                                            backgroundColor:
+                                                                Appcolor
+                                                                    .buttonBgColor,
+                                                            foregroundColor:
+                                                                Colors
+                                                                    .white,
+                                                            padding: const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    20,
+                                                                vertical:
+                                                                    10),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
                                               ),
-                                            )),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        dwsmprovider.mDemonstrationId == 1
-                                            ? Column(
-                                                children: [
-                                                  Visibility(
-                                                    visible: dwsmprovider
-                                                                .selectedAnganwadi !=
-                                                            null &&
-                                                        !dwsmprovider
-                                                            .showDemonstartion,
-                                                    child: SizedBox(
-                                                      width: double.infinity,
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-
-                                                          dwsmprovider
-                                                              .showDemonstartionButton(
-                                                                  true);
-                                                        },
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Appcolor
-                                                                  .buttonBgColor,
-                                                          foregroundColor:
-                                                              Colors.white,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                          ),
-                                                        ),
-                                                        child: const Text(
-                                                          "New Demonstration",
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily:
-                                                                  'OpenSans',
-                                                              color:
-                                                                  Colors.white),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Visibility(
-                                                    visible: dwsmprovider
-                                                                .selectedAnganwadi !=
-                                                            null &&
-                                                        dwsmprovider
-                                                            .showDemonstartion,
-                                                    child:
-                                                        showForm(dwsmprovider,masterProvider),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.all(8),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors
-                                                              .blue.shade100
-                                                              .withOpacity(0.4),
-                                                          blurRadius: 12,
-                                                          offset: const Offset(
-                                                              0, 4),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              16.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          // Heading
-
-                                                          Row(
-                                                            children: [
-                                                              _iconCircle(
-                                                                  Icons
-                                                                      .location_city,
-                                                                  Colors.blue),
-                                                              const SizedBox(
-                                                                  width: 10),
-                                                              const Text(
-                                                                "Demonstrated Details",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 18,
-                                                                  fontFamily:
-                                                                      'OpenSans',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .blue,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const Divider(
-                                                              height: 30),
-                                                          const SizedBox(
-                                                              height: 12),
-
-                                                          Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              _iconCircle(
-                                                                  Icons
-                                                                      .location_on,
-                                                                  Colors.red),
-                                                              const SizedBox(
-                                                                  width: 10),
-                                                              Expanded(
-                                                                child: Text(
-                                                                  _buildLocationPath([
-                                                                    village !=
-                                                                            null
-                                                                        ? village
-                                                                            ?.stateName
-                                                                        : "",
-                                                                    village !=
-                                                                            null
-                                                                        ? village
-                                                                            ?.districtName
-                                                                        : "",
-                                                                    village !=
-                                                                            null
-                                                                        ? village
-                                                                            ?.blockName
-                                                                        : "",
-                                                                    village !=
-                                                                            null
-                                                                        ? village
-                                                                            ?.panchayatName
-                                                                        : "",
-                                                                    village !=
-                                                                            null
-                                                                        ? village
-                                                                            ?.villageName
-                                                                        : "",
-                                                                  ]),
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    fontFamily:
-                                                                        'OpenSans',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    color: Colors
-                                                                        .black87,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-
-                                                          // School Name
-                                                          /*  _infoRow("$titleType Name", "$titleType",
-                                          Icons.school, Colors.deepPurple),
-                                  */
-                                                          // Category
-                                                          _infoRow(
-                                                              "Category", village!.institutionCategory?? "",
-                                                              Icons.category,
-                                                              Colors.orange),
-
-                                                          // Classification
-                                                          _infoRow(
-                                                              "Classification",
-                                                              village!.institutionSubCategory
-                                                                  ?? "",
-                                                              Icons.label,
-                                                              Colors.green),
-
-                                                          _infoRow(
-                                                              "Remark",
-                                                               village!
-                                                                   .remark
-                                                                  ?? "",
-                                                              Icons.message,
-                                                              Colors.teal),
-                                                          _infoRow(
-                                                              "Date",
-                                                              dwsmprovider.selectedAnganwadiDate!,
-                                                              Icons.message,
-                                                              Colors.teal),
-
-                                                          const Divider(
-                                                              height: 30),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .bottomRight,
-                                                            child:
-                                                                ElevatedButton
-                                                                    .icon(
-                                                              onPressed: () {
-                                                                String? base64String = village!
-                                                                        .photo
-                                                                        !.contains(
-                                                                            ',')
-                                                                    ? village
-                                                                        ?.photo
-                                                                        !.split(
-                                                                            ',')
-                                                                        .last
-                                                                    : village
-                                                                        ?.photo;
-
-                                                                final imageBytes =
-                                                                    base64Decode(
-                                                                        base64String!);
-
-                                                                showImage(
-                                                                    imageBytes);
-                                                              },
-                                                              icon: const Icon(
-                                                                  Icons
-                                                                      .remove_red_eye,
-                                                                  size: 18),
-                                                              label: const Text(
-                                                                  "View"),
-                                                              style:
-                                                                  ElevatedButton
-                                                                      .styleFrom(
-                                                                backgroundColor:
-                                                                    Appcolor
-                                                                        .buttonBgColor,
-                                                                foregroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        20,
-                                                                    vertical:
-                                                                        10),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              12),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : showForm(dwsmprovider,masterProvider),
-                                      ],
-                                    );
-                                  default:
-                                    return const SizedBox(); // or any placeholder
-                                }
-                              })),
-                        ),
-                      ],
+                                            ],
+                                          )
+                                        : showForm(dwsmprovider,masterProvider),
+                                  ],
+                                );
+                              default:
+                                return const SizedBox(); // or any placeholder
+                            }
+                          })),
                     ),
-                  ),
-                );
+                  ],
+                ),
+              );
         },
       ),
     );
