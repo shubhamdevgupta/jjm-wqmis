@@ -473,7 +473,6 @@ class _SchoolScreen extends State<SchoolScreen> {
                                             : showForm(dwsmprovider,masterProvider),
                                       ],
                                     );
-                                  case DataState.initial:
                                   default:
                                     return const SizedBox(); // or any placeholder
                                 }

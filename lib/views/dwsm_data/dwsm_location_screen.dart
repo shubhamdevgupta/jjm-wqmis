@@ -30,7 +30,7 @@ class _DwsmLocation extends State<DwsmLocation> {
   }
 
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
     final dwsmDashboardProvider =
         Provider.of<DwsmProvider>(context, listen: true);
     return MaterialApp(

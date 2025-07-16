@@ -187,8 +187,4 @@ class AuthenticationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  void reset() {
-    // TODO: implement reset
-  }
 }

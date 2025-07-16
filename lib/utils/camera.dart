@@ -12,7 +12,6 @@ class CameraHelper {
 
   /// Pick image from camera, compress, and convert to base64
   Future<void> pickFromCamera() async {
-    try {
       final pickedFile = await _picker.pickImage(
         source: ImageSource.camera,
         imageQuality: 50,
@@ -24,8 +23,6 @@ class CameraHelper {
         base64Image = await _convertToBase64(compressed);
 
       }
-    } catch (e) {
-    }
   }
 
   /// Remove image and base64

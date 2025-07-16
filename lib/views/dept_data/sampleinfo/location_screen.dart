@@ -32,7 +32,7 @@ class _LocationscreenState extends State<Locationscreen> {
   }
 
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
 
     final paramProvider = Provider.of<ParameterProvider>(
         context, listen: true);

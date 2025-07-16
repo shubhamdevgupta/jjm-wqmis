@@ -45,6 +45,5 @@ class DeviceInfoUtil {
       debugPrint('Error fetching device info: $e');
       return 'Unknown_Device';
     }
-    return 'Unknown_Platform';
   }
 }

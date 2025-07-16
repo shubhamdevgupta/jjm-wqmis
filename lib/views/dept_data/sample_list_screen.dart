@@ -627,8 +627,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
     }
 sampleListProvider.resetPagination();
     // Call fetch based on flags
-    if (flag == AppConstants.openSampleListScreen ||
-        flagfloation != null) {
+    if (flag == AppConstants.openSampleListScreen) {
       await sampleListProvider.fetchSampleList(
         session.regId,
         sampleListProvider.PAGE,

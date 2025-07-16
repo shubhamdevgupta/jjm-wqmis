@@ -248,7 +248,6 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
   }
 
   void showImage(String result) {
-    try {
       if (result.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Image not available at the moment.")),
@@ -280,7 +279,5 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
           );
         },
       );
-    } catch (e) {
-    }
   }
 }

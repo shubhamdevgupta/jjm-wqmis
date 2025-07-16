@@ -468,7 +468,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                             : showForm(dwsmprovider,masterProvider),
                                       ],
                                     );
-                                  case DataState.initial:
                                   default:
                                     return const SizedBox(); // or any placeholder
                                 }
