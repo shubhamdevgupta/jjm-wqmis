@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/ftk_demonstration_list_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
+import 'package:jjm_wqmis/utils/ImageDialogUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
@@ -420,12 +421,18 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                                 : village
                                                                     ?.photo;
 
-                                                            final imageBytes =
-                                                                base64Decode(
-                                                                    base64String!);
 
-                                                            showImage(
-                                                                imageBytes);
+                                                            ImageDialogUtil.showImageDialog(
+                                                              context: context,
+                                                              title: "Anganwadi",
+                                                              base64String: base64String,
+                                                              shouldFetchDemoList: false, // or false if you don't want to fetch
+                                                              stateId: null,
+                                                              districtId: null,
+                                                              regId: null,
+                                                              type: null,
+                                                            );
+
                                                           },
                                                           icon: const Icon(
                                                               Icons
@@ -644,29 +651,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
     );
   }
 
-  void showImage(Uint8List imageBytes) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Anganwadi Image"),
-          content: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.memory(imageBytes, fit: BoxFit.contain),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Widget showForm(DwsmProvider dwsmprovider, Masterprovider masterProvider) {
     return Visibility(

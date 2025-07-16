@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/utils/ImageDialogUtil.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
@@ -226,12 +227,21 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                                   ? result.photo!.split(',').last
                                                   : result.photo;
 
-                                              showImage(base64String); // show image in alert
+                                              ImageDialogUtil.showImageDialog(
+                                                context: context,
+                                                title: "",
+                                                base64String: base64String,
+                                                shouldFetchDemoList: true, // or false if you don't want to fetch
+                                                stateId: session.stateId,
+                                                districtId: session.districtId,
+                                                regId: session.regId,
+                                                type: widget.type,
+                                              );
+                                              // show image in alert
                                             },
                                           );
                                         } catch (e) {
                                           debugPrint("Error fetching demonstration list: $e");
-                                          showImage(null); // Fallback if any error
                                         } finally {
                                           // Ensure loader is always dismissed
                                           if (context.mounted) {
