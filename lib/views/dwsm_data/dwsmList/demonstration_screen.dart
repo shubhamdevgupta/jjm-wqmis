@@ -207,14 +207,13 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
                                   const Divider(height: 30),
 
-                                  /// 🔷 View Button
+
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: ElevatedButton.icon(
                                       onPressed: () async {
                                         // Show loader only once
                                         try {
-                                          // Call the provider function WITHOUT managing loader inside provider
                                           await provider.fetchDemonstrationList(
                                             session.stateId,
                                             session.districtId,
@@ -229,7 +228,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
 
                                               ImageDialogUtil.showImageDialog(
                                                 context: context,
-                                                title: "",
+                                                title: titleType!,
                                                 base64String: base64String,
                                                 shouldFetchDemoList: true, // or false if you don't want to fetch
                                                 stateId: session.stateId,

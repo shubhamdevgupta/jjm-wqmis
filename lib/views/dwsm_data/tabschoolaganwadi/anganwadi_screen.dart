@@ -50,9 +50,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       value: Provider.of<DwsmProvider>(context, listen: false),
       child: Consumer<DwsmProvider>(
         builder: (context, dwsmprovider, child) {
-          return dwsmprovider.isLoading
-              ? LoaderUtils.conditionalLoader(isLoading: dwsmprovider.isLoading)
-              : Scaffold(
+          return Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Stack(
                   children: [
@@ -62,12 +60,10 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           child: Builder(builder: (context) {
                             switch (dwsmprovider.dataState) {
                               case DataState.loading:
-                                return LoaderUtils.conditionalLoader(
-                                    isLoading: true);
+                                return LoaderUtils.conditionalLoader(isLoading: true);
 
                               case DataState.error:
-                                return AppTextWidgets.errorText(
-                                    dwsmprovider.errorMessage);
+                                return AppTextWidgets.errorText(dwsmprovider.errorMessage);
 
                               case DataState.loaded:
                                 return Column(
@@ -369,28 +365,23 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                                         ],
                                                       ),
 
-                                                      // School Name
-                                                      /*  _infoRow("$titleType Name", "$titleType",
-                                      Icons.school, Colors.deepPurple),
-                              */
                                                       // Category
                                                       _infoRow(
-                                                          "Category", village!.institutionCategory?? "",
+                                                          "Category", village?.institutionCategory?? "",
                                                           Icons.category,
                                                           Colors.orange),
 
                                                       // Classification
                                                       _infoRow(
                                                           "Classification",
-                                                          village!.institutionSubCategory
+                                                          village?.institutionSubCategory
                                                               ?? "",
                                                           Icons.label,
                                                           Colors.green),
 
                                                       _infoRow(
                                                           "Remark",
-                                                           village!
-                                                               .remark
+                                                           village?.remark
                                                               ?? "",
                                                           Icons.message,
                                                           Colors.teal),
