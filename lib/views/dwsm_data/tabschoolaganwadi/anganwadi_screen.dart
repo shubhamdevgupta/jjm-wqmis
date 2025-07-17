@@ -96,7 +96,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                             selectedAnnganwadi.name,
                                             selectedAnnganwadi.demonstrated,
                                             selectedAnnganwadi
-                                                .demonstrated_date
+                                                .demonstratedDate
                                                 .toString());
 
                                         if (dwsmprovider.mDemonstrationId ==
