@@ -33,6 +33,7 @@ class ImageDialogUtil {
 
     showDialog(
       context: dialogContext,
+      barrierDismissible: false,
       builder: (_) => AlertDialog(
         title: Text(title),
         content: ClipRRect(
@@ -65,7 +66,9 @@ class ImageDialogUtil {
                 }
               }
             },
-            child: const Text("Close"),
+            child:  Text("Close",style: TextStyle(fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue, ),),
           ),
         ],
       ),

@@ -93,7 +93,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                               selectedId!,
                                               selectedSchool.name,
                                               selectedSchool.demonstrated,
-                                              selectedSchool.demonstratedDate
+                                            selectedSchool.demonstratedDate
                                                   .toString());
                                           dwsmprovider
                                               .showDemonstartionButton(false);
