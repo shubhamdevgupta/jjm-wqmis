@@ -66,9 +66,9 @@ class ImageDialogUtil {
                 }
               }
             },
-            child:  Text("Close",style: TextStyle(fontSize: 20,
+            child:  const Text("Close",style: TextStyle(fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.blue, ),),
+              color: Colors.blue)),
           ),
         ],
       ),

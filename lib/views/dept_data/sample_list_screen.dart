@@ -627,7 +627,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
     }
 sampleListProvider.resetPagination();
     // Call fetch based on flags
-    if (flag == AppConstants.openSampleListScreen) {
+   // if (flag == AppConstants.openSampleListScreen) {
       await sampleListProvider.fetchSampleList(
         session.regId,
         sampleListProvider.page,
@@ -640,7 +640,7 @@ sampleListProvider.resetPagination();
         int.parse(masterProvider.selectedGramPanchayat ?? "0"),
         int.parse(masterProvider.selectedVillage ?? "0"),
       );
-    }
+ //   }
   }
 
   @override

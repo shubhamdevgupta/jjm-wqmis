@@ -578,7 +578,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       onTap: onTap,
       child: Container(
 
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -597,7 +597,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: iconColor.withOpacity(0.12),
                 shape: BoxShape.circle,
@@ -618,7 +618,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 13.5,
+                fontSize: 13,
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
