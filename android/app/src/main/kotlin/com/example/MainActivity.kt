@@ -45,6 +45,9 @@ class MainActivity: FlutterActivity() {
                         result.error("UNAVAILABLE", "Version name not available.", null)
                     }
                 }
+                "getSecretKey"->{
+                    result.success(getSecretKey())
+                }
                 else -> {
                     result.notImplemented()
                 }
@@ -52,6 +55,9 @@ class MainActivity: FlutterActivity() {
         }
     }
 
+    private fun getSecretKey(): String {
+        return "8080808080808080" // 🔒 Secret key stored natively
+    }
     private fun requestLocationPermission(): Boolean {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {

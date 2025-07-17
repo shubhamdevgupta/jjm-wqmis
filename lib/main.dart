@@ -15,6 +15,7 @@ import 'package:jjm_wqmis/providers/update_provider.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_routes.dart';
+import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/update_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageService.init();
   await Firebase.initializeApp();
+  await AesEncryption.initKey();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   runApp(
@@ -59,12 +61,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Delay access to context until after build
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateViewModel = Provider.of<UpdateViewModel>(navigatorKey.currentContext!, listen: false);
-      _checkForUpdate();
       _startUpdateWatcher();
-
     });
   }
 
@@ -74,11 +73,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     _cancelPeriodicChecker();
     super.dispose();
   }
-  /// ✅ Periodic checker to run every 5 minutes
   Timer? _periodicTimer;
   void _startUpdateWatcher() {
-    _checkForUpdate(); // Initial check
-    _periodicTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    _periodicTimer = Timer.periodic(const Duration(minutes: 3), (timer) {
       _checkForUpdate();
     });
   }

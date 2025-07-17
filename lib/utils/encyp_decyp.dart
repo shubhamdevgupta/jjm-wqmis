@@ -1,36 +1,40 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:jjm_wqmis/utils/secretkey_service.dart';
 
 class AesEncryption {
-  static const String key = "8080808080808080"; // 16-char key
+  static late String _key;
 
-  String encryptText(String plainText) {
-    final keyBytes = utf8.encode(key);
-    final iv = keyBytes.sublist(0, 16);
-    final encrypter = encrypt.Encrypter(
+  static Future<void> initKey() async {
+    _key = await SecretKeyService.getSecretKey();
+  }
+
+  encrypt.Encrypter _getEncrypter() {
+    final keyBytes = utf8.encode(_key);
+    return encrypt.Encrypter(
       encrypt.AES(
         encrypt.Key(Uint8List.fromList(keyBytes)),
         mode: encrypt.AESMode.cbc,
         padding: 'PKCS7',
       ),
     );
+  }
 
-    final encrypted = encrypter.encrypt(plainText, iv: encrypt.IV(iv));
-    return encrypted.base64;
+  encrypt.IV _getIV() {
+    final iv = utf8.encode(_key).sublist(0, 16);
+    return encrypt.IV(iv);
+  }
+
+  String encryptText(String plainText) {
+    final encrypter = _getEncrypter();
+    final iv = _getIV();
+    return encrypter.encrypt(plainText, iv: iv).base64;
   }
 
   String decryptText(String cipherText) {
-    final keyBytes = utf8.encode(key);
-    final iv = keyBytes.sublist(0, 16);
-    final encrypter = encrypt.Encrypter(
-      encrypt.AES(
-        encrypt.Key(Uint8List.fromList(keyBytes)),
-        mode: encrypt.AESMode.cbc,
-        padding: 'PKCS7',
-      ),
-    );
-
-    return encrypter.decrypt64(cipherText, iv: encrypt.IV(iv));
+    final encrypter = _getEncrypter();
+    final iv = _getIV();
+    return encrypter.decrypt64(cipherText, iv: iv);
   }
 }
