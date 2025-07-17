@@ -36,26 +36,26 @@ class SchoolResult {
   String name;
   int id;
   int demonstrated;
-  String demonstrated_date;
+  String demonstratedDate;
 
   SchoolResult({
     required this.name,
     required this.id,
     required this.demonstrated,
-    required this.demonstrated_date,
+    required this.demonstratedDate,
   });
 
   factory SchoolResult.fromJson(Map<String, dynamic> json) => SchoolResult(
     name: json["Name"],
     id: json["Id"],
     demonstrated: json["demonstrated"],
-    demonstrated_date: json["demonstrated_date"],
+    demonstratedDate: json["demonstrated_date"],
   );
 
   Map<String, dynamic> toJson() => {
     "Name": name,
     "Id": id,
     "demonstrated": demonstrated,
-    "demonstrated_date":demonstrated_date
+    "demonstrated_date":demonstratedDate
   };
 }

@@ -101,13 +101,13 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchoolAwcInfo(int Stateid, int Districtid, int Blockid,
-      int Gpid, int Villageid, int type,int regId) async {
+  Future<void> fetchSchoolAwcInfo(int stateId, int districtId, int blockId,
+      int gpId, int villageId, int type,int regId) async {
     _isLoading = true;
     dataState = DataState.loading;
     try {
       final rawSchoolInfo = await _dwsmRepository.fetchSchoolAwcInfo(
-          Stateid, Districtid, Blockid, Gpid, Villageid, type, regId);
+          stateId, districtId, blockId, gpId, villageId, type, regId);
 
       if (rawSchoolInfo.status == 1) {
         if (type == 0) {
@@ -209,20 +209,20 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   void setSelectedSchool(
-      String id, String name, int demonstrationId, String DemoDate) {
+      String id, String name, int demonstrationId, String demoDate) {
     selectedSchoolResult = id;
     selectedSchoolName = name;
-    selectedSchoolDate = DemoDate;
+    selectedSchoolDate = demoDate;
     mDemonstrationId = demonstrationId;
     notifyListeners();
   }
 
   void setSelectedAnganwadi(
-      String id, String name, int demonstrationId, String DemoDate) {
+      String id, String name, int demonstrationId, String demoDate) {
     selectedAnganwadi = id;
     selectedAnganwadiName = name;
     mDemonstrationId = demonstrationId;
-    selectedAnganwadiDate = DemoDate;
+    selectedAnganwadiDate = demoDate;
     schoolResultList = [];
     notifyListeners();
   }

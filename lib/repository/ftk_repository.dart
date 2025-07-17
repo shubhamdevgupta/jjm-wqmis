@@ -56,7 +56,7 @@ class FtkRepository {
       String sourceName,
       String latitude,
       String longitude,
-      String IpAddress,
+      String ipAddress,
       String sampleTypeOther,
       String parameteId,
       String paramSaferange) async {
@@ -82,7 +82,7 @@ class FtkRepository {
       "SourceName": sourceName,
       "source_latitude": latitude,
       "source_longitude": longitude,
-      "IpAddress": IpAddress,
+      "IpAddress": ipAddress,
       "sample_type_other": sampleTypeOther,
       "test_selected": parameteId,
       "saferangeid": paramSaferange
@@ -104,7 +104,7 @@ class FtkRepository {
   Future<BaseResponseModel<FtkSample>> fetchFtkSample(
       int regId,
       int villageid,
-      int SampleId,
+      int sampleId,
       ) async {
     try {
 
@@ -112,7 +112,7 @@ class FtkRepository {
         {
           'reg_id': regId,
           'villageid': villageid.toString(),
-          'SampleId': SampleId.toString(),
+          'SampleId': sampleId.toString(),
         },
       );
 

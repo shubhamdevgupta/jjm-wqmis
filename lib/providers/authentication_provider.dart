@@ -25,7 +25,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
-  var randomOne, randomTwo, captchResult;
+  var randomOne=0, randomTwo=0, captchResult=0;
 
   LoginResponse? _loginResponse;
   bool _isLoading = false;

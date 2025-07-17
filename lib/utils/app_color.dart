@@ -4,8 +4,7 @@ class Appcolor {
   static const Color white = Color(0xFFFFFFFF);
   static const Color blue = Color(0xFF90CAF9);
   static const Color black = Color(0xFF000000);
-  static const MaterialColor COLOR_PRIMARY = Colors.blue;
-  static const MaterialColor STATUSCOLOR_PRIMARY = Colors.lightBlue;
+  static const MaterialColor colorPrimary = Colors.blue;
   static const Color lightdark = Color(0xFFC4C2C2);
   static const Color light = Color(0xFFF3F3F3);
   static const Color greenmessagecolor = Color(0xFF2C8F21);

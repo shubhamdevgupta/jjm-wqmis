@@ -12,7 +12,7 @@ class Samplelistprovider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String errorMsg = '';
   bool hasMore = true;
-  int PAGE = 1;
+  int page = 1;
 
   int _baseStatus = 0;
 
@@ -42,7 +42,7 @@ class Samplelistprovider extends ChangeNotifier {
       final List<Sample> currentSamples = List.from(samples);
       final List<Sample> newSamples = response.result;
 
-      if (PAGE == 1) {
+      if (page == 1) {
         currentSamples.clear();
       }
       currentSamples.addAll(newSamples);// Safely add new items
@@ -52,7 +52,7 @@ class Samplelistprovider extends ChangeNotifier {
 
 // Update pagination flags
       hasMore = newSamples.length >= 20; // Adjust to your backend's page size
-      if (hasMore) ++PAGE; // Increment only if there's more to fetch
+      if (hasMore) ++page; // Increment only if there's more to fetch
 
 // Handle status and messages
       _baseStatus = response.status;
@@ -104,7 +104,7 @@ class Samplelistprovider extends ChangeNotifier {
   }
   void resetPagination() {
 
-    PAGE= 1;
+    page= 1;
     hasMore = true;
     notifyListeners();
   }

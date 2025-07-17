@@ -37,7 +37,7 @@ class Utilityclass{
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Appcolor.COLOR_PRIMARY,
+                    backgroundColor: Appcolor.colorPrimary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5))),
                 child: const SizedBox(

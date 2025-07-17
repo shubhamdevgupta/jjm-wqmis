@@ -588,7 +588,7 @@ class _SampleListScreenState extends State<SampleListScreen> {
           sampleListProvider.hasMore) {
         sampleListProvider.fetchSampleList(
           session.regId,
-          sampleListProvider.PAGE,
+          sampleListProvider.page,
           SEARCH,
           C_STATUS,
           SAMPLE_ID,
@@ -630,7 +630,7 @@ sampleListProvider.resetPagination();
     if (flag == AppConstants.openSampleListScreen) {
       await sampleListProvider.fetchSampleList(
         session.regId,
-        sampleListProvider.PAGE,
+        sampleListProvider.page,
         SEARCH,
         C_STATUS,
         SAMPLE_ID,

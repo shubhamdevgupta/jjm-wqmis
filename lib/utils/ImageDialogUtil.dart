@@ -31,11 +31,6 @@ class ImageDialogUtil {
 
     final dialogContext = navigatorKey.currentContext ?? context;
 
-    if (dialogContext == null) {
-      debugPrint("No valid context found for dialog.");
-      return;
-    }
-
     showDialog(
       context: dialogContext,
       builder: (_) => AlertDialog(

@@ -101,7 +101,7 @@ class Ftkprovider extends ChangeNotifier {
       sourceName,
       latitude,
       longitude,
-      IpAddress,
+      ipAddress,
       sampleTypeOther,
       parameteId,
       paramSaferange) async {
@@ -130,7 +130,7 @@ class Ftkprovider extends ChangeNotifier {
           sourceName,
           latitude,
           longitude,
-          IpAddress,
+          ipAddress,
           sampleTypeOther,
           parameteId,
           paramSaferange);

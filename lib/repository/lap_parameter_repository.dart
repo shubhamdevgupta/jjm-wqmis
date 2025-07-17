@@ -13,12 +13,12 @@ import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 class Lapparameterrepository {
   final BaseApiService _apiService = BaseApiService();
 
-  Future<BaseResponseModel<AllLabResponse>> fetchAllLab(String StateId, String districtId,
+  Future<BaseResponseModel<AllLabResponse>> fetchAllLab(String stateId, String districtId,
       String blockid, String gpid, String villageid, String isall, int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
-        'StateId': StateId,
+        'StateId': stateId,
         'districtId': districtId,
         'blockid': blockid,
         'gpid': gpid,

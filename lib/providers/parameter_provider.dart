@@ -38,8 +38,6 @@ class ParameterProvider with ChangeNotifier {
   bool isLabSelected = false;
   Labinchargeresponse? labIncharge;
 
-  List<SchoolResult> Schoolinfo = [];
-
   int? selectedSchoolId;
   String? selectedSchoolName;
 
@@ -63,10 +61,6 @@ class ParameterProvider with ChangeNotifier {
 
   List<WtpLab> wtpLab = [];
   String? selectedWtpLab;
-
-  SchoolinfoResponse? _schoolinfoResponse;
-
-  SchoolinfoResponse? get schoolInfo => _schoolinfoResponse;
 
   List<SchoolResult> schoolResult = [];
   String? selectedSchoolResult;

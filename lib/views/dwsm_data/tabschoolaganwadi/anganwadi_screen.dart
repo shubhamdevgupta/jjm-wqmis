@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/DWSM/ftk_demonstration_list_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
@@ -96,7 +93,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                             selectedAnnganwadi.name,
                                             selectedAnnganwadi.demonstrated,
                                             selectedAnnganwadi
-                                                .demonstrated_date
+                                                .demonstratedDate
                                                 .toString());
 
                                         if (dwsmprovider.mDemonstrationId ==

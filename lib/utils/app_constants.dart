@@ -78,7 +78,7 @@ class AppConstants {
   static const String maintenance = 'Maintenance';
   static const String logout = 'Logout';
   static const String dashboardOverview = 'Dashboard Overview';
-  static const String dwsm_dashboardOverview = 'DWSM Dashboard';
+  static const String dwsmDashboardOverview = 'DWSM Dashboard';
   static const String welcome = 'Welcome';
   static const String totalSamplesSubmitted = 'New Samples Registered';
   static const String  knowyoursampledetail =  "Know your sample detail";
