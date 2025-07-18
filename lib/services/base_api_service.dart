@@ -130,7 +130,7 @@ class BaseApiService {
 
         default:
           throw ApiException(
-              'Unexpected error occurred [${response.statusCode}]. Please try again.',
+              'Unexpected error occurred . Please try again after some time.',
               response.statusCode.toString());
       }
     } catch (e) {

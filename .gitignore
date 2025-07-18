@@ -44,3 +44,4 @@ app.*.map.json
 
 #json file have to remove or hide not to be on server
 /android/app/google-services.json
+/android/app/my-key.jks

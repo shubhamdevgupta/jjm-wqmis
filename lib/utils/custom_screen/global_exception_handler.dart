@@ -21,7 +21,7 @@ class GlobalExceptionHandler {
       errorMessage = e.message;
       httpErrCode = e.httpErrCode;
     } else {
-      errorMessage = 'Unexpected Error Occurred \n$e';
+      errorMessage = 'OOPs! Something went wrong, \n Please try after some time';
       httpErrCode = "";
     }
 
