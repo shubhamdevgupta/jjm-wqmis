@@ -21,6 +21,8 @@
         android:name="${applicationName}"
         android:icon="@mipmap/wqmis_lunching5"
         android:label="JJM WQMIS"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true">
         <activity
