@@ -215,7 +215,12 @@ class _LocationscreenState extends State<Locationscreen> {
                             ),
                           ),
                         ],
+
+
                       ),
+
+
+
                     ],
                   ),
                 ),
@@ -224,195 +229,8 @@ class _LocationscreenState extends State<Locationscreen> {
 
 
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'State *',
-                    style: TextStyle(
-                      fontSize: 16, fontFamily: 'OpenSans',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: DropdownButtonFormField<String>(
-
-                      value: session.stateId.toString(), // Ensure this matches the DropdownMenuItem value
-                      decoration: InputDecoration(
-                        filled:
-                            true, // Grey background to indicate it's non-editable
-                        fillColor: Colors.grey[300],
-                        labelStyle: const TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-
-                          borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 2), // Avoid focus effect
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      ),
-                      items: [
-                        DropdownMenuItem<String>(
-                          value: session.stateId.toString(), // Ensure this matches the selected value
-
-                          child: Text(session.stateName ,
-                              style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontFamily: 'OpensSans',
-                                  fontWeight:
-                                  FontWeight.w500)), // Display state name
-                        ),
-                      ],
-                      onChanged: null,
-                      // Disable selection (non-editable)
-                      isExpanded: true,
-                      style: const TextStyle(
-                        color: Colors.black, fontFamily: 'OpenSans',
-                        fontSize: 16,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              //district data here--------------
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'District',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black, // Dark text for better readability
-                        fontFamily: 'OpenSans'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: DropdownButtonFormField<String>(
-                      value: session.districtId.toString(),
-                      // Ensure this matches the DropdownMenuItem value
-                      decoration: InputDecoration(
-                        filled: true,
-                        // Grey background to indicate it's non-editable
-                        fillColor: Colors.grey[300],
-                        labelStyle: const TextStyle(
-                          color: Colors.blueAccent,
-                          fontFamily: 'OpenSans',
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.grey, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-
-                          borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 2), // Avoid focus effect
-                        ),
-                        contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      ),
-                      items: [
-                        DropdownMenuItem<String>(
-                          value: session.districtId.toString(),
-                          // Ensure this matches the selected value
-
-                          child: Text(
-                              session.districtName,
-                              style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontFamily: 'OpensSans',
-                                  fontWeight:
-                                  FontWeight.w500)), // Display state name
-                        ),
-                      ],
-                      onChanged: null,
-                      // Disable selection (non-editable)
-                      isExpanded: true,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'OpenSans',
-                        fontSize: 16,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ],
-              ),
 
 
-
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-
-                  onPressed: () async {
-
-                    await masterProvider.fetchLocation();
-                    if (widget.flag == AppConstants.openSampleListScreen) {
-
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppConstants.navigateToSampleListScreen,
-                        ModalRoute.withName('/dashboard'),
-                        arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
-                      );
-                    } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
-                      masterProvider.fetchWatersourcefilterList();
-                      masterProvider.clearsampleinfo();
-                      Navigator.pop(context, true);
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
-                    } else {
-                      /*ToastHelper.showErrorSnackBar(context, masterProvider.errorMsg);*/
-                      ToastHelper.showToastMessage(masterProvider.errorMsg);
-                    }
-
-                    //TODO LGD code
-                         /*             masterProvider.fetchVillageDetails(
-                          paramProvider.currentLongitude!,
-                          paramProvider.currentLatitude!);
-                      print('Going to Save Sample screen');
-                      final hasData = masterProvider.villageDetails.isNotEmpty;
-                      final villageLgd = hasData
-                          ? masterProvider.villageDetails.first.villageLgd
-                          : "0";
-                      masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
-                      if(masterProvider.validateVillageResponse!.status==1) {
-                        Navigator.pushReplacementNamed(context, '/savesample');
-                      }else{
-                        ToastHelper.showErrorSnackBar(context, 'please check the location ');
-                      }*/
-
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF096DA8),
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-
-                  child: const Text(
-                    'Next',
-                    style: AppStyles.textStyle
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -421,7 +239,87 @@ class _LocationscreenState extends State<Locationscreen> {
   }
 
 
+  Widget buildSampleCard({
+    required String title,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: color.withOpacity(0.5), width: 1.2),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12.withOpacity(0.05),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color.withOpacity(0.1),
+                  ),
+                  child: Image.asset(
+                    'assets/icons/medical-lab.png',
+                    width: 22,
+                    height: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
 
+              ],
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: onTap,
+                icon: const Icon(Icons.add, size: 18, color: Colors.white),
+                label: const Text(
+                  "Add Sample",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: color,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  minimumSize: const Size(10, 10),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
   void showHabitationDropdown(BuildContext context, Masterprovider masterProvider) {
     showModalBottomSheet(
       context: context,

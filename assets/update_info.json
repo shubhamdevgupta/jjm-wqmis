@@ -1,5 +1,5 @@
 {
-  "version": "1.1.5",
+  "version": "1.1.9",
   "apk_url": "https://github.com/shubhamdevgupta/jjm-wqmis/releases/download/v1.3/app-release.apk",
   "whats_new": "fix error handling \n add state district in api call \n implement delete on sample"
 }
