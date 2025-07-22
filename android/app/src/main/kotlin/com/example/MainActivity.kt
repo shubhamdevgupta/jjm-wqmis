@@ -13,7 +13,6 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.example/location_permission"
-
     private lateinit var locationManager: LocationManager
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
