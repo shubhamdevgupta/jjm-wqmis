@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
   Timer? _periodicTimer;
   void _startUpdateWatcher() {
-    _periodicTimer = Timer.periodic(const Duration(minutes: 3), (timer) {
+    _periodicTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _checkForUpdate();
     });
   }
