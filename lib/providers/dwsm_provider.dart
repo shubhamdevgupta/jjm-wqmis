@@ -52,11 +52,11 @@ class DwsmProvider extends ChangeNotifier {
 
   String errorMessage='';
 
-  Future<void> fetchDwsmDashboard(int userId) async {
+  Future<void> fetchDwsmDashboard(int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final response = await _dwsmRepository.fetchDwsmDashboard(userId);
+      final response = await _dwsmRepository.fetchDwsmDashboard(regId);
       _dwsmdashboardresponse = response;
     } catch (e) {
       debugPrint('Error in fetching source information: $e');
@@ -155,7 +155,6 @@ class DwsmProvider extends ChangeNotifier {
   }
 
   Future<void> submitDemonstration(
-    int userId,
     int schoolId,
     int stateId,
     String photoBase64,
@@ -172,7 +171,6 @@ class DwsmProvider extends ChangeNotifier {
 
     try {
       final rawSchoolInfo = await _dwsmRepository.submitDemonstration(
-          userId,
           schoolId,
           stateId,
           photoBase64,

@@ -81,7 +81,7 @@ class DwsmRepository{
   }
 
 
-  Future<DemonstrationResponse> submitDemonstration( int userId,
+  Future<DemonstrationResponse> submitDemonstration(
        int schoolId,
        int stateId,
        String photoBase64,
@@ -95,7 +95,6 @@ class DwsmRepository{
     try {
       final response = await _apiService.post('APIMobileA/FTK_Demonstrated',
         body: jsonEncode(encryptDataClassBody({
-          "UserId": userId,
           "SchoolId": schoolId,
           "StateId": stateId,
           "Photo": photoBase64,
@@ -115,10 +114,10 @@ class DwsmRepository{
     }
   }
 
-  Future<Dwsmdashboardresponse> fetchDwsmDashboard(int userId) async {
+  Future<Dwsmdashboardresponse> fetchDwsmDashboard(int regId) async {
 
     final query = _apiService.buildEncryptedQuery({
-      'reg_id': userId,
+      'reg_id': regId,
     });
 
     try {

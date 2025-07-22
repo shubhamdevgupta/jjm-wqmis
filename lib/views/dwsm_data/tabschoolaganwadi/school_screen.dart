@@ -841,7 +841,6 @@ class _SchoolScreen extends State<SchoolScreen> {
                   onPressed: () async {
                     if (await validate(dwsmprovider, masterProvider)) {
                       await dwsmprovider.submitDemonstration(
-                          session.regId,
                           int.parse(dwsmprovider.selectedSchoolResult!),
                           session.stateId,
                           _cameraHelper.base64Image!,

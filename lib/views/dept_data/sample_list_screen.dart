@@ -349,9 +349,9 @@ class _SampleListScreenState extends State<SampleListScreen> {
                                                 LoaderUtils.showLoadingWithMessage(context, message: 'Deleting sample...');
                                                 String deviceId = await DeviceInfoUtil.getUniqueDeviceId();
                                                 provider.deleteSample(
-                                                  encryption.encryptText(sample.sId.toString()),
-                                                  encryption.encryptText(session.regId.toString()),
-                                                  encryption.encryptText(deviceId),
+                                                  sample.sId.toString(),
+                                                  session.regId.toString(),
+                                                  deviceId,
                                                       (response) {
                                                     LoaderUtils.hideLoaderDialog(context);
                                                     bool deleted = provider.deleteSampleFromList(index, sample.sId);

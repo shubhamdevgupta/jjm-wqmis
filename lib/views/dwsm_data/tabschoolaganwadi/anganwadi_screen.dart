@@ -855,13 +855,13 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                       await dwsmprovider.submitDemonstration(
                           session.regId,
                           int.parse(dwsmprovider.selectedAnganwadi!),
-                          session.stateId,
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
                           masterProvider.lat.toString(),
                           masterProvider.lng.toString(),
-                          dwsmprovider.deviceId!, session.regId,() {
+                          dwsmprovider.deviceId!,
+                          session.regId,() {
                         showResponse(dwsmprovider);
                       });
                     } else {

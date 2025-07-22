@@ -67,13 +67,13 @@ class Samplelistprovider extends ChangeNotifier {
 
   Future<void> deleteSample(
       String encSid,
-      String? userId,
+      String regId,
       String deviceId,
       Function(String response) onSuccess,
       Function(String error) onError) async {
     notifyListeners();
     try {
-      final response = await _repository.deleteSample(encSid, userId, deviceId);
+      final response = await _repository.deleteSample(encSid, regId, deviceId);
 
       _baseStatus = response.status;
       errorMsg = response.message;

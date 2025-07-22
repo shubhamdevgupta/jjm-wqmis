@@ -46,12 +46,12 @@ class SampleListRepo {
     }
   }
 
-  Future<BaseResponseModel<dynamic>> deleteSample(String encryptedSid, String? userId, String deviceId) async {
+  Future<BaseResponseModel<dynamic>> deleteSample(String encryptedSid, String regId, String deviceId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         's_id': encryptedSid,
-        'userid': userId,
+        'reg_id': regId,
         'ip': deviceId,
       });
 
