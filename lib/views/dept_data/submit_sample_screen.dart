@@ -70,7 +70,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
     final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-
+    const double rowHeight = 50.0;
+    const double maxTableHeight = 250.0;
     return Consumer<Samplesubprovider>(builder: (context, provider, child) {
 
       return Scrollbar(
@@ -137,111 +138,117 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Column(
-                                  children: [Padding(
-                                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                                      child: Card(
-                                        elevation: 4,
-                                        color: Colors.white, // White background
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: SizedBox(width: double.infinity,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              children: [
-                                                // Dynamic height adjustment
-                                                ConstrainedBox(constraints: const BoxConstraints(maxHeight: 250, ), // Maximum height before scrolling starts
-                                                  child: paramProvider.cart!.isEmpty ? const Center(child: Text("No tests selected"),) // Show message if no items
-                                                          : Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      // 🔵 Fixed Header
-                                                      SingleChildScrollView(
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            _buildHeaderCell(' Sr ', width: 35),
-                                                            _buildHeaderCell('Test Name', width: MediaQuery.of(context).size.width * 0.50),
-                                                            _buildHeaderCell('Price', width: 60),
-                                                            _buildHeaderCell('Action', width: 50),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 5), // spacing
-                                                      // 🟢 Scrollable Table Body (constrained height)
-                                                      ConstrainedBox(
-                                                        constraints: const BoxConstraints(maxHeight: 205),
-                                                        child: Scrollbar(thumbVisibility: true,
-                                                          child: SingleChildScrollView(scrollDirection: Axis.vertical,
-                                                            child: SingleChildScrollView(scrollDirection: Axis.horizontal,
-                                                              child: Column(
-                                                                children: paramProvider.cart!.asMap().entries.map((entry) {
-                                                                  int index = entry.key;
-                                                                  var param = entry.value;
-                                                                  return Row(
-                                                                    children: [
-                                                                      _buildRowCell('${index + 1}', width: 35),
-                                                                      _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.50),
-                                                                      _buildRowCell(param.deptRate.toString(), width: 60),
-                                                                      SizedBox(
-                                                                        width: 50,
-                                                                        child: IconButton(
-                                                                          icon: const Icon(Icons.delete, color: Colors.red),
-                                                                          onPressed: () {
-                                                                            if (paramProvider.cart!.length > 1) {
-                                                                              paramProvider.removeFromCart(param);
-                                                                              if (paramProvider.isParam) {
-                                                                                var paramterId = paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
-                                                                                      paramProvider.fetchParamLabs(masterProvider.selectedStateId!, paramterId,session.regId);
-                                                                                paramProvider.selectedLab = "";
-                                                                              }
-                                                                            } else {
-                                                                              ToastHelper.showSnackBar(context, "Parameter cannot be empty");
-                                                                            }
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  );
-                                                                }).toList(),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                                const Divider(),
-
-                                                Padding(padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                      const Text("Total Price",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.green,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                      const SizedBox(width: 20),
-                                                      Text(
-                                                          "₹ ${paramProvider.calculateTotal()} /-",
-                                                          style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                  children: [
+                                    //lab box
+                                Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Card(
+                                  elevation: 4,
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        // Fixed Header
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              _buildHeaderCell("Sr. No.", width: 70),
+                                              _buildHeaderCell("Test Name", width: MediaQuery.of(context).size.width * 0.4),
+                                              _buildHeaderCell("Price", width: 70),
+                                              _buildHeaderCell("Action", width: 70),
+                                            ],
                                           ),
                                         ),
-                                      ),
+
+                                        const SizedBox(height: 5),
+
+                                        // Scrollable Rows
+                                        LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            int itemCount = paramProvider.cart?.length ?? 0;
+                                            double calculatedHeight = itemCount * rowHeight;
+                                            double tableHeight = calculatedHeight > maxTableHeight
+                                                ? maxTableHeight
+                                                : calculatedHeight;
+
+                                            return ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                maxHeight: tableHeight,
+                                              ),
+                                              child: Scrollbar(
+                                                thumbVisibility: true,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+                                                  child: SingleChildScrollView(
+                                                    scrollDirection: Axis.horizontal,
+                                                    child: Column(
+                                                      children: paramProvider.cart!.asMap().entries.map((entry) {
+                                                        int index = entry.key;
+                                                        var param = entry.value;
+                                                        return Row(
+                                                          children: [
+                                                            _buildRowCell('${index + 1}', width: 70),
+                                                            _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.4),
+                                                            _buildRowCell(param.deptRate.toString(), width: 70),
+                                                            SizedBox(
+                                                              width: 70,
+                                                              child: IconButton(
+                                                                icon: const Icon(Icons.delete, color: Colors.red),
+                                                                onPressed: ()async {
+                                                                  if (paramProvider.cart!.length > 1) {
+                                                                    paramProvider.removeFromCart(param);
+                                                                    if (paramProvider.isParam) {
+                                                                      var paramterId = paramProvider.cart!
+                                                                          .sublist(0, paramProvider.cart!.length)
+                                                                          .join(",");
+                                                                    await  paramProvider.fetchParamLabs(
+                                                                          masterProvider.selectedStateId!,
+                                                                          paramterId,session.regId);
+                                                                      paramProvider.selectedLab = "";
+                                                                    }
+                                                                  } else {
+                                                                    ToastHelper.showSnackBar(context, "Parameter cannot be empty");
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+
+                                        const Divider(),
+
+                                        // Total Price Section
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              const Text("Total Price",
+                                                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                                              const SizedBox(width: 20),
+                                              Text("₹ ${paramProvider.calculateTotal()} /-",
+                                                  style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Visibility(
+                                  ),
+                                ),
+                              ),
+
+                              Visibility(
                                       visible: paramProvider.isLab,
                                       child: Column(
                                         children: [
