@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
-import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
@@ -402,7 +400,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       masterProvider.selectedDistrictId!,
                       masterProvider.selectedBlockId!,
                       masterProvider.selectedGramPanchayat!,
-                      value,
+                      value,session.regId
                     );
                   }
                   Navigator.pop(context); // Close the bottom sheet
@@ -452,7 +450,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     masterProvider.fetchGramPanchayat(
                       masterProvider.selectedStateId!,
                       masterProvider.selectedDistrictId!,
-                      value,
+                      value,session.regId
                     );
                   }
                   Navigator.pop(context); // Close the bottom sheet
@@ -507,7 +505,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       masterProvider.selectedStateId!,
                       masterProvider.selectedDistrictId!,
                       masterProvider.selectedBlockId!,
-                      value,
+                      value,session.regId
                     );
                   }
                   Navigator.pop(context); // Close bottom sheet
@@ -515,11 +513,10 @@ class _LocationscreenState extends State<Locationscreen> {
                 appBarTitle: "Select Gram Panchayat",
               ),
             );
-                },
-          },
+                });
+         }
         );
-      },
-    );
+      }
   }
 
   Widget buildLocationTile({
@@ -584,4 +581,4 @@ class _LocationscreenState extends State<Locationscreen> {
 
     return provider.errorMsg.isEmpty;
   }
-}
+

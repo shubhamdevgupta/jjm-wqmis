@@ -4,8 +4,8 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboard_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/services/app_reset_service.dart';
-import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/location_screen.dart';
 import 'package:provider/provider.dart';
@@ -28,14 +28,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      await session.init();
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
       Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
 
 
-      await masterProvider.fetchDistricts(session.stateId.toString());
-      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
     });
   }
 
@@ -513,27 +511,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                    /*        showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                double screenHeight =
-                                    MediaQuery.of(context).size.height;
-                                double screenwidth =
-                                    MediaQuery.of(context).size.width;
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(10),
-                                  content: Container(
-                                    color: Colors.white,
-                                    height: screenHeight * 0.8,
-                                    width: screenwidth * 0.99,
-                                    child:  const Locationscreen(
-                                      flag: AppConstants.openSampleInfoScreen,
-                                      flagFloating: "",
-                                    ),
-                                  ),
-                                );
-                              },
+                            Navigator.pushNamed(
+                              context,
+                              AppConstants.navigateToLocationScreen,
                             );
+
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0468B1),
@@ -569,106 +551,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           )),
     );
   }
-
-  Widget _buildMenuCard({
-    required String title,
-    required IconData icon,
-    required String value,
-    required String imageName, // Renamed here
-    required VoidCallback onTap,
-    required List<Color> gradientColors,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 8,
-              offset: const Offset(2, 4),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: const EdgeInsets.all(8), // Slightly increased for spacing
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(1, 2),
-                    ),
-                  ],
-                ),
-                child: Image.asset(
-                  'assets/icons/$imageName.png',
-                  width: 26, // Increased size
-                  height: 28,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  height: 1.3,
-                  fontFamily: 'OpenSans',
-                  shadows: [
-                    Shadow(
-                      color: Colors.black12,
-                      offset: Offset(2, 2),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black54,
-                      offset: Offset(2, 2),
-                      blurRadius: 6,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-
 
   Widget _buildInfoCard({
     required String imagePath,
