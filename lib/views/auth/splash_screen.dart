@@ -3,6 +3,8 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
+import 'package:jjm_wqmis/views/dept_data/dept_dashboard_screen.dart';
+import 'package:jjm_wqmis/views/labIncharge/labincharge_dashboard.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/update_provider.dart';
@@ -53,7 +55,13 @@ class _SplashScreenState extends State<SplashScreen> {
     final roleId = session.roleId;
     await authProvider.checkLoginStatus();
     masterProvider.clearData();
-    if (authProvider.isLoggedIn) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => LabinchargeDashboard(),
+      ),
+    );
+/*    if (authProvider.isLoggedIn) {
       if (roleId == 4) {
         Navigator.pushReplacementNamed(
             context, AppConstants.navigateToDashboardScreen);
@@ -67,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacementNamed(
           context, AppConstants.navigateToLoginScreen);
-    }
+    }*/
   }
 
   @override
