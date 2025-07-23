@@ -798,7 +798,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                               width: 5,
                             ),
                             Text(
-                              'Latitude: ${masterProvider.lat?.toStringAsFixed(5)}',
+                              'Latitude: ${masterProvider.lat?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -817,7 +817,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                               width: 5,
                             ),
                             Text(
-                              'Longitude: ${masterProvider.lng?.toStringAsFixed(5)}',
+                              'Longitude: ${masterProvider.lng?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -839,6 +839,7 @@ class _SchoolScreen extends State<SchoolScreen> {
               width: double.infinity,
               child: ElevatedButton(
                   onPressed: () async {
+
                     if (await validate(dwsmprovider, masterProvider)) {
                       await dwsmprovider.submitDemonstration(
                           int.parse(dwsmprovider.selectedSchoolResult!),
@@ -846,8 +847,8 @@ class _SchoolScreen extends State<SchoolScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          masterProvider.lat.toString(),
-                          masterProvider.lng.toString(),
+                          masterProvider.lat!.toStringAsFixed(6),
+                          masterProvider.lng!.toStringAsFixed(6),
                           dwsmprovider.deviceId!,
                           session.regId, () {
                         showResponse(dwsmprovider);

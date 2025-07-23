@@ -498,7 +498,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${masterProvider.lat}",
+                                                          "${masterProvider.lat?.toStringAsFixed(6)}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -531,7 +531,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${masterProvider.lng}",
+                                                          "${masterProvider.lng?.toStringAsFixed(6)}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -924,7 +924,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lat}",
+                                                                      "${masterProvider.lat?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -961,7 +961,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lng}",
+                                                                      "${masterProvider.lng?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -1102,8 +1102,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSource,
-      masterProvider.lat!.toString(),
-      masterProvider.lng!.toString(),
+      masterProvider.lat!.toStringAsFixed(6),
+      masterProvider.lng!.toStringAsFixed(6),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
