@@ -478,19 +478,28 @@ class Masterprovider extends ChangeNotifier {
 
   Future<void> checkAndPromptLocation(BuildContext context) async {
     _isLoading = true;
+    notifyListeners(); // if using Provider
 
-    final status = await Permission.location.request();
+    final location = Location();
 
-    if (status.isGranted) {
-      Location location = Location();
+    try {
+      // 1. Check permission
+      final status = await Permission.location.status;
+      if (!status.isGranted) {
+        final result = await Permission.location.request();
+        if (!result.isGranted) {
+          _isLoading = false;
+          await openAppSettings(); // Open app settings if denied permanently
+          return;
+        }
+      }
 
-      // Check if GPS is enabled
+      // 2. Check if GPS is enabled
       bool serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
+        serviceEnabled = await location.requestService(); // prompts the user
         if (!serviceEnabled) {
-          _isLoading=false;
-          // Show dialog if user still refuses
+          _isLoading = false;
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -503,7 +512,7 @@ class Masterprovider extends ChangeNotifier {
                 ),
                 TextButton(
                   onPressed: () async {
-                    await openAppSettings();
+                    await openAppSettings(); // redirect to location settings manually
                     Navigator.of(context).pop();
                   },
                   child: const Text("Open Settings"),
@@ -515,15 +524,14 @@ class Masterprovider extends ChangeNotifier {
         }
       }
 
-      // ✅ Now GPS is ON and permission is granted
-      LocationData locationData = await location.getLocation();
-
+      // 3. Get location
+      final locationData = await location.getLocation();
       setLocation(locationData.latitude, locationData.longitude);
-      _isLoading=false;
-    } else {
-      _isLoading=false;
-      // Permission denied
-      await openAppSettings();
+    } catch (e) {
+      debugPrint("Error in checkAndPromptLocation: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners(); // if using Provider
     }
   }
 
