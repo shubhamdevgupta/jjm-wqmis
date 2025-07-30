@@ -219,7 +219,7 @@ class __SearchDialogState<T> extends State<_SearchDialog<T>> {
         backgroundColor: Colors.blue,
         elevation: 2,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close,color: Colors.white,),
           onPressed: () => Navigator.pop(context),
         ),
       ),
