@@ -4,8 +4,8 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboard_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/services/app_reset_service.dart';
-import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/location_screen.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +28,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
      await session.init();
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
+      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
       Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
 
+
+      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
     });
   }
 
@@ -510,27 +511,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                double screenHeight =
-                                    MediaQuery.of(context).size.height;
-                                double screenwidth =
-                                    MediaQuery.of(context).size.width;
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(10),
-                                  content: Container(
-                                    color: Colors.white,
-                                    height: screenHeight * 0.8,
-                                    width: screenwidth * 0.99,
-                                    child:  const Locationscreen(
-                                      flag: AppConstants.openSampleInfoScreen,
-                                      flagFloating: "",
-                                    ),
-                                  ),
-                                );
-                              },
+                            Navigator.pushNamed(
+                              context,
+                              AppConstants.navigateToLocationScreen,
                             );
+
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0468B1),
