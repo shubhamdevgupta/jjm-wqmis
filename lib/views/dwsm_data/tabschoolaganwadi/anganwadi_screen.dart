@@ -813,7 +813,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Latitude: ${masterProvider.lat?.toStringAsFixed(5)}',
+                              'Latitude: ${masterProvider.lat?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -829,7 +829,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Longitude: ${masterProvider.lng?.toStringAsFixed(5)}',
+                              'Longitude: ${masterProvider.lng?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -858,8 +858,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          masterProvider.lat.toString(),
-                          masterProvider.lng.toString(),
+                          masterProvider.lat!.toStringAsFixed(6),
+                          masterProvider.lng!.toStringAsFixed(6),
                           dwsmprovider.deviceId!,
                           session.regId,() {
                         showResponse(dwsmprovider);

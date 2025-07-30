@@ -26,7 +26,13 @@ class LocationUtils {
   /// Fetch Current Location
   static Future<Map<String, dynamic>?> getCurrentLocation() async {
     try {
-      final Map<dynamic, dynamic> location = await _permissionChannel.invokeMethod('getLocation');
+      final Map<dynamic, dynamic>? location = await _permissionChannel.invokeMethod('getLocation');
+
+      if (location == null || location['latitude'] == null || location['longitude'] == null) {
+        debugPrint('Location data is incomplete');
+        return null;
+      }
+
       debugPrint('Fetched Location Data: $location');
 
       return {
