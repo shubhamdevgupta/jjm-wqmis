@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/village_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_response.dart';
+import 'package:jjm_wqmis/models/MasterVillageData.dart';
 import 'package:jjm_wqmis/models/Wtp/wtp_list_response.dart';
 import 'package:jjm_wqmis/repository/master_repository.dart';
 
@@ -77,8 +78,11 @@ class Masterprovider extends ChangeNotifier {
 
   ValidateVillageResponse? _validateVillageResponse;
 
-  ValidateVillageResponse? get validateVillageResponse =>
-      _validateVillageResponse;
+  ValidateVillageResponse? get validateVillageResponse => _validateVillageResponse;
+
+  MasterVillageData? _masterVillageData;
+
+  MasterVillageData? get masterVillageData => _masterVillageData;
 
   int baseStatus = 0;
   int? _selectedSubSource;
@@ -542,6 +546,19 @@ class Masterprovider extends ChangeNotifier {
     try {
       _validateVillageResponse =
           await _masterRepository.validateVillage(villageId, lgdCode,regId);
+    } catch (e) {
+      errorMsg = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> masterVillagesData(String stateId, String districtId,String villageId) async {
+    _isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+    try {
+      _masterVillageData = await _masterRepository.masterVillageData(stateId, districtId,villageId);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
