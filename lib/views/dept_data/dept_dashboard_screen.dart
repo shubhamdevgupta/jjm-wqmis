@@ -35,7 +35,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   final encryption = AesEncryption();
   @override
-  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -67,9 +66,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
       final masterProvider =
       Provider.of<Masterprovider>(context, listen: false);
-      await masterProvider.fetchDistricts(session.stateId.toString());
       await masterProvider.fetchBlocks(
-          session.stateId.toString(), session.districtId.toString());
+          session.stateId.toString(), session.districtId.toString(),session.regId);
 
       Provider.of<DashboardProvider>(context, listen: false)
           .loadDashboardData(session.roleId, session.regId, session.stateId);
