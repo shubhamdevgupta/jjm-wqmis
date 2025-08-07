@@ -1,5 +1,8 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/Entities/habitation_table.dart';
+import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
+import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/providers/UpdateProvider.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboardProvider.dart';
@@ -27,19 +30,47 @@ class _DashboardscreenState extends State<Dashboardscreen> {
 
   final encryption = AesEncryption();
   @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     await session.init();
-     _checkForUpdateAndNavigate();
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
-      await masterProvider.fetchDistricts(session.stateId.toString());
-      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString());
-      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
+      await session.init();
 
+      // Initialize Floor DB
+      final database = await $FloorAppDatabase.databaseBuilder('my_app_database.db').build();
+
+      // Access DAOs
+      final habitationDao = database.habitationDao;
+      final waterSourceDao = database.waterSourceFilterDao;
+
+      // Optional: Clear old data
+      await habitationDao.clearTable();
+      await waterSourceDao.clearTable();
+
+      // Insert new data (from static values or parsed JSON)
+      await habitationDao.insertAll([
+        Habitation(69, 56, "VENKAMPETA"),
+        Habitation(1682934, 56, "DOLA PETA"),
+      ]);
+
+      await waterSourceDao.insertAll([
+        WaterSourceFilter(2, "Sources of Schemes \r\n(Raw water)"),
+      ]);
+
+      // Continue your normal flow
+      _checkForUpdateAndNavigate();
+
+      final masterProvider =
+      Provider.of<Masterprovider>(context, listen: false);
+      await masterProvider.fetchDistricts(session.stateId.toString());
+      await masterProvider.fetchBlocks(
+          session.stateId.toString(), session.districtId.toString());
+
+      Provider.of<DashboardProvider>(context, listen: false)
+          .loadDashboardData(session.roleId, session.regId, session.stateId);
     });
   }
+
 
   Future<void> _checkForUpdateAndNavigate() async {
     bool isAvailable = await _updateViewModel.checkForUpdate();
