@@ -480,7 +480,7 @@ class Masterprovider extends ChangeNotifier {
       // 1. Fetch from API
       _masterVillageData = await _masterRepository.masterVillageData(stateId, districtId, villageId);
 
-      // 2. Open Floor DB
+      /*// 2. Open Floor DB
       final db = await $FloorAppDatabase
           .databaseBuilder('my_app_database.db')
           .build();
@@ -522,7 +522,7 @@ class Masterprovider extends ChangeNotifier {
       await db.labInchargeDao.insertAll(
           _masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
       );
-
+*/
     } catch (e) {
       errorMsg = e.toString();
     } finally {

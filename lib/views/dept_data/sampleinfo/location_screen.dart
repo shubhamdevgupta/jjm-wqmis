@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
@@ -6,7 +7,6 @@ import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:provider/provider.dart';
-
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/current_location.dart';
@@ -386,7 +386,53 @@ class _LocationscreenState extends State<Locationscreen> {
                 child: ElevatedButton(
                   onPressed: () async {
 
+                    print("📥 Starting Offline Data fetch...");
                     await masterProvider.masterVillagesData("2", "4", "56");
+
+                    // 2. Open Floor DB
+                    final db = await $FloorAppDatabase
+                        .databaseBuilder('my_app_database.db')
+                        .build();
+
+                    // 3. Optional: Clear old data from all tables (initialize)
+                    await db.habitationDao.clearTable();
+                    await db.waterSourceFilterDao.clearTable();
+            /*        await db.schemeDao.clearTable();
+                    await db.sourcesDao.clearTable();
+                    await db.labDao.clearTable();
+                    await db.parameterDao.clearTable();
+                    await db.labInchargeDao.clearTable();*/
+
+                    // 4. Insert new data from API into tables
+                    await db.habitationDao.insertAll(
+                        masterProvider.masterVillageData!.habitations.map((e) => e.toEntity()).toList()
+                    );
+
+                    await db.waterSourceFilterDao.insertAll(
+                        masterProvider.masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
+                    );
+
+              /*      await db.schemeDao.insertAll(
+                        masterProvider.masterVillageData!.schemes.map((e) => e.toEntity()).toList()
+                    );
+
+                    await db.sourcesDao.insertAll(
+                        masterProvider.masterVillageData!.sources.map((e) => e.toEntity()).toList()
+                    );
+
+                    await db.labDao.insertAll(
+                        masterProvider.masterVillageData!.labs.map((e) => e.toEntity()).toList()
+                    );
+
+                    await db.parameterDao.insertAll(
+                        masterProvider.masterVillageData!.parameters.map((e) => e.toEntity()).toList()
+                    );
+
+                    await db.labInchargeDao.insertAll(
+                        masterProvider.masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
+                    );
+             */
+                    print("✅ Offline Data fetch done.");
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF096DA8),

@@ -2,7 +2,7 @@ import 'package:floor/floor.dart';
 
 @Entity(tableName: 'habitation')
 class HabitationTable {
-  @primaryKey
+  @PrimaryKey()
   final int habitationId;
 
   final int villageId;

@@ -25,29 +25,31 @@ class MasterVillageData {
     required this.labIncharges,
   });
 
+
   factory MasterVillageData.fromJson(Map<String, dynamic> json) {
     return MasterVillageData(
-      habitations: (json['habitations'] as List<dynamic>)
+      habitations: (json['Habitation'] as List<dynamic>? ?? [])
           .map((e) => HabitationModel.fromJson(e))
           .toList(),
-      waterSourceFilters: (json['water_source_filter'] as List<dynamic>)
+      waterSourceFilters: (json['WaterSourceFilter'] as List<dynamic>? ?? [])
           .map((e) => WaterSourceFilterModel.fromJson(e))
           .toList(),
-      schemes: (json['Scheme'] as List<dynamic>)
+      schemes: (json['Scheme'] as List<dynamic>? ?? [])
           .map((e) => SchemeModel.fromJson(e))
           .toList(),
-      sources: (json['Sources'] as List<dynamic>)
+      sources: (json['Sources'] as List<dynamic>? ?? [])
           .map((e) => SourceModel.fromJson(e))
           .toList(),
-      labs: (json['Lab'] as List<dynamic>)
+      labs: (json['Lab'] as List<dynamic>? ?? [])
           .map((e) => LabModel.fromJson(e))
           .toList(),
-      parameters: (json['Parameter'] as List<dynamic>)
+      parameters: (json['Parameter'] as List<dynamic>? ?? [])
           .map((e) => ParameterModel.fromJson(e))
           .toList(),
-      labIncharges: (json['LabIncharge'] as List<dynamic>)
+      labIncharges: (json['LabIncharge'] as List<dynamic>? ?? [])
           .map((e) => LabInchargeModel.fromJson(e))
           .toList(),
     );
   }
+
 }

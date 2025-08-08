@@ -41,9 +41,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       await session.init();
 
       // Initialize Floor DB
+      final database = await $FloorAppDatabase.databaseBuilder('my_app_database.db').build();
+
+      // Access DAOs
+      final habitationDao = database.habitationDao;
+      final waterSourceDao = database.waterSourceFilterDao;
+
+      // Optional: Clear old data
+      await habitationDao.clearTable();
+      await waterSourceDao.clearTable();
 
 
-      // Insert new data (from static values or parsed JSON)
+
+/*      await waterSourceDao.insertAll([
+        WaterSourceFilter(2, "Sources of Schemes \r\n(Raw water)"),
+      ]);*/
 
       // Continue your normal flow
       _checkForUpdateAndNavigate();

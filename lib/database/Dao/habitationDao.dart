@@ -6,10 +6,10 @@ abstract class HabitationDao {
   @Query('SELECT * FROM habitation')
   Future<List<HabitationTable>> getAll();
 
-  @insert
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertHabitation(HabitationTable habitation);
 
-  @insert
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertAll(List<HabitationTable> habitations);
 
   @Query('DELETE FROM habitation')
