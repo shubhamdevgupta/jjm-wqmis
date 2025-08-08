@@ -9,4 +9,14 @@ abstract class SourcesDao {
 
   @Query('SELECT * FROM Sources')
   Future<List<SourcesEntity>> getAllSources();
+
+  @insert
+  Future<void> insertAll(List<SourcesEntity> waterSources);
+
+  @Query('DELETE FROM SourcesEntity')
+  Future<void> clearTable();
+
+
+
+
 }

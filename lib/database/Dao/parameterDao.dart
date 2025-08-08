@@ -9,4 +9,11 @@ abstract class ParameterDao {
 
   @Query('SELECT * FROM Parameter')
   Future<List<ParameterEntity>> getAllParameters();
+
+
+  @insert
+  Future<void> insertAll(List<ParameterEntity> waterSources);
+
+  @Query('DELETE FROM ParameterEntity')
+  Future<void> clearTable();
 }

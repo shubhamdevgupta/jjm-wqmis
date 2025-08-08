@@ -8,4 +8,11 @@ abstract class SchemeDao {
 
   @Query('SELECT * FROM Scheme')
   Future<List<SchemeEntity>> getAllSchemes();
+
+
+  @insert
+  Future<void> insertAll(List<SchemeEntity> waterSources);
+
+  @Query('DELETE FROM SchemeEntity')
+  Future<void> clearTable();
 }

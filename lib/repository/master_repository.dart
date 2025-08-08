@@ -1,4 +1,5 @@
 
+import 'package:jjm_wqmis/models/MasterVillageData.dart';
 import 'package:jjm_wqmis/models/base_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
@@ -269,4 +270,19 @@ class MasterRepository {
     }
   }
 
+  Future<MasterVillageData> masterVillageData(
+      String stateId, String districtId,String villageId) async {
+    try {
+
+      final response = await _apiService.get(
+        'APIMobile/GetOffLineData?stateid=$stateId&districtid=$districtId&villageid=$villageId',
+      );
+
+      return MasterVillageData.fromJson(response);
+
+    } catch (e) {
+      GlobalExceptionHandler.handleException(e as Exception);
+      rethrow; // Propagate the exception for further handling
+    }
+  }
 }

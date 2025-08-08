@@ -41,25 +41,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       await session.init();
 
       // Initialize Floor DB
-      final database = await $FloorAppDatabase.databaseBuilder('my_app_database.db').build();
 
-      // Access DAOs
-      final habitationDao = database.habitationDao;
-      final waterSourceDao = database.waterSourceFilterDao;
-
-      // Optional: Clear old data
-      await habitationDao.clearTable();
-      await waterSourceDao.clearTable();
 
       // Insert new data (from static values or parsed JSON)
-      await habitationDao.insertAll([
-        Habitation(69, 56, "VENKAMPETA"),
-        Habitation(1682934, 56, "DOLA PETA"),
-      ]);
-
-      await waterSourceDao.insertAll([
-        WaterSourceFilter(2, "Sources of Schemes \r\n(Raw water)"),
-      ]);
 
       // Continue your normal flow
       _checkForUpdateAndNavigate();
@@ -233,6 +217,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
+
+
               if (dashboardProvider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -610,7 +596,9 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           ),
                         ),
                       ),
-                    )
+                    ),
+
+
                   ],
                 ),
               );

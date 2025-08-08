@@ -1,12 +1,12 @@
 import 'package:floor/floor.dart';
 
-@entity
-class Habitation {
+@Entity(tableName: 'habitation')
+class HabitationTable {
   @primaryKey
   final int habitationId;
 
   final int villageId;
   final String habitationName;
 
-  Habitation(this.habitationId, this.villageId, this.habitationName);
+  HabitationTable(this.habitationId, this.villageId, this.habitationName);
 }

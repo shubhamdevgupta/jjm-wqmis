@@ -1,12 +1,14 @@
 // lib/providers/state_provider.dart
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/habitation_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/village_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_response.dart';
+import 'package:jjm_wqmis/models/MasterVillageData.dart';
 import 'package:jjm_wqmis/models/Wtp/wtp_list_response.dart';
 import 'package:jjm_wqmis/repository/master_repository.dart';
 
@@ -80,6 +82,9 @@ class Masterprovider extends ChangeNotifier {
   ValidateVillageResponse? get validateVillageResponse =>
       _validateVillageResponse;
 
+  MasterVillageData? _masterVillageData;
+
+  MasterVillageData? get masterVillageData => _masterVillageData;
   int baseStatus = 0;
   int? _selectedSubSource;
 
@@ -460,6 +465,66 @@ class Masterprovider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint("Error during fetchLocation(): $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> masterVillagesData(String stateId, String districtId, String villageId) async {
+    _isLoading = true;
+    errorMsg = "";
+    notifyListeners();
+
+    try {
+      // 1. Fetch from API
+      _masterVillageData = await _masterRepository.masterVillageData(stateId, districtId, villageId);
+
+      // 2. Open Floor DB
+      final db = await $FloorAppDatabase
+          .databaseBuilder('my_app_database.db')
+          .build();
+
+      // 3. Optional: Clear old data from all tables (initialize)
+      await db.habitationDao.clearTable();
+      await db.waterSourceFilterDao.clearTable();
+      await db.schemeDao.clearTable();
+      await db.sourcesDao.clearTable();
+      await db.labDao.clearTable();
+      await db.parameterDao.clearTable();
+      await db.labInchargeDao.clearTable();
+
+      // 4. Insert new data from API into tables
+      await db.habitationDao.insertAll(
+          _masterVillageData!.habitations.map((e) => e.toEntity()).toList()
+      );
+
+      await db.waterSourceFilterDao.insertAll(
+          _masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
+      );
+
+      await db.schemeDao.insertAll(
+          _masterVillageData!.schemes.map((e) => e.toEntity()).toList()
+      );
+
+      await db.sourcesDao.insertAll(
+          _masterVillageData!.sources.map((e) => e.toEntity()).toList()
+      );
+
+      await db.labDao.insertAll(
+          _masterVillageData!.labs.map((e) => e.toEntity()).toList()
+      );
+
+      await db.parameterDao.insertAll(
+          _masterVillageData!.parameters.map((e) => e.toEntity()).toList()
+      );
+
+      await db.labInchargeDao.insertAll(
+          _masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
+      );
+
+    } catch (e) {
+      errorMsg = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -9,4 +9,11 @@ abstract class LabInchargeDao {
 
   @Query('SELECT * FROM LabIncharge')
   Future<List<LabInchargeEntity>> getAllLabIncharges();
+
+
+  @insert
+  Future<void> insertAll(List<LabInchargeEntity> waterSources);
+
+  @Query('DELETE FROM LabInchargeEntity')
+  Future<void> clearTable();
 }

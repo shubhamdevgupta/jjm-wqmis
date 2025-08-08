@@ -11,20 +11,19 @@ import 'package:jjm_wqmis/database/Entities/parameter_table.dart';
 import 'package:jjm_wqmis/database/Entities/scheme_table.dart';
 import 'package:jjm_wqmis/database/Entities/source_table.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:path/path.dart';
 
 import 'package:jjm_wqmis/database/Dao/habitationDao.dart';
 import 'package:jjm_wqmis/database/Dao/watersourcefilterDao.dart';
 import 'package:jjm_wqmis/database/Entities/habitation_table.dart';
 import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
 
-
-
-part 'database.g.dart'; // auto-generated file
-
+// Import the generated file
+part 'package:jjm_wqmis/database.g.dart'; // VERY IMPORTANT!
 @Database(
   version: 1,
   entities: [
-    Habitation,
+    HabitationTable,
     WaterSourceFilter,
     SchemeEntity,
     SourcesEntity,
@@ -36,13 +35,22 @@ part 'database.g.dart'; // auto-generated file
 abstract class AppDatabase extends FloorDatabase {
   HabitationDao get habitationDao;
   WaterSourceFilterDao get waterSourceFilterDao;
-
-  // ✅ Add these DAO getters
   SchemeDao get schemeDao;
   SourcesDao get sourcesDao;
   LabDao get labDao;
   ParameterDao get parameterDao;
   LabInchargeDao get labInchargeDao;
-}
 
-//for updation flutter pub run build_runner build --delete-conflicting-outputs
+  // ✅ Add this method
+  static AppDatabase? _instance;
+
+  static Future<AppDatabase> getDatabase() async {
+    if (_instance != null) return _instance!;
+
+    final dbPath = await sqflite.getDatabasesPath();
+    final path = join(dbPath, 'app_database.db');
+
+    _instance = await $FloorAppDatabase.databaseBuilder(path).build();
+    return _instance!;
+  }
+}

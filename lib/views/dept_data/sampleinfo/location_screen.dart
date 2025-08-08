@@ -380,6 +380,29 @@ class _LocationscreenState extends State<Locationscreen> {
                   ),
                 ),
               ),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+
+                    await masterProvider.masterVillagesData("2", "4", "56");
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF096DA8),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+
+                  child: const Text(
+                      'Offline Data',
+                      style: AppStyles.textStyle
+                  ),
+                ),
+              ),
             ],
           ),
         ),
