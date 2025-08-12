@@ -384,6 +384,116 @@ class _LocationscreenState extends State<Locationscreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                    onPressed: () async {
+                      print("📥 Starting Offline Data fetch...");
+
+                      // 1. Fetch data from API and wait until it's fully ready
+                      await masterProvider.masterVillagesData("2", "4", "56");
+
+                      // Safety check: make sure data exists
+                      if (masterProvider.masterVillageData == null) {
+                        print("❌ No master data received from API.");
+                        return;
+                      }
+
+                      print("📊 Habitations: ${masterProvider.masterVillageData!.habitations.length}");
+                      print("📊 WaterSourceFilters: ${masterProvider.masterVillageData!.waterSourceFilters.length}");
+
+                      // 2. Open Floor DB
+                      final db = await $FloorAppDatabase
+                          .databaseBuilder('my_app_database.db')
+                          .build();
+
+                      // 3. Clear old data
+                      await db.habitationDao.clearTable();
+                      await db.waterSourceFilterDao.clearTable();
+
+                      // 4. Insert only if list has data
+                      if (masterProvider.masterVillageData!.habitations.isNotEmpty) {
+                        await db.habitationDao.insertAll(
+                            masterProvider.masterVillageData!.habitations.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted Habitations");
+                      } else {
+                        print("⚠ No Habitations to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.waterSourceFilters.isNotEmpty) {
+                        await db.waterSourceFilterDao.insertAll(
+                            masterProvider.masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted WaterSourceFilters");
+                      } else {
+                        print("⚠ No WaterSourceFilters to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.schemes.isNotEmpty) {
+                        await db.schemeDao.insertAll(
+                            masterProvider.masterVillageData!.schemes.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted schemes");
+                      } else {
+                        print("⚠ No schemes to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.sources.isNotEmpty) {
+                        await db.sourcesDao.insertAll(
+                            masterProvider.masterVillageData!.sources.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted sources");
+                      } else {
+                        print("⚠ No sources to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.labs.isNotEmpty) {
+                        await db.labDao.insertAll(
+                            masterProvider.masterVillageData!.labs.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted labs");
+                      } else {
+                        print("⚠ No labs to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.parameters.isNotEmpty) {
+                        await db.parameterDao.insertAll(
+                            masterProvider.masterVillageData!.parameters.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted parameters");
+                      } else {
+                        print("⚠ No parameters to insert");
+                      }
+
+                      if (masterProvider.masterVillageData!.labIncharges.isNotEmpty) {
+                        await db.labInchargeDao.insertAll(
+                            masterProvider.masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
+                        );
+                        print("✅ Inserted labIncharges");
+                      } else {
+                        print("⚠ No labIncharges to insert");
+                      }
+
+
+
+                      print("🎉 Offline Data fetch & save complete.");
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF096DA8),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+
+                  child: const Text(
+                      'Offline Data',
+                      style: AppStyles.textStyle
+                  ),
+                ),
+              ),/*   SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
                   onPressed: () async {
 
                     print("📥 Starting Offline Data fetch...");
@@ -397,11 +507,11 @@ class _LocationscreenState extends State<Locationscreen> {
                     // 3. Optional: Clear old data from all tables (initialize)
                     await db.habitationDao.clearTable();
                     await db.waterSourceFilterDao.clearTable();
-            /*        await db.schemeDao.clearTable();
+            *//*        await db.schemeDao.clearTable();
                     await db.sourcesDao.clearTable();
                     await db.labDao.clearTable();
                     await db.parameterDao.clearTable();
-                    await db.labInchargeDao.clearTable();*/
+                    await db.labInchargeDao.clearTable();*//*
 
                     // 4. Insert new data from API into tables
                     await db.habitationDao.insertAll(
@@ -412,7 +522,7 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
                     );
 
-              /*      await db.schemeDao.insertAll(
+              *//*      await db.schemeDao.insertAll(
                         masterProvider.masterVillageData!.schemes.map((e) => e.toEntity()).toList()
                     );
 
@@ -431,7 +541,7 @@ class _LocationscreenState extends State<Locationscreen> {
                     await db.labInchargeDao.insertAll(
                         masterProvider.masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
                     );
-             */
+             *//*
                     print("✅ Offline Data fetch done.");
                   },
                   style: ElevatedButton.styleFrom(
@@ -448,7 +558,7 @@ class _LocationscreenState extends State<Locationscreen> {
                       style: AppStyles.textStyle
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

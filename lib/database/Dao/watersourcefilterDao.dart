@@ -10,7 +10,8 @@ abstract class WaterSourceFilterDao {
   @insert
   Future<void> insertWaterSource(WaterSourceFilter waterSourceFilter);
 
-  @insert
+
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertAll(List<WaterSourceFilter> waterSources);
 
   @Query('DELETE FROM WaterSourceFilter')

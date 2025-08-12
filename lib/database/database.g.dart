@@ -110,7 +110,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `habitation` (`habitationId` INTEGER NOT NULL, `villageId` INTEGER NOT NULL, `habitationName` TEXT NOT NULL, PRIMARY KEY (`habitationId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` INTEGER NOT NULL, `sourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` INTEGER NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Scheme` (`SchemeId` INTEGER NOT NULL, `SourceType` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `SchemeName` TEXT NOT NULL, PRIMARY KEY (`SchemeId`))');
         await database.execute(
@@ -225,7 +225,7 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
             'WaterSourceFilter',
             (WaterSourceFilter item) => <String, Object?>{
                   'id': item.id,
-                  'sourceType': item.sourceType
+                  'SourceType': item.SourceType
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -240,7 +240,7 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
   Future<List<WaterSourceFilter>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM WaterSourceFilter',
         mapper: (Map<String, Object?> row) =>
-            WaterSourceFilter(row['id'] as int, row['sourceType'] as String));
+            WaterSourceFilter(row['id'] as int, row['SourceType'] as String));
   }
 
   @override
@@ -257,7 +257,7 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
   @override
   Future<void> insertAll(List<WaterSourceFilter> waterSources) async {
     await _waterSourceFilterInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
+        waterSources, OnConflictStrategy.replace);
   }
 }
 
@@ -296,19 +296,13 @@ class _$SchemeDao extends SchemeDao {
 
   @override
   Future<void> clearTable() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM SchemeEntity');
+    await _queryAdapter.queryNoReturn('DELETE FROM Scheme');
   }
 
   @override
-  Future<void> insertAllSchemes(List<SchemeEntity> schemes) async {
+  Future<void> insertAll(List<SchemeEntity> schemes) async {
     await _schemeEntityInsertionAdapter.insertList(
         schemes, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> insertAll(List<SchemeEntity> waterSources) async {
-    await _schemeEntityInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
   }
 }
 
@@ -355,19 +349,13 @@ class _$SourcesDao extends SourcesDao {
 
   @override
   Future<void> clearTable() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM SourcesEntity');
+    await _queryAdapter.queryNoReturn('DELETE FROM Sources');
   }
 
   @override
-  Future<void> insertAllSources(List<SourcesEntity> sources) async {
+  Future<void> insertAll(List<SourcesEntity> sources) async {
     await _sourcesEntityInsertionAdapter.insertList(
         sources, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> insertAll(List<SourcesEntity> waterSources) async {
-    await _sourcesEntityInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
   }
 }
 
@@ -406,19 +394,13 @@ class _$LabDao extends LabDao {
 
   @override
   Future<void> clearTable() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM LabEntity');
+    await _queryAdapter.queryNoReturn('DELETE FROM Lab');
   }
 
   @override
-  Future<void> insertAllLabs(List<LabEntity> labs) async {
+  Future<void> insertAll(List<LabEntity> labs) async {
     await _labEntityInsertionAdapter.insertList(
         labs, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> insertAll(List<LabEntity> waterSources) async {
-    await _labEntityInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
   }
 }
 
@@ -463,19 +445,13 @@ class _$ParameterDao extends ParameterDao {
 
   @override
   Future<void> clearTable() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM ParameterEntity');
+    await _queryAdapter.queryNoReturn('DELETE FROM Parameter');
   }
 
   @override
-  Future<void> insertAllParameters(List<ParameterEntity> params) async {
+  Future<void> insertAll(List<ParameterEntity> params) async {
     await _parameterEntityInsertionAdapter.insertList(
         params, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> insertAll(List<ParameterEntity> waterSources) async {
-    await _parameterEntityInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
   }
 }
 
@@ -516,18 +492,12 @@ class _$LabInchargeDao extends LabInchargeDao {
 
   @override
   Future<void> clearTable() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM LabInchargeEntity');
+    await _queryAdapter.queryNoReturn('DELETE FROM LabIncharge');
   }
 
   @override
-  Future<void> insertAllLabIncharges(List<LabInchargeEntity> incharges) async {
+  Future<void> insertAll(List<LabInchargeEntity> incharges) async {
     await _labInchargeEntityInsertionAdapter.insertList(
         incharges, OnConflictStrategy.replace);
-  }
-
-  @override
-  Future<void> insertAll(List<LabInchargeEntity> waterSources) async {
-    await _labInchargeEntityInsertionAdapter.insertList(
-        waterSources, OnConflictStrategy.abort);
   }
 }

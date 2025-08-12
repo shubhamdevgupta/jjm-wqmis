@@ -5,15 +5,12 @@ import 'package:jjm_wqmis/database/Entities/lab_table.dart';
 @dao
 abstract class LabDao {
   @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insertAllLabs(List<LabEntity> labs);
+  Future<void> insertAll(List<LabEntity> labs);
 
   @Query('SELECT * FROM Lab')
   Future<List<LabEntity>> getAllLabs();
 
 
-  @insert
-  Future<void> insertAll(List<LabEntity> waterSources);
-
-  @Query('DELETE FROM LabEntity')
+  @Query('DELETE FROM Lab')
   Future<void> clearTable();
 }

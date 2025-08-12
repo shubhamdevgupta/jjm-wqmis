@@ -4,16 +4,15 @@ import 'package:jjm_wqmis/database/Entities/source_table.dart';
 
 @dao
 abstract class SourcesDao {
-  @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insertAllSources(List<SourcesEntity> sources);
+
 
   @Query('SELECT * FROM Sources')
   Future<List<SourcesEntity>> getAllSources();
 
-  @insert
-  Future<void> insertAll(List<SourcesEntity> waterSources);
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertAll(List<SourcesEntity> sources);
 
-  @Query('DELETE FROM SourcesEntity')
+  @Query('DELETE FROM Sources')
   Future<void> clearTable();
 
 

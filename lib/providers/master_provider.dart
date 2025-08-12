@@ -480,49 +480,30 @@ class Masterprovider extends ChangeNotifier {
       // 1. Fetch from API
       _masterVillageData = await _masterRepository.masterVillageData(stateId, districtId, villageId);
 
-      /*// 2. Open Floor DB
-      final db = await $FloorAppDatabase
-          .databaseBuilder('my_app_database.db')
-          .build();
+      if (_masterVillageData != null) {
+        // 2. Open Floor DB
+        final db = await AppDatabase.getDatabase(); // Use your static getDatabase method
 
-      // 3. Optional: Clear old data from all tables (initialize)
-      await db.habitationDao.clearTable();
-      await db.waterSourceFilterDao.clearTable();
-      await db.schemeDao.clearTable();
-      await db.sourcesDao.clearTable();
-      await db.labDao.clearTable();
-      await db.parameterDao.clearTable();
-      await db.labInchargeDao.clearTable();
+        // 3. Clear old data
+        await db.habitationDao.clearTable();
+        await db.waterSourceFilterDao.clearTable();
+        await db.schemeDao.clearTable();
+        await db.sourcesDao.clearTable();
+        await db.labDao.clearTable();
+        await db.parameterDao.clearTable();
+        await db.labInchargeDao.clearTable();
 
-      // 4. Insert new data from API into tables
-      await db.habitationDao.insertAll(
-          _masterVillageData!.habitations.map((e) => e.toEntity()).toList()
-      );
+        // 4. Insert new data
+        await db.habitationDao.insertAll(_masterVillageData!.habitations.map((e) => e.toEntity()).toList());
+        await db.waterSourceFilterDao.insertAll(_masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList());
+        await db.schemeDao.insertAll(_masterVillageData!.schemes.map((e) => e.toEntity()).toList());
+        await db.sourcesDao.insertAll(_masterVillageData!.sources.map((e) => e.toEntity()).toList());
+        await db.labDao.insertAll(_masterVillageData!.labs.map((e) => e.toEntity()).toList());
+        await db.parameterDao.insertAll(_masterVillageData!.parameters.map((e) => e.toEntity()).toList());
+        await db.labInchargeDao.insertAll(_masterVillageData!.labIncharges.map((e) => e.toEntity()).toList());
 
-      await db.waterSourceFilterDao.insertAll(
-          _masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
-      );
-
-      await db.schemeDao.insertAll(
-          _masterVillageData!.schemes.map((e) => e.toEntity()).toList()
-      );
-
-      await db.sourcesDao.insertAll(
-          _masterVillageData!.sources.map((e) => e.toEntity()).toList()
-      );
-
-      await db.labDao.insertAll(
-          _masterVillageData!.labs.map((e) => e.toEntity()).toList()
-      );
-
-      await db.parameterDao.insertAll(
-          _masterVillageData!.parameters.map((e) => e.toEntity()).toList()
-      );
-
-      await db.labInchargeDao.insertAll(
-          _masterVillageData!.labIncharges.map((e) => e.toEntity()).toList()
-      );
-*/
+        print("✅ All data inserted into Floor DB");
+      }
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -530,6 +511,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
 

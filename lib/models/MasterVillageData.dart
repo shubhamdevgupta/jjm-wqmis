@@ -31,7 +31,7 @@ class MasterVillageData {
       habitations: (json['Habitation'] as List<dynamic>? ?? [])
           .map((e) => HabitationModel.fromJson(e))
           .toList(),
-      waterSourceFilters: (json['WaterSourceFilter'] as List<dynamic>? ?? [])
+      waterSourceFilters: (json['water_source_filter'] as List<dynamic>? ?? [])
           .map((e) => WaterSourceFilterModel.fromJson(e))
           .toList(),
       schemes: (json['Scheme'] as List<dynamic>? ?? [])

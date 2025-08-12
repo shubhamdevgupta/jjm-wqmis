@@ -5,7 +5,7 @@ class WaterSourceFilter {
   @primaryKey
   final int id;
 
-  final String sourceType;
+  final String SourceType;
 
-  WaterSourceFilter(this.id, this.sourceType);
+  WaterSourceFilter(this.id, this.SourceType);
 }

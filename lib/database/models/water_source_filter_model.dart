@@ -2,22 +2,22 @@ import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
 
 class WaterSourceFilterModel {
   final int id;
-  final String sourceType;
+  final String SourceType;
 
   WaterSourceFilterModel({
     required this.id,
-    required this.sourceType,
+    required this.SourceType,
   });
 
   factory WaterSourceFilterModel.fromJson(Map<String, dynamic> json) {
     return WaterSourceFilterModel(
       id: json['Id'],
-      sourceType: json['SourceType'],
+      SourceType: json['SourceType'],
     );
   }
 
    WaterSourceFilter toEntity(){
-    return WaterSourceFilter(id, sourceType);
+    return WaterSourceFilter(id, SourceType);
 
    }
 }
