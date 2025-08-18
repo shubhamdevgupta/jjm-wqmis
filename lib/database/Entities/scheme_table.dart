@@ -1,3 +1,4 @@
+/*
 import 'package:floor/floor.dart';
 
 @Entity(tableName: 'Scheme')
@@ -15,3 +16,4 @@ class SchemeEntity {
     required this.SchemeName,
   });
 }
+*/

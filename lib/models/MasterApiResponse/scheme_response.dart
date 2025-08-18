@@ -1,5 +1,7 @@
 // lib/models/scheme_api_response.dart
 
+import 'package:floor/floor.dart';
+
 class SchemeApiResponse {
   final int status;
   final String message;
@@ -34,20 +36,31 @@ class SchemeApiResponse {
       'SchemeApiResponse(status: $status, message: $message, resultCount: ${result.length})';
 }
 // lib/models/scheme_response.dart
-
+@Entity(tableName: 'Scheme')
 class SchemeResponse {
-  final String schemeId;
-  final String schemeName;
+  @PrimaryKey()
+  final int? schemeId;
+  final String? schemeName;
+
+  final int? sourceType; // make nullable
+  final int? villageId;  // make nullable
 
   SchemeResponse({
-    required this.schemeId,
-    required this.schemeName,
+    this.schemeId,
+     this.schemeName,
+    this.sourceType,
+    this.villageId
+    ,
   });
 
   factory SchemeResponse.fromJson(Map<String, dynamic> json) {
     return SchemeResponse(
       schemeId: json['SchemeId'] ?? '',
       schemeName: json['SchemeName'] ?? '',
+
+      villageId: json['VillageId'] ?? '',
+      sourceType: json['SourceType']?? '',
+
     );
   }
 
@@ -55,6 +68,12 @@ class SchemeResponse {
     return {
       'SchemeId': schemeId,
       'SchemeName': schemeName,
+
+      'VillageId': sourceType,
+      'SourceType': villageId,
+
+
+
     };
   }
 

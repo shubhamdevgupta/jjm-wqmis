@@ -189,7 +189,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       return DropdownMenuItem<String>(
                         value: scheme.schemeId.toString(),
                         child: Text(
-                          scheme.schemeName,
+                          scheme.schemeName ?? 'No Name',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(

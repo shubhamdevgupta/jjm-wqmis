@@ -112,7 +112,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` INTEGER NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Scheme` (`SchemeId` INTEGER NOT NULL, `SourceType` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `SchemeName` TEXT NOT NULL, PRIMARY KEY (`SchemeId`))');
+            'CREATE TABLE IF NOT EXISTS `Scheme` (`schemeId` INTEGER, `schemeName` TEXT NOT NULL, `sourceType` INTEGER, `villageId` INTEGER, PRIMARY KEY (`schemeId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Sources` (`location_id` INTEGER NOT NULL, `SourceType` INTEGER NOT NULL, `SourceTypeCategoryId` INTEGER NOT NULL, `SchemeId` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `HabitationId` INTEGER NOT NULL, `Is_fhtc` INTEGER NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY (`location_id`))');
         await database.execute(
@@ -266,14 +266,14 @@ class _$SchemeDao extends SchemeDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _schemeEntityInsertionAdapter = InsertionAdapter(
+        _schemeResponseInsertionAdapter = InsertionAdapter(
             database,
             'Scheme',
-            (SchemeEntity item) => <String, Object?>{
-                  'SchemeId': item.SchemeId,
-                  'SourceType': item.SourceType,
-                  'VillageId': item.VillageId,
-                  'SchemeName': item.SchemeName
+            (SchemeResponse item) => <String, Object?>{
+                  'schemeId': item.schemeId,
+                  'schemeName': item.schemeName,
+                  'sourceType': item.sourceType,
+                  'villageId': item.villageId
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -282,16 +282,27 @@ class _$SchemeDao extends SchemeDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<SchemeEntity> _schemeEntityInsertionAdapter;
+  final InsertionAdapter<SchemeResponse> _schemeResponseInsertionAdapter;
 
   @override
-  Future<List<SchemeEntity>> getAllSchemes() async {
+  Future<List<SchemeResponse>> getAllSchemes() async {
     return _queryAdapter.queryList('SELECT * FROM Scheme',
-        mapper: (Map<String, Object?> row) => SchemeEntity(
-            SchemeId: row['SchemeId'] as int,
-            SourceType: row['SourceType'] as int,
-            VillageId: row['VillageId'] as int,
-            SchemeName: row['SchemeName'] as String));
+        mapper: (Map<String, Object?> row) => SchemeResponse(
+            schemeId: row['schemeId'] as int?,
+            schemeName: row['schemeName'] as String,
+            sourceType: row['sourceType'] as int?,
+            villageId: row['villageId'] as int?));
+  }
+
+  @override
+  Future<List<SchemeResponse>> getSchemesByVillageAndSource(
+    int villageId,
+    int sourceType,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT SchemeId, SchemeName FROM scheme WHERE VillageId = ?1 AND SourceType = ?2',
+        mapper: (Map<String, Object?> row) => SchemeResponse(schemeId: row['schemeId'] as int?, schemeName: row['schemeName'] as String, sourceType: row['sourceType'] as int?, villageId: row['villageId'] as int?),
+        arguments: [villageId, sourceType]);
   }
 
   @override
@@ -300,8 +311,8 @@ class _$SchemeDao extends SchemeDao {
   }
 
   @override
-  Future<void> insertAll(List<SchemeEntity> schemes) async {
-    await _schemeEntityInsertionAdapter.insertList(
+  Future<void> insertAll(List<SchemeResponse> schemes) async {
+    await _schemeResponseInsertionAdapter.insertList(
         schemes, OnConflictStrategy.replace);
   }
 }

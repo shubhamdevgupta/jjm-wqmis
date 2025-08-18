@@ -1,5 +1,6 @@
 
 import 'package:jjm_wqmis/database/Entities/scheme_table.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 
 class SchemeModel {
   final int sourceType;
@@ -23,8 +24,8 @@ class SchemeModel {
     );
   }
 
-  SchemeEntity toEntity(){
-    return SchemeEntity(SchemeId: schemeId, SourceType: sourceType, VillageId: villageId, SchemeName: schemeName);
+  SchemeResponse toEntity(){
+    return SchemeResponse(schemeId: schemeId, sourceType: sourceType, villageId: villageId, schemeName: schemeName);
   }
 
 }

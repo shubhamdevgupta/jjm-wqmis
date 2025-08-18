@@ -1,5 +1,9 @@
 // Flutter layout for the 'Sample Information' form
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/database.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_date_time_picker.dart';
@@ -32,9 +36,27 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   void initState() {
     super.initState();
     session.init();
+
+    _loadData();
+
   }
+
+  Future<void> _loadData() async {
+    final db = await AppDatabase.getDatabase();
+    //List<SchemeResponse> schemes = await db.schemeDao.getSchemesByVillageAndSource(56, 2);
+    List<SchemeResponse> schemes = await db.schemeDao.getAllSchemes();
+
+    log('SCHEME LENGTH : ${schemes.length}');
+    print("SCHEME LENGTH : ${schemes.length}");
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
     return MaterialApp(
       home: WillPopScope(
         onWillPop: () async {
@@ -252,10 +274,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 return DropdownMenuItem<String>(
                   value: scheme.schemeId.toString(),
                   child: Text(
-                    scheme.schemeName,
+                    scheme.schemeName ?? 'No Name',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans',),
+                    style: const TextStyle(fontSize: 14, fontFamily: 'OpenSans'),
                   ),
                 );
               }).toList(),

@@ -1,6 +1,9 @@
 // lib/providers/state_provider.dart
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/Entities/scheme_table.dart';
 import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/habitation_response.dart';
@@ -48,6 +51,8 @@ class Masterprovider extends ChangeNotifier {
 
   List<SchemeResponse> schemes = [];
   String? selectedScheme;
+
+
 
   List<WaterSourceResponse> waterSource = [];
   String? selectedWaterSource;
@@ -279,7 +284,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
+/*  Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
       String filter,int regId) async {
     _isLoading = true;
     notifyListeners();
@@ -320,7 +325,93 @@ class Masterprovider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }*/
+
+
+
+
+  Future<void> fetchSchemes(
+      String stateId,
+      String districtId,
+      String villageId,
+      String habitationId,
+      String filter,
+      int regId,
+      ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+     // bool hasInternet = await checkInternetConnection(); // We'll create this function
+
+      if (false) {
+        // ✅ Fetch from API
+        final mSchemes = await _masterRepository.fetchSchemes(
+          stateId,
+          districtId,
+          villageId,
+          habitationId,
+          filter,
+          regId,
+        );
+
+        baseStatus = mSchemes.status;
+
+        if (baseStatus == 1) {
+          schemes = mSchemes.result;
+
+          // Save to local DB for offline use
+          final db = await AppDatabase.getDatabase();
+          await db.schemeDao.insertAll(schemes);
+
+          if (schemes.length == 1) {
+            selectedScheme = schemes.first.schemeId.toString();
+          }
+        } else {
+          errorMsg = mSchemes.message;
+        }
+      } else {
+
+        final db = await AppDatabase.getDatabase();
+
+        schemes = await db.schemeDao.getSchemesByVillageAndSource(56, 2);
+
+        log('SCHEME LENGTH : ${schemes.length}');
+
+
+
+        if (schemes.isNotEmpty && schemes.length == 1) {
+          selectedScheme = schemes.first.schemeId.toString();
+        }
+      }
+
+      // Continue with your existing WTP/source fetch logic
+      if (selectedWtsfilter == "5") {
+        await fetchWTPList(selectedStateId!, selectedScheme!, regId);
+      } else if (selectedWtsfilter == "6") {
+        setSelectedSubSource(0);
+        setSelectedWTP("0");
+        await fetchSourceInformation(
+          selectedVillage!,
+          selectedHabitation!,
+          selectedWtsfilter!,
+          "0",
+          selectedSubSource.toString(),
+          selectedWtp!,
+          selectedStateId!,
+          selectedScheme!,
+          regId,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error in fetching scheme: $e');
+      GlobalExceptionHandler.handleException(e as Exception);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
+
 
   Future<void> fetchSourceInformation(
     String villageId,
