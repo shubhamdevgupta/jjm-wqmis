@@ -177,6 +177,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          /*
           Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -219,10 +220,10 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
               ),
             ),
           ),
+*/
           buildSchemeDropDown(masterProvider),
 
           const SizedBox(height: 10),
-          // First Visibility Widget with Border
 
           buildSourceofScheme(masterProvider),
           buildWtpWater(masterProvider),
@@ -233,6 +234,9 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
       ),
     );
   }
+
+
+
 
 
   Widget buildSchemeDropDown(Masterprovider masterProvider) {

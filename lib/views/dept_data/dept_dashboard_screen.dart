@@ -1,9 +1,5 @@
 // views/DashboardScreen.dart
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/database/Entities/habitation_table.dart';
-import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
-import 'package:jjm_wqmis/database/database.dart';
-
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 
 import 'package:jjm_wqmis/providers/dashboard_provider.dart';
@@ -70,20 +66,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     });
   }
 
-
-  Future<void> _checkForUpdateAndNavigate() async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
-
-    if (isAvailable && mounted) {
-      final updateInfo = await _updateViewModel.getUpdateInfo();
-
-      if (updateInfo != null) {
-
-        DialogUtils.showUpdateDialog(context, updateInfo);
-        return;
-      }
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Container(

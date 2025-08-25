@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:jjm_wqmis/utils/app_style.dart';
 
 class CustomDropdown extends StatefulWidget {
@@ -19,7 +18,39 @@ class CustomDropdown extends StatefulWidget {
     this.appBarTitle,
     this.showSearchBar = true,
   });
+  static void openSearchDialog<T>({
+    required BuildContext context,
+    required String title,
+    required T? value,
+    required List<DropdownMenuItem<T>> items,
+    required ValueChanged<T?> onChanged,
+    String? appBarTitle,
+    bool showSearchBar = true,
+  }) {
+    if (items.isEmpty) return;
 
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Search',
+      pageBuilder: (context, anim1, anim2) {
+        return _SearchDialog<T>(
+          items: items,
+          onItemSelected: (selected) {
+            onChanged.call(selected);
+          },
+          appBarTitle: appBarTitle ?? title,
+          showSearchBar: showSearchBar,
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(anim1),
+          child: child,
+        );
+      },
+    );
+  }
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
 }
@@ -32,6 +63,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
     super.initState();
     selectedValue = widget.value ?? '';
   }
+
   @override
   void didUpdateWidget(covariant CustomDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -40,33 +72,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
         selectedValue = widget.value ?? '';
       });
     }
-  }
-  void _openSearchDialog() {
-    if (widget.items.isEmpty) return; // Prevent opening when list is empty
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'Search',
-      pageBuilder: (context, anim1, anim2) {
-        return _SearchDialog(
-          items: widget.items,
-          onItemSelected: (value) {
-            setState(() {
-              selectedValue = value;
-            });
-            widget.onChanged?.call(value);
-          },
-          appBarTitle: widget.appBarTitle,
-          showSearchBar: widget.showSearchBar,
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return SlideTransition(
-          position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(anim1),
-          child: child,
-        );
-      },
-    );
   }
 
   @override
@@ -86,8 +91,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           }
         }
       }
-    } catch (e) {
-      // fallback if something goes wrong
+    } catch (_) {
       label = "--Select--";
     }
 
@@ -98,7 +102,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
           RichText(
             text: TextSpan(
               text: widget.title.replaceAll('*', ''),
-                style: AppStyles.textStyleBoldBlack16,
+              style: AppStyles.textStyleBoldBlack16,
               children: widget.title.contains('*')
                   ? const [
                 TextSpan(
@@ -106,7 +110,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   style: TextStyle(
                     color: Colors.red,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold, fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'OpenSans',
                   ),
                 ),
               ]
@@ -115,7 +120,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
           ),
         const SizedBox(height: 8),
         GestureDetector(
-          onTap: _openSearchDialog,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
             decoration: BoxDecoration(
@@ -138,7 +142,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   child: Text(
                     label,
                     style: TextStyle(
-                      fontSize: 16, fontFamily: 'OpenSans',
+                      fontSize: 16,
+                      fontFamily: 'OpenSans',
                       color: (selectedValue == null || selectedValue!.isEmpty)
                           ? Colors.black54
                           : Colors.black,
@@ -157,10 +162,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
   }
 }
 
-// Fullscreen searchable dropdown
-class _SearchDialog extends StatefulWidget {
-  final List<DropdownMenuItem<String>> items;
-  final ValueChanged<String> onItemSelected;
+// Search dialog component
+class _SearchDialog<T> extends StatefulWidget {
+  final List<DropdownMenuItem<T>> items;
+  final ValueChanged<T> onItemSelected;
   final String? appBarTitle;
   final bool showSearchBar;
 
@@ -172,11 +177,12 @@ class _SearchDialog extends StatefulWidget {
   });
 
   @override
-  __SearchDialogState createState() => __SearchDialogState();
+  __SearchDialogState<T> createState() => __SearchDialogState<T>();
 }
 
-class __SearchDialogState extends State<_SearchDialog> {
-  late List<DropdownMenuItem<String>> filteredItems;
+
+class __SearchDialogState<T> extends State<_SearchDialog<T>> {
+  late List<DropdownMenuItem<T>> filteredItems;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -196,22 +202,24 @@ class __SearchDialogState extends State<_SearchDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final itemsToShow = widget.showSearchBar ? filteredItems : widget.items;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.appBarTitle ?? "Select Item", style: const TextStyle(
+        title: Text(
+          widget.appBarTitle ?? "Select Item",
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color:
-            Colors.white, // Dark text for better readability
-            fontFamily: 'OpenSans'
-
-        ),),
+            color: Colors.white,
+            fontFamily: 'OpenSans',
+          ),
+        ),
         backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
         elevation: 2,
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close,color: Colors.white,),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -226,8 +234,7 @@ class __SearchDialogState extends State<_SearchDialog> {
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: const Icon(Icons.search),
-                    contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(color: Colors.grey),
@@ -239,16 +246,12 @@ class __SearchDialogState extends State<_SearchDialog> {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                itemCount: widget.showSearchBar
-                    ? filteredItems.length
-                    : widget.items.length,
+                itemCount: itemsToShow.length,
                 separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (context, index) {
-                  final item = widget.showSearchBar
-                      ? filteredItems[index]
-                      : widget.items[index];
+                  final item = itemsToShow[index];
                   return ListTile(
-                    title: Text((item.child as Text).data ?? ''),
+                    title: item.child,
                     onTap: () {
                       widget.onItemSelected(item.value!);
                       Navigator.pop(context);
