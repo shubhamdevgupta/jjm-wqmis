@@ -284,25 +284,43 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-/*  Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
-      String filter,int regId) async {
+  Future<void> fetchSchemes(
+      String stateId,
+      String districtId,
+      String villageId,
+      String habitationId,
+      String filter,
+      int regId,
+      ) async {
     _isLoading = true;
     notifyListeners();
+
     try {
-      final mSchemes = await _masterRepository.fetchSchemes(stateId,
-          districtid, villageId, habitationId, filter,regId);
+      // ✅ Always call repository
+      final mSchemes = await _masterRepository.fetchSchemes(
+        stateId,
+        districtId,
+        villageId,
+        habitationId,
+        filter,
+        regId,
+      );
+
       baseStatus = mSchemes.status;
 
       if (baseStatus == 1) {
         schemes = mSchemes.result;
+
         if (schemes.length == 1) {
           selectedScheme = schemes.first.schemeId.toString();
         }
       } else {
         errorMsg = mSchemes.message;
       }
+
+      // Continue with WTP/source fetch logic
       if (selectedWtsfilter == "5") {
-        await fetchWTPList(selectedStateId!, selectedScheme!,regId);
+        await fetchWTPList(selectedStateId!, selectedScheme!, regId);
       } else if (selectedWtsfilter == "6") {
         setSelectedSubSource(0);
         setSelectedWTP("0");
@@ -315,7 +333,7 @@ class Masterprovider extends ChangeNotifier {
           selectedWtp!,
           selectedStateId!,
           selectedScheme!,
-          regId
+          regId,
         );
       }
     } catch (e) {
@@ -325,12 +343,12 @@ class Masterprovider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }*/
+  }
 
 
 
 
-  Future<void> fetchSchemes(
+ /* Future<void> fetchSchemes(
       String stateId,
       String districtId,
       String villageId,
@@ -410,7 +428,7 @@ class Masterprovider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
+  }*/
 
 
   Future<void> fetchSourceInformation(

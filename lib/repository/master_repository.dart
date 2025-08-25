@@ -1,4 +1,8 @@
 
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/models/MasterVillageData.dart';
 import 'package:jjm_wqmis/models/base_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
@@ -13,6 +17,7 @@ import 'package:jjm_wqmis/models/lgd_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/block_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/habitation_response.dart';
 import 'package:jjm_wqmis/services/base_api_service.dart';
+import 'package:jjm_wqmis/utils/custom_screen/custom_exception.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 
@@ -125,29 +130,71 @@ class MasterRepository {
       String villageId,
       String habitationId,
       String filter,
-      int regId
+      int regId,
       ) async {
     try {
-
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
         'districtid': districtId,
         'villageid': villageId,
         'habitationid': habitationId,
         'filter': filter,
-        'reg_Id' :regId
-
+        'reg_Id': regId,
       });
 
-      final response = await _apiService.get('/apimasterA/getScheme?$query');
+      try {
+        await _apiService.checkConnectivity();
 
-      return BaseResponseModel<SchemeResponse>.fromJson(response,(json)=> SchemeResponse.fromJson(json));
+        // ✅ Online → API
+        final json = await _apiService.get('/apimasterA/getScheme?$query');
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+        log("📡 FetchSchemes: Got data from API");
+
+        if (json['status'] == 1 && json['result'] != null) {
+          final list = (json['result'] as List)
+              .map((e) => SchemeResponse.fromJson(e))
+              .toList();
+
+          final db = await AppDatabase.getDatabase();
+          await db.schemeDao.insertAll(list);
+
+          log("💾 Schemes saved to local DB: ${list.length} items");
+        }
+
+        return BaseResponseModel<SchemeResponse>.fromJson(
+          json,
+              (j) => SchemeResponse.fromJson(j),
+        );
+
+      } on NetworkException {
+        // ❌ Offline → DB
+        final db = await AppDatabase.getDatabase();
+        final local = await db.schemeDao.getSchemesByVillageAndSource(
+          int.parse(villageId),
+          int.parse(filter),
+        );
+
+        log("📴 FetchSchemes: No internet → fetched ${local.length} schemes from DB");
+
+        return BaseResponseModel<SchemeResponse>(
+          status: 1,
+          message: "Fetched from local database",
+          result: local,
+        );
+      }
+    } catch (e, stack) {
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      } else {
+        debugPrint("Non-Exception error: $e");
+        debugPrintStack(stackTrace: stack);
+      }
       rethrow;
     }
   }
+
+
+
 
 
   Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
