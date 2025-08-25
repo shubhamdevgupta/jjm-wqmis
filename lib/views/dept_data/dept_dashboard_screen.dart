@@ -457,7 +457,84 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       ),
                     ),
 
-                  /*  Padding(
+                    const SizedBox(height: 15),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 16,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              "Add Sample",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildAddButtonCard(
+                                  imagePath: 'assets/icons/Onlinecloud.png',
+                                  iconColor: Colors.blue,
+                                  title: "Online Mode",
+                                    onTap: () async {
+                                      showDialog<bool>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          double screenHeight =
+                                              MediaQuery.of(context).size.height;
+                                          double screenwidth =
+                                              MediaQuery.of(context).size.width;
+                                          return AlertDialog(
+                                            contentPadding: const EdgeInsets.all(10),
+                                            content: Container(
+                                              color: Colors.white,
+                                              height: screenHeight * 0.8,
+                                              width: screenwidth * 0.99,
+                                              child:  const Locationscreen(
+                                                flag: AppConstants.openSampleInfoScreen,
+                                                flagFloating: "",
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _buildAddButtonCard(
+                                  imagePath: 'assets/icons/Offlinecloud.png',
+                                  iconColor: Colors.deepOrangeAccent,
+                                  title: "Offline Mode",
+                                  onTap: () {
+                                    // Navigate to offline sample
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    /*  Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
@@ -555,7 +632,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       ),
                     ),*/
                     const SizedBox(height: 20),
-                    Center(
+                  /*  Center(
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -608,7 +685,92 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           ),
                         ),
                       ),
-                    ),
+                    ),*/
+
+                  /*  Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              "Add Sample",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Online Mode Button
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Online dialog
+                              },
+                              icon: const Icon(Icons.cloud, color: Colors.white),
+                              label: const Text(
+                                "Online Mode",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.shade700,
+                                minimumSize: const Size.fromHeight(48),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          // Offline Mode Button
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Offline dialog
+                              },
+                              icon: const Icon(Icons.cloud_off, color: Colors.white),
+                              label: const Text(
+                                "Offline Mode",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange.shade700,
+                                minimumSize: const Size.fromHeight(48),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )*/
+
 
 
                   ],
@@ -787,5 +949,79 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     );
   }
 
+  Widget _buildAddButtonCard({
+    required String imagePath,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: iconColor.withOpacity(0.6),
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.12),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: iconColor.withOpacity(0.6),
+                  width: 1.2,
+                ),
+              ),
+              child: Image.asset(
+                imagePath,
+                width: 32,
+                height: 32,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13.5,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: onTap,
+              icon: Icon(Icons.add, color: Colors.white, size: 18),
+              label: const Text(
+                "Add",
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: iconColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
 }

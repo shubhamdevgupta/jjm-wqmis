@@ -112,7 +112,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` INTEGER NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Scheme` (`schemeId` INTEGER, `schemeName` TEXT NOT NULL, `sourceType` INTEGER, `villageId` INTEGER, PRIMARY KEY (`schemeId`))');
+            'CREATE TABLE IF NOT EXISTS `Scheme` (`schemeId` TEXT, `schemeName` TEXT, `sourceType` INTEGER, `villageId` INTEGER, PRIMARY KEY (`schemeId`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Sources` (`location_id` INTEGER NOT NULL, `SourceType` INTEGER NOT NULL, `SourceTypeCategoryId` INTEGER NOT NULL, `SchemeId` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `HabitationId` INTEGER NOT NULL, `Is_fhtc` INTEGER NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY (`location_id`))');
         await database.execute(
@@ -288,8 +288,8 @@ class _$SchemeDao extends SchemeDao {
   Future<List<SchemeResponse>> getAllSchemes() async {
     return _queryAdapter.queryList('SELECT * FROM Scheme',
         mapper: (Map<String, Object?> row) => SchemeResponse(
-            schemeId: row['schemeId'] as int?,
-            schemeName: row['schemeName'] as String,
+            schemeId: row['schemeId'] as String?,
+            schemeName: row['schemeName'] as String?,
             sourceType: row['sourceType'] as int?,
             villageId: row['villageId'] as int?));
   }
@@ -301,7 +301,7 @@ class _$SchemeDao extends SchemeDao {
   ) async {
     return _queryAdapter.queryList(
         'SELECT SchemeId, SchemeName FROM scheme WHERE VillageId = ?1 AND SourceType = ?2',
-        mapper: (Map<String, Object?> row) => SchemeResponse(schemeId: row['schemeId'] as int?, schemeName: row['schemeName'] as String, sourceType: row['sourceType'] as int?, villageId: row['villageId'] as int?),
+        mapper: (Map<String, Object?> row) => SchemeResponse(schemeId: row['schemeId'] as String?, schemeName: row['schemeName'] as String?, sourceType: row['sourceType'] as int?, villageId: row['villageId'] as int?),
         arguments: [villageId, sourceType]);
   }
 

@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 
 class SchemeModel {
   final int sourceType;
-  final int schemeId;
+  final String schemeId;
   final int villageId;
   final String schemeName;
 

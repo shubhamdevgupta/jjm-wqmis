@@ -32,7 +32,7 @@ class BaseApiService {
     log('POST_Request ency--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
+      await checkConnectivity();
       final response = await http.post(url, headers: headers, body: body,);
 
       if (response.headers['content-type']?.contains(',') ?? false) {
@@ -59,7 +59,7 @@ class BaseApiService {
     log('GET Request: URL: $url');
     log('GET Request: Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
+      await checkConnectivity();
 
       final response = await http.get(
         url,
@@ -74,7 +74,7 @@ class BaseApiService {
       return _processResponse(response);
   }
 
-  Future<void> _checkConnectivity() async {
+  Future<void> checkConnectivity() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       throw NetworkException(
