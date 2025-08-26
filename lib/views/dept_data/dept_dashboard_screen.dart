@@ -488,27 +488,11 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   iconColor: Colors.blue,
                                   title: "Online Mode",
                                     onTap: () async {
-                                      showDialog<bool>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          double screenHeight =
-                                              MediaQuery.of(context).size.height;
-                                          double screenwidth =
-                                              MediaQuery.of(context).size.width;
-                                          return AlertDialog(
-                                            contentPadding: const EdgeInsets.all(10),
-                                            content: Container(
-                                              color: Colors.white,
-                                              height: screenHeight * 0.8,
-                                              width: screenwidth * 0.99,
-                                              child:  const Locationscreen(
-                                                flag: AppConstants.openSampleInfoScreen,
-                                                flagFloating: "",
-                                              ),
-                                            ),
-                                          );
-                                        },
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppConstants.navigateToLocationScreen,
                                       );
+
                                     },
                                 ),
                               ),
@@ -518,8 +502,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   imagePath: 'assets/icons/Offlinecloud.png',
                                   iconColor: Colors.deepOrangeAccent,
                                   title: "Offline Mode",
-                                  onTap: () {
-                                    // Navigate to offline sample
+                                  onTap: () async {
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppConstants.navigateToChosevillage,
+                                    );
+
                                   },
                                 ),
                               ),

@@ -57,6 +57,7 @@ class AppConstants {
 
   static const String navigateToExceptionScreen = '/exceptionScreen';
   static const String navigateToLocationScreen = '/locationScreen';
+  static const String navigateToChosevillage = '/chosevillage';
   static const String navigateToSampleInformationScreen = '/sampleInfo';
   static const String navigateToSampleListScreen = '/sampleList';
   static const String navigateToSubmitSampleScreen = '/sampleSubmit';
