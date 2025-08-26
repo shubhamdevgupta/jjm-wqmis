@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/utils/webView/testReport.dart';
 import 'package:jjm_wqmis/views/auth/login_screen.dart';
 import 'package:jjm_wqmis/views/auth/splash_screen.dart';
 import 'package:jjm_wqmis/views/dept_data/dept_dashboard_screen.dart';
+import 'package:jjm_wqmis/views/dept_data/dept_offline/chosevillage.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/location_screen.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/sample_info_screen.dart';
 import 'package:jjm_wqmis/views/dept_data/sample_list_screen.dart';
@@ -69,7 +70,7 @@ class AppRoutes {
       AppConstants.navigateToLocationScreen: (context) =>
            const Locationscreen(flag: '',flagFloating: '',),
       AppConstants.navigateToChosevillage: (context) =>
-           const Locationscreen(flag: '',flagFloating: '',),
+           const Chosevillage(flag: '',flagFloating: '',),
       AppConstants.navigateToSampleInformationScreen: (context) =>
           const Sampleinformationscreen(),
       AppConstants.navigateToSampleListScreen: (context) => const SampleListScreen(),

@@ -3,7 +3,7 @@ import 'package:floor/floor.dart';
 @entity
 class WaterSourceFilter {
   @primaryKey
-  final int id;
+  final String id;
 
   final String SourceType;
 

@@ -3,7 +3,7 @@ import 'package:floor/floor.dart';
 @Entity(tableName: 'Sources')
 class SourcesEntity {
   @PrimaryKey()
-  final int location_id;
+  final String location_id;
   final int SourceType;
   final int SourceTypeCategoryId;
   final int SchemeId;

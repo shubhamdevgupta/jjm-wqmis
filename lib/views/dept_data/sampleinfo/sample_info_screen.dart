@@ -2,6 +2,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/database.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
 
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
@@ -36,11 +38,11 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     super.initState();
     session.init();
 
-/*    _loadData();*/
+    _loadData();
 
   }
 
-/*  Future<void> _loadData() async {
+  Future<void> _loadData() async {
     final db = await AppDatabase.getDatabase();
     //List<SchemeResponse> schemes = await db.schemeDao.getSchemesByVillageAndSource(56, 2);
     List<SchemeResponse> schemes = await db.schemeDao.getAllSchemes();
@@ -48,7 +50,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     log('SCHEME LENGTH : ${schemes.length}');
     print("SCHEME LENGTH : ${schemes.length}");
 
-  }*/
+  }
 
 
   @override

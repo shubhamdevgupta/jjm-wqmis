@@ -1,7 +1,7 @@
 import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
 
 class WaterSourceFilterModel {
-  final int id;
+  final String id;
   final String SourceType;
 
   WaterSourceFilterModel({

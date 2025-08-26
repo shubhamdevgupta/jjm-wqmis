@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/block_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/habitation_response.dart';
@@ -12,6 +13,7 @@ import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/dept_dashboard_screen.dart';
+import 'package:path/path.dart' as _selectedVillages;
 import 'package:provider/provider.dart';
 
 class Chosevillage extends StatefulWidget {
@@ -29,14 +31,38 @@ class _Chosevillage extends State<Chosevillage> {
   final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
+  late Future<List<String>> _villagesFuture;
+  List<String> _allVillages = [
+    "Rampur",
+    "Lakshmipur",
+    "Rajgarh",
+    "Sundernagar",
+    "Bhavanipur",
+    "Chandrapur"
+  ];
+  List<String> _filteredVillages = [];
+  Set<String> _selectedVillages = {}; // ✅ Multi-select
   @override
   void initState() {
     super.initState();
     session.init();
+    _villagesFuture = _loadVillages();
     Provider.of<Masterprovider>(context, listen: false).fetchWatersourcefilterList(session.regId);
 
   }
+  Future<List<String>> _loadVillages() async {
+    await Future.delayed(const Duration(milliseconds: 800)); // mimic API delay
+    _filteredVillages = List.from(_allVillages);
+    return _allVillages;
+  }
 
+  void _filterVillages(String query) {
+    setState(() {
+      _filteredVillages = _allVillages
+          .where((v) => v.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
@@ -102,333 +128,351 @@ class _Chosevillage extends State<Chosevillage> {
 
   Widget buildStateVillage(
       Masterprovider masterProvider, ParameterProvider paramProvider) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      margin: const EdgeInsets.all(0),
-      child: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildLocationTile(
+                            icon: Icons.location_city,
+                            label: "State",
+                            value:  session.stateName.toString() ?? "N/A",
+                            color: Colors.green,
+                          ),
+                        ),
+
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: buildLocationTile(
+                            icon: Icons.location_city,
+                            label: "District",
+                            value:  session.districtName.toString() ?? "N/A",
+                            color: Colors.orangeAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+
+
+
+                ),
+              ),
+            ),
+
+
+
+
+      Padding(
+        padding: const EdgeInsets.all(12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Village Details ",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+              // 🔹 Header
+              Row(
+                children: [
+                  const Icon(Icons.download_for_offline,
+                      color: Colors.blue, size: 22),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Select Villages",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Row 1: State & District
-                      /*     Row(
-                        children: [
-                          Expanded(
-                            child: buildLocationTile(
-                              icon: Icons.location_city,
-                              label: "State",
-                              value: session.stateName ?? "Select",
-                              color: Colors.blue,
-                            ),
+                        SizedBox(height: 2),
+                        Text(
+                          "Download villages for offline use and tagging.",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
+                            height: 1.3,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: buildLocationTile(
-                              icon: Icons.location_city,
-                              label: "District",
-                              value: session.districtName ?? "Select",
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ],
-                      ),*/
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
 
-                      // Row 2: Block & Gram Panchayat
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                CustomDropdown.openSearchDialog<String>(
-                                  context: context,
-                                  title: "Select Block",
-                                  value: masterProvider.selectedBlockId,
-                                  items: masterProvider.blocks.map((block) {
-                                    return DropdownMenuItem<String>(
-                                      value: block.jjmBlockId,
-                                      child: Text(block.blockName),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      masterProvider.setSelectedBlock(value);
-                                      masterProvider.fetchGramPanchayat(
-                                        masterProvider.selectedStateId!,
-                                        masterProvider.selectedDistrictId!,
-                                        value,
-                                        session.regId,
-                                      );
-                                    }
-                                  },
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(8),
-                              child: buildLocationTile(
-                                icon: Icons.map,
-                                label: "Block",
-                                value: (masterProvider.selectedBlockId != null &&
-                                    masterProvider.selectedBlockId!.isNotEmpty)
-                                    ? masterProvider.blocks
-                                    .firstWhere(
-                                      (b) => b.jjmBlockId == masterProvider.selectedBlockId,
-                                  orElse: () => BlockResponse(jjmBlockId: "", blockName: "", jjmDistrictId: ''),
-                                ).blockName : "Select",
-                                color: Colors.green,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                CustomDropdown.openSearchDialog<String>(
-                                  context: context,
-                                  title: "Select Grampanchayat",
-                                  value: masterProvider.selectedGramPanchayat,
-                                  items: masterProvider.gramPanchayat
-                                      .map((grampanchayat) {
-                                    return DropdownMenuItem<String>(
-                                      value: grampanchayat.jjmPanchayatId,
-                                      child: Text(grampanchayat.panchayatName),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      masterProvider
-                                          .setSelectedGrampanchayat(value);
-                                      masterProvider.fetchVillage(
-                                        masterProvider.selectedStateId!,
-                                        masterProvider.selectedDistrictId!,
-                                        masterProvider.selectedBlockId!,
-                                        value,
-                                        session.regId,
-                                      );
-                                    }
-                                  },
-                                );
-                              },
-                              child: buildLocationTile(
-                                icon: Icons.location_city,
-                                label: "Gram Panchayat",
-                                value: (masterProvider.selectedGramPanchayat != null &&
-                                    masterProvider.selectedGramPanchayat!.isNotEmpty)
-                                    ? masterProvider.gramPanchayat
-                                    .firstWhere(
-                                      (b) => b.jjmPanchayatId == masterProvider.selectedGramPanchayat,
-                                  orElse: () => GramPanchayatresponse(jjmPanchayatId: '', panchayatName: ''),
-                                )
-                                    .panchayatName
-                                    : "Select",
-                                color: Colors.orange,
-                              ),
-
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Row 3: Village & Habitation
-                      Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                CustomDropdown.openSearchDialog<String>(
-                                  context: context,
-                                  title: "Select Village",
-                                  value: masterProvider.selectedVillage,
-                                  items: masterProvider.village.map((village) {
-                                    return DropdownMenuItem<String>(
-                                      value: village.jjmVillageId,
-                                      child: Text(village.villageName),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      masterProvider.setSelectedVillage(value);
-
-                                      masterProvider.fetchHabitations(
-                                        masterProvider.selectedStateId!,
-                                        masterProvider.selectedDistrictId!,
-                                        masterProvider.selectedBlockId!,
-                                        masterProvider.selectedGramPanchayat!,
-                                        value,
-                                        session.regId,
-                                      );
-                                    }
-                                  },
-                                );
-                              },
-                              child: buildLocationTile(
-                                icon: Icons.home,
-                                label: "Village",
-                                value: (masterProvider.selectedVillage != null &&
-                                    masterProvider.selectedVillage!.isNotEmpty)
-                                    ? masterProvider.village
-                                    .firstWhere(
-                                      (b) => b.jjmVillageId == masterProvider.selectedVillage,
-                                  orElse: () => Villageresponse(jjmVillageId: '', villageName: '', flag: 0),
-                                )
-                                    .villageName
-                                    : "Select",
-                                color: Colors.purple,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                CustomDropdown.openSearchDialog<String>(
-                                  context: context,
-                                  title: "Select Habitation",
-                                  value: masterProvider.selectedHabitation,
-                                  items: masterProvider.habitationId
-                                      .map((habitation) {
-                                    return DropdownMenuItem<String>(
-                                      value: habitation.habitationId,
-                                      child: Text(habitation.habitationName),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    if (value != null && value.isNotEmpty) {
-                                      masterProvider
-                                          .setSelectedHabitation(value);
-                                    }
-                                  },
-                                );
-                              },
-                              child:buildLocationTile(
-                                icon: Icons.home_work,
-                                label: "Habitation",
-                                value: (masterProvider.selectedHabitation != null &&
-                                    masterProvider.selectedHabitation!.isNotEmpty)
-                                    ? masterProvider.habitationId
-                                    .firstWhere(
-                                      (b) => b.habitationId == masterProvider.selectedHabitation,
-                                  orElse: () => HabitationResponse(
-                                    habitationId: '',
-                                    habitationName: '',
-                                    villageId: '',
-                                  ),
-                                ).habitationName
-                                    : "Select",
-                                color: Colors.green,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-
-
-
+              // 🔎 Sleek Search Bar
+              TextField(
+                onChanged: _filterVillages,
+                decoration: InputDecoration(
+                  hintText: "Search village...",
+                  prefixIcon: const Icon(Icons.search, color: Colors.black54),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
+              const SizedBox(height: 14),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.15),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Sample source location",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      Column(
-                        children: masterProvider.wtsFilterList.map((filter) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: InkWell(
-                              onTap: () {
-                                masterProvider.setSelectedWaterSourcefilter(filter.id);
-                                Navigator.pushNamed(context, AppConstants.navigateToSampleInformationScreen);
-
-                                masterProvider.setSelectedWaterSourcefilter(filter.id);
-                                if (filter.id != "0" &&
-                                    [masterProvider.selectedStateId, masterProvider.selectedDistrictId, masterProvider.selectedVillage, masterProvider.selectedHabitation].every((e) => e != null)) {
-                                  masterProvider.fetchSchemes(
-                                    session.stateId.toString(),
-                                    session.districtId.toString(),
-                                    masterProvider.selectedVillage!,
-                                    masterProvider.selectedHabitation!,
-                                    filter.id,
-                                    session.regId,
-                                  );
+              // 🏘 Modern List
+              SizedBox(
+                height: 350,
+                child: FutureBuilder<List<String>>(
+                  future: _villagesFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text("Error loading villages"));
+                    } else if (_filteredVillages.isEmpty) {
+                      return const Center(child: Text("No villages found"));
+                    }
+                    return ListView.separated(
+                      itemCount: _filteredVillages.length,
+                      separatorBuilder: (_, __) =>
+                          Divider(color: Colors.grey.shade200, height: 1),
+                      itemBuilder: (context, index) {
+                        final village = _filteredVillages[index];
+                        final isSelected = _selectedVillages.contains(village);
+                        return ListTile(
+                          contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 4),
+                          leading: CircleAvatar(
+                            radius: 16,
+                            backgroundColor: Colors.blue.shade50,
+                            child: const Icon(Icons.location_on,
+                                color: Colors.blue, size: 18),
+                          ),
+                          title: Text(
+                            village,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          trailing: Checkbox(
+                            value: isSelected,
+                            activeColor: Colors.blue,
+                            onChanged: (bool? selected) {
+                              setState(() {
+                                if (selected == true) {
+                                  _selectedVillages.add(village);
+                                } else {
+                                  _selectedVillages.remove(village);
                                 }
-
-                              },
-                              borderRadius: BorderRadius.circular(8),
-                              child: buildLocationTile(
-                                  icon: Icons.water_drop,
-                                  label: filter.sourceType,
-                                  value:  "",
-                                  color:  Colors.blue
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
+                              });
+                            },
+                          ),
+                          onTap: () {
+                            setState(() {
+                              if (isSelected) {
+                                _selectedVillages.remove(village);
+                              } else {
+                                _selectedVillages.add(village);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
+
+              // ✅ Action button
+              if (_selectedVillages.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Downloading: ${_selectedVillages.join(", ")}",
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.cloud_download),
+                    label: const Text(
+                      "Download Selected",
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ]
             ],
           ),
+        ),
+      ),
+
+            SizedBox(height: 20,),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("📥 Starting Offline Data fetch...");
+
+                  // 1. Fetch data from API and wait until it's fully ready
+                  await masterProvider.masterVillagesData("2", "4", "56");
+
+                  // Safety check: make sure data exists
+                  if (masterProvider.masterVillageData == null) {
+                    print("❌ No master data received from API.");
+                    return;
+                  }
+
+                  print("📊 Habitations: ${masterProvider.masterVillageData!.habitations.length}");
+                  print("📊 WaterSourceFilters: ${masterProvider.masterVillageData!.waterSourceFilters.length}");
+
+                  // 2. Open Floor DB
+                  final db = await $FloorAppDatabase
+                      .databaseBuilder('my_app_database.db')
+                      .build();
+
+                  // 3. Clear old data
+                  await db.habitationDao.clearTable();
+                  await db.waterSourceFilterDao.clearTable();
+
+                  // 4. Insert only if list has data
+                  if (masterProvider.masterVillageData!.habitations.isNotEmpty) {
+                    await db.habitationDao.insertAll(
+                        masterProvider.masterVillageData!.habitations.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted Habitations");
+                  } else {
+                    print("⚠ No Habitations to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.waterSourceFilters.isNotEmpty) {
+                    await db.waterSourceFilterDao.insertAll(
+                        masterProvider.masterVillageData!.waterSourceFilters.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted WaterSourceFilters");
+                  } else {
+                    print("⚠ No WaterSourceFilters to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.schemes.isNotEmpty) {
+                    await db.schemeDao.insertAll(
+                        masterProvider.masterVillageData!.schemes.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted schemes");
+                  } else {
+                    print("⚠ No schemes to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.sources.isNotEmpty) {
+                    await db.sourcesDao.insertAll(
+                        masterProvider.masterVillageData!.sources.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted sources");
+                  } else {
+                    print("⚠ No sources to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.labs.isNotEmpty) {
+                    await db.labDao.insertAll(
+                        masterProvider.masterVillageData!.labs.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted labs");
+                  } else {
+                    print("⚠ No labs to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.parameters.isNotEmpty) {
+                    await db.parameterDao.insertAll(
+                        masterProvider.masterVillageData!.parameters.map((e) => e.toEntity()).toList()
+                    );
+                    print("✅ Inserted parameters");
+                  } else {
+                    print("⚠ No parameters to insert");
+                  }
+
+                  if (masterProvider.masterVillageData!.labIncharges.isNotEmpty) {
+                    await db.labInchargeDao.insertAll(masterProvider.masterVillageData!.labIncharges.map((e) => e.toEntity()).toList());
+                    print("✅ Inserted labIncharges");
+
+                    masterProvider.fetchWatersourcefilterList(session.regId);
+                    masterProvider.clearsampleinfo();
+                    Navigator.pop(context, true);
+                    Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
+                  } else {
+                    print("⚠ No labIncharges to insert");
+                  }
+
+
+
+                  print("🎉 Offline Data fetch & save complete.");
+
+
+
+
+                },
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF096DA8),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+
+                child: const Text(
+                    'Offline Data',
+                    style: AppStyles.textStyle
+                ),
+              ),
+            ),
+
+          ],
         ),
       ),
     );
@@ -481,7 +525,7 @@ Widget buildLocationTile({
             ],
           ),
         ),
-        const Icon(Icons.arrow_downward_sharp, size: 20, color: Colors.black54),
+        // 🔽 Removed the dropdown arrow since not needed
       ],
     ),
   );

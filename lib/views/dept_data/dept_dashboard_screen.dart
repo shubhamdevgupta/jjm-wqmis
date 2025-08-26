@@ -615,7 +615,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       ),
                     ),*/
                     const SizedBox(height: 20),
-                  /*  Center(
+                    Center(
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -668,7 +668,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                           ),
                         ),
                       ),
-                    ),*/
+                    ),
 
                   /*  Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

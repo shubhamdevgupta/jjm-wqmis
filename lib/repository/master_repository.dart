@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:jjm_wqmis/database/Dao/watersourcefilterDao.dart';
 import 'package:jjm_wqmis/database/database.dart';
 import 'package:jjm_wqmis/models/MasterVillageData.dart';
 import 'package:jjm_wqmis/models/base_response.dart';
@@ -151,9 +152,7 @@ class MasterRepository {
         log("📡 FetchSchemes: Got data from API");
 
         if (json['status'] == 1 && json['result'] != null) {
-          final list = (json['result'] as List)
-              .map((e) => SchemeResponse.fromJson(e))
-              .toList();
+          final list = (json['result'] as List).map((e) => SchemeResponse.fromJson(e)).toList();
 
           final db = await AppDatabase.getDatabase();
           await db.schemeDao.insertAll(list);
@@ -161,10 +160,7 @@ class MasterRepository {
           log("💾 Schemes saved to local DB: ${list.length} items");
         }
 
-        return BaseResponseModel<SchemeResponse>.fromJson(
-          json,
-              (j) => SchemeResponse.fromJson(j),
-        );
+        return BaseResponseModel<SchemeResponse>.fromJson(json, (j) => SchemeResponse.fromJson(j),);
 
       } on NetworkException {
         // ❌ Offline → DB
@@ -199,19 +195,67 @@ class MasterRepository {
 
   Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
     try {
-
       final query = _apiService.buildEncryptedQuery({
-        'reg_Id' :regId
+        'reg_Id': regId,
       });
 
-      final response = await _apiService.get('/apimasterA/Get_water_source_filter?$query');
-      return BaseResponseModel<Watersourcefilterresponse>.fromJson(response,(json)=> Watersourcefilterresponse.fromJson(json));
+      try {
+        await _apiService.checkConnectivity();
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+        // ✅ Online → API
+        final response = await _apiService.get('/apimasterA/Get_water_source_filter?$query');
+        log("📡 FetchWaterSourceFilterList: Got data from API");
+
+        if (response['Status'] == 1 && response['Result'] != null) {
+          // Convert API response to model
+          final apiList = (response['Result'] as List)
+              .map((e) => Watersourcefilterresponse.fromJson(e))
+              .toList();
+
+          // Convert to DB entity and save
+          final dbList = apiList.map((e) => e.toEntity()).toList();
+          final db = await AppDatabase.getDatabase();
+          await db.waterSourceFilterDao.insertAll(dbList);
+
+          log("💾 WaterSourceFilter saved to local DB: ${dbList.length} items");
+        }
+
+        return BaseResponseModel<Watersourcefilterresponse>.fromJson(
+          response,
+              (json) => Watersourcefilterresponse.fromJson(json),
+        );
+
+      } on NetworkException {
+        // ❌ Offline → fetch from local DB
+        final db = await AppDatabase.getDatabase();
+        final local = await db.waterSourceFilterDao.getAll();
+
+        log("📴 FetchWaterSourceFilterList: No internet → fetched ${local.length} items from DB");
+
+        // Convert DB entities back to API model
+        final offlineList = local.map((e) => Watersourcefilterresponse(
+          id: e.id,
+          sourceType: e.SourceType,
+        )).toList();
+
+        return BaseResponseModel<Watersourcefilterresponse>(
+          status: 1,
+          message: "Fetched from local database",
+          result: offlineList,
+        );
+      }
+
+    } catch (e, stack) {
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      } else {
+        debugPrint("Non-Exception error: $e");
+        debugPrintStack(stackTrace: stack);
+      }
       rethrow;
     }
   }
+
 
   Future<BaseResponseModel<WaterSourceResponse>> fetchSourceInformation(
       String villageId,

@@ -1,3 +1,41 @@
+import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
+
+/// Core model used in app
+class Watersourcefilterresponse {
+  final String id;
+  final String sourceType;
+
+  Watersourcefilterresponse({
+    required this.id,
+    required this.sourceType,
+  });
+
+  /// From API JSON (was Watersourcefilterresponse)
+  factory Watersourcefilterresponse.fromJson(Map<String, dynamic> json) {
+    return Watersourcefilterresponse(
+      id: json['Id'].toString(),
+      sourceType: json['SourceType']?.trim() ?? '',
+    );
+  }
+
+  /// Convert to DB entity (WaterSourceFilter table)
+  WaterSourceFilter toEntity() {
+    return WaterSourceFilter(id, sourceType);
+  }
+
+  /// Convert to JSON if needed
+  Map<String, dynamic> toJson() {
+    return {
+      'Id': id,
+      'SourceType': sourceType,
+    };
+  }
+
+  @override
+  String toString() => 'WaterSource(id: $id, type: $sourceType)';
+}
+
+/// API response wrapper
 class WaterSourceFilterResponse {
   final int status;
   final String message;
@@ -18,32 +56,4 @@ class WaterSourceFilterResponse {
           .toList(),
     );
   }
-}
-// lib/models/watersourcefilter_response.dart
-
-class Watersourcefilterresponse {
-  final String id;
-  final String sourceType;
-
-  Watersourcefilterresponse({
-    required this.id,
-    required this.sourceType,
-  });
-
-  factory Watersourcefilterresponse.fromJson(Map<String, dynamic> json) {
-    return Watersourcefilterresponse(
-      id: json['Id'].toString(),
-      sourceType: json['SourceType']?.trim() ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'Id': id,
-      'SourceType': sourceType,
-    };
-  }
-
-  @override
-  String toString() => 'WaterSource(id: $id, type: $sourceType)';
 }

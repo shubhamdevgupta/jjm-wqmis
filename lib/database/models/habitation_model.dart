@@ -1,8 +1,8 @@
 import '../Entities/habitation_table.dart';
 
 class HabitationModel {
-  final int villageId;
-  final int habitationId;
+  final String villageId;
+  final String habitationId;
   final String habitationName;
 
   HabitationModel({

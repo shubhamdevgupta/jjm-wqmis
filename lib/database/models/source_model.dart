@@ -6,7 +6,7 @@ class SourceModel {
   final int schemeId;
   final int villageId;
   final int habitationId;
-  final int locationId;
+  final String locationId;
   final String locationName;
   final int isFhtc;
 

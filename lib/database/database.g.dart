@@ -108,13 +108,13 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `habitation` (`habitationId` INTEGER NOT NULL, `villageId` INTEGER NOT NULL, `habitationName` TEXT NOT NULL, PRIMARY KEY (`habitationId`))');
+            'CREATE TABLE IF NOT EXISTS `habitation` (`habitationId` TEXT NOT NULL, `villageId` TEXT NOT NULL, `habitationName` TEXT NOT NULL, PRIMARY KEY (`habitationId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` INTEGER NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` TEXT NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Scheme` (`schemeId` TEXT, `schemeName` TEXT, `sourceType` INTEGER, `villageId` INTEGER, PRIMARY KEY (`schemeId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Sources` (`location_id` INTEGER NOT NULL, `SourceType` INTEGER NOT NULL, `SourceTypeCategoryId` INTEGER NOT NULL, `SchemeId` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `HabitationId` INTEGER NOT NULL, `Is_fhtc` INTEGER NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY (`location_id`))');
+            'CREATE TABLE IF NOT EXISTS `Sources` (`location_id` TEXT NOT NULL, `SourceType` INTEGER NOT NULL, `SourceTypeCategoryId` INTEGER NOT NULL, `SchemeId` INTEGER NOT NULL, `VillageId` INTEGER NOT NULL, `HabitationId` INTEGER NOT NULL, `Is_fhtc` INTEGER NOT NULL, `location_name` TEXT NOT NULL, PRIMARY KEY (`location_id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Lab` (`lab_id` INTEGER NOT NULL, `stateid` INTEGER NOT NULL, `lab_name` TEXT NOT NULL, `is_wtp` INTEGER NOT NULL, PRIMARY KEY (`lab_id`))');
         await database.execute(
@@ -192,8 +192,8 @@ class _$HabitationDao extends HabitationDao {
   Future<List<HabitationTable>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM habitation',
         mapper: (Map<String, Object?> row) => HabitationTable(
-            row['habitationId'] as int,
-            row['villageId'] as int,
+            row['habitationId'] as String,
+            row['villageId'] as String,
             row['habitationName'] as String));
   }
 
@@ -239,8 +239,8 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
   @override
   Future<List<WaterSourceFilter>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM WaterSourceFilter',
-        mapper: (Map<String, Object?> row) =>
-            WaterSourceFilter(row['id'] as int, row['SourceType'] as String));
+        mapper: (Map<String, Object?> row) => WaterSourceFilter(
+            row['id'] as String, row['SourceType'] as String));
   }
 
   @override
@@ -348,7 +348,7 @@ class _$SourcesDao extends SourcesDao {
   Future<List<SourcesEntity>> getAllSources() async {
     return _queryAdapter.queryList('SELECT * FROM Sources',
         mapper: (Map<String, Object?> row) => SourcesEntity(
-            location_id: row['location_id'] as int,
+            location_id: row['location_id'] as String,
             SourceType: row['SourceType'] as int,
             SourceTypeCategoryId: row['SourceTypeCategoryId'] as int,
             SchemeId: row['SchemeId'] as int,
