@@ -505,6 +505,12 @@ class Masterprovider extends ChangeNotifier {
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
         wtsFilterList = rawWtsFilterList.result;
+
+        // 👇 Default selection if none is set
+        if (selectedWtsfilter == null && wtsFilterList.isNotEmpty) {
+          selectedWtsfilter = wtsFilterList.first.id.toString();
+        }
+
       } else {
         errorMsg = rawWtsFilterList.message;
       }
@@ -516,6 +522,7 @@ class Masterprovider extends ChangeNotifier {
       notifyListeners(); // Finish loading
     }
   }
+
 
   Future<void> fetchVillageDetails(double lon, double lat) async {
     _isLoading = true;

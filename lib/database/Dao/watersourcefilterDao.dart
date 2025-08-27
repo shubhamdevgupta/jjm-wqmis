@@ -1,18 +1,19 @@
 import 'package:floor/floor.dart';
 import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 
 
 @dao
 abstract class WaterSourceFilterDao {
   @Query('SELECT * FROM WaterSourceFilter')
-  Future<List<WaterSourceFilter>> getAll();
+  Future<List<Watersourcefilterresponse>> getAll();
 
   @insert
-  Future<void> insertWaterSource(WaterSourceFilter waterSourceFilter);
+  Future<void> insertWaterSource(Watersourcefilterresponse waterSourceFilter);
 
 
   @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insertAll(List<WaterSourceFilter> waterSources);
+  Future<void> insertAll(List<Watersourcefilterresponse> waterSources);
 
   @Query('DELETE FROM WaterSourceFilter')
   Future<void> clearTable();

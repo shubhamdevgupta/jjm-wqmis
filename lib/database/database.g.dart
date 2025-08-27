@@ -110,7 +110,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `habitation` (`habitationId` TEXT NOT NULL, `villageId` TEXT NOT NULL, `habitationName` TEXT NOT NULL, PRIMARY KEY (`habitationId`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` TEXT NOT NULL, `SourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `WaterSourceFilter` (`id` TEXT NOT NULL, `sourceType` TEXT NOT NULL, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Scheme` (`schemeId` TEXT, `schemeName` TEXT, `sourceType` INTEGER, `villageId` INTEGER, PRIMARY KEY (`schemeId`))');
         await database.execute(
@@ -220,12 +220,12 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _waterSourceFilterInsertionAdapter = InsertionAdapter(
+        _watersourcefilterresponseInsertionAdapter = InsertionAdapter(
             database,
             'WaterSourceFilter',
-            (WaterSourceFilter item) => <String, Object?>{
+            (Watersourcefilterresponse item) => <String, Object?>{
                   'id': item.id,
-                  'SourceType': item.SourceType
+                  'sourceType': item.sourceType
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -234,13 +234,14 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<WaterSourceFilter> _waterSourceFilterInsertionAdapter;
+  final InsertionAdapter<Watersourcefilterresponse>
+      _watersourcefilterresponseInsertionAdapter;
 
   @override
-  Future<List<WaterSourceFilter>> getAll() async {
+  Future<List<Watersourcefilterresponse>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM WaterSourceFilter',
-        mapper: (Map<String, Object?> row) => WaterSourceFilter(
-            row['id'] as String, row['SourceType'] as String));
+        mapper: (Map<String, Object?> row) => Watersourcefilterresponse(
+            id: row['id'] as String, sourceType: row['sourceType'] as String));
   }
 
   @override
@@ -249,14 +250,15 @@ class _$WaterSourceFilterDao extends WaterSourceFilterDao {
   }
 
   @override
-  Future<void> insertWaterSource(WaterSourceFilter waterSourceFilter) async {
-    await _waterSourceFilterInsertionAdapter.insert(
+  Future<void> insertWaterSource(
+      Watersourcefilterresponse waterSourceFilter) async {
+    await _watersourcefilterresponseInsertionAdapter.insert(
         waterSourceFilter, OnConflictStrategy.abort);
   }
 
   @override
-  Future<void> insertAll(List<WaterSourceFilter> waterSources) async {
-    await _waterSourceFilterInsertionAdapter.insertList(
+  Future<void> insertAll(List<Watersourcefilterresponse> waterSources) async {
+    await _watersourcefilterresponseInsertionAdapter.insertList(
         waterSources, OnConflictStrategy.replace);
   }
 }

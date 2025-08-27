@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:path/path.dart';
 
@@ -29,7 +30,7 @@ part 'database.g.dart';
   version: 1,
   entities: [
     HabitationTable,
-    WaterSourceFilter,
+    Watersourcefilterresponse,
     SchemeResponse,
     SourcesEntity,
     LabEntity,

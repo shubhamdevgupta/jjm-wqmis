@@ -193,13 +193,14 @@ class MasterRepository {
 
 
 
-  Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
+ /* Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
     try {
       final query = _apiService.buildEncryptedQuery({
         'reg_Id': regId,
       });
 
       try {
+        // ✅ Check connectivity
         await _apiService.checkConnectivity();
 
         // ✅ Online → API
@@ -207,26 +208,29 @@ class MasterRepository {
         log("📡 FetchWaterSourceFilterList: Got data from API");
 
         if (response['Status'] == 1 && response['Result'] != null) {
-          // Convert API response to model
+          // Convert API response → model
           final apiList = (response['Result'] as List)
               .map((e) => Watersourcefilterresponse.fromJson(e))
               .toList();
 
-          // Convert to DB entity and save
+          // Convert to DB entity
           final dbList = apiList.map((e) => e.toEntity()).toList();
+
+          // Save in DB
           final db = await AppDatabase.getDatabase();
           await db.waterSourceFilterDao.insertAll(dbList);
 
           log("💾 WaterSourceFilter saved to local DB: ${dbList.length} items");
         }
 
+        // Return response model
         return BaseResponseModel<Watersourcefilterresponse>.fromJson(
           response,
               (json) => Watersourcefilterresponse.fromJson(json),
         );
 
       } on NetworkException {
-        // ❌ Offline → fetch from local DB
+        // ❌ Offline → DB
         final db = await AppDatabase.getDatabase();
         final local = await db.waterSourceFilterDao.getAll();
 
@@ -235,7 +239,7 @@ class MasterRepository {
         // Convert DB entities back to API model
         final offlineList = local.map((e) => Watersourcefilterresponse(
           id: e.id,
-          sourceType: e.SourceType,
+          sourceType: e.sourceType,
         )).toList();
 
         return BaseResponseModel<Watersourcefilterresponse>(
@@ -254,7 +258,39 @@ class MasterRepository {
       }
       rethrow;
     }
+  }*/
+
+  Future<BaseResponseModel<Watersourcefilterresponse>> fetchWaterSourceFilterList(int regId) async {
+    try {
+      // 📦 Always fetch from DB
+      final db = await AppDatabase.getDatabase();
+      final local = await db.waterSourceFilterDao.getAll();
+
+      log("📴 FetchWaterSourceFilterList: fetched ${local.length} items from DB");
+
+      // Convert DB entities back to API model
+      final offlineList = local.map((e) => Watersourcefilterresponse(
+        id: e.id,
+        sourceType: e.sourceType,
+      )).toList();
+
+      return BaseResponseModel<Watersourcefilterresponse>(
+        status: 1,
+        message: "Fetched from local database",
+        result: offlineList,
+      );
+
+    } catch (e, stack) {
+      if (e is Exception) {
+        GlobalExceptionHandler.handleException(e);
+      } else {
+        debugPrint("Non-Exception error: $e");
+        debugPrintStack(stackTrace: stack);
+      }
+      rethrow;
+    }
   }
+
 
 
   Future<BaseResponseModel<WaterSourceResponse>> fetchSourceInformation(

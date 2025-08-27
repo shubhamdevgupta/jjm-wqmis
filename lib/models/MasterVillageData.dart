@@ -5,10 +5,11 @@ import 'package:jjm_wqmis/database/models/parameter_model.dart';
 import 'package:jjm_wqmis/database/models/scheme_model.dart';
 import 'package:jjm_wqmis/database/models/source_model.dart';
 import 'package:jjm_wqmis/database/models/water_source_filter_model.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 
 class MasterVillageData {
   final List<HabitationModel> habitations;
-  final List<WaterSourceFilterModel> waterSourceFilters;
+  final List<Watersourcefilterresponse> waterSourceFilters;
   final List<SchemeModel> schemes;
   final List<SourceModel> sources;
   final List<LabModel> labs;
@@ -32,7 +33,7 @@ class MasterVillageData {
           .map((e) => HabitationModel.fromJson(e))
           .toList(),
       waterSourceFilters: (json['water_source_filter'] as List<dynamic>? ?? [])
-          .map((e) => WaterSourceFilterModel.fromJson(e))
+          .map((e) => Watersourcefilterresponse.fromJson(e))
           .toList(),
       schemes: (json['Scheme'] as List<dynamic>? ?? [])
           .map((e) => SchemeModel.fromJson(e))

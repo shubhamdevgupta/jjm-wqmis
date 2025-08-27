@@ -1,7 +1,10 @@
+import 'package:floor/floor.dart';
 import 'package:jjm_wqmis/database/Entities/watersourcefilter_table.dart';
 
 /// Core model used in app
+@Entity(tableName: 'WaterSourceFilter')
 class Watersourcefilterresponse {
+  @PrimaryKey()
   final String id;
   final String sourceType;
 
@@ -19,8 +22,8 @@ class Watersourcefilterresponse {
   }
 
   /// Convert to DB entity (WaterSourceFilter table)
-  WaterSourceFilter toEntity() {
-    return WaterSourceFilter(id, sourceType);
+  Watersourcefilterresponse toEntity() {
+    return Watersourcefilterresponse( id: id, sourceType: sourceType);
   }
 
   /// Convert to JSON if needed
