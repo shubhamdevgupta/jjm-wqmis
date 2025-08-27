@@ -21,6 +21,7 @@ class Locationscreen extends StatefulWidget {
   State<Locationscreen> createState() => _LocationscreenState();
 }
 
+
 class _LocationscreenState extends State<Locationscreen> {
   final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
