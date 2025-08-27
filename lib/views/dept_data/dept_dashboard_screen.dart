@@ -492,7 +492,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                         context,
                                         AppConstants.navigateToLocationScreen,
                                       );
-
                                     },
                                 ),
                               ),
