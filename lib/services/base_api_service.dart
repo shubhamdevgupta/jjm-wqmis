@@ -4,17 +4,17 @@ import 'dart:developer';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:jjm_wqmis/utils/custom_screen/custom_exception.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
-
-import 'package:jjm_wqmis/utils/custom_screen/custom_exception.dart';
 
 class BaseApiService {
   final String _baseUrl = 'https://ejalshakti.gov.in/wqmis/api/';
   static const String ejalShakti = "https://ejalshakti.gov.in/wqmis/api/";
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
-  final encryption = AesEncryption(); // Put this at the top of your BaseApiService class
+  final encryption =
+      AesEncryption(); // Put this at the top of your BaseApiService class
 
   Future<dynamic> post(
     String endpoint, {
@@ -32,17 +32,21 @@ class BaseApiService {
     log('POST_Request ency--- : ${body.toString()}');
     log('Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
-      final response = await http.post(url, headers: headers, body: body,);
+    await _checkConnectivity();
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
 
-      if (response.headers['content-type']?.contains(',') ?? false) {
-        response.headers['content-type'] = 'application/json; charset=utf-8';
-      }
+    if (response.headers['content-type']?.contains(',') ?? false) {
+      response.headers['content-type'] = 'application/json; charset=utf-8';
+    }
 
-      log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
-      log('Response Body: ${response.body}');
+    log('Response Status Code: ${response.statusCode} : Headers: ${response.headers}');
+    log('Response Body: ${response.body}');
 
-      return _processResponse(response);
+    return _processResponse(response);
   }
 
   Future<dynamic> get(String endpoint,
@@ -59,19 +63,19 @@ class BaseApiService {
     log('GET Request: URL: $url');
     log('GET Request: Headers: ${headers.toString()}');
 
-      await _checkConnectivity();
+    await _checkConnectivity();
 
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+    final response = await http.get(
+      url,
+      headers: headers,
+    );
 
-      if (response.headers['content-type']?.contains(',') ?? false) {
-        response.headers['content-type'] = 'application/json; charset=utf-8';
-      }
-      log('Response: ${response.statusCode} : Body: ${response.body}');
+    if (response.headers['content-type']?.contains(',') ?? false) {
+      response.headers['content-type'] = 'application/json; charset=utf-8';
+    }
+    log('Response: ${response.statusCode} : Body: ${response.body}');
 
-      return _processResponse(response);
+    return _processResponse(response);
   }
 
   Future<void> _checkConnectivity() async {
@@ -82,50 +86,54 @@ class BaseApiService {
     }
   }
 
-
   dynamic _processResponse(http.Response response) {
     try {
       switch (response.statusCode) {
         case 200:
-            final rawJson = json.decode(response.body);
-            if (rawJson is Map<String, dynamic> && rawJson.containsKey('EncryptedData')) {
-              final encryptedData = rawJson['EncryptedData'];
-              final decryptedString = encryption.decryptText(encryptedData);
-              final decryptedJson = json.decode(decryptedString);
-              log('Decrypted Response:  ${decryptedString.toString()}');
+          final rawJson = json.decode(response.body);
+          if (rawJson is Map<String, dynamic> &&
+              rawJson.containsKey('EncryptedData')) {
+            final encryptedData = rawJson['EncryptedData'];
+            final decryptedString = encryption.decryptText(encryptedData);
+            final decryptedJson = json.decode(decryptedString);
+            log('Decrypted Response:  ${decryptedString.toString()}');
 
-              return decryptedJson;
-            }
-            return rawJson;
+            return decryptedJson;
+          }
+          return rawJson;
 
         case 400:
           throw ApiException(
-              'Something went wrong with your request. Please check and try again.',
+              'Something went wrong with your request. Please check and try again. \n Error Code : 400',
               response.statusCode.toString());
 
         case 401:
           throw ApiException(
-              'Your session has expired or you are not authorized. Please log in again.',
+              'Your session has expired or you are not authorized. Please log in again. \n Error Code : 401',
               response.statusCode.toString());
 
         case 404:
           throw ApiException(
-              'Oops! The page or service you’re trying to reach is not available. Please contact support.',
+              'Oops! The page or service you’re trying to reach is not available. Please contact support. \n Error Code : 404',
+              response.statusCode.toString());
+        case 405:
+          throw ApiException(
+              'The requested resource does not support http method . \n Error Code : 405',
               response.statusCode.toString());
 
         case 408:
           throw ApiException(
-              'The request timed out. Please check your connection and try again.',
+              'The request timed out. Please check your connection and try again. \n Error Code : 408',
               response.statusCode.toString());
 
         case 500:
           throw ApiException(
-              'Server encountered an error. Please try again later.',
+              'Server encountered an error. Please try again later. \n Error Code : 500',
               response.statusCode.toString());
 
         case 502:
           throw ApiException(
-              'We’re experiencing server issues. Please try again shortly.',
+              'We’re experiencing server issues. Please try again shortly. \n Error Code : 404',
               response.statusCode.toString());
 
         default:
@@ -137,10 +145,10 @@ class BaseApiService {
       if (e is AppException) {
         rethrow; // Let known exceptions pass through
       }
-      throw ApiException('An unexpected error occurred: $e', response.statusCode.toString());
+      throw ApiException(
+          'An unexpected error occurred: $e', response.statusCode.toString());
     }
   }
-
 
   String buildEncryptedQuery(Map<String, dynamic> params) {
     log("PARAM FOR ENCRYPTION : ${params.toString()}");
@@ -169,10 +177,7 @@ class BaseApiService {
     String res = " $message";
     return res;
   }
-
-
 }
-
 
 Map<String, dynamic> encryptJsonBody(Map<String, dynamic> json) {
   return json.map((key, value) {
@@ -201,6 +206,7 @@ Future<String> getEncryptedToken() async {
 
   return session.token.toString();
 }
+
 enum ApiType {
   ejalShakti,
   reverseGeocoding,
