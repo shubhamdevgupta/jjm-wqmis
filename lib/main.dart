@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +37,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Samplelistprovider()),
         ChangeNotifierProvider(create: (_) => DwsmProvider()),
         ChangeNotifierProvider(create: (_) => Ftkprovider()),
-        ChangeNotifierProvider(create: (_) => UpdateViewModel()), // ✅ Added
+        ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -55,52 +53,49 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   UpdateViewModel? _updateViewModel;
-  bool _updateDialogShown = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Initialize updateViewModel reference (check happens in splash screen)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateViewModel = Provider.of<UpdateViewModel>(navigatorKey.currentContext!, listen: false);
-      _startUpdateWatcher();
+      if (navigatorKey.currentContext != null) {
+        _updateViewModel = Provider.of<UpdateViewModel>(navigatorKey.currentContext!, listen: false);
+      }
     });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _cancelPeriodicChecker();
     super.dispose();
-  }
-  Timer? _periodicTimer;
-  void _startUpdateWatcher() {
-    _periodicTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
-      _checkForUpdate();
-    });
-  }
-
-  void _cancelPeriodicChecker() {
-    _periodicTimer?.cancel();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && !_updateDialogShown) {
-      _checkForUpdate();
+    // Only check on resume if 15 minutes have passed (throttled check)
+    if (state == AppLifecycleState.resumed && _updateViewModel != null) {
+      _checkForUpdate(forceCheck: false);
     }
   }
 
-  Future<void> _checkForUpdate() async {
-    if (_updateViewModel == null || _updateDialogShown) return;
+  /// Check for update with throttling support
+  Future<void> _checkForUpdate({required bool forceCheck}) async {
+    if (_updateViewModel == null) return;
 
-    bool isAvailable = await _updateViewModel!.checkForUpdate();
-    if (isAvailable && navigatorKey.currentContext != null) {
+    // Prevent duplicate dialogs
+    if (_updateViewModel!.isDialogShown) return;
+
+    // Use throttled check (unless forced on startup)
+    final isAvailable = await _updateViewModel!.checkForUpdateWithThrottle(forceCheck: forceCheck);
+    
+    if (isAvailable && navigatorKey.currentContext != null && mounted) {
       final updateInfo = await _updateViewModel!.getUpdateInfo();
-      if (updateInfo != null) {
-        _updateDialogShown = true;
+      if (updateInfo != null && !_updateViewModel!.isDialogShown) {
+        _updateViewModel!.setDialogShown(true);
         await DialogUtils.showUpdateDialog(navigatorKey.currentContext!, updateInfo);
-        _updateDialogShown = false;
+        _updateViewModel!.setDialogShown(false);
       }
     }
   }

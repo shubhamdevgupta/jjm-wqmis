@@ -26,35 +26,60 @@ class _TabSchoolAganwadi extends State<Tabschoolaganwadi>
   @override
   void initState() {
     super.initState();
+
     mTabController = TabController(length: 2, vsync: this, initialIndex: 0);
     dwsmDashboardProvider = Provider.of<DwsmProvider>(context, listen: false);
     masterProvider = Provider.of<Masterprovider>(context, listen: false);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DwsmProvider>(context, listen: false).clearData();
+      dwsmDashboardProvider.clearData();
+      fetchSchoolAwc(0);  // safe call now
     });
+
     mTabController.addListener(() {
       if (mTabController.indexIsChanging) return;
 
       if (mTabController.index == 0) {
         fetchSchoolAwc(0);
         dwsmDashboardProvider.clearSelectedAnganwadi();
-      } else if (mTabController.index == 1) {
+      } else {
         dwsmDashboardProvider.clearSelectedAnganwadi();
         fetchSchoolAwc(1);
         dwsmDashboardProvider.clearSelectedSchool();
       }
     });
-    fetchSchoolAwc(0); //zero for schoool and 1 for anganwadi
   }
 
+
   void fetchSchoolAwc(int type) {
+    final stateId = masterProvider.selectedStateId;
+    final districtId = masterProvider.selectedDistrictId;
+    final blockId = masterProvider.selectedBlockId;
+    final gpId = masterProvider.selectedGramPanchayat;
+    final villageId = masterProvider.selectedVillage;
+    final regId = session.regId;
+
+    // Null-safety check
+    if (stateId == null ||
+        districtId == null ||
+        blockId == null ||
+        gpId == null ||
+        villageId == null) {
+      debugPrint("❌ Cannot fetch School/AWC data. One or more fields are NULL:");
+      debugPrint("stateId=$stateId, districtId=$districtId");
+      debugPrint("blockId=$blockId, gpId=$gpId, villageId=$villageId");
+      debugPrint("regId=$regId");
+      return;
+    }
+
     dwsmDashboardProvider.fetchSchoolAwcInfo(
-      int.parse(masterProvider.selectedStateId!),
-      int.parse(masterProvider.selectedDistrictId!),
-      int.parse(masterProvider.selectedBlockId!),
-      int.parse(masterProvider.selectedGramPanchayat!),
-      int.parse(masterProvider.selectedVillage!),
-      type,session.regId
+      int.parse(stateId),
+      int.parse(districtId),
+      int.parse(blockId),
+      int.parse(gpId),
+      int.parse(villageId),
+      type,
+      regId,
     );
   }
 

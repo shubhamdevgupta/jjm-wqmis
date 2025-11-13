@@ -104,6 +104,7 @@ class AuthenticationProvider extends ChangeNotifier {
         onFailure(errorMsg);
       }
     } catch (e) {
+      print("exception in auth provider--->>>  $e");
       GlobalExceptionHandler.handleException(e as Exception);
       _loginResponse = null;
     } finally {

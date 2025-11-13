@@ -15,7 +15,7 @@ class GlobalExceptionHandler {
     BuildContext context = navigatorKey.currentContext!;
     String errorMessage;
     String httpErrCode;
-
+    print("errorr :$e");
     if (e is AppException) {
       // errorMessage = e.toString();
       errorMessage = e.message;
