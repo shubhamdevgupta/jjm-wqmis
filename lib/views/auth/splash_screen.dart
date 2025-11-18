@@ -17,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final session = UserSessionManager();
-  final UpdateViewModel _updateViewModel = UpdateViewModel();
 
   @override
   void initState() {
@@ -31,14 +30,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   Future<void> _checkForUpdateAndNavigate() async {
-    bool isAvailable = await _updateViewModel.checkForUpdate();
+    // Use Provider instance instead of creating new one
+    final updateViewModel = Provider.of<UpdateViewModel>(context, listen: false);
+    
+    // Use throttled check (force on startup to ensure first check happens)
+    bool isAvailable = await updateViewModel.checkForUpdateWithThrottle(forceCheck: true);
 
     if (isAvailable && mounted) {
-      final updateInfo = await _updateViewModel.getUpdateInfo();
+      final updateInfo = await updateViewModel.getUpdateInfo();
 
-      if (updateInfo != null) {
-
-        DialogUtils.showUpdateDialog(context, updateInfo);
+      if (updateInfo != null && !updateViewModel.isDialogShown) {
+        updateViewModel.setDialogShown(true);
+        await DialogUtils.showUpdateDialog(context, updateInfo);
+        updateViewModel.setDialogShown(false);
         return;
       }
     }

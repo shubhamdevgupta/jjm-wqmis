@@ -24,6 +24,7 @@ class AppConstants {
   static const String prefVillageName = 'prefVillageName';
 
   static const String prefRegId = 'reg_id';
+  static const String prefLastUpdateCheckTime = 'last_update_check_time';
 
   /////////////////////   Routes literals  //////////////////////////////////
 
