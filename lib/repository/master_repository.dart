@@ -204,11 +204,13 @@ class MasterRepository {
 
 
 
-  Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId, String schemeId,int regId) async {
+  Future<BaseResponseModel<Wtp>> fetchWTPlist(String stateId,String villageId,String habitationId, String schemeId,int regId) async {
     try {
 
       final query = _apiService.buildEncryptedQuery({
         'stateid': stateId,
+        'villageid':villageId,
+        'habitationid':habitationId,
         'schemeid': schemeId,
         'reg_Id' :regId
 
