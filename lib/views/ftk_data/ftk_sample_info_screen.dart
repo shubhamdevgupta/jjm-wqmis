@@ -210,6 +210,8 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
                       if (sourceId == "5") {
                         masterProvider.fetchWTPList(
                           masterProvider.selectedStateId!,
+                          masterProvider.selectedVillage!,
+                            masterProvider.selectedHabitation!,
                           value!, session.regId
                         );
                       } else if (sourceId == "6") {

@@ -292,7 +292,7 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = mSchemes.message;
       }
       if (selectedWtsfilter == "5") {
-        await fetchWTPList(selectedStateId!, selectedScheme!,regId);
+        await fetchWTPList(selectedStateId!,selectedVillage!,selectedHabitation!, selectedScheme!,regId);
       } else if (selectedWtsfilter == "6") {
         setSelectedSubSource(0);
         setSelectedWTP("0");
@@ -358,12 +358,12 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String stateId, String schemeId,int regId) async {
+  Future<void> fetchWTPList(String stateId,String villageId,String habitationId, String schemeId,int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
       final fetchedList =
-          await _masterRepository.fetchWTPlist(stateId, schemeId,regId);
+          await _masterRepository.fetchWTPlist(stateId,villageId,habitationId, schemeId,regId);
 
       if (fetchedList.status == 1) {
         wtpList = fetchedList.result;
