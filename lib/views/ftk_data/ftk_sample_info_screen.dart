@@ -1194,7 +1194,7 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
     }
 
     // Only validate water source if "Inlet of WTP" is selected
-    if (masterProvider.selectedSubSource == 5 &&
+    if (masterProvider.selectedSubSource == 0 &&
         (masterProvider.selectedWaterSource == null ||
             masterProvider.selectedWaterSource!.isEmpty)) {
       masterProvider.errorMsg = "Water Source for Inlet is empty or invalid";

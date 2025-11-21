@@ -803,7 +803,28 @@ class Masterprovider extends ChangeNotifier {
   }
 
   void selectRadioOption(int value) {
-    if (value == 2 || value == 1) {
+    // Handle WTP Inlet/Outlet (values 0 and 1 when selectedWtsfilter == "5")
+    if (selectedWtsfilter == "5" && (value == 0 || value == 1)) {
+      clearAddresRemarks();
+      if (value == 0) {
+        // Inlet of WTP - fetch source information
+        setSelectedSubSource(value);
+        fetchSourceInformation(
+            selectedVillage!,
+            selectedHabitation!,
+            selectedWtsfilter!,
+            "0",
+            "0",
+            selectedWtp!,
+            selectedStateId!,
+            selectedScheme!,session.regId);
+      }else{
+        setSelectedSubSource(value);
+      }
+      // Outlet of WTP (value == 1) - just set the value, no API call needed
+    } 
+    // Handle Ground water (GW) and Surface water (SW) sources (values 1 and 2 when selectedWtsfilter == "2")
+    else if (selectedWtsfilter == "2" && (value == 1 || value == 2)) {
       clearAddresRemarks();
       setSelectedSubSource(value);
       Future.delayed(Duration.zero, () {
@@ -836,20 +857,6 @@ class Masterprovider extends ChangeNotifier {
           "0",
           selectedStateId!,
           selectedScheme!,session.regId);
-    } else if (value == 5) {
-      setSelectedSubSource(value);
-      clearAddresRemarks();
-      fetchSourceInformation(
-          selectedVillage!,
-          selectedHabitation!,
-          selectedWtsfilter!,
-          "0",
-          "0",
-          selectedWtp!,
-          selectedStateId!,
-          selectedScheme!,session.regId);
-    } else if (value == 6) {
-      setSelectedSubSource(value);
     } else if (value == 7) {
       clearAddresRemarks();
       setSelectedHandpump(value);

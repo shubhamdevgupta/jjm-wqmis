@@ -497,16 +497,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         Row(
                           children: [
                             Radio(
-                              value: 5,
+                              value: 0,
                               groupValue: masterProvider.selectedSubSource,
                               onChanged: (value) {
                                 masterProvider.istreated=0;
                                 masterProvider.selectRadioOption(value!);
+                                masterProvider.setSelectedSubSource(0);
+                                print("inlet value----${masterProvider.selectedSubSource}");
                               },
                             ),
                             InkWell(
                                 onTap: () {
-                                  masterProvider.selectRadioOption(5);
+                                  masterProvider.selectRadioOption(0);
                                 },
                                 child: const Text('Inlet of WTP'))
                           ],
@@ -514,16 +516,18 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                         Row(
                           children: [
                             Radio(
-                              value: 6,
+                              value: 1,
                               groupValue: masterProvider.selectedSubSource,
                               onChanged: (value) {
                                 masterProvider.istreated=1;
                                 masterProvider.selectRadioOption(value!);
+                                masterProvider.setSelectedSubSource(1);
+                                print("outlet value----${masterProvider.selectedSubSource}");
                               },
                             ),
                             InkWell(
                                 onTap: () {
-                                  masterProvider.selectRadioOption(6);
+                                  masterProvider.selectRadioOption(1);
                                 },
                                 child: const Text('Outlet of WTP'))
                           ],
@@ -553,7 +557,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                   // Align text to the left
                   children: [
                     Visibility(
-                      visible: masterProvider.selectedSubSource == 5,
+                      visible: masterProvider.selectedSubSource == 0,
                       child: CustomDropdown(
                         title: "Select Water Source *",
                         value: masterProvider.selectedWaterSource,
@@ -1131,7 +1135,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
     }
 
     // Only validate water source if "Inlet of WTP" is selected
-    if (masterProvider.selectedSubSource == 5 &&
+    if (masterProvider.selectedSubSource == 0 &&
         (masterProvider.selectedWaterSource == null ||
             masterProvider.selectedWaterSource!.isEmpty)) {
       masterProvider.errorMsg = "Water Source for Inlet is empty or invalid";
