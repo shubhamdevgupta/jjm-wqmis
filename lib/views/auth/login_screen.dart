@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_color.dart';
-import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:provider/provider.dart';
-
 import 'package:jjm_wqmis/utils/app_style.dart';
+import 'package:jjm_wqmis/utils/loader_utils.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 // Login Page
 class Loginscreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class _LoginpageState extends State<Loginscreen> {
                 centerTitle: true,
                 title: Text(
                   'Login ',
-                   style: AppStyles.appBarTitle,
+                  style: AppStyles.appBarTitle,
                 ),
                 backgroundColor: Appcolor.btncolor,
               ),
@@ -56,7 +57,6 @@ class _LoginpageState extends State<Loginscreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         Padding(
                           padding: const EdgeInsets.only(left: 20, top: 10),
                           child: buildHeader(),
@@ -66,9 +66,11 @@ class _LoginpageState extends State<Loginscreen> {
                         ),
                         Card(
                           elevation: 6,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
                           color: Colors.white,
-                          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
                           child: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Column(
@@ -86,7 +88,6 @@ class _LoginpageState extends State<Loginscreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 20),
-
                                 buildFormLabel('Password'),
                                 buildTextFormField(
                                   controller: passwordController,
@@ -100,11 +101,11 @@ class _LoginpageState extends State<Loginscreen> {
                                           : Icons.visibility,
                                       color: Colors.blueGrey,
                                     ),
-                                    onPressed: provider.togglePasswordVisibility,
+                                    onPressed:
+                                        provider.togglePasswordVisibility,
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-
                                 buildFormLabel('Security Check'),
                                 Row(
                                   children: [
@@ -114,11 +115,16 @@ class _LoginpageState extends State<Loginscreen> {
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           color: const Color(0xFFF1F3F4),
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: Text(
                                           '${provider.randomOne} + ${provider.randomTwo} = ?',
-                                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'OpenSans',),
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'OpenSans',
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -128,13 +134,13 @@ class _LoginpageState extends State<Loginscreen> {
                                       borderRadius: BorderRadius.circular(30),
                                       child: CircleAvatar(
                                         backgroundColor: Colors.blue.shade50,
-                                        child: const Icon(Icons.refresh, color: Colors.blue),
+                                        child: const Icon(Icons.refresh,
+                                            color: Colors.blue),
                                       ),
                                     )
                                   ],
                                 ),
                                 const SizedBox(height: 16),
-
                                 buildTextFormField(
                                   controller: captchaController,
                                   hint: 'Enter result',
@@ -142,7 +148,6 @@ class _LoginpageState extends State<Loginscreen> {
                                   keyboardType: TextInputType.number,
                                 ),
                                 const SizedBox(height: 30),
-
                                 SizedBox(
                                   width: double.infinity,
                                   height: 52,
@@ -151,49 +156,80 @@ class _LoginpageState extends State<Loginscreen> {
                                       if (validateLoginInput(provider)) {
                                         provider.loginUser(
                                           phoneController.text,
-                                          passwordController.text, 1,
-                                              () {
+                                          passwordController.text,
+                                          1,
+                                          () {
                                             provider.fetchLocation();
-                                            if(provider.loginResponse?.roleId==4){
-                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToDashboardScreen);
-                                            }else if(provider.loginResponse?.roleId==8){
-                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToDwsmDashboard);
-                                            }else if(provider.loginResponse?.roleId==7){
-                                              Navigator.pushReplacementNamed(context, AppConstants.navigateToFtkDashboard);
+                                            if (provider
+                                                    .loginResponse?.roleId ==
+                                                4) {
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  AppConstants
+                                                      .navigateToDashboardScreen);
+                                            } else if (provider
+                                                    .loginResponse?.roleId ==
+                                                8) {
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  AppConstants
+                                                      .navigateToDwsmDashboard);
+                                            } else if (provider
+                                                    .loginResponse?.roleId ==
+                                                7) {
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  AppConstants
+                                                      .navigateToFtkDashboard);
                                             }
                                           },
-                                              (errorMessage) {
+                                          (errorMessage) {
                                             /*ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(content: Text(errorMessage)));*/
-                                                ToastHelper.showToastMessage(errorMessage);
+                                            ToastHelper.showToastMessage(
+                                                errorMessage);
                                           },
                                         );
                                       } else {
-                                        ToastHelper.showToastMessage(provider.errorMsg);
+                                        ToastHelper.showToastMessage(
+                                            provider.errorMsg);
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Appcolor.btncolor,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(14)),
+                                          borderRadius:
+                                              BorderRadius.circular(14)),
                                       elevation: 4,
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
                                     ),
                                     child: const Text(
                                       'LOGIN',
                                       style: TextStyle(
-                                        color:Colors.white,
-                                        fontSize: 17, fontFamily: 'OpenSans',
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontFamily: 'OpenSans',
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Image.asset("assets/icons/nicone.png", height: 40),
-                                ),
+                                Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Image.asset("assets/icons/nicone.png",
+                                          height: 40),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text("v${AppUtil.appVersion}"),
+                                    ),
+                                  ],
+                                )
+
                               ],
                             ),
                           ),
@@ -203,7 +239,7 @@ class _LoginpageState extends State<Loginscreen> {
                   ),
                   // Loading Overlay
                   if (provider.isLoading)
-                  LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
+                    LoaderUtils.conditionalLoader(isLoading: provider.isLoading)
                 ],
               ),
             ),
@@ -218,8 +254,12 @@ class _LoginpageState extends State<Loginscreen> {
 
     int? enteredCaptcha = int.tryParse(captcha);
     // Using a single if-else statement
-    provider.errorMsg = (phone.isNotEmpty && phone.length == 10 && RegExp(r'^[0-9]{10}$').hasMatch(phone))
-        ? (password.isNotEmpty ? (captcha.isNotEmpty && enteredCaptcha == provider.captchResult // Compare as int
+    provider.errorMsg = (phone.isNotEmpty &&
+            phone.length == 10 &&
+            RegExp(r'^[0-9]{10}$').hasMatch(phone))
+        ? (password.isNotEmpty
+            ? (captcha.isNotEmpty &&
+                    enteredCaptcha == provider.captchResult // Compare as int
                 ? ""
                 : "Please Enter Correct Captcha")
             : "Please Enter Password")
@@ -283,6 +323,7 @@ class _LoginpageState extends State<Loginscreen> {
       ],
     );
   }
+
   Widget buildFormLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
@@ -313,7 +354,8 @@ class _LoginpageState extends State<Loginscreen> {
         filled: true,
         fillColor: const Color(0xFFF5F7FA),
         hintText: hint,
-        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -325,7 +367,4 @@ class _LoginpageState extends State<Loginscreen> {
       ),
     );
   }
-
-
-
 }

@@ -11,6 +11,7 @@ import 'package:jjm_wqmis/providers/ftk_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/providers/update_provider.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_routes.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
@@ -21,6 +22,8 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppUtil.init();   // <-- Load version at startup
+
   await LocalStorageService.init();
   await Firebase.initializeApp();
   await AesEncryption.initKey();

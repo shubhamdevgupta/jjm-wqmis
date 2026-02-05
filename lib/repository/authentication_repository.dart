@@ -22,8 +22,8 @@ class AuthenticaitonRepository {
         })));
 
       return LoginResponse.fromJson(response);
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -41,8 +41,8 @@ class AuthenticaitonRepository {
       final response = await _apiService.get('/apiMobileA/dashbord?$query');
 
         return Dashboardresponse.fromJson(response);
-    } catch ( e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch ( e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }

@@ -3,11 +3,10 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:jjm_wqmis/repository/authentication_repository.dart';
-import 'package:jjm_wqmis/utils/app_constants.dart';
-
 import 'package:jjm_wqmis/models/login_response.dart';
+import 'package:jjm_wqmis/repository/authentication_repository.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
+import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 import 'package:jjm_wqmis/utils/location_utils.dart';
@@ -17,6 +16,7 @@ class AuthenticationProvider extends ChangeNotifier {
   final AuthenticaitonRepository _authRepository = AuthenticaitonRepository();
   final LocalStorageService _localStorage = LocalStorageService();
   final session = UserSessionManager();
+
   AuthenticationProvider() {
     generateCaptcha();
   }
@@ -25,7 +25,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
-  var randomOne=0, randomTwo=0, captchResult=0;
+  var randomOne = 0, randomTwo = 0, captchResult = 0;
 
   LoginResponse? _loginResponse;
   bool _isLoading = false;
@@ -65,36 +65,50 @@ class AuthenticationProvider extends ChangeNotifier {
   // Method to login user
   Future<void> loginUser(phoneNumber, password, appId, Function() onSuccess,
       Function onFailure) async {
-
     _isLoading = true;
     notifyListeners();
     String txtSalt = generateSalt();
     String encryPass = encryptPassword(password, txtSalt);
 
     try {
-      _loginResponse = await _authRepository.loginUser(phoneNumber, encryPass, txtSalt, appId);
+      _loginResponse = await _authRepository.loginUser(
+          phoneNumber, encryPass, txtSalt, appId);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
-        _localStorage.saveString(AppConstants.prefToken, _loginResponse!.token.toString());
-        _localStorage.saveString(AppConstants.prefName, _loginResponse!.name.toString());
-        _localStorage.saveString(AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
-        _localStorage.saveString(AppConstants.prefLoginID, _loginResponse!.loginId!);
+        _localStorage.saveString(
+            AppConstants.prefToken, _loginResponse!.token.toString());
+        _localStorage.saveString(
+            AppConstants.prefName, _loginResponse!.name.toString());
+        _localStorage.saveString(
+            AppConstants.prefMobile, _loginResponse!.mobileNumber.toString());
+        _localStorage.saveString(
+            AppConstants.prefLoginID, _loginResponse!.loginId!);
 
         _localStorage.saveInt(AppConstants.prefRegId, _loginResponse!.regId!);
         _localStorage.saveInt(AppConstants.prefRoleId, _loginResponse!.roleId!);
 
-        _localStorage.saveInt(AppConstants.prefStateId, _loginResponse!.stateId!);
-        _localStorage.saveInt(AppConstants.prefDistrictId, _loginResponse!.districtId!);
-        _localStorage.saveInt(AppConstants.prefBlockId, _loginResponse!.blockId!);
-        _localStorage.saveInt(AppConstants.prefPanchayatId, _loginResponse!.gramPanchayatId!);
-        _localStorage.saveInt(AppConstants.prefVillageId, _loginResponse!.villageId!);
+        _localStorage.saveInt(
+            AppConstants.prefStateId, _loginResponse!.stateId!);
+        _localStorage.saveInt(
+            AppConstants.prefDistrictId, _loginResponse!.districtId!);
+        _localStorage.saveInt(
+            AppConstants.prefBlockId, _loginResponse!.blockId!);
+        _localStorage.saveInt(
+            AppConstants.prefPanchayatId, _loginResponse!.gramPanchayatId!);
+        _localStorage.saveInt(
+            AppConstants.prefVillageId, _loginResponse!.villageId!);
 
-        _localStorage.saveString(AppConstants.prefStateName, _loginResponse!.stateName.toString());
-        _localStorage.saveString(AppConstants.prefDistName, _loginResponse!.districtName.toString());
-        _localStorage.saveString(AppConstants.prefBlockName, _loginResponse!.blockName.toString());
-        _localStorage.saveString(AppConstants.prefGramPanchayatName, _loginResponse!.panchayatName.toString());
-        _localStorage.saveString(AppConstants.prefVillageName, _loginResponse!.villageName.toString());
+        _localStorage.saveString(
+            AppConstants.prefStateName, _loginResponse!.stateName.toString());
+        _localStorage.saveString(
+            AppConstants.prefDistName, _loginResponse!.districtName.toString());
+        _localStorage.saveString(
+            AppConstants.prefBlockName, _loginResponse!.blockName.toString());
+        _localStorage.saveString(AppConstants.prefGramPanchayatName,
+            _loginResponse!.panchayatName.toString());
+        _localStorage.saveString(AppConstants.prefVillageName,
+            _loginResponse!.villageName.toString());
 
         notifyListeners();
         onSuccess();
@@ -103,9 +117,12 @@ class AuthenticationProvider extends ChangeNotifier {
         errorMsg = _loginResponse!.msg!;
         onFailure(errorMsg);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print("exception in auth provider--->>>  $e");
-      GlobalExceptionHandler.handleException(e as Exception);
+      GlobalExceptionHandler.handleException(
+        e as Exception,
+        stackTrace: stackTrace,
+      );
       _loginResponse = null;
     } finally {
       _isLoading = false;
@@ -135,7 +152,8 @@ class AuthenticationProvider extends ChangeNotifier {
             lng: _currentLongitude!,
           );
 
-          debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
+          debugPrint(
+              'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
         } else {
           debugPrint("Location fetch failed (locationData is null)");
         }
@@ -149,7 +167,6 @@ class AuthenticationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   String trim(String value) => value.trim();
 
@@ -187,5 +204,4 @@ class AuthenticationProvider extends ChangeNotifier {
     _isShownPassword = !_isShownPassword;
     notifyListeners();
   }
-
 }

@@ -31,9 +31,9 @@ class Lapparameterrepository {
 
       return BaseResponseModel<AllLabResponse>.fromJson(response,(json)=> AllLabResponse.fromJson(json));
 
-    } catch (e) {
+    } catch (e,stackTrace) {
       log('Error in fetchAllLab: $e');
-      GlobalExceptionHandler.handleException(e as Exception); // Removed the 'as Exception' cast
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -54,8 +54,8 @@ class Lapparameterrepository {
 
       return BaseResponseModel<Parameterresponse>.fromJson(response,(json)=> Parameterresponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -72,8 +72,8 @@ class Lapparameterrepository {
 
         return Labinchargeresponse.fromJson(response); // Directly pass response
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -94,8 +94,8 @@ class Lapparameterrepository {
 
       return BaseResponseModel<Lab>.fromJson(response,(json)=> Lab.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow; // Return null in case of an error
     }
   }
@@ -114,8 +114,8 @@ class Lapparameterrepository {
 
       return BaseResponseModel<WtpLab>.fromJson(response,(json)=> WtpLab.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow; // Return null if any error occurs
     }
   }

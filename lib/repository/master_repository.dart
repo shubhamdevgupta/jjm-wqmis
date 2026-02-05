@@ -34,8 +34,8 @@ class MasterRepository {
 
       return BaseResponseModel<BlockResponse>.fromJson(response,(json)=>BlockResponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -57,8 +57,8 @@ class MasterRepository {
 
       return BaseResponseModel<GramPanchayatresponse>.fromJson(response,(json)=>GramPanchayatresponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -80,8 +80,8 @@ class MasterRepository {
 
       return BaseResponseModel<Villageresponse>.fromJson(response,(json)=>Villageresponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -112,8 +112,8 @@ class MasterRepository {
 
       return BaseResponseModel<HabitationResponse>.fromJson(response,(json)=>HabitationResponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -142,8 +142,8 @@ class MasterRepository {
 
       return BaseResponseModel<SchemeResponse>.fromJson(response,(json)=> SchemeResponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -159,8 +159,8 @@ class MasterRepository {
       final response = await _apiService.get('/apimasterA/Get_water_source_filter?$query');
       return BaseResponseModel<Watersourcefilterresponse>.fromJson(response,(json)=> Watersourcefilterresponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -196,8 +196,8 @@ class MasterRepository {
 
       return BaseResponseModel<WaterSourceResponse>.fromJson(response,(json)=> WaterSourceResponse.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -222,8 +222,8 @@ class MasterRepository {
 
       return BaseResponseModel<Wtp>.fromJson(response,(json)=> Wtp.fromJson(json));
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -243,8 +243,8 @@ class MasterRepository {
 
        return response.map((json) => Lgdresponse.fromJson(json)).toList();
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -265,8 +265,8 @@ class MasterRepository {
 
        return ValidateVillageResponse.fromJson(response);
 
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow; // Propagate the exception for further handling
     }
   }

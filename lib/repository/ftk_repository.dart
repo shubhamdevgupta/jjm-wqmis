@@ -28,8 +28,8 @@ class FtkRepository {
           'APIMasterA/GetParameterList?$query');
       return BaseResponseModel<FtkParameter>.fromJson(
           response, (json) => FtkParameter.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace){
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -95,8 +95,8 @@ class FtkRepository {
           await _apiService.post('APIMobileA/add_ftk_data', body: requestData);
 
       return Sampleresponse.fromJson(response);
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -122,8 +122,8 @@ class FtkRepository {
 
       return BaseResponseModel<FtkSample>.fromJson(
           response, (json) => FtkSample.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -146,8 +146,8 @@ class FtkRepository {
       final response = await _apiService.get(endpoint);
 
       return FtkDashboardResponse.fromJson(response);
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace){
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }

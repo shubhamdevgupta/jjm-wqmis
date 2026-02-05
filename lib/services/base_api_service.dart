@@ -24,6 +24,12 @@ class BaseApiService {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
     headers ??= {};
+    headers.addAll({
+      'User-Agent': 'Mozilla/5.0 (Android; Flutter)',
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
+    });
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
     headers['APIKey'] = await getEncryptedToken();
@@ -56,6 +62,12 @@ class BaseApiService {
     final Uri url = Uri.parse('$baseUrl$endpoint');
 
     headers ??= {};
+    headers.addAll({
+      'User-Agent': 'Mozilla/5.0 (Android; Flutter)',
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
+    });
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
     headers['APIKey'] = await getEncryptedToken();
@@ -141,12 +153,14 @@ class BaseApiService {
               'Unexpected error occurred . Please try again after some time.',
               response.statusCode.toString());
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (e is AppException) {
-        rethrow; // Let known exceptions pass through
+        rethrow; // expected API errors
       }
-      throw ApiException(
-          'An unexpected error occurred: $e', response.statusCode.toString());
+      throw UnexpectedException(
+        'Unexpected response parsing error',
+        e,
+      );
     }
   }
 

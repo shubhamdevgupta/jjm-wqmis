@@ -8,7 +8,6 @@ class AppException implements Exception {
   String toString() {
     return message;
   }
-
 }
 
 class NetworkException extends AppException {
@@ -17,5 +16,15 @@ class NetworkException extends AppException {
 }
 
 class ApiException extends AppException {
-  ApiException(super.message,super.httpErrCode);
+  ApiException(super.message, super.httpErrCode);
+}
+
+class UnexpectedException implements Exception {
+  final String message;
+  final Object originalError;
+
+  UnexpectedException(this.message, this.originalError);
+
+  @override
+  String toString() => message;
 }
