@@ -14,13 +14,13 @@ class BaseApiService {
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
   final encryption =
-      AesEncryption(); // Put this at the top of your BaseApiService class
+  AesEncryption(); // Put this at the top of your BaseApiService class
 
   Future<dynamic> post(
-    String endpoint, {
-    Map<String, String>? headers,
-    dynamic body, // Accepts raw JSON as string
-  }) async {
+      String endpoint, {
+        Map<String, String>? headers,
+        dynamic body, // Accepts raw JSON as string
+      }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
     headers ??= {};
@@ -51,7 +51,7 @@ class BaseApiService {
 
   Future<dynamic> get(String endpoint,
       {ApiType apiType = ApiType.ejalShakti,
-      Map<String, String>? headers}) async {
+        Map<String, String>? headers}) async {
     final String baseUrl = getBaseUrl(apiType);
     final Uri url = Uri.parse('$baseUrl$endpoint');
 

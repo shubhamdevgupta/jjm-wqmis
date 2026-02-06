@@ -4,13 +4,14 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboard_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/services/app_reset_service.dart';
-import 'package:jjm_wqmis/utils/encyp_decyp.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/app_style.dart';
+import 'package:jjm_wqmis/utils/encyp_decyp.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/location_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'package:jjm_wqmis/utils/app_style.dart';
 
 class Dashboardscreen extends StatefulWidget {
   const Dashboardscreen({super.key});
@@ -23,16 +24,14 @@ class _DashboardscreenState extends State<Dashboardscreen> {
   final session = UserSessionManager();
 
   final encryption = AesEncryption();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     await session.init();
-      final masterProvider =
-          Provider.of<Masterprovider>(context, listen: false);
-      await masterProvider.fetchBlocks(session.stateId.toString(), session.districtId.toString(),session.regId);
-      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
-
+      await session.init();
+      Provider.of<DashboardProvider>(context, listen: false)
+          .loadDashboardData(session.roleId, session.regId, session.stateId);
     });
   }
 
@@ -67,11 +66,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
               Stack(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.refresh,
-                        color: Colors.white),
+                    icon: const Icon(Icons.refresh, color: Colors.white),
                     // Cart icon
                     onPressed: () {
-                      Provider.of<DashboardProvider>(context, listen: false).loadDashboardData(session.roleId,session.regId,session.stateId);
+                      Provider.of<DashboardProvider>(context, listen: false)
+                          .loadDashboardData(
+                              session.roleId, session.regId, session.stateId);
                     },
                   )
                 ],
@@ -131,7 +131,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     AppConstants.submitSampleInfo,
                     style: AppStyles.style16NormalBlack,
                   ),
-
                   onTap: () async {
                     Navigator.pop(context);
                     await Future.delayed(const Duration(milliseconds: 200));
@@ -147,7 +146,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                             color: Colors.white,
                             height: screenHeight * 0.8,
                             width: screenwidth * 0.99,
-                            child:  const Locationscreen(
+                            child: const Locationscreen(
                               flag: AppConstants.openSampleInfoScreen,
                               flagFloating: "",
                             ),
@@ -172,15 +171,21 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       AppConstants.navigateToLoginScreen,
-                          (route) => false,
+                      (route) => false,
                     );
                   },
+                ),
+                ListTile(
+                  title: Text("v${AppUtil.appVersion}",
+                  ),
                 ),
               ],
             ),
           ),
           body: Consumer<DashboardProvider>(
             builder: (context, dashboardProvider, child) {
+              final masterProvider =
+                  Provider.of<Masterprovider>(context, listen: false);
               if (dashboardProvider.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -301,7 +306,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                     ),
                     const SizedBox(height: 15),
                     Container(
-
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -331,13 +335,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   imagePath: 'assets/icons/medical-lab.png',
                                   iconColor: Colors.blue,
                                   title: AppConstants.totalSamplesSubmitted,
-                                  value:  '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
+                                  value:
+                                      '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
                                   onTap: () {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag': AppConstants.totalSamplesSubmitted,
-                                          'flagFloating': AppConstants.totalSamplesSubmitted
+                                          'flag': AppConstants
+                                              .totalSamplesSubmitted,
+                                          'flagFloating':
+                                              AppConstants.totalSamplesSubmitted
                                         });
                                   },
                                 ),
@@ -347,15 +354,17 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 child: _buildInfoCard(
                                   imagePath: 'assets/icons/test.png',
                                   iconColor: Colors.deepOrange,
-                                  title:  AppConstants.totalPhysicalSubmitted,
-                                  value:   '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
+                                  title: AppConstants.totalPhysicalSubmitted,
+                                  value:
+                                      '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
                                   onTap: () {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag':
-                                          AppConstants.totalPhysicalSubmitted,
-                                          'flagFloating': AppConstants.totalPhysicalSubmitted
+                                          'flag': AppConstants
+                                              .totalPhysicalSubmitted,
+                                          'flagFloating': AppConstants
+                                              .totalPhysicalSubmitted
                                         });
                                   },
                                 ),
@@ -373,13 +382,16 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   imagePath: 'assets/icons/blood_tube.png',
                                   iconColor: Colors.green,
                                   title: AppConstants.totalSampleTested,
-                                  value:   '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
+                                  value:
+                                      '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
                                   onTap: () {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag': AppConstants.totalSampleTested,
-                                          'flagFloating': AppConstants.totalSampleTested
+                                          'flag':
+                                              AppConstants.totalSampleTested,
+                                          'flagFloating':
+                                              AppConstants.totalSampleTested
                                         });
                                   },
                                 ),
@@ -395,8 +407,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                     Navigator.pushNamed(context,
                                         AppConstants.navigateToSampleListScreen,
                                         arguments: {
-                                          'flag': AppConstants.knowyoursampledetail,
-                                          'flagFloating': AppConstants.knowyoursampledetail
+                                          'flag':
+                                              AppConstants.knowyoursampledetail,
+                                          'flagFloating':
+                                              AppConstants.knowyoursampledetail
                                         });
                                   },
                                 ),
@@ -406,131 +420,37 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-
-                  /*  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 10.0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _buildMenuCard(
-                                title: AppConstants.totalSamplesSubmitted,
-                                icon: Icons.analytics,
-                                gradientColors: [
-                                  Colors.lightBlue,
-                                  Colors.blueAccent
-                                ],
-                                value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
-                                imageName: 'medical-lab',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag':
-                                            AppConstants.totalSamplesSubmitted,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalPhysicalSubmitted,
-                                icon: Icons.attach_money,
-                                gradientColors: [
-                                  Colors.deepOrange,
-                                  Colors.orange
-                                ],
-                                value:
-                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
-                                imageName: 'test',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag':
-                                            AppConstants.totalPhysicalSubmitted,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalSampleTested,
-                                icon: Icons.check_circle,
-                                gradientColors: [Colors.teal, Colors.green],
-                                value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
-                                imageName: 'search',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag': AppConstants.totalSampleTested,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                                   _buildMenuCard(
-                                  title: AppConstants.totalRetest,
-                                  icon: Icons.refresh,
-                                  gradientColors: [Colors.red, Colors.deepOrange],
-                                  value: '${dashboardProvider.dashboardData?.totalRetest??0}',
-                                  onTap: () {
-                                    // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                                    ToastHelper.showSnackBar(context, "Admin can access this option only");
-                                  },
-                                ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-
-                          Center(
-                            child: const Text(
-                              "All figures are based on current year data.",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
-                            showDialog<bool>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                double screenHeight =
-                                    MediaQuery.of(context).size.height;
-                                double screenwidth =
-                                    MediaQuery.of(context).size.width;
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(10),
-                                  content: Container(
-                                    color: Colors.white,
-                                    height: screenHeight * 0.8,
-                                    width: screenwidth * 0.99,
-                                    child:  const Locationscreen(
-                                      flag: AppConstants.openSampleInfoScreen,
-                                      flagFloating: "",
+                            await masterProvider.fetchBlocks(
+                                session.stateId.toString(),
+                                session.districtId.toString(),
+                                session.regId);
+                              showDialog<bool>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  double screenHeight =
+                                      MediaQuery.of(context).size.height;
+                                  double screenwidth =
+                                      MediaQuery.of(context).size.width;
+                                  return AlertDialog(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    content: Container(
+                                      color: Colors.white,
+                                      height: screenHeight * 0.8,
+                                      width: screenwidth * 0.99,
+                                      child: const Locationscreen(
+                                        flag: AppConstants.openSampleInfoScreen,
+                                        flagFloating: "",
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
+                                  );
+                                },
+                              );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0468B1),
@@ -577,7 +497,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -610,7 +529,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                 imagePath,
                 width: 32,
                 height: 32,
-
               ),
             ),
             const SizedBox(height: 10),
@@ -638,6 +556,4 @@ class _DashboardscreenState extends State<Dashboardscreen> {
       ),
     );
   }
-
-
 }

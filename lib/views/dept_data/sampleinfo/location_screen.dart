@@ -326,6 +326,7 @@ class _LocationscreenState extends State<Locationscreen> {
                 onChanged: (value) {
                   masterProvider.setSelectedHabitation(value);
                 },
+                appBarTitle: "Select Habitation",
               ),
               const SizedBox(height: 12),
               SizedBox(

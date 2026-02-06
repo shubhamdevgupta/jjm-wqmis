@@ -40,8 +40,8 @@ class SampleListRepo {
 
       return BaseResponseModel<Sample>.fromJson(
           response, (json) => Sample.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -60,8 +60,8 @@ class SampleListRepo {
       final response = await _apiService.get(urlEndpoint);
 
       return BaseResponseModel<dynamic>.fromJson(response, (json) => Sample.fromJson(json));
-    } catch (e) {
-      GlobalExceptionHandler.handleException(e as Exception);
+    } catch (e,stackTrace) {
+      GlobalExceptionHandler.handleException(e as Exception,stackTrace: stackTrace);
       rethrow;
     }
   }
