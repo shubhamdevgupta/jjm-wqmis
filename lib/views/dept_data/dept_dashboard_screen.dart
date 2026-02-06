@@ -4,6 +4,7 @@ import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/dashboard_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/services/app_reset_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
@@ -173,6 +174,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                       (route) => false,
                     );
                   },
+                ),
+                ListTile(
+                  title: Text("v${AppUtil.appVersion}",
+                  ),
                 ),
               ],
             ),
@@ -415,104 +420,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         ],
                       ),
                     ),
-
-                    /*  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          GridView.count(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 10.0,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              _buildMenuCard(
-                                title: AppConstants.totalSamplesSubmitted,
-                                icon: Icons.analytics,
-                                gradientColors: [
-                                  Colors.lightBlue,
-                                  Colors.blueAccent
-                                ],
-                                value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesSubmitted ?? 0}',
-                                imageName: 'medical-lab',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag':
-                                            AppConstants.totalSamplesSubmitted,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalPhysicalSubmitted,
-                                icon: Icons.attach_money,
-                                gradientColors: [
-                                  Colors.deepOrange,
-                                  Colors.orange
-                                ],
-                                value:
-                                    '${dashboardProvider.dashboardData?.samplesPhysicallySubmitted ?? 0}',
-                                imageName: 'test',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag':
-                                            AppConstants.totalPhysicalSubmitted,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                              _buildMenuCard(
-                                title: AppConstants.totalSampleTested,
-                                icon: Icons.check_circle,
-                                gradientColors: [Colors.teal, Colors.green],
-                                value:
-                                    '${dashboardProvider.dashboardData?.totalSamplesTested ?? 0}',
-                                imageName: 'search',
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      AppConstants.navigateToSampleListScreen,
-                                      arguments: {
-                                        'flag': AppConstants.totalSampleTested,
-                                        'flagFloating': ""
-                                      });
-                                },
-                              ),
-                                   _buildMenuCard(
-                                  title: AppConstants.totalRetest,
-                                  icon: Icons.refresh,
-                                  gradientColors: [Colors.red, Colors.deepOrange],
-                                  value: '${dashboardProvider.dashboardData?.totalRetest??0}',
-                                  onTap: () {
-                                    // Navigator.pushNamed(context, AppConstants.navigateToSampleList, arguments: {'flag': AppConstants.totalRetest});
-                                    ToastHelper.showSnackBar(context, "Admin can access this option only");
-                                  },
-                                ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-
-                          Center(
-                            child: const Text(
-                              "All figures are based on current year data.",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
                     const SizedBox(height: 20),
                     Center(
                       child: SizedBox(
@@ -523,7 +430,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                 session.stateId.toString(),
                                 session.districtId.toString(),
                                 session.regId);
-                            if (masterProvider.baseStatus == 1) {
                               showDialog<bool>(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -545,10 +451,6 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                                   );
                                 },
                               );
-                            } else {
-                              ToastHelper.showErrorSnackBar(
-                                  context, masterProvider.errorMsg);
-                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0468B1),

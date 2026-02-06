@@ -14,22 +14,16 @@ class BaseApiService {
   static const String reverseGeocoding = "https://reversegeocoding.nic.in/";
   static const String github = "https://api.github.com/repos/";
   final encryption =
-      AesEncryption(); // Put this at the top of your BaseApiService class
+  AesEncryption(); // Put this at the top of your BaseApiService class
 
   Future<dynamic> post(
-    String endpoint, {
-    Map<String, String>? headers,
-    dynamic body, // Accepts raw JSON as string
-  }) async {
+      String endpoint, {
+        Map<String, String>? headers,
+        dynamic body, // Accepts raw JSON as string
+      }) async {
     final Uri url = Uri.parse('$_baseUrl$endpoint');
 
     headers ??= {};
-    headers.addAll({
-      'User-Agent': 'Mozilla/5.0 (Android; Flutter)',
-      'Accept': 'application/json',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Connection': 'keep-alive',
-    });
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
     headers['APIKey'] = await getEncryptedToken();
@@ -57,17 +51,11 @@ class BaseApiService {
 
   Future<dynamic> get(String endpoint,
       {ApiType apiType = ApiType.ejalShakti,
-      Map<String, String>? headers}) async {
+        Map<String, String>? headers}) async {
     final String baseUrl = getBaseUrl(apiType);
     final Uri url = Uri.parse('$baseUrl$endpoint');
 
     headers ??= {};
-    headers.addAll({
-      'User-Agent': 'Mozilla/5.0 (Android; Flutter)',
-      'Accept': 'application/json',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Connection': 'keep-alive',
-    });
     headers.putIfAbsent('Content-Type', () => 'application/json');
 
     headers['APIKey'] = await getEncryptedToken();
@@ -153,14 +141,12 @@ class BaseApiService {
               'Unexpected error occurred . Please try again after some time.',
               response.statusCode.toString());
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       if (e is AppException) {
-        rethrow; // expected API errors
+        rethrow; // Let known exceptions pass through
       }
-      throw UnexpectedException(
-        'Unexpected response parsing error',
-        e,
-      );
+      throw ApiException(
+          'An unexpected error occurred: $e', response.statusCode.toString());
     }
   }
 
