@@ -51,17 +51,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
-
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-      if (CurrentLocation.latitude != null &&
-          CurrentLocation.longitude != null) {
-        masterProvider.setLocation(
-          CurrentLocation.latitude,
-          CurrentLocation.longitude,
-        );
-      }
-      if (masterProvider.lat == null || masterProvider.lng == null) {
-        masterProvider.checkAndPromptLocation(context);
+      if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+      CurrentLocation.getLocation();
       }
     });
   }
@@ -505,7 +496,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${masterProvider.lat?.toStringAsFixed(6)}",
+                                                          "${CurrentLocation.latitude?.toStringAsFixed(6)}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -538,7 +529,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           width: 16,
                                                         ),
                                                         Text(
-                                                          "${masterProvider.lng?.toStringAsFixed(6)}",
+                                                          "${CurrentLocation.longitude?.toStringAsFixed(6)}",
                                                           // Display placeholder text if null
                                                           style: TextStyle(
                                                             fontSize: 14,
@@ -931,7 +922,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lat?.toStringAsFixed(6)}",
+                                                                      "${CurrentLocation.latitude?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -968,7 +959,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lng?.toStringAsFixed(6)}",
+                                                                      "${CurrentLocation.longitude?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -1069,12 +1060,12 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
     }
-    await masterProvider.fetchLocation();
+    CurrentLocation.refresh();
 
-    if (masterProvider.lat == null || masterProvider.lng == null) {
-      await masterProvider.checkAndPromptLocation(context);
+    if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+       CurrentLocation.getLocation();
 
-      if (masterProvider.lat == null || masterProvider.lng == null) {
+      if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
         // User cancelled or GPS still off
         ToastHelper.showSnackBar(context, "Location is required to proceed.");
         return;
@@ -1109,8 +1100,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSource,
-      masterProvider.lat!.toStringAsFixed(6),
-      masterProvider.lng!.toStringAsFixed(6),
+      CurrentLocation.latitude!.toStringAsFixed(6),
+      CurrentLocation.longitude!.toStringAsFixed(6),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,

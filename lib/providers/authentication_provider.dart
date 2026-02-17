@@ -147,10 +147,7 @@ class AuthenticationProvider extends ChangeNotifier {
           _currentLongitude = locationData['longitude'];
 
           // 🔥 Set global current location
-          CurrentLocation.setLocation(
-            lat: _currentLatitude!,
-            lng: _currentLongitude!,
-          );
+
 
           debugPrint(
               'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');

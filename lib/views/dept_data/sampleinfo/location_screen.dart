@@ -335,7 +335,7 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   onPressed: () async {
 
-                    await masterProvider.fetchLocation();
+                    CurrentLocation.refresh();
                     if (widget.flag == AppConstants.openSampleListScreen) {
 
                       Navigator.pushNamedAndRemoveUntil(

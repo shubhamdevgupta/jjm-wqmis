@@ -18,8 +18,6 @@ import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 import 'package:jjm_wqmis/utils/location_utils.dart';
-import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -56,7 +54,7 @@ class Masterprovider extends ChangeNotifier {
 
   int istreated=0;
 
-  double? _currentLatitude;
+/*  double? _currentLatitude;
   double? _currentLongitude;
 
   double? get currentLatitude => _currentLatitude;
@@ -64,10 +62,10 @@ class Masterprovider extends ChangeNotifier {
   double? get currentLongitude => _currentLongitude;
   double? _latitude;
   double? _longitude;
-
-  // ✅ Getters
+   // ✅ Getters
   double? get lat => _latitude;
-  double? get lng => _longitude;
+  double? get lng => _longitude;*/
+
   List<Watersourcefilterresponse> wtsFilterList = [];
   String? selectedWtsfilter;
 
@@ -429,7 +427,7 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchLocation() async {
+/*  Future<void> fetchLocation() async {
     _isLoading = true;
     notifyListeners();
 
@@ -445,11 +443,6 @@ class Masterprovider extends ChangeNotifier {
           _currentLatitude = locationData['latitude'];
           _currentLongitude = locationData['longitude'];
 
-          // 🔥 Set global current location
-          CurrentLocation.setLocation(
-            lat: _currentLatitude!,
-            lng: _currentLongitude!,
-          );
 
           debugPrint('Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
         } else {
@@ -464,76 +457,86 @@ class Masterprovider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
+  }*/
 
 
 
   // ✅ Optional helper method
-  void setLocation(double? lat, double? lng) {
+/*  void setLocation(double? lat, double? lng) {
     _latitude = lat;
     _longitude = lng;
     notifyListeners();
-  }
+  }*/
 
 
+/*
   Future<void> checkAndPromptLocation(BuildContext context) async {
     _isLoading = true;
-    notifyListeners(); // if using Provider
-
-    final location = Location();
+    notifyListeners();
 
     try {
-      // 1. Check permission
-      final status = await Permission.location.status;
-      if (!status.isGranted) {
-        final result = await Permission.location.request();
-        if (!result.isGranted) {
-          _isLoading = false;
-          await openAppSettings(); // Open app settings if denied permanently
-          return;
-        }
+      // 1️⃣ Check permission using native method
+      bool permissionGranted =
+      await LocationUtils.requestLocationPermission();
+
+      if (!permissionGranted) {
+        _isLoading = false;
+        notifyListeners();
+        return; // user denied
       }
 
-      // 2. Check if GPS is enabled
-      bool serviceEnabled = await location.serviceEnabled();
+      // 2️⃣ Check if GPS service is enabled
+      bool serviceEnabled =
+      await LocationUtils.isLocationServiceEnabled();
+
       if (!serviceEnabled) {
-        serviceEnabled = await location.requestService(); // prompts the user
-        if (!serviceEnabled) {
-          _isLoading = false;
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: const Text("Enable Location"),
-              content: const Text("GPS is required to fetch location."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Cancel"),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await openAppSettings(); // redirect to location settings manually
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Open Settings"),
-                ),
-              ],
-            ),
-          );
-          return;
-        }
+        _isLoading = false;
+        notifyListeners();
+
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text("Enable Location"),
+            content:
+            const Text("GPS is required to fetch location."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await LocationUtils.openLocationSettings();
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Open Settings"),
+              ),
+            ],
+          ),
+        );
+
+        return;
       }
 
-      // 3. Get location
-      final locationData = await location.getLocation();
-      setLocation(locationData.latitude, locationData.longitude);
+      // 3️⃣ Fetch location using native method
+      final locationData =
+      await LocationUtils.getCurrentLocation();
+
+      if (locationData != null) {
+        setLocation(
+          locationData["latitude"],
+          locationData["longitude"],
+        );
+      }
+
     } catch (e) {
       debugPrint("Error in checkAndPromptLocation: $e");
     } finally {
       _isLoading = false;
-      notifyListeners(); // if using Provider
+      notifyListeners();
     }
   }
+*/
 
   Future<void> validateVillage(String villageId, String lgdCode,int regId) async {
     _isLoading = true;
@@ -722,8 +725,8 @@ class Masterprovider extends ChangeNotifier {
 
     istreated = 0;
 
-    _currentLatitude = null;
-    _currentLongitude = null;
+  /*  _currentLatitude = null;
+    _currentLongitude = null;*/
 
     wtsFilterList.clear();
     selectedWtsfilter = null;
@@ -762,8 +765,10 @@ class Masterprovider extends ChangeNotifier {
 
     istreated = 0;
 
+/*
     _currentLatitude = null;
     _currentLongitude = null;
+*/
 
     wtsFilterList.clear();
     selectedWtsfilter = null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
+import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/submit_sample_screen.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _AsperparameterviewState extends State<Asperparameterview> {
                   onPressed: () async {
                     provider.selectedLab = '';
                     provider.labList.clear();
-                    await  masterProvider.fetchLocation();
+                    CurrentLocation.getLocation();
                     if (provider.cart!.isNotEmpty) {
                       var paramterId = provider.cart!
                           .sublist(0, provider.cart!.length)

@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import android.content.Intent
+import android.provider.Settings
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "com.example/location_permission"
@@ -44,6 +46,13 @@ class MainActivity: FlutterActivity() {
                         result.error("UNAVAILABLE", "Version name not available.", null)
                     }
                 }
+                "isLocationServiceEnabled" -> {
+                    result.success(isLocationEnabled())
+                }
+                "openLocationSettings" -> {
+                    openLocationSettings()
+                    result.success(true)
+                }
                 "getSecretKey"->{
                     result.success(getSecretKey())
                 }
@@ -65,6 +74,17 @@ class MainActivity: FlutterActivity() {
         }
         return true
     }
+    private fun isLocationEnabled(): Boolean {
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+    private fun openLocationSettings() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+    }
+
 
     private fun getCurrentLocation(): Location? {
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager

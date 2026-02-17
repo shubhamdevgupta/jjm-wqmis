@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/providers/ftk_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
+import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/ftk_parameter_screen.dart';
@@ -208,12 +209,13 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
   Future<void> validateAndSaveData(BuildContext context, Ftkprovider ftkProvider) async {
     final parsedSource = int.tryParse(masterProvider.selectedWaterSource?.toString() ?? '') ?? 0;
 
-    await masterProvider.fetchLocation();
+    CurrentLocation.refresh();
 
-    if (masterProvider.lat == null || masterProvider.lng == null) {
-      await masterProvider.checkAndPromptLocation(context);
+    if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+       CurrentLocation.getLocation();
 
-      if (masterProvider.lat == null || masterProvider.lng == null) {
+      if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+        // User cancelled or GPS still off
         ToastHelper.showSnackBar(context, "Location is required to proceed.");
         return;
       }
@@ -247,8 +249,8 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       int.parse(masterProvider.selectedScheme!),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSourceName ?? '',
-      masterProvider.lat!.toStringAsFixed(6),
-      masterProvider.lng!.toStringAsFixed(6),
+      CurrentLocation.latitude!.toStringAsFixed(6),
+      CurrentLocation.longitude!.toStringAsFixed(6),
       ftkProvider.deviceId,
       masterProvider.sampleTypeOther,
       ftkProvider.getSelectedParameterIds(),

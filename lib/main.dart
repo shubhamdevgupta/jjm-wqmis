@@ -14,6 +14,7 @@ import 'package:jjm_wqmis/services/local_storage_service.dart';
 import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_routes.dart';
+import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
 import 'package:jjm_wqmis/utils/update_dialog.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,8 @@ void main() async {
   await LocalStorageService.init();
   await Firebase.initializeApp();
   await AesEncryption.initKey();
+  await CurrentLocation.init();
+
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   runApp(

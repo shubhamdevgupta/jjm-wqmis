@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/models/DWSM/ftk_demonstration_list_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/ImageDialogUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/current_location.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
@@ -486,15 +487,14 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
       dwsmprovider.errorMessage = "Please capture an image first.";
       return false;
     }
-    await masterProvider.fetchLocation();
+    CurrentLocation.refresh();
 
-    if (masterProvider.lat == null || masterProvider.lng == null) {
-      await masterProvider.checkAndPromptLocation(context);
+    if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+       CurrentLocation.getLocation();
 
-      if (masterProvider.lat == null || masterProvider.lng == null) {
+      if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
         // User cancelled or GPS still off
         ToastHelper.showSnackBar(context, "Location is required to proceed.");
-        return false;
       }
     }
 
@@ -813,7 +813,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Latitude: ${masterProvider.lat?.toStringAsFixed(6)}',
+                              'Latitude: ${CurrentLocation.latitude?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -829,7 +829,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                             const Icon(Icons.location_on,
                                 color: Colors.blue, size: 18),
                             Text(
-                              'Longitude: ${masterProvider.lng?.toStringAsFixed(6)}',
+                              'Longitude: ${CurrentLocation.longitude?.toStringAsFixed(6)}',
                               // Reduces to 3 decimal places
                               style: TextStyle(
                                   fontSize: 13,
@@ -858,8 +858,8 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           _cameraHelper.base64Image!,
                           "2025-2026",
                           remarkController.text,
-                          masterProvider.lat!.toStringAsFixed(6),
-                          masterProvider.lng!.toStringAsFixed(6),
+                          CurrentLocation.latitude!.toStringAsFixed(6),
+                          CurrentLocation.longitude!.toStringAsFixed(6),
                           dwsmprovider.deviceId!,
                           session.regId,() {
                         showResponse(dwsmprovider);
