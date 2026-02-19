@@ -7,9 +7,9 @@ import 'package:jjm_wqmis/models/login_response.dart';
 import 'package:jjm_wqmis/repository/authentication_repository.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
-import 'package:jjm_wqmis/utils/current_location.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
-import 'package:jjm_wqmis/utils/location_utils.dart';
+import 'package:jjm_wqmis/utils/location/location_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -40,14 +40,6 @@ class AuthenticationProvider extends ChangeNotifier {
   bool get isShownPassword => _isShownPassword;
 
   String errorMsg = '';
-
-  double? _currentLatitude;
-  double? _currentLongitude;
-
-  double? get currentLatitude => _currentLatitude;
-
-  double? get currentLongitude => _currentLongitude;
-
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
@@ -124,41 +116,6 @@ class AuthenticationProvider extends ChangeNotifier {
         stackTrace: stackTrace,
       );
       _loginResponse = null;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchLocation() async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      debugPrint('Requesting location permission...');
-      bool permissionGranted = await LocationUtils.requestLocationPermission();
-
-      if (permissionGranted) {
-        debugPrint('Permission granted. Fetching location...');
-        final locationData = await LocationUtils.getCurrentLocation();
-
-        if (locationData != null) {
-          _currentLatitude = locationData['latitude'];
-          _currentLongitude = locationData['longitude'];
-
-          // 🔥 Set global current location
-
-
-          debugPrint(
-              'Location Fetched: Lat: $_currentLatitude, Lng: $_currentLongitude');
-        } else {
-          debugPrint("Location fetch failed (locationData is null)");
-        }
-      } else {
-        debugPrint("Permission denied. Cannot fetch location.");
-      }
-    } catch (e) {
-      debugPrint("Error during fetchLocation(): $e");
     } finally {
       _isLoading = false;
       notifyListeners();

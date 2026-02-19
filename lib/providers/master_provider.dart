@@ -14,10 +14,10 @@ import 'package:jjm_wqmis/models/lgd_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/block_response.dart';
 import 'package:jjm_wqmis/models/validate_village.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
-import 'package:jjm_wqmis/utils/current_location.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
-import 'package:jjm_wqmis/utils/location_utils.dart';
+import 'package:jjm_wqmis/utils/location/location_utils.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();

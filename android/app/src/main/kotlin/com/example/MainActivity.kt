@@ -34,7 +34,7 @@ class MainActivity: FlutterActivity() {
                             "longitude" to location.longitude
                         ))
                     } else {
-                        result.error("LOCATION_ERROR", "Location not available", null)
+                        result.success(null)   // ✅ Fix here
                     }
                 }
                 "getVersionName"->{

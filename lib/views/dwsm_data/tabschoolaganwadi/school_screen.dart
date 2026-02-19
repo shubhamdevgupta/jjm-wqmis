@@ -7,7 +7,7 @@ import 'package:jjm_wqmis/utils/app_color.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/camera.dart';
-import 'package:jjm_wqmis/utils/current_location.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/utils/location/location_dialog.dart';
 import 'location_utils.dart';
 
 class CurrentLocation {
@@ -17,16 +18,19 @@ class CurrentLocation {
   /// Initialize & Fetch location (call once at app start or login)
   static Future<bool> init() async {
     if (_isFetching) return false;
-
     _isFetching = true;
 
     try {
-      // 1️⃣ Check permission
+      // 1️⃣ Permission
       bool permissionGranted =
       await LocationUtils.requestLocationPermission();
-      if (!permissionGranted) return false;
 
-      // 2️⃣ Check GPS
+      if (!permissionGranted) {
+        debugPrint("Permission denied");
+        return false;
+      }
+
+      // 2️⃣ Service check
       bool serviceEnabled =
       await LocationUtils.isLocationServiceEnabled();
 
@@ -42,13 +46,13 @@ class CurrentLocation {
       if (location != null) {
         _latitude = location["latitude"];
         _longitude = location["longitude"];
+        debugPrint("Location stored successfully");
         return true;
       }
 
+      debugPrint("Location returned null");
       return false;
-    } catch (e) {
-      debugPrint("CurrentLocation init error: $e");
-      return false;
+
     } finally {
       _isFetching = false;
     }
