@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
-import 'package:jjm_wqmis/utils/current_location.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 
 class Locationscreen extends StatefulWidget {
   final String flag;
@@ -335,7 +335,7 @@ class _LocationscreenState extends State<Locationscreen> {
 
                   onPressed: () async {
 
-                    await masterProvider.fetchLocation();
+                    CurrentLocation.refresh();
                     if (widget.flag == AppConstants.openSampleListScreen) {
 
                       Navigator.pushNamedAndRemoveUntil(

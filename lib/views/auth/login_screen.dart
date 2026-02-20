@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/utils/app_color.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -159,7 +160,9 @@ class _LoginpageState extends State<Loginscreen> {
                                           passwordController.text,
                                           1,
                                           () {
-                                            provider.fetchLocation();
+                                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                                              CurrentLocation.init();
+                                            });
                                             if (provider
                                                     .loginResponse?.roleId ==
                                                 4) {

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/param_lab_response.dart';
+import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
 import 'package:jjm_wqmis/providers/sample_submit_provider.dart';
-import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
-import 'package:jjm_wqmis/utils/current_location.dart';
-import 'package:jjm_wqmis/utils/loader_utils.dart';
-import 'package:jjm_wqmis/utils/show_error_msg.dart';
-import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
+import 'package:jjm_wqmis/utils/loader_utils.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
+import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:provider/provider.dart';
 
 class SubmitSampleScreen extends StatefulWidget {
@@ -51,17 +51,9 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
-
-      final masterProvider = Provider.of<Masterprovider>(context, listen: false);
-      if (CurrentLocation.latitude != null &&
-          CurrentLocation.longitude != null) {
-        masterProvider.setLocation(
-          CurrentLocation.latitude,
-          CurrentLocation.longitude,
-        );
-      }
-      if (masterProvider.lat == null || masterProvider.lng == null) {
-        masterProvider.checkAndPromptLocation(context);
+      if (CurrentLocation.latitude == null ||
+          CurrentLocation.longitude == null) {
+        CurrentLocation.refresh();
       }
     });
   }
@@ -73,7 +65,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
     const double rowHeight = 50.0;
     const double maxTableHeight = 250.0;
     return Consumer<Samplesubprovider>(builder: (context, provider, child) {
-
       return Scrollbar(
         thumbVisibility: true,
         controller: _scrollController,
@@ -140,115 +131,185 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                 child: Column(
                                   children: [
                                     //lab box
-                                Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Card(
-                                  elevation: 4,
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        // Fixed Header
-                                        SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Card(
+                                        elevation: 4,
+                                        color: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
                                             children: [
-                                              _buildHeaderCell("Sr. No.", width: 70),
-                                              _buildHeaderCell("Test Name", width: MediaQuery.of(context).size.width * 0.4),
-                                              _buildHeaderCell("Price", width: 70),
-                                              _buildHeaderCell("Action", width: 70),
-                                            ],
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 5),
-
-                                        // Scrollable Rows
-                                        LayoutBuilder(
-                                          builder: (context, constraints) {
-                                            int itemCount = paramProvider.cart?.length ?? 0;
-                                            double calculatedHeight = itemCount * rowHeight;
-                                            double tableHeight = calculatedHeight > maxTableHeight
-                                                ? maxTableHeight
-                                                : calculatedHeight;
-
-                                            return ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                maxHeight: tableHeight,
-                                              ),
-                                              child: Scrollbar(
-                                                thumbVisibility: true,
-                                                child: SingleChildScrollView(
-                                                  scrollDirection: Axis.vertical,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection: Axis.horizontal,
-                                                    child: Column(
-                                                      children: paramProvider.cart!.asMap().entries.map((entry) {
-                                                        int index = entry.key;
-                                                        var param = entry.value;
-                                                        return Row(
-                                                          children: [
-                                                            _buildRowCell('${index + 1}', width: 70),
-                                                            _buildRowCell(param.parameterName, width: MediaQuery.of(context).size.width * 0.4),
-                                                            _buildRowCell(param.deptRate.toString(), width: 70),
-                                                            SizedBox(
-                                                              width: 70,
-                                                              child: IconButton(
-                                                                icon: const Icon(Icons.delete, color: Colors.red),
-                                                                onPressed: ()async {
-                                                                  if (paramProvider.cart!.length > 1) {
-                                                                    paramProvider.removeFromCart(param);
-                                                                    if (paramProvider.isParam) {
-                                                                      var paramterId = paramProvider.cart!
-                                                                          .sublist(0, paramProvider.cart!.length)
-                                                                          .join(",");
-                                                                    await  paramProvider.fetchParamLabs(
-                                                                          masterProvider.selectedStateId!,
-                                                                          paramterId,session.regId);
-                                                                      paramProvider.selectedLab = "";
-                                                                    }
-                                                                  } else {
-                                                                    ToastHelper.showSnackBar(context, "Parameter cannot be empty");
-                                                                  }
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      }).toList(),
-                                                    ),
-                                                  ),
+                                              // Fixed Header
+                                              SingleChildScrollView(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    _buildHeaderCell("Sr. No.",
+                                                        width: 70),
+                                                    _buildHeaderCell(
+                                                        "Test Name",
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.4),
+                                                    _buildHeaderCell("Price",
+                                                        width: 70),
+                                                    _buildHeaderCell("Action",
+                                                        width: 70),
+                                                  ],
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        ),
 
-                                        const Divider(),
+                                              const SizedBox(height: 5),
 
-                                        // Total Price Section
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              const Text("Total Price",
-                                                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                                              const SizedBox(width: 20),
-                                              Text("₹ ${paramProvider.calculateTotal()} /-",
-                                                  style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                                              // Scrollable Rows
+                                              LayoutBuilder(
+                                                builder:
+                                                    (context, constraints) {
+                                                  int itemCount = paramProvider
+                                                          .cart?.length ??
+                                                      0;
+                                                  double calculatedHeight =
+                                                      itemCount * rowHeight;
+                                                  double tableHeight =
+                                                      calculatedHeight >
+                                                              maxTableHeight
+                                                          ? maxTableHeight
+                                                          : calculatedHeight;
+
+                                                  return ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxHeight: tableHeight,
+                                                    ),
+                                                    child: Scrollbar(
+                                                      thumbVisibility: true,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          child: Column(
+                                                            children:
+                                                                paramProvider
+                                                                    .cart!
+                                                                    .asMap()
+                                                                    .entries
+                                                                    .map(
+                                                                        (entry) {
+                                                              int index =
+                                                                  entry.key;
+                                                              var param =
+                                                                  entry.value;
+                                                              return Row(
+                                                                children: [
+                                                                  _buildRowCell(
+                                                                      '${index + 1}',
+                                                                      width:
+                                                                          70),
+                                                                  _buildRowCell(
+                                                                      param
+                                                                          .parameterName,
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.4),
+                                                                  _buildRowCell(
+                                                                      param
+                                                                          .deptRate
+                                                                          .toString(),
+                                                                      width:
+                                                                          70),
+                                                                  SizedBox(
+                                                                    width: 70,
+                                                                    child:
+                                                                        IconButton(
+                                                                      icon: const Icon(
+                                                                          Icons
+                                                                              .delete,
+                                                                          color:
+                                                                              Colors.red),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        if (paramProvider.cart!.length >
+                                                                            1) {
+                                                                          paramProvider
+                                                                              .removeFromCart(param);
+                                                                          if (paramProvider
+                                                                              .isParam) {
+                                                                            var paramterId =
+                                                                                paramProvider.cart!.sublist(0, paramProvider.cart!.length).join(",");
+                                                                            await paramProvider.fetchParamLabs(
+                                                                                masterProvider.selectedStateId!,
+                                                                                paramterId,
+                                                                                session.regId);
+                                                                            paramProvider.selectedLab =
+                                                                                "";
+                                                                          }
+                                                                        } else {
+                                                                          ToastHelper.showSnackBar(
+                                                                              context,
+                                                                              "Parameter cannot be empty");
+                                                                        }
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }).toList(),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+
+                                              const Divider(),
+
+                                              // Total Price Section
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8.0,
+                                                        horizontal: 8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    const Text("Total Price",
+                                                        style: TextStyle(
+                                                            color: Colors.green,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    const SizedBox(width: 20),
+                                                    Text(
+                                                        "₹ ${paramProvider.calculateTotal()} /-",
+                                                        style: const TextStyle(
+                                                            color: Colors.green,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  ],
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
 
-                              Visibility(
+                                    Visibility(
                                       visible: paramProvider.isLab,
                                       child: Column(
                                         children: [
@@ -452,82 +513,89 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   color: Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(12),
-                                                  // Rounded corners
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.grey
                                                           .withOpacity(0.3),
-                                                      // Shadow color
                                                       blurRadius: 10,
-                                                      // Shadow blur
-                                                      offset: const Offset(0,
-                                                          5), // Shadow position
+                                                      offset:
+                                                          const Offset(0, 5),
                                                     ),
                                                   ],
                                                 ),
                                                 padding:
-                                                    const EdgeInsets.all(8),
+                                                    const EdgeInsets.all(12),
                                                 child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    const Text(
-                                                      "Geo Location of Sample Taken:",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.blueGrey,
-                                                      ),
-                                                    ),
-                                                    Divider(
-                                                        thickness: 1,
-                                                        color: Colors
-                                                            .grey.shade300),
+                                                    // ================= HEADER ROW =================
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .start,
+                                                              .spaceBetween,
                                                       children: [
                                                         const Text(
-                                                          'Latitude:',
+                                                          "Geo Location of Sample Taken:",
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight:
-                                                                FontWeight.w600,
+                                                                FontWeight.bold,
                                                             color:
-                                                                Colors.black87,
+                                                                Colors.blueGrey,
                                                           ),
                                                         ),
-                                                        const SizedBox(
-                                                          width: 16,
-                                                        ),
-                                                        Text(
-                                                          "${masterProvider.lat?.toStringAsFixed(6)}",
-                                                          // Display placeholder text if null
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.7),
+
+                                                        // 🔥 Fetch Button
+                                                        InkWell(
+                                                          onTap: () async {
+                                                          await CurrentLocation.refresh();
+                                                          },
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          child: Row(
+                                                            children: const [
+                                                              Icon(
+                                                                Icons
+                                                                    .my_location,
+                                                                size: 18,
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 4),
+                                                              Text(
+                                                                "Fetch",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .blue,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
+
+                                                    Divider(
+                                                        thickness: 1,
+                                                        color: Colors
+                                                            .grey.shade300),
+
+                                                    const SizedBox(height: 8),
+
+                                                    // ================= LATITUDE =================
                                                     Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
                                                       children: [
                                                         const Text(
-                                                          'Longitude :',
+                                                          'Latitude:',
                                                           style: TextStyle(
-                                                            fontSize: 16,
+                                                            fontSize: 15,
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color:
@@ -535,16 +603,63 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                           ),
                                                         ),
                                                         const SizedBox(
-                                                          width: 16,
+                                                            width: 16),
+                                                        Expanded(
+                                                          child: Text(
+                                                            CurrentLocation
+                                                                        .latitude !=
+                                                                    null
+                                                                ? CurrentLocation
+                                                                    .latitude!
+                                                                    .toStringAsFixed(
+                                                                        6)
+                                                                : "Not Available",
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                            ),
+                                                          ),
                                                         ),
-                                                        Text(
-                                                          "${masterProvider.lng?.toStringAsFixed(6)}",
-                                                          // Display placeholder text if null
+                                                      ],
+                                                    ),
+
+                                                    const SizedBox(height: 10),
+
+                                                    // ================= LONGITUDE =================
+                                                    Row(
+                                                      children: [
+                                                        const Text(
+                                                          'Longitude:',
                                                           style: TextStyle(
-                                                            fontSize: 14,
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.7),
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.black87,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 16),
+                                                        Expanded(
+                                                          child: Text(
+                                                            CurrentLocation
+                                                                        .longitude !=
+                                                                    null
+                                                                ? CurrentLocation
+                                                                    .longitude!
+                                                                    .toStringAsFixed(
+                                                                        6)
+                                                                : "Not Available",
+                                                            style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
@@ -624,10 +739,10 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                         .labId,
                                                                     selectedLab
                                                                         .labName);
-                                                            paramProvider
-                                                                .fetchLabIncharge(
-                                                                    selectedLab
-                                                                        .labId,session.regId);
+                                                            paramProvider.fetchLabIncharge(
+                                                                selectedLab
+                                                                    .labId,
+                                                                session.regId);
                                                             paramProvider
                                                                 .setSelectedLab(
                                                                     value);
@@ -931,7 +1046,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lat?.toStringAsFixed(6)}",
+                                                                      "${CurrentLocation.latitude?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -968,7 +1083,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                       width: 16,
                                                                     ),
                                                                     Text(
-                                                                      "${masterProvider.lng?.toStringAsFixed(6)}",
+                                                                      "${CurrentLocation.longitude?.toStringAsFixed(6)}",
                                                                       // Display placeholder text if null
                                                                       style:
                                                                           TextStyle(
@@ -1069,12 +1184,13 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ToastHelper.showSnackBar(context, "Please select at least one test.");
       return;
     }
-    await masterProvider.fetchLocation();
+    CurrentLocation.refresh();
 
-    if (masterProvider.lat == null || masterProvider.lng == null) {
-      await masterProvider.checkAndPromptLocation(context);
+    if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
+      CurrentLocation.refresh();
 
-      if (masterProvider.lat == null || masterProvider.lng == null) {
+      if (CurrentLocation.latitude == null ||
+          CurrentLocation.longitude == null) {
         // User cancelled or GPS still off
         ToastHelper.showSnackBar(context, "Location is required to proceed.");
         return;
@@ -1109,8 +1225,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       int.parse(masterProvider.selectedScheme.toString()),
       masterProvider.otherSourceLocation,
       masterProvider.selectedWaterSource,
-      masterProvider.lat!.toStringAsFixed(6),
-      masterProvider.lng!.toStringAsFixed(6),
+      CurrentLocation.latitude!.toStringAsFixed(6),
+      CurrentLocation.longitude!.toStringAsFixed(6),
       remarkController.text,
       provider.deviceId,
       masterProvider.sampleTypeOther,
@@ -1197,7 +1313,8 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
   Widget _buildHeaderCell(String text, {required double width}) {
     return Container(
       width: width,
-      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0,left: 2.0,right: 4.0),
+      padding:
+          const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 2.0, right: 4.0),
       color: Colors.blue,
       child: Text(
         text,
@@ -1217,5 +1334,4 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       ),
     );
   }
-
 }

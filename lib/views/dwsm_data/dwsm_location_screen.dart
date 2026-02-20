@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
@@ -344,7 +345,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await masterProvider.fetchLocation();
+                    CurrentLocation.refresh();
                     Navigator.pushReplacementNamed(
                         context, AppConstants.navigateToTabSchoolAganwadi);
                   },

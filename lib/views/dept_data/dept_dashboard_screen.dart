@@ -8,6 +8,7 @@ import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/encyp_decyp.dart';
+import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/toast_helper.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/sampleinfo/location_screen.dart';
@@ -30,6 +31,8 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
+     await CurrentLocation.refresh();
+      print("------->> ${CurrentLocation.longitude}");
       Provider.of<DashboardProvider>(context, listen: false)
           .loadDashboardData(session.roleId, session.regId, session.stateId);
     });
