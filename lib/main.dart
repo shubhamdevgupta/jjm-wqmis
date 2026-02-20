@@ -28,9 +28,6 @@ void main() async {
   await LocalStorageService.init();
   await Firebase.initializeApp();
   await AesEncryption.initKey();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    CurrentLocation.init();
-  });
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 

@@ -474,7 +474,7 @@ class _SchoolScreen extends State<SchoolScreen> {
     CurrentLocation.refresh();
 
     if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
-      await CurrentLocation.getLocation();
+      await CurrentLocation.refresh();
 
       if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
         // User cancelled or GPS still off

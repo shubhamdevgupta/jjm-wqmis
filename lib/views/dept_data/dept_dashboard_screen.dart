@@ -31,7 +31,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
-      CurrentLocation.getLocation();
+     await CurrentLocation.refresh();
       print("------->> ${CurrentLocation.longitude}");
       Provider.of<DashboardProvider>(context, listen: false)
           .loadDashboardData(session.roleId, session.regId, session.stateId);

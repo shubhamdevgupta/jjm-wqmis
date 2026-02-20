@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:jjm_wqmis/utils/location/location_dialog.dart';
 
 class LocationUtils {
   static const MethodChannel _permissionChannel =
@@ -54,8 +55,24 @@ class LocationUtils {
   /// Fetch Current Location
   static Future<Map<String, dynamic>?> getCurrentLocation() async {
     try {
+      // 1️⃣ Check permission
+      bool permissionGranted = await requestLocationPermission();
+      if (!permissionGranted) {
+        debugPrint("Permission not granted");
+        return null;
+      }
+
+      // 2️⃣ Check service
+      bool serviceEnabled = await isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint("Location service disabled → opening settings");
+        await LocationDialog.showMandatoryLocationDialog();
+        return null;
+      }
+
+      // 3️⃣ Fetch location
       final Map<dynamic, dynamic>? location =
-          await _permissionChannel.invokeMethod('getLocation');
+      await _permissionChannel.invokeMethod('getLocation');
 
       if (location == null ||
           location['latitude'] == null ||

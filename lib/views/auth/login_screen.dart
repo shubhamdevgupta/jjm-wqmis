@@ -160,6 +160,9 @@ class _LoginpageState extends State<Loginscreen> {
                                           passwordController.text,
                                           1,
                                           () {
+                                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                                              CurrentLocation.init();
+                                            });
                                             if (provider
                                                     .loginResponse?.roleId ==
                                                 4) {

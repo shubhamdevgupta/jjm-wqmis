@@ -212,7 +212,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
     CurrentLocation.refresh();
 
     if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
-       CurrentLocation.getLocation();
+       CurrentLocation.refresh();
 
       if (CurrentLocation.latitude == null || CurrentLocation.longitude == null) {
         // User cancelled or GPS still off
