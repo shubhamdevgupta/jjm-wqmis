@@ -35,8 +35,7 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WillPopScope(
+    return  WillPopScope(
         onWillPop: () async {
           // Navigate back to Dashboard when pressing back button
           Navigator.pushNamedAndRemoveUntil(
@@ -146,8 +145,8 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                 );
               })),
         ),
-      ),
-    );
+      );
+
   }
   Widget buildSampleTaken(Masterprovider masterProvider) {
     return Padding(

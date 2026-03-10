@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
-import 'package:jjm_wqmis/utils/loader_utils.dart';
-import 'package:jjm_wqmis/utils/app_constants.dart';
-import 'package:jjm_wqmis/utils/user_session_manager.dart';
-import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
-import 'package:jjm_wqmis/utils/toast_helper.dart';
-import 'package:provider/provider.dart';
-
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
+import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
+import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
+import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/location/current_location.dart';
+import 'package:jjm_wqmis/utils/toast_helper.dart';
+import 'package:jjm_wqmis/utils/user_session_manager.dart';
+import 'package:provider/provider.dart';
 
 class Locationscreen extends StatefulWidget {
   final String flag;
   final String flagFloating; // Declare flag parameter
 
-   const Locationscreen({super.key, required this.flag , required this.flagFloating });
+  const Locationscreen(
+      {super.key, required this.flag, required this.flagFloating});
 
   @override
   State<Locationscreen> createState() => _LocationscreenState();
@@ -25,61 +25,59 @@ class _LocationscreenState extends State<Locationscreen> {
   final session = UserSessionManager();
   final lat = CurrentLocation.latitude;
   final lng = CurrentLocation.longitude;
+
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     session.init();
   }
 
   @override
   Widget build(BuildContext context) {
+    final paramProvider = Provider.of<ParameterProvider>(context, listen: true);
+    return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          // Removes the default back button
+          centerTitle: true,
+          title: Text(
+            'Choose Location',
+            style: AppStyles.appBarTitle,
+          ),
 
-    final paramProvider = Provider.of<ParameterProvider>(
-        context, listen: true);
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              // Removes the default back button
-              centerTitle: true,
-              title: Text(
-                'Choose Location',
-                style: AppStyles.appBarTitle,
+          //elevation
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              // Background color for the container
+              borderRadius: BorderRadius.circular(8),
+              // Rounded corners
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF096DA8), // Dark blue color
+                  Color(0xFF3C8DBC), // jjm blue color
+                ],
+                begin: Alignment.topCenter, // Start at the top center
+                end: Alignment.bottomCenter, // End at the bottom center
               ),
-
-              //elevation
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  // Background color for the container
-                  borderRadius: BorderRadius.circular(8),
-                  // Rounded corners
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF096DA8), // Dark blue color
-                      Color(0xFF3C8DBC), // jjm blue color
-                    ],
-                    begin: Alignment.topCenter, // Start at the top center
-                    end: Alignment.bottomCenter, // End at the bottom center
-                  ),
-                ),
-              ),
-              elevation: 5,
             ),
-            body: Consumer<Masterprovider>(
-                builder: (context, masterProvider, child) {
-              return masterProvider.isLoading
-                      ? LoaderUtils.conditionalLoader(isLoading: masterProvider.isLoading)
-                      :SingleChildScrollView(
-                      child: Column(
-                    children: [buildStateVillage(masterProvider,paramProvider)],
-                  ));
-
-            })));
-
+          ),
+          elevation: 5,
+        ),
+        body:
+            Consumer<Masterprovider>(builder: (context, masterProvider, child) {
+          return masterProvider.isLoading
+              ? LoaderUtils.conditionalLoader(
+                  isLoading: masterProvider.isLoading)
+              : SingleChildScrollView(
+                  child: Column(
+                  children: [buildStateVillage(masterProvider, paramProvider)],
+                ));
+        }));
   }
 
-  Widget buildStateVillage(Masterprovider masterProvider, ParameterProvider paramProvider) {
+  Widget buildStateVillage(
+      Masterprovider masterProvider, ParameterProvider paramProvider) {
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(
@@ -99,7 +97,8 @@ class _LocationscreenState extends State<Locationscreen> {
                   const Text(
                     'State *',
                     style: TextStyle(
-                      fontSize: 16, fontFamily: 'OpenSans',
+                      fontSize: 16,
+                      fontFamily: 'OpenSans',
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -107,16 +106,20 @@ class _LocationscreenState extends State<Locationscreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: DropdownButtonFormField<String>(
-
-                      value: session.stateId.toString(), // Ensure this matches the DropdownMenuItem value
+                      value: session.stateId.toString(),
+                      // Ensure this matches the DropdownMenuItem value
                       decoration: InputDecoration(
-                        filled:
-                            true, // Grey background to indicate it's non-editable
+                        filled: true,
+                        // Grey background to indicate it's non-editable
                         fillColor: Colors.grey[300],
-                        labelStyle: const TextStyle(color: Colors.blueAccent, fontFamily: 'OpenSans',),
+                        labelStyle: const TextStyle(
+                          color: Colors.blueAccent,
+                          fontFamily: 'OpenSans',
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.grey, width: 2),
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -125,26 +128,28 @@ class _LocationscreenState extends State<Locationscreen> {
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
-                          value: session.stateId.toString(), // Ensure this matches the selected value
+                          value: session.stateId.toString(),
+                          // Ensure this matches the selected value
 
-                          child: Text(session.stateName ,
+                          child: Text(session.stateName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
-                                  FontWeight.w500)), // Display state name
+                                      FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
                       // Disable selection (non-editable)
                       isExpanded: true,
                       style: const TextStyle(
-                        color: Colors.black, fontFamily: 'OpenSans',
+                        color: Colors.black,
+                        fontFamily: 'OpenSans',
                         fontSize: 16,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -181,7 +186,8 @@ class _LocationscreenState extends State<Locationscreen> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.grey, width: 2),
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 2),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -190,21 +196,20 @@ class _LocationscreenState extends State<Locationscreen> {
                               color: Colors.grey,
                               width: 2), // Avoid focus effect
                         ),
-                        contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
                       ),
                       items: [
                         DropdownMenuItem<String>(
                           value: session.districtId.toString(),
                           // Ensure this matches the selected value
 
-                          child: Text(
-                              session.districtName,
+                          child: Text(session.districtName,
                               style: const TextStyle(
                                   color: Colors.black87,
                                   fontFamily: 'OpensSans',
                                   fontWeight:
-                                  FontWeight.w500)), // Display state name
+                                      FontWeight.w500)), // Display state name
                         ),
                       ],
                       onChanged: null,
@@ -241,15 +246,15 @@ class _LocationscreenState extends State<Locationscreen> {
                     title: "Block *",
                     onChanged: (value) {
                       masterProvider.setSelectedBlock(value);
-                      if (value != null&&value.isNotEmpty) {
+                      if (value != null && value.isNotEmpty) {
                         masterProvider.fetchGramPanchayat(
                             masterProvider.selectedStateId!,
                             masterProvider.selectedDistrictId!,
-                            value,session.regId);
+                            value,
+                            session.regId);
                       }
                     },
                     appBarTitle: "Select block",
-
                   ),
                 ],
               ),
@@ -275,11 +280,11 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedStateId!,
                         masterProvider.selectedDistrictId!,
                         masterProvider.selectedBlockId!,
-                        value,session.regId);
+                        value,
+                        session.regId);
                   }
                 },
                 appBarTitle: "Select Gram Panchayat",
-
               ),
               const SizedBox(height: 12),
               ///// village data heree ----------
@@ -303,7 +308,8 @@ class _LocationscreenState extends State<Locationscreen> {
                         masterProvider.selectedDistrictId!,
                         masterProvider.selectedBlockId!,
                         masterProvider.selectedGramPanchayat!,
-                        value,session.regId);
+                        value,
+                        session.regId);
                   }
                 },
                 appBarTitle: "Select Village",
@@ -332,30 +338,35 @@ class _LocationscreenState extends State<Locationscreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-
                   onPressed: () async {
-
                     CurrentLocation.refresh();
                     if (widget.flag == AppConstants.openSampleListScreen) {
-
                       Navigator.pushNamedAndRemoveUntil(
                         context,
                         AppConstants.navigateToSampleListScreen,
                         ModalRoute.withName('/dashboard'),
-                        arguments: {'flag': widget.flag,'dis' : masterProvider.selectedDistrictId,'block':masterProvider.selectedBlockId, 'flagFloating': widget.flagFloating,},
+                        arguments: {
+                          'flag': widget.flag,
+                          'dis': masterProvider.selectedDistrictId,
+                          'block': masterProvider.selectedBlockId,
+                          'flagFloating': widget.flagFloating,
+                        },
                       );
-                    } else if (widget.flag == AppConstants.openSampleInfoScreen && validateStateVillage(masterProvider)) {
+                    } else if (widget.flag ==
+                            AppConstants.openSampleInfoScreen &&
+                        validateStateVillage(masterProvider)) {
                       masterProvider.fetchWatersourcefilterList(session.regId);
                       masterProvider.clearsampleinfo();
                       Navigator.pop(context, true);
-                      Navigator.pushReplacementNamed(context, AppConstants.navigateToSampleInformationScreen);
+                      Navigator.pushReplacementNamed(context,
+                          AppConstants.navigateToSampleInformationScreen);
                     } else {
                       /*ToastHelper.showErrorSnackBar(context, masterProvider.errorMsg);*/
                       ToastHelper.showToastMessage(masterProvider.errorMsg);
                     }
 
                     //TODO LGD code
-                 /*   masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
+                    /*   masterProvider.fetchVillageDetails(masterProvider.currentLongitude!, masterProvider.currentLatitude!);
                     final hasData = masterProvider.villageDetails.isNotEmpty;
                     final villageLgd = hasData ? masterProvider.villageDetails.first.villageLgd : "0";
                     masterProvider.validateVillage(masterProvider.selectedVillage!,villageLgd);
@@ -364,21 +375,16 @@ class _LocationscreenState extends State<Locationscreen> {
                     }else{
                       ToastHelper.showErrorSnackBar(context, 'please check the location ');
                     }*/
-
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF096DA8),
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 100.0),
-
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 100.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-
-                  child: const Text(
-                    'Next',
-                    style: AppStyles.textStyle
-                  ),
+                  child: const Text('Next', style: AppStyles.textStyle),
                 ),
               ),
             ],
@@ -391,14 +397,15 @@ class _LocationscreenState extends State<Locationscreen> {
   bool validateStateVillage(Masterprovider provider) {
     provider.errorMsg = provider.selectedStateId?.isNotEmpty == true
         ? provider.selectedDistrictId?.isNotEmpty == true
-        ? provider.selectedBlockId?.isNotEmpty == true
-        ? provider.selectedGramPanchayat?.isNotEmpty == true
-        ? (provider.selectedVillage != null && provider.selectedVillage != "0"
-        ? ""
-        : "Please select village before proceeding.")
-        : "Please select Gram Panchayat before proceeding."
-        : "Please select Block before proceeding."
-        : "Please select District before proceeding."
+            ? provider.selectedBlockId?.isNotEmpty == true
+                ? provider.selectedGramPanchayat?.isNotEmpty == true
+                    ? (provider.selectedVillage != null &&
+                            provider.selectedVillage != "0"
+                        ? ""
+                        : "Please select village before proceeding.")
+                    : "Please select Gram Panchayat before proceeding."
+                : "Please select Block before proceeding."
+            : "Please select District before proceeding."
         : "Please select State before proceeding.";
 
     return provider.errorMsg.isEmpty;

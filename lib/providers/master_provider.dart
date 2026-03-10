@@ -1,6 +1,7 @@
 // lib/providers/state_provider.dart
 
 import 'package:flutter/material.dart';
+import 'package:jjm_wqmis/models/MasterApiResponse/block_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/grampanchayat_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/habitation_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/scheme_response.dart';
@@ -8,16 +9,12 @@ import 'package:jjm_wqmis/models/MasterApiResponse/village_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_filter_response.dart';
 import 'package:jjm_wqmis/models/MasterApiResponse/water_source_response.dart';
 import 'package:jjm_wqmis/models/Wtp/wtp_list_response.dart';
-import 'package:jjm_wqmis/repository/master_repository.dart';
-
 import 'package:jjm_wqmis/models/lgd_response.dart';
-import 'package:jjm_wqmis/models/MasterApiResponse/block_response.dart';
 import 'package:jjm_wqmis/models/validate_village.dart';
+import 'package:jjm_wqmis/repository/master_repository.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
-import 'package:jjm_wqmis/utils/location/current_location.dart';
-import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
-import 'package:jjm_wqmis/utils/location/location_utils.dart';
+import 'package:jjm_wqmis/utils/user_session_manager.dart';
 
 class Masterprovider extends ChangeNotifier {
   final MasterRepository _masterRepository = MasterRepository();
@@ -52,7 +49,7 @@ class Masterprovider extends ChangeNotifier {
   List<Wtp> wtpList = [];
   String? selectedWtp;
 
-  int istreated=0;
+  int istreated = 0;
 
 /*  double? _currentLatitude;
   double? _currentLongitude;
@@ -97,15 +94,18 @@ class Masterprovider extends ChangeNotifier {
 
   String? _selectedDatetimeSampleCollection = "";
 
-  String? get selectedDatetimeSampleCollection => _selectedDatetimeSampleCollection;
+  String? get selectedDatetimeSampleCollection =>
+      _selectedDatetimeSampleCollection;
 
   String? _selectedDatetimeSampleTested = "";
 
   String? get selectedDatetimeSampleTested => _selectedDatetimeSampleTested;
 
   final TextEditingController householdController = TextEditingController();
-  final TextEditingController handpumpSourceController = TextEditingController();
-  final TextEditingController handpumpLocationController = TextEditingController();
+  final TextEditingController handpumpSourceController =
+      TextEditingController();
+  final TextEditingController handpumpLocationController =
+      TextEditingController();
 
   TextEditingController addressController = TextEditingController();
   TextEditingController ftkRemarkController = TextEditingController();
@@ -148,7 +148,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchGramPanchayat(
-      String stateId, String districtId, String blockId ,int regId) async {
+      String stateId, String districtId, String blockId, int regId) async {
     if (stateId.isEmpty || districtId.isEmpty || blockId.isEmpty) {
       errorMsg = "Please select State, District, and Block.";
       notifyListeners();
@@ -160,7 +160,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawGPs = await _masterRepository.fetchGramPanchayats(
-          stateId, districtId, blockId,regId);
+          stateId, districtId, blockId, regId);
 
       baseStatus = rawGPs.status;
 
@@ -185,8 +185,8 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchVillage(
-      String stateId, String districtId, String blockId, String gpID,int regId) async {
+  Future<void> fetchVillage(String stateId, String districtId, String blockId,
+      String gpID, int regId) async {
     if (stateId.isEmpty ||
         districtId.isEmpty ||
         blockId.isEmpty ||
@@ -201,7 +201,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawVillages = await _masterRepository.fetchVillages(
-          stateId, districtId, blockId, gpID,regId);
+          stateId, districtId, blockId, gpID, regId);
 
       baseStatus = rawVillages.status;
 
@@ -213,13 +213,8 @@ class Masterprovider extends ChangeNotifier {
           setSelectedVillage(singleVillage.jjmVillageId);
 
           /// ✅ Automatically trigger habitation fetch
-          await fetchHabitations(
-            stateId,
-            districtId,
-            blockId,
-            gpID,
-            singleVillage.jjmVillageId,regId
-          );
+          await fetchHabitations(stateId, districtId, blockId, gpID,
+              singleVillage.jjmVillageId, regId);
         }
       } else {
         errorMsg = rawVillages.message;
@@ -235,7 +230,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchHabitations(String stateId, String districtId,
-      String blockId, String gpId, String villageId,int regId) async {
+      String blockId, String gpId, String villageId, int regId) async {
     if ([stateId, districtId, blockId, gpId, villageId].any((e) => e.isEmpty)) {
       errorMsg = "Please select all fields to load habitations.";
       notifyListeners();
@@ -247,7 +242,7 @@ class Masterprovider extends ChangeNotifier {
 
     try {
       final rawHabitations = await _masterRepository.fetchHabitations(
-          stateId, districtId, blockId, gpId, villageId,regId);
+          stateId, districtId, blockId, gpId, villageId, regId);
 
       baseStatus = rawHabitations.status;
 
@@ -272,13 +267,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchSchemes(String stateId, String districtid,String villageId, String habitationId,
-      String filter,int regId) async {
+  Future<void> fetchSchemes(String stateId, String districtid, String villageId,
+      String habitationId, String filter, int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final mSchemes = await _masterRepository.fetchSchemes(stateId,
-          districtid, villageId, habitationId, filter,regId);
+      final mSchemes = await _masterRepository.fetchSchemes(
+          stateId, districtid, villageId, habitationId, filter, regId);
       baseStatus = mSchemes.status;
 
       if (baseStatus == 1) {
@@ -290,21 +285,21 @@ class Masterprovider extends ChangeNotifier {
         errorMsg = mSchemes.message;
       }
       if (selectedWtsfilter == "5") {
-        await fetchWTPList(selectedStateId!,selectedVillage!,selectedHabitation!, selectedScheme!,regId);
+        await fetchWTPList(selectedStateId!, selectedVillage!,
+            selectedHabitation!, selectedScheme!, regId);
       } else if (selectedWtsfilter == "6") {
         setSelectedSubSource(0);
         setSelectedWTP("0");
         await fetchSourceInformation(
-          selectedVillage!,
-          selectedHabitation!,
-          selectedWtsfilter!,
-          "0",
-          selectedSubSource.toString(),
-          selectedWtp!,
-          selectedStateId!,
-          selectedScheme!,
-          regId
-        );
+            selectedVillage!,
+            selectedHabitation!,
+            selectedWtsfilter!,
+            "0",
+            selectedSubSource.toString(),
+            selectedWtp!,
+            selectedStateId!,
+            selectedScheme!,
+            regId);
       }
     } catch (e) {
       debugPrint('Error in fetching scheme: $e');
@@ -316,15 +311,15 @@ class Masterprovider extends ChangeNotifier {
   }
 
   Future<void> fetchSourceInformation(
-    String villageId,
-    String habitationId,
-    String filter,
-    String cat,
-    String subcat,
-    String wtpId,
-    String stateId,
-    String schemeId, int regId
-  ) async {
+      String villageId,
+      String habitationId,
+      String filter,
+      String cat,
+      String subcat,
+      String wtpId,
+      String stateId,
+      String schemeId,
+      int regId) async {
     _isLoading = true;
     try {
       final rawWaterSource = await _masterRepository.fetchSourceInformation(
@@ -335,14 +330,15 @@ class Masterprovider extends ChangeNotifier {
           subcat,
           wtpId,
           stateId,
-          schemeId,regId);
+          schemeId,
+          regId);
       baseStatus = rawWaterSource.status;
 
       if (rawWaterSource.status == 1) {
         waterSource = rawWaterSource.result;
         if (waterSource.length == 1) {
           selectedWaterSource = waterSource.first.locationId.toString();
-          selectedWaterSourceName= waterSource.first.locationName;
+          selectedWaterSourceName = waterSource.first.locationName;
         }
       } else {
         errorMsg = rawWaterSource.message;
@@ -356,12 +352,13 @@ class Masterprovider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchWTPList(String stateId,String villageId,String habitationId, String schemeId,int regId) async {
+  Future<void> fetchWTPList(String stateId, String villageId,
+      String habitationId, String schemeId, int regId) async {
     _isLoading = true;
     notifyListeners();
     try {
-      final fetchedList =
-          await _masterRepository.fetchWTPlist(stateId,villageId,habitationId, schemeId,regId);
+      final fetchedList = await _masterRepository.fetchWTPlist(
+          stateId, villageId, habitationId, schemeId, regId);
 
       if (fetchedList.status == 1) {
         wtpList = fetchedList.result;
@@ -385,7 +382,8 @@ class Masterprovider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners(); // Start loading
     try {
-      final rawWtsFilterList = await _masterRepository.fetchWaterSourceFilterList(regId);
+      final rawWtsFilterList =
+          await _masterRepository.fetchWaterSourceFilterList(regId);
       baseStatus = rawWtsFilterList.status;
       if (rawWtsFilterList.status == 1) {
         wtsFilterList = rawWtsFilterList.result;
@@ -459,15 +457,12 @@ class Masterprovider extends ChangeNotifier {
     }
   }*/
 
-
-
   // ✅ Optional helper method
 /*  void setLocation(double? lat, double? lng) {
     _latitude = lat;
     _longitude = lng;
     notifyListeners();
   }*/
-
 
 /*
   Future<void> checkAndPromptLocation(BuildContext context) async {
@@ -538,13 +533,14 @@ class Masterprovider extends ChangeNotifier {
   }
 */
 
-  Future<void> validateVillage(String villageId, String lgdCode,int regId) async {
+  Future<void> validateVillage(
+      String villageId, String lgdCode, int regId) async {
     _isLoading = true;
     errorMsg = "";
     notifyListeners();
     try {
       _validateVillageResponse =
-          await _masterRepository.validateVillage(villageId, lgdCode,regId);
+          await _masterRepository.validateVillage(villageId, lgdCode, regId);
     } catch (e) {
       errorMsg = e.toString();
     } finally {
@@ -570,7 +566,6 @@ class Masterprovider extends ChangeNotifier {
     selectedScheme = null;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
-
 
   void clearSelectedSubSource() {
     _selectedSubSource = null;
@@ -601,6 +596,7 @@ class Masterprovider extends ChangeNotifier {
     selectedWaterSource = value;
     notifyListeners(); // Notify listeners to rebuild the widget
   }
+
   void setSelectedWaterSourceInformationName(String? value) {
     selectedWaterSourceName = value;
     notifyListeners(); // Notify listeners to rebuild the widget
@@ -690,12 +686,11 @@ class Masterprovider extends ChangeNotifier {
     habitationId.clear();
     notifyListeners();
   }
+
   void setSelectedStateOnly(String? stateId) {
     selectedStateId = stateId;
     notifyListeners();
   }
-
-
 
   void clearData() {
     selectedStateId = null;
@@ -725,7 +720,7 @@ class Masterprovider extends ChangeNotifier {
 
     istreated = 0;
 
-  /*  _currentLatitude = null;
+    /*  _currentLatitude = null;
     _currentLongitude = null;*/
 
     wtsFilterList.clear();
@@ -750,6 +745,7 @@ class Masterprovider extends ChangeNotifier {
 
     notifyListeners();
   }
+
   void clearDataforFtk() {
     habitationId.clear();
     selectedHabitation = null;
@@ -822,12 +818,13 @@ class Masterprovider extends ChangeNotifier {
             "0",
             selectedWtp!,
             selectedStateId!,
-            selectedScheme!,session.regId);
-      }else{
+            selectedScheme!,
+            session.regId);
+      } else {
         setSelectedSubSource(value);
       }
       // Outlet of WTP (value == 1) - just set the value, no API call needed
-    } 
+    }
     // Handle Ground water (GW) and Surface water (SW) sources (values 1 and 2 when selectedWtsfilter == "2")
     else if (selectedWtsfilter == "2" && (value == 1 || value == 2)) {
       clearAddresRemarks();
@@ -841,7 +838,8 @@ class Masterprovider extends ChangeNotifier {
             "0",
             "0",
             selectedStateId!,
-            selectedScheme!,session.regId);
+            selectedScheme!,
+            session.regId);
       });
     } else if (value == 3) {
       setSelectedWaterSourceInformation("0");
@@ -861,7 +859,8 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!,session.regId);
+          selectedScheme!,
+          session.regId);
     } else if (value == 7) {
       clearAddresRemarks();
       setSelectedHandpump(value);
@@ -874,7 +873,8 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!,session.regId);
+          selectedScheme!,
+          session.regId);
     } else if (value == 8) {
       clearAddresRemarks();
       setSelectedHandpump(value);
@@ -887,9 +887,153 @@ class Masterprovider extends ChangeNotifier {
           "0",
           "0",
           selectedStateId!,
-          selectedScheme!,session.regId);
+          selectedScheme!,
+          session.regId);
     }
     notifyListeners();
+  }
+
+  bool validateSourceofScheme() {
+    if (selectedScheme == null ||
+        selectedScheme!.isEmpty) {
+      errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (selectedWaterSource == "" ||
+        selectedWaterSource!.isEmpty) {
+      errorMsg = "Water Source is empty or invalid";
+      return false;
+    }
+
+    if (selectedDatetime == null) {
+      errorMsg = "Sample Collection Date empty or invalid";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateWtpWaterFields() {
+    if (selectedScheme == null ||
+        selectedScheme!.isEmpty) {
+      errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (selectedWtp == null ||
+        selectedWtp!.isEmpty) {
+      errorMsg =
+          "Water Treatment Plant (WTP) is empty or invalid";
+      return false;
+    }
+
+    // Only validate water source if "Inlet of WTP" is selected
+    if (selectedSubSource == 0 &&
+        (selectedWaterSource == null ||
+            selectedWaterSource!.isEmpty)) {
+      errorMsg = "Water Source for Inlet is empty or invalid";
+      return false;
+    }
+
+    if (selectedDatetime == null) {
+      errorMsg = "Sample Collection Date empty or invalid";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateEsrWaterFields() {
+    if (selectedScheme == null ||
+        selectedScheme!.isEmpty) {
+      errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (selectedWaterSource == null ||
+        selectedWaterSource!.isEmpty) {
+      errorMsg = "ESR/GSR is empty or invalid.";
+      return false;
+    }
+
+    if (selectedDatetime == null) {
+      errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+    return true;
+  }
+
+  bool validateHouseholdWaterFields() {
+    if (selectedScheme == '' ||
+        selectedScheme!.isEmpty) {
+      errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (selectedHousehold == null) {
+      errorMsg = "Household selection is empty or invalid.";
+      return false;
+    }
+
+    if (selectedHousehold == 3) {
+      if (householdController.text.trim().isEmpty) {
+        errorMsg = "Household name is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (selectedHousehold == 4) {
+      if (selectedWaterSource == null ||
+          selectedWaterSource!.isEmpty) {
+        errorMsg = "School / AWC is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (selectedDatetime == null) {
+      errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+
+    return true;
+  }
+
+  bool validateHandpumpWaterFields() {
+    if (selectedScheme == null ||
+        selectedScheme!.isEmpty) {
+     errorMsg = "Scheme is empty or invalid.";
+      return false;
+    }
+
+    if (selectedHandpumpPrivate == null) {
+      errorMsg = "Handpump type selection is empty or invalid.";
+      return false;
+    }
+
+    if (selectedHandpumpPrivate == 7) {
+      if (selectedWaterSource == null ||
+          selectedWaterSource!.isEmpty) {
+        errorMsg = "Govt. handpump is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (selectedHandpumpPrivate == 8) {
+      if (handpumpSourceController.text.trim().isEmpty) {
+        errorMsg = "Type of source is empty or invalid.";
+        return false;
+      }
+      if (handpumpLocationController.text.trim().isEmpty) {
+        errorMsg = "Location is empty or invalid.";
+        return false;
+      }
+    }
+
+    if (selectedDatetime == null) {
+      errorMsg = "Date and time is empty or invalid.";
+      return false;
+    }
+
+    return true;
   }
 
   void clearsampleinfo() {
@@ -898,13 +1042,14 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSelection(){
+  void clearSelection() {
     clearSelectedSubSource();
     setSelectedHouseHold(null);
     setSelectedHandpump(null);
     clearAddresRemarks();
   }
-  void clearAddresRemarks(){
+
+  void clearAddresRemarks() {
     addressController.clear();
     ftkRemarkController.clear();
   }

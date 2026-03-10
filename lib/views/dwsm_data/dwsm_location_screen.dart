@@ -34,8 +34,7 @@ class _DwsmLocation extends State<DwsmLocation> {
   Widget build(BuildContext context) {
     final dwsmDashboardProvider =
         Provider.of<DwsmProvider>(context, listen: true);
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
               // Removes the default back button
@@ -87,7 +86,7 @@ class _DwsmLocation extends State<DwsmLocation> {
                         isLoading: dwsmDashboardProvider.isLoading)
                 ],
               );
-            })));
+            }));
   }
 
   Widget buildStateVillage(
