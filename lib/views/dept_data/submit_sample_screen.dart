@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/providers/sample_submit_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
+import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
@@ -1196,8 +1197,6 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
         return;
       }
     }
-    await provider.fetchDeviceId();
-    //TODO lab is null here
     int parsedSource =
         int.tryParse(masterProvider.selectedWaterSource?.toString() ?? '') ?? 0;
 
@@ -1228,7 +1227,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
       CurrentLocation.latitude!.toStringAsFixed(6),
       CurrentLocation.longitude!.toStringAsFixed(6),
       remarkController.text,
-      provider.deviceId,
+      DeviceInfoUtil.deviceId,
       masterProvider.sampleTypeOther,
       int.parse(masterProvider.selectedWtp ?? '0'),
       masterProvider.istreated,

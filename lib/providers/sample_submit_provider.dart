@@ -14,9 +14,6 @@ class Samplesubprovider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? _deviceId;
-  String? get deviceId => _deviceId;
-
   Future<void> sampleSubmit(
       labId,
       regId,
@@ -88,13 +85,4 @@ class Samplesubprovider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
-
-
-
-
 }

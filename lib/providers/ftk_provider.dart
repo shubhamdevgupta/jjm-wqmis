@@ -25,16 +25,7 @@ class Ftkprovider extends ChangeNotifier {
   FtkDashboardResponse? ftkDashboardResponse;
   String errorMsg = '';
 
-  String? _deviceId;
-  String? get deviceId => _deviceId;
-
   List<FtkSample> ftkSample = []; // Correctly storing List<Sample>
-
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
 
   Future<void> fetchParameterList(int stateId, int districtId,int regId) async {
     _isLoading = true;

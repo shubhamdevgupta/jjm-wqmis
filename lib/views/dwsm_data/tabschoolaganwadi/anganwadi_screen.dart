@@ -3,6 +3,7 @@ import 'package:jjm_wqmis/models/DWSM/ftk_demonstration_list_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/ImageDialogUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
+import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
@@ -477,7 +478,6 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
   }
 
   Future<bool> validate(DwsmProvider dwsmprovider, Masterprovider masterProvider) async {
-    await dwsmprovider.fetchDeviceId();
 
     if (dwsmprovider.selectedAnganwadi == null) {
       dwsmprovider.errorMessage = "Please Select Anganwadi first.";
@@ -860,7 +860,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           remarkController.text,
                           CurrentLocation.latitude!.toStringAsFixed(6),
                           CurrentLocation.longitude!.toStringAsFixed(6),
-                          dwsmprovider.deviceId!,
+                          DeviceInfoUtil.deviceId,
                           session.regId,() {
                         showResponse(dwsmprovider);
                       });

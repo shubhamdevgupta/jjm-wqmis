@@ -39,10 +39,6 @@ class DwsmProvider extends ChangeNotifier {
 
   Dwsmdashboardresponse? get dwsmdashboardresponse => _dwsmdashboardresponse;
 
-  String? _deviceId;
-
-  String? get deviceId => _deviceId;
-
   bool _showDemonstartion = false;
 
   bool get showDemonstartion => _showDemonstartion;
@@ -195,11 +191,6 @@ class DwsmProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchDeviceId() async {
-    _deviceId = await DeviceInfoUtil.getUniqueDeviceId();
-    debugPrint('Device ID: $_deviceId');
-    notifyListeners();
-  }
 
   void showDemonstartionButton(bool value) {
     _showDemonstartion = value;

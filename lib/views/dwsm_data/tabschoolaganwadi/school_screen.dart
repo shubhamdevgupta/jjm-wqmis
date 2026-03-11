@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/utils/app_color.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/camera.dart';
+import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
@@ -462,7 +463,6 @@ class _SchoolScreen extends State<SchoolScreen> {
 
   Future<bool> validate(
       DwsmProvider dwsmprovider, Masterprovider masterProvider) async {
-    await dwsmprovider.fetchDeviceId();
     if (dwsmprovider.selectedSchoolResult == null) {
       dwsmprovider.errorMessage = "Please Select School first.";
       return false;
@@ -850,7 +850,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                           remarkController.text,
                           CurrentLocation.latitude!.toStringAsFixed(6),
                           CurrentLocation.longitude!.toStringAsFixed(6),
-                          dwsmprovider.deviceId!,
+                          DeviceInfoUtil.deviceId,
                           session.regId, () {
                         showResponse(dwsmprovider);
                       });
