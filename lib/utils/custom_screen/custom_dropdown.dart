@@ -30,14 +30,14 @@ class _CustomDropdownState extends State<CustomDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.value ?? '';
+    selectedValue = widget.value;
   }
   @override
   void didUpdateWidget(covariant CustomDropdown oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       setState(() {
-        selectedValue = widget.value ?? '';
+        selectedValue = widget.value;
       });
     }
   }
@@ -51,6 +51,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
         return _SearchDialog(
           items: widget.items,
           onItemSelected: (value) {
+            if (!mounted) return;
             setState(() {
               selectedValue = value;
             });
@@ -182,13 +183,15 @@ class __SearchDialogState extends State<_SearchDialog> {
   @override
   void initState() {
     super.initState();
-    filteredItems = widget.items;
+    filteredItems = List.from(widget.items);
   }
 
   void _filterItems(String query) {
     setState(() {
       filteredItems = widget.items.where((item) {
-        final label = (item.child as Text).data ?? '';
+        final label = item.child is Text
+            ? ((item.child as Text).data ?? '')
+            : '';
         return label.toLowerCase().contains(query.toLowerCase());
       }).toList();
     });
@@ -250,7 +253,10 @@ class __SearchDialogState extends State<_SearchDialog> {
                   return ListTile(
                     title: Text((item.child as Text).data ?? ''),
                     onTap: () {
-                      widget.onItemSelected(item.value!);
+                      final value = item.value;
+                      if (value != null) {
+                        widget.onItemSelected(value);
+                      }
                       Navigator.pop(context);
                     },
                   );
