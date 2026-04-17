@@ -15,7 +15,7 @@ class ImageDialogUtil {
     int? districtId,
     int? regId,
     int? type,
-    String year = "2025-2026",
+    String year = "2026-2027",
     String round = "0",
   }) {
     Uint8List? imageBytes;

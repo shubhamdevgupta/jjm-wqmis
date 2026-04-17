@@ -103,7 +103,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                                           dwsmprovider.fetchDemonstrationList(
                                                   session.stateId,
                                                   session.districtId,
-                                                  "2025-2026",
+                                                  "2026-2027",
                                                   selectedId,
                                                   11,session.regId, onSuccess: (result) {
                                             village = result;
@@ -856,7 +856,7 @@ class _AnganwadiScreen extends State<AnganwadiScreen> {
                           session.regId,
                           int.parse(dwsmprovider.selectedAnganwadi!),
                           _cameraHelper.base64Image!,
-                          "2025-2026",
+                          "2026-2027",
                           remarkController.text,
                           CurrentLocation.latitude!.toStringAsFixed(6),
                           CurrentLocation.longitude!.toStringAsFixed(6),

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:ca4cc357574e974ca7eab9",
+        "mobilesdk_app_id": "1:149829529276:android:c607bfcdc8f2aa43a7eab9",
         "android_client_info": {
-          "package_name": "com.androiddev.astrohelpme"
+          "package_name": "com.ddws.jjm_wqmis"
         }
       },
       "oauth_client": [],
@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:0f1e54ed0ba414a1a7eab9",
+        "mobilesdk_app_id": "1:149829529276:android:b098c9ab6ce23367a7eab9",
         "android_client_info": {
-          "package_name": "com.example.asignment"
+          "package_name": "com.shubhamandroidev.sos_buddy"
         }
       },
       "oauth_client": [],
@@ -45,9 +45,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:a319189ba6ca5ee3a7eab9",
+        "mobilesdk_app_id": "1:149829529276:android:881ad9cd539485cda7eab9",
         "android_client_info": {
-          "package_name": "com.example.autocapture"
+          "package_name": "com.shubhamandroidev.taxiservice"
         }
       },
       "oauth_client": [],
@@ -64,47 +64,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:a8ab9357d96069b4a7eab9",
+        "mobilesdk_app_id": "1:149829529276:android:56031b7146f77cc6a7eab9",
         "android_client_info": {
-          "package_name": "com.example.cno_inspection"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC_M5nY4aTjyoTy9ERRrbIKrvprmXLFl5s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:4d894eee06ca36d6a7eab9",
-        "android_client_info": {
-          "package_name": "com.example.jjm_wqmis"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC_M5nY4aTjyoTy9ERRrbIKrvprmXLFl5s"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:149829529276:android:503102b522ecab8fa7eab9",
-        "android_client_info": {
-          "package_name": "com.example.spy"
+          "package_name": "com.shubhamdev.stepcounter"
         }
       },
       "oauth_client": [],

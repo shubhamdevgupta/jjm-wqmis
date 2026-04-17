@@ -32,7 +32,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
     await  Provider.of<DwsmProvider>(context, listen: false).fetchDemonstrationList(
           session.stateId,
           session.districtId,
-          "2025-2026",
+          "2026-2027",
           "0",
           widget.type!,session.regId);
     });
@@ -217,7 +217,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                                           await provider.fetchDemonstrationList(
                                             session.stateId,
                                             session.districtId,
-                                            "2025-2026",
+                                            "2026-2027",
                                             village.schoolId??"0",
                                             widget.type!,session.regId,
                                             onSuccess: (result) {
@@ -412,7 +412,7 @@ class _DemonstrationscreenState extends State<Demonstrationscreen> {
                     .fetchDemonstrationList(
                   session.stateId,
                   session.districtId,
-                  "2025-2026",
+                  "2026-2027",
                   "0",
                   widget.type!,
                   session.regId,

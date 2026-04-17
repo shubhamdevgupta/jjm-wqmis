@@ -104,7 +104,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                             dwsmprovider.fetchDemonstrationList(
                                                 session.stateId,
                                                 session.districtId,
-                                                "2025-2026",
+                                                "2026-2027",
                                                 selectedId,
                                                 10,
                                                 session.regId,
@@ -846,7 +846,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                           int.parse(dwsmprovider.selectedSchoolResult!),
                           session.stateId,
                           _cameraHelper.base64Image!,
-                          "2025-2026",
+                          "2026-2027",
                           remarkController.text,
                           CurrentLocation.latitude!.toStringAsFixed(6),
                           CurrentLocation.longitude!.toStringAsFixed(6),

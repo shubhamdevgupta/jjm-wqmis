@@ -1,4 +1,4 @@
-package com.example.jjm_wqmis
+package com.ddws.jjm_wqmis
 
 import android.Manifest
 import android.content.Intent
