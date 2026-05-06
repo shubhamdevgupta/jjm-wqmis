@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'time_address_widget.dart';
 
-class EsrWaterWidget extends StatelessWidget {
-
+class EsrWaterWidget extends StatefulWidget {
   final Masterprovider masterProvider;
   final String? sourceId;
 
@@ -21,8 +20,12 @@ class EsrWaterWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  State<EsrWaterWidget> createState() => _EsrWaterWidgetState();
+}
 
+class _EsrWaterWidgetState extends State<EsrWaterWidget> {
+  @override
+  Widget build(BuildContext context) {
     if (sourceId != "6" || masterProvider.selectedScheme!.isEmpty ?? true) {
       return const SizedBox();
     }
@@ -44,23 +47,22 @@ class EsrWaterWidget extends StatelessWidget {
             masterProvider.baseStatus == 0
                 ? AppTextWidgets.errorText(masterProvider.errorMsg)
                 : CustomDropdown(
-              title: "Select ESR/GSR *",
-              value: masterProvider.selectedWaterSource,
-              items: masterProvider.waterSource.map((waterSource) {
-                return DropdownMenuItem<String>(
-                  value: waterSource.locationId,
-                  child: Text(
-                    waterSource.locationName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    title: "Select ESR/GSR *",
+                    value: masterProvider.selectedWaterSource,
+                    items: masterProvider.waterSource.map((waterSource) {
+                      return DropdownMenuItem<String>(
+                        value: waterSource.locationId,
+                        child: Text(
+                          waterSource.locationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      masterProvider.setSelectedWaterSourceInformation(value);
+                    },
                   ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                masterProvider
-                    .setSelectedWaterSourceInformation(value);
-              },
-            ),
             const SizedBox(
               height: 10,
             ),
@@ -88,7 +90,8 @@ class EsrWaterWidget extends StatelessWidget {
                                         )),
                               );
                             } else {
-                              ToastHelper.showToastMessage(masterProvider.errorMsg);
+                              ToastHelper.showToastMessage(
+                                  masterProvider.errorMsg);
                             }
                           },
                           style: AppStyles.buttonStylePrimary(),
@@ -101,7 +104,6 @@ class EsrWaterWidget extends StatelessWidget {
                     )
                   ],
                 )),
-
           ],
         ),
       ),

@@ -37,6 +37,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
           Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchWatersourcefilterList(session.regId);
       sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
+
+      print("--->$sampleCounts");
     });
   }
 

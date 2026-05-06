@@ -190,7 +190,7 @@ class Ftkprovider extends ChangeNotifier {
     return {
       // These keys MUST match wtsFilterList's source.id values
       "2": response.totalSourceScheme,
-      "6": response.totalStorageStructure,
+      "6": 2,
       "3": response.totalHhScAwc,
       "4": response.totalHandpumpsOtherPrivateSource,
     };
