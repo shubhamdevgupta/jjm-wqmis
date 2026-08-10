@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'time_address_widget.dart';
 
-class EsrWaterWidget extends StatelessWidget {
-
+class EsrWaterWidget extends StatefulWidget {
   final Masterprovider masterProvider;
   final String? sourceId;
 
@@ -21,20 +20,26 @@ class EsrWaterWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  State<EsrWaterWidget> createState() => _EsrWaterWidgetState();
+}
 
-    if (sourceId != "6" || masterProvider.selectedScheme!.isEmpty ?? true) {
+class _EsrWaterWidgetState extends State<EsrWaterWidget> {
+  @override
+  Widget build(BuildContext context) {
+    // Access constructor values through widget.
+    final Masterprovider masterProvider = widget.masterProvider;
+    final String? sourceId = widget.sourceId;
+
+    if (sourceId != "6") {
       return const SizedBox();
     }
 
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            12), // Slightly increased border radius for a smooth look
+        borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.all(5),
-      // Margin to ensure spacing around the card
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -42,66 +47,68 @@ class EsrWaterWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             masterProvider.baseStatus == 0
-                ? AppTextWidgets.errorText(masterProvider.errorMsg)
+                ? AppTextWidgets.errorText(
+                    masterProvider.errorMsg,
+                  )
                 : CustomDropdown(
-              title: "Select ESR/GSR *",
-              value: masterProvider.selectedWaterSource,
-              items: masterProvider.waterSource.map((waterSource) {
-                return DropdownMenuItem<String>(
-                  value: waterSource.locationId,
-                  child: Text(
-                    waterSource.locationName,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    title: "Select ESR/GSR *",
+                    value: masterProvider.selectedWaterSource,
+                    items: masterProvider.waterSource.map((waterSource) {
+                      return DropdownMenuItem<String>(
+                        value: waterSource.locationId,
+                        child: Text(
+                          waterSource.locationName,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      masterProvider.setSelectedWaterSourceInformation(value);
+                    },
                   ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                masterProvider
-                    .setSelectedWaterSourceInformation(value);
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Visibility(
-                visible: masterProvider.selectedWaterSource != "",
-                child: Column(
-                  children: [
-                    TimeAddressWidget(masterProvider: masterProvider),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (masterProvider.validateEsrWaterFields()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ChangeNotifierProvider.value(
-                                          value: masterProvider,
-                                          child: const FtkParameterListScreen(),
-                                        )),
-                              );
-                            } else {
-                              ToastHelper.showToastMessage(masterProvider.errorMsg);
-                            }
-                          },
-                          style: AppStyles.buttonStylePrimary(),
-                          child: const Text(
-                            'Next',
-                            style: AppStyles.textStyle,
-                          ),
+              visible: masterProvider.selectedWaterSource != "",
+              child: Column(
+                children: [
+                  TimeAddressWidget(
+                    masterProvider: masterProvider,
+                  ),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (masterProvider.validateEsrWaterFields()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                  value: masterProvider,
+                                  child: const FtkParameterListScreen(),
+                                ),
+                              ),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(
+                              masterProvider.errorMsg,
+                            );
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
                         ),
                       ),
-                    )
-                  ],
-                )),
-
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
