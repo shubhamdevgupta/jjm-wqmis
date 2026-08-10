@@ -26,18 +26,20 @@ class EsrWaterWidget extends StatefulWidget {
 class _EsrWaterWidgetState extends State<EsrWaterWidget> {
   @override
   Widget build(BuildContext context) {
-    if (sourceId != "6" || masterProvider.selectedScheme!.isEmpty ?? true) {
+    // Access constructor values through widget.
+    final Masterprovider masterProvider = widget.masterProvider;
+    final String? sourceId = widget.sourceId;
+
+    if (sourceId != "6") {
       return const SizedBox();
     }
 
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            12), // Slightly increased border radius for a smooth look
+        borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.all(5),
-      // Margin to ensure spacing around the card
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -45,7 +47,9 @@ class _EsrWaterWidgetState extends State<EsrWaterWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             masterProvider.baseStatus == 0
-                ? AppTextWidgets.errorText(masterProvider.errorMsg)
+                ? AppTextWidgets.errorText(
+                    masterProvider.errorMsg,
+                  )
                 : CustomDropdown(
                     title: "Select ESR/GSR *",
                     value: masterProvider.selectedWaterSource,
@@ -63,47 +67,48 @@ class _EsrWaterWidgetState extends State<EsrWaterWidget> {
                       masterProvider.setSelectedWaterSourceInformation(value);
                     },
                   ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Visibility(
-                visible: masterProvider.selectedWaterSource != "",
-                child: Column(
-                  children: [
-                    TimeAddressWidget(masterProvider: masterProvider),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (masterProvider.validateEsrWaterFields()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ChangeNotifierProvider.value(
-                                          value: masterProvider,
-                                          child: const FtkParameterListScreen(),
-                                        )),
-                              );
-                            } else {
-                              ToastHelper.showToastMessage(
-                                  masterProvider.errorMsg);
-                            }
-                          },
-                          style: AppStyles.buttonStylePrimary(),
-                          child: const Text(
-                            'Next',
-                            style: AppStyles.textStyle,
-                          ),
+              visible: masterProvider.selectedWaterSource != "",
+              child: Column(
+                children: [
+                  TimeAddressWidget(
+                    masterProvider: masterProvider,
+                  ),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (masterProvider.validateEsrWaterFields()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChangeNotifierProvider.value(
+                                  value: masterProvider,
+                                  child: const FtkParameterListScreen(),
+                                ),
+                              ),
+                            );
+                          } else {
+                            ToastHelper.showToastMessage(
+                              masterProvider.errorMsg,
+                            );
+                          }
+                        },
+                        style: AppStyles.buttonStylePrimary(),
+                        child: const Text(
+                          'Next',
+                          style: AppStyles.textStyle,
                         ),
                       ),
-                    )
-                  ],
-                )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

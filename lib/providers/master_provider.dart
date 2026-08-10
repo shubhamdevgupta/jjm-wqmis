@@ -803,7 +803,7 @@ class Masterprovider extends ChangeNotifier {
     notifyListeners(); // Important if UI is bound to the controller values
   }
 
-  void selectRadioOption(int value) {
+  void selectRadioOption(int? value) {
     // Handle WTP Inlet/Outlet (values 0 and 1 when selectedWtsfilter == "5")
     if (selectedWtsfilter == "5" && (value == 0 || value == 1)) {
       clearAddresRemarks();
@@ -894,14 +894,12 @@ class Masterprovider extends ChangeNotifier {
   }
 
   bool validateSourceofScheme() {
-    if (selectedScheme == null ||
-        selectedScheme!.isEmpty) {
+    if (selectedScheme == null || selectedScheme!.isEmpty) {
       errorMsg = "Scheme is empty or invalid.";
       return false;
     }
 
-    if (selectedWaterSource == "" ||
-        selectedWaterSource!.isEmpty) {
+    if (selectedWaterSource == "" || selectedWaterSource!.isEmpty) {
       errorMsg = "Water Source is empty or invalid";
       return false;
     }
@@ -914,23 +912,19 @@ class Masterprovider extends ChangeNotifier {
   }
 
   bool validateWtpWaterFields() {
-    if (selectedScheme == null ||
-        selectedScheme!.isEmpty) {
+    if (selectedScheme == null || selectedScheme!.isEmpty) {
       errorMsg = "Scheme is empty or invalid.";
       return false;
     }
 
-    if (selectedWtp == null ||
-        selectedWtp!.isEmpty) {
-      errorMsg =
-          "Water Treatment Plant (WTP) is empty or invalid";
+    if (selectedWtp == null || selectedWtp!.isEmpty) {
+      errorMsg = "Water Treatment Plant (WTP) is empty or invalid";
       return false;
     }
 
     // Only validate water source if "Inlet of WTP" is selected
     if (selectedSubSource == 0 &&
-        (selectedWaterSource == null ||
-            selectedWaterSource!.isEmpty)) {
+        (selectedWaterSource == null || selectedWaterSource!.isEmpty)) {
       errorMsg = "Water Source for Inlet is empty or invalid";
       return false;
     }
@@ -943,14 +937,12 @@ class Masterprovider extends ChangeNotifier {
   }
 
   bool validateEsrWaterFields() {
-    if (selectedScheme == null ||
-        selectedScheme!.isEmpty) {
+    if (selectedScheme == null || selectedScheme!.isEmpty) {
       errorMsg = "Scheme is empty or invalid.";
       return false;
     }
 
-    if (selectedWaterSource == null ||
-        selectedWaterSource!.isEmpty) {
+    if (selectedWaterSource == null || selectedWaterSource!.isEmpty) {
       errorMsg = "ESR/GSR is empty or invalid.";
       return false;
     }
@@ -963,8 +955,7 @@ class Masterprovider extends ChangeNotifier {
   }
 
   bool validateHouseholdWaterFields() {
-    if (selectedScheme == '' ||
-        selectedScheme!.isEmpty) {
+    if (selectedScheme == '' || selectedScheme!.isEmpty) {
       errorMsg = "Scheme is empty or invalid.";
       return false;
     }
@@ -982,8 +973,7 @@ class Masterprovider extends ChangeNotifier {
     }
 
     if (selectedHousehold == 4) {
-      if (selectedWaterSource == null ||
-          selectedWaterSource!.isEmpty) {
+      if (selectedWaterSource == null || selectedWaterSource!.isEmpty) {
         errorMsg = "School / AWC is empty or invalid.";
         return false;
       }
@@ -998,9 +988,8 @@ class Masterprovider extends ChangeNotifier {
   }
 
   bool validateHandpumpWaterFields() {
-    if (selectedScheme == null ||
-        selectedScheme!.isEmpty) {
-     errorMsg = "Scheme is empty or invalid.";
+    if (selectedScheme == null || selectedScheme!.isEmpty) {
+      errorMsg = "Scheme is empty or invalid.";
       return false;
     }
 
@@ -1010,8 +999,7 @@ class Masterprovider extends ChangeNotifier {
     }
 
     if (selectedHandpumpPrivate == 7) {
-      if (selectedWaterSource == null ||
-          selectedWaterSource!.isEmpty) {
+      if (selectedWaterSource == null || selectedWaterSource!.isEmpty) {
         errorMsg = "Govt. handpump is empty or invalid.";
         return false;
       }
