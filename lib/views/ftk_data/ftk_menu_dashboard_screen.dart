@@ -201,9 +201,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                                   ? false
                                                   : count == 0;
 
-                                          final bool showCount =
-                                              !(isHouseholdAwcSource &&
-                                                  count == 0);
+                                          final bool showCount = count > 0;
 
                                           return buildSampleCard(
                                             title: source.sourceType,
