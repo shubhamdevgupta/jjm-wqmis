@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.16+16
+version: 1.1.18+18
 
 environment:
   sdk: ^3.5.4
@@ -55,6 +55,7 @@ dependencies:
   firebase_analytics: ^10.10.0
   flutter_native_splash: ^2.4.6
   firebase_performance: ^0.9.4+7
+  shorebird_code_push: ^2.0.7
 
 flutter_native_splash:
   color: "#ffffff"
@@ -81,6 +82,7 @@ flutter:
 
   assets:
     - assets/icons/
+    - shorebird.yaml
 
   fonts:
     - family: OpenSans

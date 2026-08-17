@@ -36,7 +36,8 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       final masterProvider =
           Provider.of<Masterprovider>(context, listen: false);
       await masterProvider.fetchWatersourcefilterList(session.regId);
-      sampleCounts = Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
+      sampleCounts =
+          Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
 
       print("--->$sampleCounts");
     });
@@ -167,12 +168,11 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                 ),
                                 sampleCounts == null
                                     ? LoaderUtils.conditionalLoader(
-                                        isLoading: sampleCounts == null)
+                                        isLoading: sampleCounts == null,
+                                      )
                                     : Column(
                                         children: masterProvider.wtsFilterList
-                                            .where((source) =>
-                                                source.id !=
-                                                "5") // Exclude ID 5
+                                            .where((source) => source.id != "5")
                                             .map((source) {
                                           final colorIndex = masterProvider
                                                   .wtsFilterList
@@ -185,10 +185,32 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                           final count =
                                               sampleCounts![source.id] ?? 0;
 
+                                          final String sourceType = source
+                                              .sourceType
+                                              .trim()
+                                              .toLowerCase();
+                                          final bool isHouseholdAwcSource =
+                                              source.id == "3" &&
+                                                  (sourceType.contains(
+                                                          "household") ||
+                                                      sourceType
+                                                          .contains("awc"));
+
+                                          final bool isDisabled =
+                                              isHouseholdAwcSource
+                                                  ? false
+                                                  : count == 0;
+
+                                          final bool showCount =
+                                              !(isHouseholdAwcSource &&
+                                                  count == 0);
+
                                           return buildSampleCard(
                                             title: source.sourceType,
                                             color: cardColor,
                                             count: count.toString(),
+                                            showCount: showCount,
+                                            isDisabled: isDisabled,
                                             onTap: (count) {
                                               if (count.isNotEmpty) {
                                                 masterProvider
@@ -298,9 +320,9 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
     required Function(String count) onTap,
     required String count,
     required Color color,
+    required bool isDisabled,
+    required bool showCount,
   }) {
-    final bool isDisabled = count == "0";
-
     Widget cardContent = Opacity(
       opacity: isDisabled ? 0.7 : 1.0,
       child: GestureDetector(
@@ -310,7 +332,10 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: color.withOpacity(0.5), width: 1.2),
+            border: Border.all(
+              color: color.withOpacity(0.5),
+              width: 1.2,
+            ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -337,7 +362,9 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                       height: 22,
                     ),
                   ),
+
                   const SizedBox(width: 8),
+
                   Expanded(
                     child: Text(
                       title,
@@ -348,14 +375,17 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                       ),
                     ),
                   ),
-                  Text(
-                    count,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+
+                  // Hide 0 for Household/AWC card
+                  if (showCount)
+                    Text(
+                      count,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -363,15 +393,23 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
                   onPressed: isDisabled ? null : () => onTap(count),
-                  icon: const Icon(Icons.add, size: 18, color: Colors.white),
+                  icon: const Icon(
+                    Icons.add,
+                    size: 18,
+                    color: Colors.white,
+                  ),
                   label: const Text(
                     "Add Sample",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                   style: TextButton.styleFrom(
                     backgroundColor: color,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     minimumSize: const Size(25, 40),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
@@ -380,7 +418,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
