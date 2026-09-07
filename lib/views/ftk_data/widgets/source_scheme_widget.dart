@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
+import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
@@ -24,6 +25,8 @@ class SourceOfSchemeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final testingProvider = context.read<TestingDateTimeProvider>();
+
     return Column(
       children: [
         Visibility(
@@ -59,6 +62,9 @@ class SourceOfSchemeWidget extends StatelessWidget {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.selectRadioOption(value!);
+                          testingProvider.setSourceType(
+                            WaterTestingSourceType.groundwater,
+                          );
                         },
                       ),
                       const Text(
@@ -76,6 +82,9 @@ class SourceOfSchemeWidget extends StatelessWidget {
                         groupValue: masterProvider.selectedSubSource,
                         onChanged: (value) {
                           masterProvider.selectRadioOption(value!);
+                          testingProvider.setSourceType(
+                            WaterTestingSourceType.surfaceWater,
+                          );
                         },
                       ),
                       const Text(

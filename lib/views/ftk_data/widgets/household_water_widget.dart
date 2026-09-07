@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
+import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_textfield.dart';
@@ -25,6 +26,8 @@ class HouseholdWaterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final testingProvider = context.read<TestingDateTimeProvider>();
+
     if (sourceId != "3") {
       return const SizedBox();
     }
@@ -135,7 +138,7 @@ class HouseholdWaterWidget extends StatelessWidget {
           height: 10,
         ),
         Visibility(
-          visible: sourceId=="3" && masterProvider.selectedScheme!=null,
+          visible: sourceId == "3" && masterProvider.selectedScheme != null,
           child: Card(
             elevation: 5, // Increased elevation for a more modern shadow effect
             shape: RoundedRectangleBorder(
@@ -159,6 +162,9 @@ class HouseholdWaterWidget extends StatelessWidget {
                         onChanged: (value) {
                           masterProvider.householdController.clear();
                           masterProvider.selectRadioOption(value!);
+                          testingProvider.setSourceType(
+                            WaterTestingSourceType.household,
+                          );
                         },
                       ),
                       InkWell(
@@ -177,6 +183,9 @@ class HouseholdWaterWidget extends StatelessWidget {
                         groupValue: masterProvider.selectedHousehold,
                         onChanged: (value) async {
                           masterProvider.selectRadioOption(value!);
+                          testingProvider.setSourceType(
+                            WaterTestingSourceType.anganwadi,
+                          );
                         },
                       ),
                       InkWell(

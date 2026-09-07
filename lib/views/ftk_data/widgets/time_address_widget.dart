@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
-import 'package:jjm_wqmis/utils/custom_screen/custom_date_time_picker.dart';
+import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
+import 'package:jjm_wqmis/views/ftk_data/widgets/testing_date_time_picker.dart';
+import 'package:provider/provider.dart';
 
 class TimeAddressWidget extends StatelessWidget {
-
   final Masterprovider masterProvider;
 
   const TimeAddressWidget({
@@ -13,48 +14,95 @@ class TimeAddressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<TestingDateTimeProvider>(
+      builder: (
+        context,
+        testingProvider,
+        child,
+      ) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ====================================================
+            // SAMPLE COLLECTION
+            // ====================================================
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+            TestingDateTimePicker(
+              title: "Date & Time of Sample Collection *",
 
-        CustomDateTimePicker(
-          textTitle: "Date & Time of Sample Collection *",
-          onDateTimeSelected: (value) {
-            masterProvider.setSelectedDateTime(value);
-          },
-        ),
+              // SAME WINDOW
+              firstDate: testingProvider.windowStart,
+              lastDate: testingProvider.windowEnd,
 
-        const SizedBox(height: 10),
+              selectedDateTime: testingProvider.collectionDateTime,
 
-        CustomDateTimePicker(
-          textTitle: "Date & Time of Sample tested *",
-          onDateTimeSelected: (value) {
-            masterProvider.setSelectedDateTime(value);
-          },
-        ),
+              onChanged: (value) {
+                testingProvider.setCollectionDateTime(
+                  value,
+                );
+              },
+            ),
 
-        const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-        TextFormField(
-          controller: masterProvider.addressController,
-          decoration: const InputDecoration(
-            hintText: "Enter Address",
-            border: OutlineInputBorder(),
-          ),
-        ),
+            // ====================================================
+            // SAMPLE TESTED
+            // ====================================================
 
-        const SizedBox(height: 10),
+            TestingDateTimePicker(
+              title: "Date & Time of Sample Tested *",
 
-        TextFormField(
-          controller: masterProvider.ftkRemarkController,
-          maxLines: 2,
-          decoration: const InputDecoration(
-            hintText: "Enter remarks",
-            border: OutlineInputBorder(),
-          ),
-        ),
-      ],
+              // IMPORTANT:
+              // Same testing window as collection.
+              firstDate: testingProvider.windowStart,
+              lastDate: testingProvider.windowEnd,
+
+              selectedDateTime: testingProvider.testedDateTime,
+
+              // Only the TIME has an additional restriction.
+              minimumDateTime: testingProvider.minimumTestedDateTime,
+
+              // User must select collection first.
+              enabled: testingProvider.collectionDateTime != null,
+
+              onChanged: (value) {
+                testingProvider.setTestedDateTime(
+                  value,
+                );
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            // ====================================================
+            // ADDRESS
+            // ====================================================
+
+            TextFormField(
+              controller: masterProvider.addressController,
+              decoration: const InputDecoration(
+                hintText: "Enter Address",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // ====================================================
+            // REMARKS
+            // ====================================================
+
+            TextFormField(
+              controller: masterProvider.ftkRemarkController,
+              maxLines: 2,
+              decoration: const InputDecoration(
+                hintText: "Enter remarks",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
