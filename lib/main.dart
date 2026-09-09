@@ -9,6 +9,7 @@ import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/providers/parameter_provider.dart';
 import 'package:jjm_wqmis/providers/sample_list_provider.dart';
 import 'package:jjm_wqmis/providers/sample_submit_provider.dart';
+import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
 import 'package:jjm_wqmis/providers/update_provider.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
 import 'package:jjm_wqmis/utils/AppUtil.dart';
@@ -42,6 +43,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => Samplelistprovider()),
         ChangeNotifierProvider(create: (_) => DwsmProvider()),
         ChangeNotifierProvider(create: (_) => Ftkprovider()),
+        ChangeNotifierProvider(create: (_) => TestingDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => UpdateViewModel()),
       ],
       child: const MyApp(),

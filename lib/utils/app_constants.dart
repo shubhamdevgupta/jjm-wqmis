@@ -99,6 +99,10 @@ class AppConstants {
 
 
   static const String navigateToftkSampleInfoScreen = '/ftksampleinfoScreen';
+  static const String navigateToftkSourceofScheme = '/sourceOfScheme';
+  static const String navigateToftkStorageESR = '/storageEsr';
+  static const String navigateToftkHouseHold = '/househould';
+  static const String navigateToftkHandpump = '/handpump';
 
   static const String selectedTest = 'Selected Test';
 

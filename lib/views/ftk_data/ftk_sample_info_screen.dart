@@ -7,11 +7,7 @@ import 'package:jjm_wqmis/utils/custom_screen/custom_dropdown.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/show_error_msg.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/esr_water_widget.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/handpump_water_widget.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/household_water_widget.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/scheme_dropdown_widget.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/source_scheme_widget.dart';
+import 'package:jjm_wqmis/views/ftk_data/screens/scheme_dropdown_widget.dart';
 import 'package:provider/provider.dart';
 
 class ftkSampleInformationScreen extends StatefulWidget {
@@ -274,27 +270,27 @@ class _ftkSampleinformationscreen extends State<ftkSampleInformationScreen> {
               regId: session.regId,
             ),
 
-          SourceOfSchemeWidget(
+          /*   SourceOfSchemeWidget(
+            masterProvider: masterProvider,
+            sourceId: sourceId,
+            session: session,
+          ),*/
+
+          /*   EsrWaterWidget(
+            masterProvider: masterProvider,
+            sourceId: sourceId,
+          ),
+*/
+          /*  HouseholdWaterWidget(
             masterProvider: masterProvider,
             sourceId: sourceId,
             session: session,
           ),
-
-          EsrWaterWidget(
+*/
+          /*   HandpumpWaterWidget(
             masterProvider: masterProvider,
             sourceId: sourceId,
-          ),
-
-          HouseholdWaterWidget(
-            masterProvider: masterProvider,
-            sourceId: sourceId,
-            session: session,
-          ),
-
-          HandpumpWaterWidget(
-            masterProvider: masterProvider,
-            sourceId: sourceId,
-          ),
+          ),*/
         ],
       ),
     );

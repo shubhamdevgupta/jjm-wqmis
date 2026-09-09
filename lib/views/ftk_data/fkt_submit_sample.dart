@@ -82,7 +82,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
                 Navigator.pop(context);
               } else {
                 Navigator.pushReplacementNamed(
-                    context, AppConstants.navigateToftkSampleInfoScreen);
+                    context, AppConstants.navigateToFtkSampleScreen);
               }
             },
           ),
