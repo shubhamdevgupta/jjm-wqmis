@@ -6,6 +6,7 @@ import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
+import 'package:jjm_wqmis/views/ftk_data/screens/handpump_water_widget.dart';
 import 'package:provider/provider.dart';
 
 class Ftkmenudashboardscreen extends StatefulWidget {
@@ -214,15 +215,44 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                                 masterProvider
                                                     .setSelectedWaterSourcefilter(
                                                         source.id);
-                                                Navigator.pushNamed(
-                                                  context,
-                                                  AppConstants
-                                                      .navigateToftkSampleInfoScreen,
-                                                  arguments: {
-                                                    'sourceId': source.id,
-                                                    'sourceType':
-                                                        source.sourceType,
-                                                  },
+
+                                                masterProvider
+                                                    .setSelectedVillageOnly(
+                                                        session.villageId
+                                                            .toString());
+                                                masterProvider
+                                                    .setSelectedStateOnly(
+                                                        session.stateId
+                                                            .toString());
+                                                masterProvider
+                                                    .setSelectedHabitation('0');
+                                                masterProvider.fetchHabitations(
+                                                    session.stateId.toString(),
+                                                    session.districtId
+                                                        .toString(),
+                                                    session.blockId.toString(),
+                                                    session.panchayatId
+                                                        .toString(),
+                                                    session.villageId
+                                                        .toString(),
+                                                    session.regId);
+
+                                                masterProvider.fetchSchemes(
+                                                    session.stateId.toString(),
+                                                    session.districtId
+                                                        .toString(),
+                                                    session.villageId
+                                                        .toString(),
+                                                    masterProvider
+                                                        .selectedHabitation!,
+                                                    source.id,
+                                                    session.regId);
+
+                                                _navigateToWaterSourceScreen(
+                                                  masterProvider:
+                                                      masterProvider,
+                                                  sourceId: source.id,
+                                                  sourceType: source.sourceType,
                                                 );
                                               }
                                             },
@@ -262,6 +292,76 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
 
   Widget _arrow() {
     return Icon(Icons.arrow_forward_ios, size: 10, color: Colors.grey[500]);
+  }
+
+  void _navigateToWaterSourceScreen({
+    required Masterprovider masterProvider,
+    required String sourceId,
+    required String sourceType,
+  }) {
+    switch (sourceId) {
+      // ============================================================
+      // 2 = Sources of Schemes (Raw Water)
+      // ============================================================
+      case "2":
+        Navigator.pushNamed(
+          context,
+          AppConstants.navigateToftkSourceofScheme,
+          arguments: {
+            'sourceId': sourceId,
+            'sourceType': sourceType,
+          },
+        );
+        break;
+
+      // ============================================================
+      // 6 = Storage Structure (ESR/GSR)
+      // ============================================================
+      case "6":
+        Navigator.pushNamed(
+          context,
+          AppConstants.navigateToftkStorageESR,
+          arguments: {
+            'sourceId': sourceId,
+            'sourceType': sourceType,
+          },
+        );
+        break;
+
+      // ============================================================
+      // 3 = Households / School / AWCs
+      // ============================================================
+      case "3":
+        Navigator.pushNamed(
+          context,
+          AppConstants.navigateToftkHouseHold,
+          arguments: {
+            'sourceId': sourceId,
+            'sourceType': sourceType,
+          },
+        );
+        break;
+
+      // ============================================================
+      // 4 = Handpumps and other private sources
+      // ============================================================
+      case "4":
+        Navigator.pushNamed(
+          context,
+          AppConstants.navigateToftkHandpump,
+          arguments: {
+            'sourceId': sourceId,
+            'sourceType': sourceType,
+          },
+        );
+        break;
+
+      default:
+        debugPrint(
+          "No FTK screen found for sourceId: $sourceId",
+        );
+        break;
+    }
   }
 
   Widget buildLocationTile({

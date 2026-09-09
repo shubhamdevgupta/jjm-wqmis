@@ -5,6 +5,8 @@ enum WaterTestingSourceType {
   surfaceWater,
   household,
   anganwadi,
+  storage,
+  handpump,
 }
 
 class TestingDateTimeProvider extends ChangeNotifier {
@@ -12,25 +14,9 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // SOURCE TYPE
   // ============================================================
 
-  WaterTestingSourceType _sourceType =
-      WaterTestingSourceType.surfaceWater;
+  WaterTestingSourceType _sourceType = WaterTestingSourceType.surfaceWater;
 
   WaterTestingSourceType get sourceType => _sourceType;
-
-  void setSourceType(WaterTestingSourceType type) {
-    if (_sourceType == type) {
-      return;
-    }
-
-    _sourceType = type;
-    print("updated source type is $sourceType");
-    // When source changes, previously selected dates may
-    // belong to a different testing window.
-    _collectionDateTime = null;
-    _testedDateTime = null;
-
-    notifyListeners();
-  }
 
   // ============================================================
   // SELECTED DATE/TIME
@@ -42,6 +28,61 @@ class TestingDateTimeProvider extends ChangeNotifier {
   DateTime? get collectionDateTime => _collectionDateTime;
 
   DateTime? get testedDateTime => _testedDateTime;
+
+  // ============================================================
+  // SOURCE TYPE
+  // ============================================================
+
+  void setSourceType(WaterTestingSourceType type) {
+    if (_sourceType == type) {
+      return;
+    }
+
+    _sourceType = type;
+
+    print("updated source type is $sourceType");
+
+    // ----------------------------------------------------------
+    // STORAGE / HANDPUMP
+    // ----------------------------------------------------------
+    //
+    // Both Collection and Tested Date/Time are automatically
+    // fixed to the current DateTime.
+    //
+    // User cannot change them.
+    //
+    // No 5-minute gap is required.
+    // ----------------------------------------------------------
+
+    if (type == WaterTestingSourceType.storage ||
+        type == WaterTestingSourceType.handpump) {
+      final now = DateTime.now();
+
+      _collectionDateTime = now;
+      _testedDateTime = now;
+    } else {
+      // --------------------------------------------------------
+      // NORMAL SOURCE
+      // --------------------------------------------------------
+      //
+      // Clear old values because the testing window may change.
+      // --------------------------------------------------------
+
+      _collectionDateTime = null;
+      _testedDateTime = null;
+    }
+
+    notifyListeners();
+  }
+
+  // ============================================================
+  // IS FIXED DATE/TIME SOURCE?
+  // ============================================================
+
+  bool get isFixedDateTimeSource {
+    return _sourceType == WaterTestingSourceType.storage ||
+        _sourceType == WaterTestingSourceType.handpump;
+  }
 
   // ============================================================
   // TODAY
@@ -71,6 +112,14 @@ class TestingDateTimeProvider extends ChangeNotifier {
   }
 
   // ============================================================
+  // CURRENT DATE/TIME
+  // ============================================================
+
+  DateTime get currentDateTime {
+    return DateTime.now();
+  }
+
+  // ============================================================
   // TESTING WINDOW START
   // ============================================================
 
@@ -78,16 +127,14 @@ class TestingDateTimeProvider extends ChangeNotifier {
     final now = DateTime.now();
 
     switch (_sourceType) {
-    // ----------------------------------------------------------
-    // GROUNDWATER
-    //
-    // H1 = April - September
-    // H2 = October - March
-    // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // GROUNDWATER
+      //
+      // H1 = April - September
+      // H2 = October - March
+      // --------------------------------------------------------
 
       case WaterTestingSourceType.groundwater:
-
-      // H1
         if (now.month >= 4 && now.month <= 9) {
           return DateTime(
             now.year,
@@ -96,7 +143,6 @@ class TestingDateTimeProvider extends ChangeNotifier {
           );
         }
 
-        // H2: October - December
         if (now.month >= 10) {
           return DateTime(
             now.year,
@@ -105,25 +151,22 @@ class TestingDateTimeProvider extends ChangeNotifier {
           );
         }
 
-        // H2: January - March
         return DateTime(
           now.year - 1,
           10,
           1,
         );
 
-    // ----------------------------------------------------------
-    // SURFACE WATER
-    //
-    // Q1 = April - June
-    // Q2 = July - September
-    // Q3 = October - December
-    // Q4 = January - March
-    // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // SURFACE WATER
+      //
+      // Q1 = April - June
+      // Q2 = July - September
+      // Q3 = October - December
+      // Q4 = January - March
+      // --------------------------------------------------------
 
       case WaterTestingSourceType.surfaceWater:
-
-      // Q1
         if (now.month >= 4 && now.month <= 6) {
           return DateTime(
             now.year,
@@ -132,7 +175,6 @@ class TestingDateTimeProvider extends ChangeNotifier {
           );
         }
 
-        // Q2
         if (now.month >= 7 && now.month <= 9) {
           return DateTime(
             now.year,
@@ -141,7 +183,6 @@ class TestingDateTimeProvider extends ChangeNotifier {
           );
         }
 
-        // Q3
         if (now.month >= 10 && now.month <= 12) {
           return DateTime(
             now.year,
@@ -150,18 +191,15 @@ class TestingDateTimeProvider extends ChangeNotifier {
           );
         }
 
-        // Q4
         return DateTime(
           now.year,
           1,
           1,
         );
 
-    // ----------------------------------------------------------
-    // HOUSEHOLD
-    //
-    // Current month only
-    // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // HOUSEHOLD
+      // --------------------------------------------------------
 
       case WaterTestingSourceType.household:
         return DateTime(
@@ -170,11 +208,9 @@ class TestingDateTimeProvider extends ChangeNotifier {
           1,
         );
 
-    // ----------------------------------------------------------
-    // ANGANWADI
-    //
-    // Current month only
-    // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // ANGANWADI
+      // --------------------------------------------------------
 
       case WaterTestingSourceType.anganwadi:
         return DateTime(
@@ -182,6 +218,24 @@ class TestingDateTimeProvider extends ChangeNotifier {
           now.month,
           1,
         );
+
+      // --------------------------------------------------------
+      // STORAGE
+      // --------------------------------------------------------
+      //
+      // Calendar is not used.
+      // Return today just to keep the getter valid.
+      // --------------------------------------------------------
+
+      case WaterTestingSourceType.storage:
+        return today;
+
+      // --------------------------------------------------------
+      // HANDPUMP
+      // --------------------------------------------------------
+
+      case WaterTestingSourceType.handpump:
+        return today;
     }
   }
 
@@ -190,13 +244,6 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   DateTime get windowEnd {
-    // IMPORTANT:
-    //
-    // Never allow future dates.
-    //
-    // Therefore the current date/time is always the
-    // maximum selectable value.
-
     return endOfToday;
   }
 
@@ -205,7 +252,11 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   void setCollectionDateTime(DateTime value) {
-    // Validate against current testing window.
+    // Storage / Handpump are fixed.
+    if (isFixedDateTimeSource) {
+      return;
+    }
+
     if (!isCollectionDateTimeValid(value)) {
       return;
     }
@@ -213,7 +264,7 @@ class TestingDateTimeProvider extends ChangeNotifier {
     _collectionDateTime = value;
 
     // Existing tested date must remain at least 5 minutes
-    // after collection.
+    // after collection for normal sources.
     if (_testedDateTime != null) {
       if (_testedDateTime!.isBefore(
         value.add(
@@ -232,6 +283,11 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   void setTestedDateTime(DateTime value) {
+    // Storage / Handpump are fixed.
+    if (isFixedDateTimeSource) {
+      return;
+    }
+
     if (!isTestedDateTimeValid(value)) {
       return;
     }
@@ -246,6 +302,11 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   DateTime? get minimumTestedDateTime {
+    // Storage / Handpump have NO 5-minute restriction.
+    if (isFixedDateTimeSource) {
+      return null;
+    }
+
     if (_collectionDateTime == null) {
       return null;
     }
@@ -260,12 +321,14 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   bool isCollectionDateTimeValid(DateTime value) {
-    // Must be inside active testing window.
+    if (isFixedDateTimeSource) {
+      return false;
+    }
+
     if (value.isBefore(windowStart)) {
       return false;
     }
 
-    // Cannot be future.
     if (value.isAfter(DateTime.now())) {
       return false;
     }
@@ -278,17 +341,18 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   bool isTestedDateTimeValid(DateTime value) {
-    // Must be inside active testing window.
+    if (isFixedDateTimeSource) {
+      return false;
+    }
+
     if (value.isBefore(windowStart)) {
       return false;
     }
 
-    // Cannot be future.
     if (value.isAfter(DateTime.now())) {
       return false;
     }
 
-    // Must be 5 minutes after collection.
     if (minimumTestedDateTime != null &&
         value.isBefore(minimumTestedDateTime!)) {
       return false;
@@ -302,8 +366,17 @@ class TestingDateTimeProvider extends ChangeNotifier {
   // ============================================================
 
   void clearDates() {
-    _collectionDateTime = null;
-    _testedDateTime = null;
+    // For Storage / Handpump we don't clear because their values
+    // are automatically fixed to current DateTime.
+    if (isFixedDateTimeSource) {
+      final now = DateTime.now();
+
+      _collectionDateTime = now;
+      _testedDateTime = now;
+    } else {
+      _collectionDateTime = null;
+      _testedDateTime = null;
+    }
 
     notifyListeners();
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
-import 'package:jjm_wqmis/views/ftk_data/widgets/testing_date_time_picker.dart';
+import 'package:jjm_wqmis/views/ftk_data/screens/testing_date_time_picker.dart';
 import 'package:provider/provider.dart';
 
 class TimeAddressWidget extends StatelessWidget {
@@ -36,6 +36,9 @@ class TimeAddressWidget extends StatelessWidget {
 
               selectedDateTime: testingProvider.collectionDateTime,
 
+              // Storage / Handpump = disabled
+              enabled: !testingProvider.isFixedDateTimeSource,
+
               onChanged: (value) {
                 testingProvider.setCollectionDateTime(
                   value,
@@ -52,18 +55,27 @@ class TimeAddressWidget extends StatelessWidget {
             TestingDateTimePicker(
               title: "Date & Time of Sample Tested *",
 
-              // IMPORTANT:
-              // Same testing window as collection.
               firstDate: testingProvider.windowStart,
               lastDate: testingProvider.windowEnd,
 
               selectedDateTime: testingProvider.testedDateTime,
 
-              // Only the TIME has an additional restriction.
+              // Normal source:
+              // Collection + 5 minutes
+              //
+              // Storage / Handpump:
+              // null = no gap
               minimumDateTime: testingProvider.minimumTestedDateTime,
 
-              // User must select collection first.
-              enabled: testingProvider.collectionDateTime != null,
+              // Normal source:
+              // collection must be selected first
+              //
+              // Storage / Handpump:
+              // automatically enabled visually but
+              // picker itself remains disabled because
+              // isFixedDateTimeSource = true
+              enabled: !testingProvider.isFixedDateTimeSource &&
+                  testingProvider.collectionDateTime != null,
 
               onChanged: (value) {
                 testingProvider.setTestedDateTime(
