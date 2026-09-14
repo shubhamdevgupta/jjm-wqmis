@@ -492,7 +492,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                           child: Padding(
                             padding: const EdgeInsetsGeometry.all(8.0),
                             child: Text(
-                              "v${AppUtil.appVersion},",
+                              "v${AppUtil.appVersion}",
                               style: const TextStyle(color: Colors.blueAccent),
                             ),
                           ),
