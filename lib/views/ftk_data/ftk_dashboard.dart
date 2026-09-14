@@ -32,6 +32,7 @@ class _ftkDashboard extends State<ftkDashboard> {
           .fetchFtkDashboardData(session.regId, session.villageId);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -410,7 +411,8 @@ class _ftkDashboard extends State<ftkDashboard> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           const Text(
-                                            AppConstants.totalSamplesalreadytested,
+                                            AppConstants
+                                                .totalSamplesalreadytested,
                                             style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.white,
@@ -485,11 +487,14 @@ class _ftkDashboard extends State<ftkDashboard> {
                             ),
                           ),
                         ),
-
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: Padding(padding: const EdgeInsetsGeometry.all(8.0),
-                          child: Text("v${AppUtil.appVersion}"),
+                          child: Padding(
+                            padding: const EdgeInsetsGeometry.all(8.0),
+                            child: Text(
+                              "v${AppUtil.appVersion},",
+                              style: const TextStyle(color: Colors.blueAccent),
+                            ),
                           ),
                         )
                       ],
