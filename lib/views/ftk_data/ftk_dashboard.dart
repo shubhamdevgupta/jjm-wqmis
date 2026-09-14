@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/authentication_provider.dart';
 import 'package:jjm_wqmis/providers/ftk_provider.dart';
 import 'package:jjm_wqmis/services/app_reset_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
@@ -482,6 +483,13 @@ class _ftkDashboard extends State<ftkDashboard> {
                                 ],
                               ),
                             ),
+                          ),
+                        ),
+
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(padding: const EdgeInsetsGeometry.all(8.0),
+                          child: Text("v${AppUtil.appVersion}"),
                           ),
                         )
                       ],

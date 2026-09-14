@@ -151,7 +151,9 @@ class _SourceOfSchemeWidgetState extends State<SourceOfSchemeWidget> {
                                         sourceId: sourceId,
                                         regId: session.regId,
                                       ),
-                                    const SizedBox(height: 10,),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
 
                                     Column(
                                       children: [
@@ -350,6 +352,16 @@ class _SourceOfSchemeWidgetState extends State<SourceOfSchemeWidget> {
                                                                 onPressed: () {
                                                                   if (masterProvider
                                                                       .validateSourceofScheme()) {
+                                                                    if (testingProvider.collectionDateTime ==
+                                                                            null ||
+                                                                        testingProvider.testedDateTime ==
+                                                                            null) {
+                                                                      ToastHelper.showSnackBar(
+                                                                          context,
+                                                                          "Please Select Date & Time");
+                                                                      return;
+                                                                    }
+
                                                                     Navigator
                                                                         .push(
                                                                       context,
