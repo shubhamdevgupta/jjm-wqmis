@@ -442,6 +442,15 @@ class _HouseholdWaterWidgetState extends State<HouseholdWaterWidget> {
                                                                 masterProvider
                                                                     .householdController
                                                                     .text;
+                                                            if (testingProvider.collectionDateTime ==
+                                                                null ||
+                                                                testingProvider.testedDateTime ==
+                                                                    null) {
+                                                              ToastHelper.showSnackBar(
+                                                                  context,
+                                                                  "Please Select Date & Time");
+                                                              return;
+                                                            }
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
@@ -582,6 +591,15 @@ class _HouseholdWaterWidgetState extends State<HouseholdWaterWidget> {
                                                                         masterProvider
                                                                             .householdController
                                                                             .text;
+                                                                    if (testingProvider.collectionDateTime ==
+                                                                        null ||
+                                                                        testingProvider.testedDateTime ==
+                                                                            null) {
+                                                                      ToastHelper.showSnackBar(
+                                                                          context,
+                                                                          "Please Select Date & Time");
+                                                                      return;
+                                                                    }
                                                                     Navigator
                                                                         .push(
                                                                       context,
