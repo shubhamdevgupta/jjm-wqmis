@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/providers/ftk_provider.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
+import 'package:jjm_wqmis/providers/testing_date_time_provider.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/device_utils.dart';
@@ -20,6 +21,7 @@ class FtkParameterListScreen extends StatefulWidget {
 
 class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
   late Masterprovider masterProvider;
+  late TestingDateTimeProvider testingDateTimeProvider;
   final session = UserSessionManager();
   final ScrollController _scrollController = ScrollController();
   bool isAtBottom = false;
@@ -38,6 +40,7 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       final ftkProvider = Provider.of<Ftkprovider>(context, listen: false);
       await ftkProvider.fetchParameterList(session.stateId, session.districtId,session.regId);
       masterProvider = Provider.of<Masterprovider>(context, listen: false);
+      testingDateTimeProvider = Provider.of<TestingDateTimeProvider>(context, listen: false);
     });
 
 
@@ -226,12 +229,15 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       ToastHelper.showErrorSnackBar(context, 'Please select at least 1 parameter');
       return;
     }
+
+    print("================ ${testingDateTimeProvider.collectionDateTime}");
+    print("================ ${testingDateTimeProvider.testedDateTime}");
     await ftkProvider.saveFtkData(
       session.loginId,
       session.regId,
       session.roleId,
-      masterProvider.selectedDatetimeSampleCollection,
-      masterProvider.selectedDatetimeSampleTested,
+      testingDateTimeProvider.collectionDateTime.toString(),
+      testingDateTimeProvider.testedDateTime.toString(),
       masterProvider.selectedSubSource,
       parsedSource,
       session.stateId,
