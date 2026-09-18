@@ -11,7 +11,7 @@ import 'package:jjm_wqmis/models/DWSM/school_info_response.dart';
 import 'package:jjm_wqmis/models/Wtp/wtp_lab_response.dart';
 
 
-import 'package:jjm_wqmis/models/LabInchargeResponse/allLab_response.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/all_lab_response.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/parameter_response.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 

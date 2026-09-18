@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:jjm_wqmis/models/login_response.dart';
 import 'package:jjm_wqmis/repository/authentication_repository.dart';
 import 'package:jjm_wqmis/services/local_storage_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/app_constants.dart';
-import 'package:jjm_wqmis/utils/location/current_location.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
-import 'package:jjm_wqmis/utils/location/location_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
@@ -40,6 +39,7 @@ class AuthenticationProvider extends ChangeNotifier {
   bool get isShownPassword => _isShownPassword;
 
   String errorMsg = '';
+
   Future<void> checkLoginStatus() async {
     _isLoggedIn = _localStorage.getBool(AppConstants.prefIsLoggedIn) ?? false;
     notifyListeners();
@@ -64,7 +64,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
     try {
       _loginResponse = await _authRepository.loginUser(
-          phoneNumber, encryPass, txtSalt, appId);
+          phoneNumber, encryPass, txtSalt, appId,AppUtil.appVersion);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
@@ -110,7 +110,6 @@ class AuthenticationProvider extends ChangeNotifier {
         onFailure(errorMsg);
       }
     } catch (e, stackTrace) {
-      print("exception in auth provider--->>>  $e");
       GlobalExceptionHandler.handleException(
         e as Exception,
         stackTrace: stackTrace,

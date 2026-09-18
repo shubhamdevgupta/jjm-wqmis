@@ -4,7 +4,6 @@ import 'package:jjm_wqmis/models/FTK/ftk_data_response.dart';
 import 'package:jjm_wqmis/models/FTK/ftk_parameter_response.dart';
 import 'package:jjm_wqmis/models/FTK/sample_response.dart';
 import 'package:jjm_wqmis/repository/ftk_repository.dart';
-import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 
 class Ftkprovider extends ChangeNotifier {

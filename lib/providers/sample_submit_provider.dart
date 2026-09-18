@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:jjm_wqmis/models/FTK/sample_response.dart';
 import 'package:jjm_wqmis/repository/sample_sub_repo.dart';
-import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 
 class Samplesubprovider extends ChangeNotifier {

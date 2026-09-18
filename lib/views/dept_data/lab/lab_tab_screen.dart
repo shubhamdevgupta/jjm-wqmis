@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/utils/user_session_manager.dart';
 import 'package:jjm_wqmis/views/dept_data/submit_sample_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:jjm_wqmis/models/LabInchargeResponse/allLab_response.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/all_lab_response.dart';
 import 'package:jjm_wqmis/providers/master_provider.dart';
 import 'package:jjm_wqmis/utils/custom_screen/custom_searchable_dropdown.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';

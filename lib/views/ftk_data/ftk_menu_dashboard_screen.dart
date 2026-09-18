@@ -6,7 +6,6 @@ import 'package:jjm_wqmis/utils/app_constants.dart';
 import 'package:jjm_wqmis/utils/app_style.dart';
 import 'package:jjm_wqmis/utils/loader_utils.dart';
 import 'package:jjm_wqmis/utils/user_session_manager.dart';
-import 'package:jjm_wqmis/views/ftk_data/screens/handpump_water_widget.dart';
 import 'package:provider/provider.dart';
 
 class Ftkmenudashboardscreen extends StatefulWidget {
@@ -39,8 +38,6 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
       await masterProvider.fetchWatersourcefilterList(session.regId);
       sampleCounts =
           Provider.of<Ftkprovider>(context, listen: false).getSampleCountsMap();
-
-      print("--->$sampleCounts");
     });
   }
 
@@ -120,7 +117,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.withOpacity(0.1),
+                                        color: Colors.grey.withValues(alpha:0.1),
                                         blurRadius: 6,
                                         offset: const Offset(0, 3),
                                       ),
@@ -373,14 +370,14 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha:0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withValues(alpha:0.2),
             radius: 16,
             child: Icon(icon, size: 16, color: color),
           ),
@@ -431,13 +428,13 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: color.withOpacity(0.5),
+              color: color.withValues(alpha:0.5),
               width: 1.2,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black12.withOpacity(0.05),
+                color: Colors.black12.withValues(alpha:0.05),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
@@ -452,7 +449,7 @@ class _ftkMenuDashboardScreen extends State<Ftkmenudashboardscreen> {
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha:0.1),
                     ),
                     child: Image.asset(
                       'assets/icons/medical-lab.png',

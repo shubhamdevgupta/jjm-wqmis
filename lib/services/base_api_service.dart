@@ -79,8 +79,9 @@ class BaseApiService {
   }
 
   Future<void> _checkConnectivity() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
+    final List<ConnectivityResult> connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult.contains(ConnectivityResult.none) || connectivityResult.isEmpty) {
       throw NetworkException(
           'No internet connection. Please check your connection and try again.');
     }

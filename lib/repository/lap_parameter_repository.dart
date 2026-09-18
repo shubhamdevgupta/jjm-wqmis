@@ -4,7 +4,7 @@ import 'package:jjm_wqmis/models/base_response.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/lab_incharge_response.dart';
 import 'package:jjm_wqmis/models/param_lab_response.dart';
 
-import 'package:jjm_wqmis/models/LabInchargeResponse/allLab_response.dart';
+import 'package:jjm_wqmis/models/LabInchargeResponse/all_lab_response.dart';
 import 'package:jjm_wqmis/models/LabInchargeResponse/parameter_response.dart';
 import 'package:jjm_wqmis/models/Wtp/wtp_lab_response.dart';
 import 'package:jjm_wqmis/services/base_api_service.dart';

@@ -144,6 +144,10 @@ class _ftkDashboard extends State<ftkDashboard> {
                   );
                 },
               ),
+              ListTile(
+                title: Text("v${AppUtil.appVersion}",
+                ),
+              ),
             ],
           ),
         ),
@@ -166,7 +170,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
+                                color: Colors.black.withValues(alpha:0.08),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -278,7 +282,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
+                                    color: Colors.grey.withValues(alpha:0.1),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
@@ -381,7 +385,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.blueAccent.withOpacity(0.2),
+                                      color: Colors.blueAccent.withValues(alpha:0.2),
                                       blurRadius: 8,
                                       offset: const Offset(0, 4),
                                     ),
@@ -392,7 +396,7 @@ class _ftkDashboard extends State<ftkDashboard> {
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withOpacity(0.15),
+                                        color: Colors.white.withValues(alpha:0.15),
                                         shape: BoxShape.circle,
                                         border:
                                             Border.all(color: Colors.white24),
@@ -487,16 +491,6 @@ class _ftkDashboard extends State<ftkDashboard> {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: const EdgeInsetsGeometry.all(8.0),
-                            child: Text(
-                              "v${AppUtil.appVersion}",
-                              style: const TextStyle(color: Colors.blueAccent),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   );
@@ -515,14 +509,14 @@ class _ftkDashboard extends State<ftkDashboard> {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha:0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withValues(alpha:0.2),
             radius: 16,
             child: Icon(icon, size: 16, color: color),
           ),

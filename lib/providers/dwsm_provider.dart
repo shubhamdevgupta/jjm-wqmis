@@ -5,7 +5,6 @@ import 'package:jjm_wqmis/repository/dwsm_repository.dart';
 
 import 'package:jjm_wqmis/models/DWSM/school_info_response.dart';
 import 'package:jjm_wqmis/models/DashboardResponse/dwsm_dashboard_response.dart';
-import 'package:jjm_wqmis/utils/device_utils.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 import 'package:jjm_wqmis/views/dwsm_data/tabschoolaganwadi/school_aganwadi_screen.dart';
 

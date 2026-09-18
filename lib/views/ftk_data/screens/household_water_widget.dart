@@ -442,13 +442,16 @@ class _HouseholdWaterWidgetState extends State<HouseholdWaterWidget> {
                                                                 masterProvider
                                                                     .householdController
                                                                     .text;
-                                                            if (testingProvider.collectionDateTime ==
-                                                                null ||
-                                                                testingProvider.testedDateTime ==
+                                                            if (testingProvider
+                                                                        .collectionDateTime ==
+                                                                    null ||
+                                                                testingProvider
+                                                                        .testedDateTime ==
                                                                     null) {
-                                                              ToastHelper.showSnackBar(
-                                                                  context,
-                                                                  "Please Select Date & Time");
+                                                              ToastHelper
+                                                                  .showSnackBar(
+                                                                      context,
+                                                                      "Please Select Date & Time");
                                                               return;
                                                             }
                                                             Navigator.push(
@@ -592,7 +595,7 @@ class _HouseholdWaterWidgetState extends State<HouseholdWaterWidget> {
                                                                             .householdController
                                                                             .text;
                                                                     if (testingProvider.collectionDateTime ==
-                                                                        null ||
+                                                                            null ||
                                                                         testingProvider.testedDateTime ==
                                                                             null) {
                                                                       ToastHelper.showSnackBar(

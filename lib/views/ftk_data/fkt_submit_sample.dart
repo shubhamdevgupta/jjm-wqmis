@@ -230,8 +230,6 @@ class _FtkParameterListScreenState extends State<FtkParameterListScreen> {
       return;
     }
 
-    print("================ ${testingDateTimeProvider.collectionDateTime}");
-    print("================ ${testingDateTimeProvider.testedDateTime}");
     await ftkProvider.saveFtkData(
       session.loginId,
       session.regId,

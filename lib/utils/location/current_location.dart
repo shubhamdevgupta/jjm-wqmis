@@ -1,4 +1,4 @@
-import 'location_utils.dart';
+import 'package:jjm_wqmis/utils/location/location_utils.dart';
 
 class CurrentLocation {
   static double? _latitude;

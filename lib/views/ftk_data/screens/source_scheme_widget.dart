@@ -30,8 +30,6 @@ class _SourceOfSchemeWidgetState extends State<SourceOfSchemeWidget> {
 
   @override
   void initState() {
-    print("==========$sourceId");
-    print("==========$sourceType");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final args = ModalRoute.of(context)?.settings.arguments;

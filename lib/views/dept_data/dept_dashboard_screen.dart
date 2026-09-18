@@ -32,7 +32,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await session.init();
      await CurrentLocation.refresh();
-      print("------->> ${CurrentLocation.longitude}");
+
       Provider.of<DashboardProvider>(context, listen: false)
           .loadDashboardData(session.roleId, session.regId, session.stateId);
     });
@@ -206,7 +206,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha:0.08),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -319,7 +319,7 @@ class _DashboardscreenState extends State<Dashboardscreen> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha:0.05),
                             blurRadius: 16,
                             offset: const Offset(0, 6),
                           ),
@@ -505,12 +505,12 @@ class _DashboardscreenState extends State<Dashboardscreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: iconColor.withOpacity(0.6), // 🔹 Colored border
+            color: iconColor.withValues(alpha:0.6), // 🔹 Colored border
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha:0.05),
               blurRadius: 10,
               offset: const Offset(0, 6),
             ),
@@ -521,10 +521,10 @@ class _DashboardscreenState extends State<Dashboardscreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha:0.12),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: iconColor.withOpacity(0.6), // 🔹 Colored border
+                  color: iconColor.withValues(alpha:0.6), // 🔹 Colored border
                   width: 1.2,
                 ),
               ),

@@ -1,6 +1,7 @@
-import 'package:flutter/services.dart';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:jjm_wqmis/utils/location/location_dialog.dart';
 
 class LocationUtils {
@@ -72,7 +73,7 @@ class LocationUtils {
 
       // 3️⃣ Fetch location
       final Map<dynamic, dynamic>? location =
-      await _permissionChannel.invokeMethod('getLocation');
+          await _permissionChannel.invokeMethod('getLocation');
 
       if (location == null ||
           location['latitude'] == null ||

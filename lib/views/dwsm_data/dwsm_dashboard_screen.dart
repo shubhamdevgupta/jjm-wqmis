@@ -186,7 +186,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha:0.08),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -301,7 +301,7 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha:0.05),
                             blurRadius: 16,
                             offset: const Offset(0, 6),
                           ),
@@ -517,12 +517,12 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: iconColor.withOpacity(0.6), // 🔹 Colored border
+            color: iconColor.withValues(alpha:0.6), // 🔹 Colored border
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha:0.05),
               blurRadius: 10,
               offset: const Offset(0, 6),
             ),
@@ -533,10 +533,10 @@ class dwsmDashboardScreen extends State<Dwsdashboardscreen> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha:0.12),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: iconColor.withOpacity(0.6), // 🔹 Colored border
+                  color: iconColor.withValues(alpha:0.6), // 🔹 Colored border
                   width: 1.2,
                 ),
               ),

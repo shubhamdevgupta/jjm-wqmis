@@ -396,7 +396,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                       boxShadow: [
                                                         BoxShadow(
                                                           color: Colors.grey
-                                                              .withOpacity(0.3),
+                                                              .withValues(alpha:0.3),
                                                           // Shadow color
                                                           blurRadius: 10,
                                                           // Shadow blur
@@ -517,7 +517,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                   boxShadow: [
                                                     BoxShadow(
                                                       color: Colors.grey
-                                                          .withOpacity(0.3),
+                                                          .withValues(alpha:0.3),
                                                       blurRadius: 10,
                                                       offset:
                                                           const Offset(0, 5),
@@ -619,7 +619,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               fontSize: 14,
                                                               color: Colors
                                                                   .black
-                                                                  .withOpacity(
+                                                                  .withValues(alpha:
                                                                       0.7),
                                                             ),
                                                           ),
@@ -658,7 +658,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                               fontSize: 14,
                                                               color: Colors
                                                                   .black
-                                                                  .withOpacity(
+                                                                  .withValues(alpha:
                                                                       0.7),
                                                             ),
                                                           ),
@@ -984,7 +984,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                 BoxShadow(
                                                                   color: Colors
                                                                       .grey
-                                                                      .withOpacity(
+                                                                      .withValues(alpha:
                                                                           0.3),
                                                                   // Shadow color
                                                                   blurRadius:
@@ -1055,7 +1055,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                             14,
                                                                         color: Colors
                                                                             .black
-                                                                            .withOpacity(0.7),
+                                                                            .withValues(alpha:0.7),
                                                                       ),
                                                                     ),
                                                                   ],
@@ -1092,7 +1092,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                                                                             14,
                                                                         color: Colors
                                                                             .black
-                                                                            .withOpacity(0.7),
+                                                                            .withValues(alpha:0.7),
                                                                       ),
                                                                     ),
                                                                   ],
@@ -1114,7 +1114,7 @@ class _SelectedSampleScreenState extends State<SubmitSampleScreen> {
                             ),
                             if (provider.isLoading)
                               Container(
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha:0.5),
                                 // Background opacity
                                 child: const Center(
                                   child: CircularProgressIndicator(

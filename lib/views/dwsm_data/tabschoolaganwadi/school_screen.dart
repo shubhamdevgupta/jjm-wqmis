@@ -137,7 +137,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                 boxShadow: [
                                                   BoxShadow(
                                                     color: Colors.grey
-                                                        .withOpacity(0.1),
+                                                        .withValues(alpha:0.1),
                                                     blurRadius: 8,
                                                     offset: const Offset(0, 4),
                                                   ),
@@ -258,7 +258,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                                       BoxShadow(
                                                         color: Colors
                                                             .blue.shade100
-                                                            .withOpacity(0.4),
+                                                            .withValues(alpha:0.4),
                                                         blurRadius: 12,
                                                         offset:
                                                             const Offset(0, 4),
@@ -568,7 +568,7 @@ class _SchoolScreen extends State<SchoolScreen> {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: bgColor.withOpacity(0.2),
+        color: bgColor.withValues(alpha:0.2),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: bgColor, size: 18),
@@ -591,7 +591,7 @@ class _SchoolScreen extends State<SchoolScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.05), // Light background tone
+                color: color.withValues(alpha:0.05), // Light background tone
                 borderRadius: BorderRadius.circular(12),
               ),
               child: RichText(
@@ -678,7 +678,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha:0.1),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -712,7 +712,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.blueGrey.withOpacity(0.2),
+                                    color: Colors.blueGrey.withValues(alpha:0.2),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -766,7 +766,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha:0.1),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -805,7 +805,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                                   fontSize: 13,
                                   fontFamily: 'OpenSans',
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black.withOpacity(0.7)),
+                                  color: Colors.black.withValues(alpha:0.7)),
                             ),
                           ],
                         ),
@@ -823,7 +823,7 @@ class _SchoolScreen extends State<SchoolScreen> {
                               style: TextStyle(
                                   fontSize: 13,
                                   fontFamily: 'OpenSans',
-                                  color: Colors.black.withOpacity(0.7)),
+                                  color: Colors.black.withValues(alpha:0.7)),
                             ),
                           ],
                         ),

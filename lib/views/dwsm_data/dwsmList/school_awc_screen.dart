@@ -105,7 +105,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.blue.shade100.withOpacity(0.4),
+                              color: Colors.blue.shade100.withValues(alpha:0.4),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -201,7 +201,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.05), // Light background tone
+                color: color.withValues(alpha:0.05), // Light background tone
                 borderRadius: BorderRadius.circular(12),
               ),
               child: RichText(
@@ -236,7 +236,7 @@ class _SchoolAWCScreenState extends State<SchoolAWCScreen> {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: bgColor.withOpacity(0.2),
+        color: bgColor.withValues(alpha:0.2),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: bgColor, size: 18),

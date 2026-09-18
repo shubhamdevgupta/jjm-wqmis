@@ -19,12 +19,12 @@ class DialogUtils {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: iconColor.withOpacity(0.6), // Match your theme
+                color: iconColor.withValues(alpha: 0.6), // Match your theme
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha:0.05),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -37,10 +37,10 @@ class DialogUtils {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.12),
+                    color: iconColor.withValues(alpha:0.12),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: iconColor.withOpacity(0.6),
+                      color: iconColor.withValues(alpha:0.6),
                       width: 1.2,
                     ),
                   ),

@@ -40,7 +40,6 @@ class TestingDateTimeProvider extends ChangeNotifier {
 
     _sourceType = type;
 
-    print("updated source type is $sourceType");
 
     // ----------------------------------------------------------
     // STORAGE / HANDPUMP

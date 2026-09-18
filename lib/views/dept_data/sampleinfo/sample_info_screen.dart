@@ -502,7 +502,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 masterProvider.istreated=0;
                                 masterProvider.selectRadioOption(value!);
                                 masterProvider.setSelectedSubSource(0);
-                                print("inlet value----${masterProvider.selectedSubSource}");
                               },
                             ),
                             InkWell(
@@ -521,7 +520,6 @@ class _Sampleinformationscreen extends State<Sampleinformationscreen> {
                                 masterProvider.istreated=1;
                                 masterProvider.selectRadioOption(value!);
                                 masterProvider.setSelectedSubSource(1);
-                                print("outlet value----${masterProvider.selectedSubSource}");
                               },
                             ),
                             InkWell(
