@@ -123,7 +123,9 @@ class Ftkprovider extends ChangeNotifier {
           ipAddress,
           sampleTypeOther,
           parameteId,
-          paramSaferange);
+          paramSaferange,
+
+      );
       notifyListeners();
       if (sampleresponse!.status == 1) {
         isSubmitData = true;

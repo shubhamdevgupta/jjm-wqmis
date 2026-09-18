@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:jjm_wqmis/models/FTK/sample_response.dart';
 import 'package:jjm_wqmis/services/base_api_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 
 class Samplesubrepo {
@@ -61,6 +62,7 @@ class Samplesubrepo {
       "istreated":istreated,
       "test_selected": testSelected,
       "sample_submit_type": sampleSubmitType,
+      "app_version": AppUtil.appVersion
     }));
 
     try {

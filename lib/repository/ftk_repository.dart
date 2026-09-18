@@ -7,6 +7,7 @@ import 'package:jjm_wqmis/models/FTK/ftk_data_response.dart';
 import 'package:jjm_wqmis/models/FTK/ftk_parameter_response.dart';
 import 'package:jjm_wqmis/models/FTK/sample_response.dart';
 import 'package:jjm_wqmis/services/base_api_service.dart';
+import 'package:jjm_wqmis/utils/AppUtil.dart';
 import 'package:jjm_wqmis/utils/custom_screen/global_exception_handler.dart';
 
 class FtkRepository {
@@ -85,7 +86,8 @@ class FtkRepository {
       "IpAddress": ipAddress,
       "sample_type_other": sampleTypeOther,
       "test_selected": parameteId,
-      "saferangeid": paramSaferange
+      "saferangeid": paramSaferange,
+      "app_version": AppUtil.appVersion
     }));
 
     debugPrint("Sample Submit Request: $requestData");

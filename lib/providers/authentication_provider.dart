@@ -64,7 +64,7 @@ class AuthenticationProvider extends ChangeNotifier {
 
     try {
       _loginResponse = await _authRepository.loginUser(
-          phoneNumber, encryPass, txtSalt, appId,AppUtil.appVersion);
+          phoneNumber, encryPass, txtSalt, appId);
       if (_loginResponse?.status == 1) {
         _isLoggedIn = true;
         _localStorage.saveBool(AppConstants.prefIsLoggedIn, true);
